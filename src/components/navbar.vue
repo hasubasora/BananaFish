@@ -7,11 +7,11 @@
         </div>
     </div>
      <div class="news">
-          <img src="../assets/Img/news.png" alt="">
-          <div class="newsbanner">
-            <span>最新</span>
-            <span>恭喜空空获得宇宙一个哈哈哈哈哈哈哈哈哈</span>
-            <span>|更多</span>
+       <div class="newsBox">
+            <img src="../assets/Img/news.png" alt="">
+            <span class="c-red">最新</span>
+            <span class="newsText">恭喜空空获得宇宙一个哈哈哈哈哈哈哈哈哈</span>
+            <span class="allText">|更多</span>
           </div>
         </div>
     </div>
@@ -56,21 +56,44 @@ export default {
 .navbar {
   display: flex;
   justify-content: center;
-
   .center {
+    flex: 1;
     border: 1px solid #f5f5f5;
     > img {
       height: 3rem;
       width: 3rem;
-      display: block;
-      padding: 0.8rem;
-      padding-bottom: 0;
+      align-content: center;
+      padding-top: .8rem;
     }
     > span {
       color: #888;
       font-size: 0.8rem;
-      margin: 0.2rem 0;
+      margin: 0.5rem 0;
       display: block;
+    }
+  }
+}
+.news {
+  justify-content: center;
+  display: flex;
+  .newsBox {
+    display: flex;
+    font-size: 0.9rem;
+    border: 1px solid #f5f5ff;
+    padding: 0.5rem 0;
+    > img {
+      height: 1rem;
+      width: 4rem;
+    }
+    .newsText {
+      width: 13rem;
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    > span {
+      padding: 0 0.46rem;
     }
   }
 }
