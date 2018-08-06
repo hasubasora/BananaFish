@@ -56,14 +56,16 @@ export default {
 .navbar {
   display: flex;
   justify-content: center;
+  background: #fff;
   .center {
+    text-align: center;
     flex: 1;
     border: 1px solid #f5f5f5;
     > img {
       height: 3rem;
       width: 3rem;
       align-content: center;
-      padding-top: .8rem;
+      padding-top: 0.8rem;
     }
     > span {
       color: #888;
@@ -76,6 +78,7 @@ export default {
 .news {
   justify-content: center;
   display: flex;
+    background: #fff;
   .newsBox {
     display: flex;
     font-size: 0.9rem;

@@ -14,7 +14,8 @@
       <mt-tab-container class="page-tabbar-container" v-model="selected" style='border:1px solid red'>
         <mt-tab-container-item id="home">
           <!-- 轮播图 -->
-            <div class="bannerTop">
+            <div class="home">
+              <div class="bannerTop">
                 <div class="bannerCenter">
                 <div class="classify"><img src="../assets/Img/classify.png" alt=""></div>
                 <label for="search" class="search"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="娘娘，娘娘，你好娘"></label>
@@ -30,7 +31,22 @@
           <div class="participationInProfit">
               <participationInProfit></participationInProfit>
           </div>
-           
+           <!-- 商品列表 -->
+           <div class="showtime">
+             <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <!-- 广告 -->
+              <div class="bannerPad">
+                  <img src="../assets/Img/banner.png" alt="广告">
+                  <GoodsList></GoodsList>
+              </div>
+              <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <!-- 广告 -->
+              <div class="bannerPad">
+                  <img src="../assets/Img/banner.png" alt="广告">
+                  <GoodsList2></GoodsList2>
+              </div>
+           </div>
+            </div>
           <!-- <mt-cell v-for="n in 10" :title="'餐厅 ' + n" /> -->
         </mt-tab-container-item>
         <mt-tab-container-item id="订单">
@@ -78,22 +94,38 @@ export default {
   name: "page-tabbar",
   data() {
     return {
-      selected: "home"
+      selected: "home",
+      timesrc: require("../assets/Img/fhyp.png")
     };
+  },
+  created() {
+    this.$axios({
+      method: "POST",
+      data: {},
+      url: "http://localhost:809/index/getindexcategory",
+      responseType: "json"
+    }).then(function(response) {
+      if (response.data.code == 12000) {
+        _this.msg = response.data.object.NoticeContent;
+      }
+    });
   },
   components: {
     swipe: swipe => require(["@/components/swipe"], swipe),
     navbar: navbar => require(["@/components/navbar"], navbar),
     participationInProfit: participationInProfit =>
-      require(["@/components/participationInProfit"], participationInProfit)
+      require(["@/components/participationInProfit"], participationInProfit),
+    showtime: showtime => require(["@/components/showtime"], showtime),
+    GoodsList: GoodsList => require(["@/components/GoodsList"], GoodsList),
+    GoodsList2: GoodsList2 => require(["@/components/GoodsList2"], GoodsList2)
   }
 };
 </script>
  
 <style lang='scss'>
 .page-tabbar {
-  overflow: hidden;
   height: 100vh;
+  overflow: scroll;
 }
 
 .page-wrap {
@@ -137,6 +169,10 @@ export default {
     }
   }
 }
+.home {
+  background: #f2f2f2;
+  margin-bottom: 3rem;
+}
 #search {
   border: none;
   outline: none;
@@ -148,14 +184,22 @@ export default {
 
 //第二部分连接处
 .navbarcompont {
-  margin: 0 1rem;
+  margin: 0 1rem 1rem;
 }
 //分红准备
 
 .participationInProfit {
   width: 100%;
-  height: 10rem;
   display: flex;
+  justify-content: center;
+  margin: 0 0 1rem;
+}
 
+//广告
+.bannerPad {
+  margin: 1rem;
+  > img {
+    width: 100%;
+  }
 }
 </style>
