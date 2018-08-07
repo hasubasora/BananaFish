@@ -2,9 +2,10 @@
         <yd-grids-group :rows="3" >
         <yd-grids-item  v-for="item in GoodsList" :key="item.id" >
             <span slot="text">
-            <router-link to="home" class="goods" ><img class="SalePriceImg" src="../assets/Img/gwc.png" alt="">
+            <router-link to="home" class="goodsThree" ><img class="SalePriceImg" src="../assets/Img/gwc.png" alt="">
                  <img :src="item.ProductImg" class="ProductImg" alt="">
-                <div class="goodsDian"><span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
+                <div class="goodsDian" v-if="item.Integral>0"><span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
+                <div class="goodsDian" v-if="item.Integral<1"><span class="goodsBack">优品购</span></div>
                 <div class="goodsName">{{item.ProductTitle}}</div>
                 <div class="specification"> {{item.SubTitle}}</div>
                <span class="ProductStock">月销{{item.ProductStock}}件</span>
@@ -17,7 +18,7 @@
     </yd-grids-group>
 </template>
 <style lang="scss">
-.goods {
+.goodsThree {
   position: relative;
   text-align: justify;
   color: #111;
@@ -25,7 +26,6 @@
   background: #fff;
   .goodsDian {
     font-size: 0.1rem;
-    text-align: justify;
     color: #ff5f17;
     .goodsBack {
       text-align: center;
@@ -33,11 +33,12 @@
       border-radius: 5px;
       background: #ff5f17;
       color: #fff;
+      margin-right: 0.2rem;
     }
   }
   .ProductImg {
-    width: 2rem;
     height: 2rem;
+    width: 2rem;
   }
   .goodsName {
     font-size: 0.25rem;
@@ -86,7 +87,7 @@ export default {
         pageindex: 1,
         pagesize: 10
       },
-      url: "http://localhost:58326/index/getindexintegralproduct",
+      url: "http://localhost:58326/index/getindexotherproduct",
       responseType: "json"
     }).then(response => {
       if (response.data.success == 200) {

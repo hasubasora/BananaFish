@@ -8,10 +8,13 @@
     </div>
      <div class="news">
        <div class="newsBox">
-            <img src="../assets/Img/news.png" alt="">
-            <span class="c-red">最新</span>
-            <span class="newsText">恭喜空空获得宇宙一个哈哈哈哈哈哈哈哈哈</span>
-            <span class="allText">|更多</span>
+         <img src="../assets/Img/news.png" alt="">
+           <yd-rollnotice autoplay="2000">
+              <yd-rollnotice-item><span style="color:#F00;"> 最新 </span>荣耀V9 3月超级钜惠！</yd-rollnotice-item>
+              <yd-rollnotice-item><span style="color:#F00;"> 最新 </span>3.23京东超级品牌日格力盛典</yd-rollnotice-item>
+              <yd-rollnotice-item><span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
+           </yd-rollnotice>
+           <span class="allText">|更多</span>
           </div>
         </div>
     </div>
@@ -62,15 +65,14 @@ export default {
     flex: 1;
     border: 1px solid #f5f5f5;
     > img {
-      height: 3rem;
-      width: 3rem;
+      width: 0.8rem;
       align-content: center;
-      padding-top: 0.8rem;
+      padding-top: 0.3rem;
     }
     > span {
       color: #888;
-      font-size: 0.8rem;
-      margin: 0.5rem 0;
+      font-size: 0.3rem;
+      margin: 0.1rem 0;
       display: block;
     }
   }
@@ -78,25 +80,26 @@ export default {
 .news {
   justify-content: center;
   display: flex;
-    background: #fff;
+  background: #fff;
   .newsBox {
+    width: 6.8rem;
+    height: 0.7rem;
     display: flex;
-    font-size: 0.9rem;
-    border: 1px solid #f5f5ff;
-    padding: 0.5rem 0;
+    font-size: 0.25rem;
     > img {
-      height: 1rem;
-      width: 4rem;
+      flex: 1;
+      height: 0.4rem;
+      margin: 0.1rem;
+      width: 1.5rem;
     }
     .newsText {
-      width: 13rem;
       display: inline-block;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
     > span {
-      padding: 0 0.46rem;
+      width: 1rem; margin: 0.1rem;
     }
   }
 }

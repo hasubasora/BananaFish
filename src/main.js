@@ -13,6 +13,15 @@ import 'mint-ui/lib/style.css'
 Vue.use(Mint);
 
 /**
+ * YDUI
+ */
+import YDUI from 'vue-ydui'; /* 相当于import YDUI from 'vue-ydui/ydui.rem.js' */
+import 'vue-ydui/dist/ydui.rem.css';
+/* 使用px：import 'vue-ydui/dist/ydui.px.css'; */
+
+Vue.use(YDUI);
+
+/**
  * 请求组件
  */
 import axios from 'axios'

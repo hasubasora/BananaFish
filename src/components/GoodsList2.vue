@@ -1,75 +1,92 @@
 <template>
-    <div class="goodsBox">
-         <router-link to="home"  class="topgoods"  v-for="item in GoodsList" :key="item.id" ><img class="SalePriceImg" src="../assets/Img/gwc.png" alt="">
-            <img :src="item.ProductImg" alt="">
-            <div class="goodsDian"><span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
-            <div class="goodsName">{{item.ProductTitle}}</div>
-            <div class="specification"> {{item.SubTitle}}</div>
-            <span class="ProductStock">头筹价</span>
-            <div class="SalePrice">
-            <strong>￥{{item.MinSalePrice}}-{{item.MaxSalePrice}}</strong>
-            </div>
-           </router-link>
-        
-    </div>
+        <yd-grids-group :rows="2" >
+        <yd-grids-item  v-for="item in GoodsList" :key="item.id" >
+            <router-link slot="text" to="home" class="goodsTwo" ><img class="SalePriceImg" src="../assets/Img/go.png" alt="">
+                 <img :src="item.ProductImg" class="ProductImg" alt="">
+                  <p style="background:#f3f3f3;font-size:.1rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
+                 <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+                    <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
+              
+               <div class="RemainNum">已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</div> 
+                <div class="goodsName"><span class="goodsBack">头筹价</span>{{item.ProductTitle}}</div>
+                <div class="specification"> {{item.SubTitle}}</div>
+               <span class="ProductStock">头筹价</span>
+                <div class="SalePrice">
+                <strong>￥{{item.MinSalePrice}}-{{item.MaxSalePrice}}</strong>
+                </div>
+            </router-link>
+        </yd-grids-item>
+    </yd-grids-group>
 </template>
 <style lang="scss">
-.goodsBox {
-  display: flex;
-  flex-wrap: wrap;
-  .topgoods {
-    position: relative;
-    color: #111;
-    text-decoration: none;
-    background: #fff;
-    padding: .5rem;
-    margin: 1%;
-    &:nth-of-type(1n) {
-      margin-left: 0;
-    }
-    &:nth-of-type(3n) {
-      margin-right: 0;
-    }
-    width: 44%;
-    .goodsDian {
-      font-size: 0.5rem;
-      color: #ff5f17;
-      .goodsBack {
-        text-align: center;
-        padding: 0.1rem 0.4rem;
-        border-radius: 5px;
-        background: #ff5f17;
-        color: #fff;
-        margin-right: 0.2rem;
-      }
-    }
-    .goodsName {
-      font-size: 0.9rem;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .specification {
-      color: #999;
-      font-size: 0.6rem;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .ProductStock {
-      color: #999;
-      font-size: 0.5rem;
-    }
-    .SalePrice {
-      display: flex;
-      justify-content: space-between;
-    }
-    .SalePriceImg {
-      width: 2rem;
-      position: absolute;
-      right: .5rem;
-      bottom: .5rem;
-    }
+.goodsTwo {
+  position: relative;
+  color: #111;
+  text-decoration: none;
+  background: #fff;
+  .goodsBack {
+    text-align: center;
+    padding: 0.05rem 0.2rem;
+    border-radius: 5px;
+    line-height: 0.4rem;
+    font-size: 0.1rem;
+    background: #ff5f17;
+    color: #fff;
+    margin-right: 0.2rem;
+  }
+  .RemainNum {
+    color: #ff5f17;
+    font-size: 0.1rem;
+  }
+  .ProductImg {
+    height: 2rem;
+    width: 2rem;
+  }
+  .mt-progress-runway {
+    background-color: #8a8a8a;
+  }
+  .mt-progress-runway,
+  .mt-progress-progress {
+    border-radius: 10px;
+  }
+  .mt-progress-progress {
+    background-color: #ff5f17;
+  }
+  .prog {
+    position: absolute;
+    color: #fff;
+    top: 0.13rem;
+    left: -0.5rem;
+    z-index: 9;
+  }
+  .goodsName {
+    font-size: 0.25rem;
+    overflow: hidden;
+    white-space: nowrap;
+    // text-overflow: ellipsis;
+  }
+  .specification {
+    color: #999;
+    font-size: 0.1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .ProductStock {
+    color: #999;
+    font-size: 0.1rem;
+    text-align: left;
+    display: block;
+  }
+  .SalePrice {
+    display: flex;
+    justify-content: space-between;
+  }
+  .SalePriceImg {
+    width: 0.6rem;
+    position: absolute;
+    right: -0.5rem;
+    bottom: -2.9rem;
   }
 }
 </style>
@@ -77,7 +94,8 @@
 export default {
   data() {
     return {
-      GoodsList: []
+      GoodsList: [],
+      progress4: 0.6
     };
   },
   created() {

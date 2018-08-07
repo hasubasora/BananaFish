@@ -17,39 +17,41 @@
 .participation {
   display: flex;
   .participationBox {
-    border: 1px solid #f2f2f2;
     position: relative;
     flex: 1;
     background: #fff;
-    width: 11.5rem;
-    height: 7rem;
+    width: 3.5rem;
+    height: 2.5rem;
     border-radius: 5px;
-    margin: 0 0.2rem;
+    &:nth-child(1) {
+      margin-right: 0.1rem;
+    }
     .participationImg {
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 5rem;
+      width: 1.8rem;
     }
     .title {
       text-align: center;
-      margin-left: 1rem;
-      height: 1.2rem;
-      width: 3rem;
+      margin-left: .2rem;
+      height: .4rem;
+      width: 1rem;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
-      font-size: 0.5rem;
-      line-height: 1.1rem;
+      font-size: 0.1rem;
+      line-height: .4rem;
       color: #fff;
       background: #ff5f17;
     }
     > h4 {
-      text-indent: 1rem;
-      margin: 0.5rem 0;
+      text-indent: .2rem;
+      font-size: .3rem;
+      margin: 0.1rem 0;
     }
     > h5 {
-      text-indent: 1rem;
-      font-size: 0.4rem;
+      text-indent: .2rem;
+      font-size: 0.2rem;
       color: #999;
       margin: 0 0 0.5rem 0;
     }
@@ -57,28 +59,28 @@
       display: inline-block;
       color: #fff;
       background: #ff5f17;
-      padding: 0.2rem 0.6rem;
-      margin-left: 1rem;
+      padding: 0.1rem 0.2rem;
+      margin-left: .1rem;
       border-radius: 50rem;
-      font-size: 0.4rem;
+      font-size: 0.1rem;
       text-decoration: none;
     }
     .timeout {
       position: absolute;
-      right: .2rem;
-      top: .3rem;
+      right: 0.1rem;
+      top: 0.1rem;
       outline: 1px solid red;
-      width: 7rem;
-      font-size: .5rem;
+      width: 2.1rem;
+      font-size: 0.1rem;
       .timeoutL {
-        width: 3.5rem;
+        width: 1rem;
         text-align: center;
         display: inline-block;
         background: red;
         color: #fff;
       }
       .timeoutR {
-        width: 2.5rem;
+        width: 1rem;
         text-align: center;
         display: inline-block;
         color: red;

@@ -7,23 +7,23 @@
 <style lang="scss">
 .fh_title {
   position: relative;
-  padding: 0 1rem;
+  padding: 0 .2rem;
   > img {
     height: 1rem;
     width: auto;
   }
   .fh_title_all {
-    font-size: 0.8rem;
-    line-height: 0.8rem;
+    font-size: 0.1rem;
+    line-height: 0.2rem;
     position: absolute;
-    right: 1rem;
+    right: .2rem;
     text-decoration: none;
     color: #444;
     > img {
-      height: 1rem;
+      height: .25rem;
       vertical-align: sub;
       width: auto;
-      padding-left: 0.8rem;
+      padding-left: 0.2rem;
     }
   }
 }
