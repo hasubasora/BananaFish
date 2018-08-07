@@ -1,12 +1,12 @@
 <template>
     <div class="participation">
-        <blockquote  v-for="(item,index) in points" :key='index'>
-        <div class="left">
+     
+        <div class="left"  v-for="(item,index) in points" :key='index'>
             <div class="title">
                 {{item.title}}
             </div>
+       
         </div>
-        </blockquote>
         <div class="right"></div>
     </div>
 </template>
