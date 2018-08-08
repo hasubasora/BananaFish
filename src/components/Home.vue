@@ -14,27 +14,52 @@
       <mt-tab-container class="page-tabbar-container" v-model="selected" style='border:1px solid red'>
         <mt-tab-container-item id="home">
           <!-- 轮播图 -->
-            <div class="bannerTop">
+            <div class="home">
+              <div class="bannerTop">
                 <div class="bannerCenter">
-                <div class="classify"><img src="../assets/Img/classify.png" alt=""></div>
-                <label for="search" class="search"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="娘娘，娘娘，你好娘"></label>
+                <div class="classify">
+                  <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
+                  </div>
+                <div class="search"> <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="娘娘，娘娘，你好娘"></label></div>
                 <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
                 </div>
                 <swipe></swipe>
             </div>
             <!-- 连接新闻 -->
            <div class="navbarcompont">
-               <navbar></navbar>
+               <navbar></navbar> 
            </div>
            <!-- 分红等 -->
           <div class="participationInProfit">
               <participationInProfit></participationInProfit>
           </div>
-           
+           <!-- 商品列表 -->
+           <div class="showtime">
+             <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <!-- 广告 -->
+              <div class="bannerPad">
+                  <img src="../assets/Img/banner.png" alt="广告">
+                  <GoodsList></GoodsList>
+              </div>
+              <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <!-- 广告 -->
+              <div class="bannerPad">
+                  <img src="../assets/Img/banner.png" alt="广告">
+                  <GoodsList2></GoodsList2>
+              </div>
+               <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <!-- 广告 -->
+              <div class="bannerPad">
+                  <img src="../assets/Img/banner.png" alt="广告">
+                  <GoodsList3></GoodsList3>
+              </div>
+           </div>
+            </div>
           <!-- <mt-cell v-for="n in 10" :title="'餐厅 ' + n" /> -->
         </mt-tab-container-item>
-        <mt-tab-container-item id="订单">
-          <!-- <mt-cell v-for="n in 5" :title="'订单 ' + n" /> -->
+        <mt-tab-container-item id="ProductGroupList">
+          <ProductGroupList></ProductGroupList>
+          <!-- <mt-cell v-for="n in 5" :title="'ProductGroupList ' + n" /> -->
         </mt-tab-container-item>
         <mt-tab-container-item id="发现">
           <!-- <mt-cell v-for="n in 7" :title="'发现 ' + n" /> -->
@@ -57,7 +82,7 @@
         <img slot="icon" src="../assets/Img/home.png">
         首页
       </mt-tab-item>
-      <mt-tab-item id="订单">
+      <mt-tab-item id="ProductGroupList">
         <img slot="icon" src="../assets/logo.png">
         头筹
       </mt-tab-item>
@@ -78,22 +103,40 @@ export default {
   name: "page-tabbar",
   data() {
     return {
-      selected: "home"
+      selected: "home",
+      timesrc: require("../assets/Img/fhyp.png")
     };
+  },
+  created() {
+    this.$axios({
+      method: "POST",
+      data: {},
+      url: "http://localhost:809/index/getindexcategory",
+      responseType: "json"
+    }).then(function(response) {
+      if (response.data.code == 12000) {
+        _this.msg = response.data.object.NoticeContent;
+      }
+    });
   },
   components: {
     swipe: swipe => require(["@/components/swipe"], swipe),
     navbar: navbar => require(["@/components/navbar"], navbar),
     participationInProfit: participationInProfit =>
-      require(["@/components/participationInProfit"], participationInProfit)
+      require(["@/components/participationInProfit"], participationInProfit),
+    showtime: showtime => require(["@/components/showtime"], showtime),
+    GoodsList: GoodsList => require(["@/components/GoodsList"], GoodsList),
+    GoodsList2: GoodsList2 => require(["@/components/GoodsList2"], GoodsList2),
+    GoodsList3: GoodsList3 => require(["@/components/GoodsList3"], GoodsList3),
+    ProductGroupList: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList)
   }
 };
 </script>
  
 <style lang='scss'>
 .page-tabbar {
-  overflow: hidden;
   height: 100vh;
+  overflow: scroll;
 }
 
 .page-wrap {
@@ -108,54 +151,71 @@ export default {
     display: flex;
     position: absolute;
     width: 100%;
-    padding-top: 1rem;
+    padding-top: 0.2rem;
     .classify {
+      padding: 0.1rem;
       img {
-        height: 2.5rem;
-        width: 2.5rem;
-        padding: 0 1rem;
+        width: 0.8rem;
+        height: auto;
       }
-      flex: 1;
     }
     .search {
-      flex: 5;
-      position: relative;
-      img {
-        position: absolute;
-        height: 1.5rem;
-        width: 1.5rem;
-        padding: 0.5rem;
+      flex: 1;
+      text-align: center;
+      .searchlabel {
+        position: relative;
+        img {
+          position: absolute;
+          left: 0.3rem;
+          top: -0.07rem;
+          height: 0.4rem;
+          width: 0.4rem;
+        }
       }
     }
     .massage {
-      flex: 1;
+      padding: 0.1rem;
       img {
-        height: 2.5rem;
-        width: 2.5rem;
-        padding: 0 1rem;
+        width: 0.8rem;
+        height: auto;
       }
     }
   }
+}
+.home {
+  background: #f2f2f2;
+  margin-bottom: 3rem;
 }
 #search {
   border: none;
   outline: none;
   border-radius: 15rem;
-  width: 100%;
-  height: 2.5rem;
-  text-indent: 2.5rem;
+  width: 5rem;
+  height: 0.6rem;
+  text-indent: 1rem;
+  background-color: #fff;
 }
 
 //第二部分连接处
 .navbarcompont {
-  margin: 0 1rem;
+  margin: 0 0.2rem 0.2rem;
 }
 //分红准备
 
 .participationInProfit {
   width: 100%;
-  height: 10rem;
   display: flex;
-
+  justify-content: center;
+  margin: 0 0 0.2rem;
 }
+
+//广告
+.bannerPad {
+  margin: 0.2rem;
+  > img {
+    width: 100%;
+  }
+}
+
+
 </style>

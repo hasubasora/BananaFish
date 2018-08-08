@@ -18,7 +18,7 @@ export default {
 </script>
 <style lang="scss" >
 #swipe {
-  height: 10rem;
+  height: 3rem;
 }
 img{
     width: 100%;

@@ -10,6 +10,15 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },{
+      path: '/productList',
+      name: 'productList',
+      component: productList => require(["@/components/productList"], productList),
+    }, {
+      path: '/ProductGroupList',
+      name: 'ProductGroupList',
+      component: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList),
     }
+    
   ]
 })
