@@ -87,7 +87,7 @@ export default {
         pageindex: 1,
         pagesize: 10
       },
-      url: "http://localhost:58326/index/getindexotherproduct",
+      url: this.$server.serverUrl+"/index/getindexotherproduct",
       responseType: "json"
     }).then(response => {
       if (response.data.success == 200) {

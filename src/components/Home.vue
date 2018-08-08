@@ -111,7 +111,7 @@ export default {
     this.$axios({
       method: "POST",
       data: {},
-      url: "http://localhost:809/index/getindexcategory",
+      url: this.$server.serverUrl+"/index/getindexcategory",
       responseType: "json"
     }).then(function(response) {
       if (response.data.code == 12000) {

@@ -33,13 +33,8 @@ Vue.prototype.$axios = axios;
 import Vuex from "vuex"
 Vue.use(Vuex);
 
-//YDUI
-// import YDUI from 'vue-ydui'; /* 相当于import YDUI from 'vue-ydui/ydui.rem.js' */
-// import 'vue-ydui/dist/ydui.rem.css';
-// /* 使用px：import 'vue-ydui/dist/ydui.px.css'; */
-// Vue.use(YDUI);
-
-
+import serverUrl from "../static/temper.js"
+Vue.prototype.$server = serverUrl;
 
 
 

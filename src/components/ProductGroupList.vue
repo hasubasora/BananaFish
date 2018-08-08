@@ -29,7 +29,7 @@
                                 <span class="goodsatop">本期头筹奖品</span>
                                 <img :src="item.ProductImg" alt="">
                                 <p class="ProductTitle">{{item.ProductTitle}}</p>
-                                <div class="SubTitle"><img src="../assets/Img/tc.png" alt="">{{item.SubTitle}}</div>
+                                <div class="SubTitle">{{item.SubTitle}}</div>
                                 <div class="points">
                                     市场价 <strong>￥{{item.MarketPrice}}</strong>
                                 </div>
@@ -54,8 +54,11 @@
                 </yd-flexbox>
 
         <yd-flexbox-item>
-
-2
+          <div class="p_progress">
+            <div class="p_prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+            <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
+            <p><span>已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</span> <time>00:00:00</time></p>
+          </div>
         </yd-flexbox-item>
  </div>
             </yd-tab-panel>
@@ -97,6 +100,7 @@
   }
 }
 .ProductGroupList {
+  margin-bottom: 1rem;
   background: url("../assets/Img/bg.jpg") center;
   background-size: 100%;
   .ProductNews {
@@ -135,10 +139,16 @@
   background: #fff8dc;
   margin: 0.2rem 0.1rem;
   padding: 0.1rem;
+  .yd-grids-2 {
+    width: 4.6rem;
+  }
 }
 .goodsListOne {
   width: 2.4rem;
   .GroupId {
+    position: absolute;
+    top: 0;
+    left: 0;
     background: #ff5f17;
     color: #fff;
     width: 2.4rem;
@@ -150,7 +160,7 @@
   }
   .goodsa {
     width: 2.3rem;
-    margin: 0.1rem 0 0 0;
+    margin: 0.5rem 0 0 0;
     border-radius: 8px;
     background: #fff;
     .goodsatop {
@@ -172,13 +182,9 @@
       text-overflow: ellipsis;
     }
     .SubTitle {
-      > img {
-        vertical-align: text-top;
-        width: 0.7rem;
-      }
       font-size: 0.2rem;
       padding: 0.1rem 0;
-      line-height: 0.2rem;
+      line-height: 0.4rem;
       overflow: hidden;
       color: #999;
       padding: 0 0.1rem;
@@ -229,10 +235,23 @@
     }
   }
 }
-.yd-grids-2 {
-  width: 4.6rem;
+.p_progress {
+  padding: .2rem;
+  position: relative;
+  .p_prog {
+    position: absolute;
+    color: #fff;
+    z-index: 2;
+    top: 0.31rem;
+    left: 3rem;
+  }
+  > p {
+    color: #ff5f17;
+    font-size: 0.3rem;
+    display: flex;
+    justify-content: space-around;
+  }
 }
-
 </style>
 
 <script>
@@ -246,7 +265,7 @@ export default {
     this.$axios({
       method: "POST",
       data: {},
-      url: "http://localhost:809/index/getproductgrouplist",
+      url: this.$server.serverUrl + "/index/getproductgrouplist",
       responseType: "json"
     }).then(response => {
       if (response.data.success == 200) {
