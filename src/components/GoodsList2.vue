@@ -42,16 +42,7 @@
     height: 2rem;
     width: 2rem;
   }
-  .mt-progress-runway {
-    background-color: #8a8a8a;
-  }
-  .mt-progress-runway,
-  .mt-progress-progress {
-    border-radius: 10px;
-  }
-  .mt-progress-progress {
-    background-color: #ff5f17;
-  }
+ 
   .prog {
     position: absolute;
     color: #fff;
@@ -105,7 +96,7 @@ export default {
         pageindex: 1,
         pagesize: 10
       },
-      url: "http://localhost:58326/index/getindexgroupproduct",
+      url: this.$server.serverUrl+"/index/getindexgroupproduct",
       responseType: "json"
     }).then(response => {
       if (response.data.success == 200) {

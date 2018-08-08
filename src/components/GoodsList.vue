@@ -3,11 +3,11 @@
         <yd-grids-item  v-for="item in GoodsList" :key="item.id" >
             <span slot="text">
             <router-link to="home" class="goods" ><img class="SalePriceImg" src="../assets/Img/gwc.png" alt="">
-                 <img :src="item.ProductImg" class="ProductImg" alt="">
+                <img :src="item.ProductImg" class="ProductImg" alt="">
                 <div class="goodsDian"><span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
                 <div class="goodsName">{{item.ProductTitle}}</div>
                 <div class="specification"> {{item.SubTitle}}</div>
-               <span class="ProductStock">月销{{item.ProductStock}}件</span>
+                <span class="ProductStock">月销{{item.ProductStock}}件</span>
                 <div class="SalePrice">
                 <strong>￥{{item.SalePrice}}</strong>
                 </div>
@@ -86,7 +86,7 @@ export default {
         pageindex: 1,
         pagesize: 10
       },
-      url: "http://localhost:58326/index/getindexintegralproduct",
+      url: this.$server.serverUrl+"/index/getindexintegralproduct",
       responseType: "json"
     }).then(response => {
       if (response.data.success == 200) {

@@ -13,7 +13,7 @@
     width: auto;
   }
   .fh_title_all {
-    font-size: 0.1rem;
+    font-size: 0.2rem;
     line-height: 0.2rem;
     position: absolute;
     right: .2rem;

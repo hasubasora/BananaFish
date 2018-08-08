@@ -39,7 +39,7 @@
       width: 1rem;
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
-      font-size: 0.1rem;
+      font-size: 0.2rem;
       line-height: .4rem;
       color: #fff;
       background: #ff5f17;
@@ -62,7 +62,7 @@
       padding: 0.1rem 0.2rem;
       margin-left: .1rem;
       border-radius: 50rem;
-      font-size: 0.1rem;
+      font-size: 0.2rem;
       text-decoration: none;
     }
     .timeout {

@@ -6,22 +6,31 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App"
+};
 </script>
 
 <style lang='scss'>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-body{
+body {
   margin: 0;
 }
 .c-red {
-    color: red;
+  color: red;
 }
-
+.mt-progress-runway {
+  background-color: #8a8a8a;
+}
+.mt-progress-runway,
+.mt-progress-progress {
+  border-radius: 10px;
+}
+.mt-progress-progress {
+  background-color: #ff5f17;
+}
 </style>
