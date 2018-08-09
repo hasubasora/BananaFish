@@ -1,5 +1,5 @@
 <template>
-<div class="ProductGroupList">
+<yd-layout class="ProductGroupList">
       <yd-flexbox direction="vertical">
         <yd-flexbox-item class="ProTop">
             <img class="haibao" src="../assets/Img/haibao.jpg" alt="">
@@ -63,12 +63,44 @@
  </div>
             </yd-tab-panel>
             <yd-tab-panel label="正在揭晓">我需要三件东西：爱情友谊和图书。然而这三者之间何其相通！炽热的爱情可以充实图书的内容，图书又是人们最忠实的朋友。</yd-tab-panel>
-            <yd-tab-panel label="拔得头筹">时间是一切财富中最宝贵的财富。</yd-tab-panel>
+            <yd-tab-panel label="拔得头筹">
+
+
+        <yd-flexbox direction="vertical">
+            <yd-flexbox-item>
+              <span>第一期</span>
+            </yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-flexbox>
+                  <yd-flexbox-item>
+                    <div class="gjtx">
+                     <img src="../assets/Img/gjtx.png" alt="">
+                     <img src="../assets/Img/gjtx.png" alt=""> 
+                    </div>
+                  </yd-flexbox-item>
+                  <yd-flexbox-item>
+                    <p><img src="../assets/Img/gj.png" alt="">头筹幸运号码</p>
+                    <div>10086111111</div>
+                    <div>拔得头筹</div>
+                    <div>头筹用户</div>
+                    <div>参与时间</div>
+                    <div>计算规则</div>
+                  </yd-flexbox-item>
+               </yd-flexbox>
+            </yd-flexbox-item>
+            <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
+        </yd-flexbox>
+
+
+
+
+
+            </yd-tab-panel>
         </yd-tab>
         </yd-flexbox-item>
         <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
       </yd-flexbox>
-      </div>
+      </yd-layout>
 </template>
 <style lang="scss">
 .ProTop {
@@ -236,7 +268,7 @@
   }
 }
 .p_progress {
-  padding: .2rem;
+  padding: 0.2rem;
   position: relative;
   .p_prog {
     position: absolute;
@@ -258,7 +290,8 @@
 export default {
   data() {
     return {
-      GoodsList: []
+      GoodsList: [],
+      TheTop: []
     };
   },
   created() {
@@ -271,6 +304,18 @@ export default {
       if (response.data.success == 200) {
         this.GoodsList = response.data.rows;
         console.log(this.GoodsList);
+      }
+    });
+
+    this.$axios({
+      method: "POST",
+      data: {},
+      url: this.$server.serverUrl + "/index/getwinnergrouporder",
+      responseType: "json"
+    }).then(response => {
+      if (response.data.success == 200) {
+        this.TheTop = response.data.rows;
+        console.log(this.TheTop);
       }
     });
   }

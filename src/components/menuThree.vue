@@ -11,9 +11,9 @@
         <yd-scrollnav>
         <yd-scrollnav-panel :label="item.CateName" v-for="(item, key) in GoodsList" :key="key">
             <!-- 内容 -->
-            <p>{{item.CateName}}</p>
+            <!-- <p>{{item.CateName}}</p> -->
             <yd-list :theme="1">
-                <yd-list-item v-for="(itemt,key) in item.LstProduct" :key="key">
+                <yd-list-item v-for="(itemt,key) in item.LstProduct" :key="key" @click.native="GoItemDes(itemt.Id)">
                   <div slot="img" class="goodLists"> 
                     
                      <div class="goodsImg">  
@@ -56,12 +56,14 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.params._type);
+    
     this.$axios({
       method: "POST",
       data: {
         pageindex: 1,
         pagesize: 10,
-        categoryid: 102001000
+        categoryid: this.$route.params._type
       },
       url: this.$server.serverUrl + "/index/getcategoryproduct",
       responseType: "json"
@@ -71,6 +73,12 @@ export default {
         console.log(this.GoodsList);
       }
     });
+  },
+  methods: {
+    GoItemDes(i) {
+       console.log(i);
+      this.$router.push({ name: "GeneralItemDescription", params: { _type: i } });
+    }
   }
 };
 </script>

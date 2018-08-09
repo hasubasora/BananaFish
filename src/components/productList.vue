@@ -16,8 +16,8 @@
                        <yd-grids-group :rows="3" title="" item-height="2rem">
                             <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id">
                                 <span slot="text">  
-                                    <router-link to="/menuThree">
-                                 <div class="GoThree" @click="GoThreeList(itemt.CategoryId)">
+                                    <router-link to=""  @click.native="GoThreeList(itemt.CategoryId)">
+                                   <div class="GoThree">
                                      <img :src="itemt.CateIcon" alt="" >
                                     <p>{{ itemt.CateName }}</p>
                                  </div>
@@ -83,8 +83,7 @@ export default {
   methods: {
     GoThreeList(i) {
       console.log(i);
-      this.$router.push({ name: "menuThree", params: { _type: 2222 } });
-      return;
+      this.$router.push({ name: "menuThree", params: { _type: i } });
     }
   }
 };
