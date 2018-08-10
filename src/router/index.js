@@ -20,7 +20,7 @@ export default new Router({
       component: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList),
     },
     {//三级目录
-      path: '/menuThree',
+      path: '/menuThree/:Group_id',
       name: 'menuThree',
       component: menuThree => require(["@/components/menuThree"], menuThree),
     },
@@ -30,7 +30,7 @@ export default new Router({
       component: ItemDescription => require(["@/components/ItemDescription"], ItemDescription),
     },
     {//商品详细
-      path: '/GeneralItemDescription',
+      path: '/GeneralItemDescription/:Good_id',
       name: 'GeneralItemDescription',
       component: GeneralItemDescription => require(["@/components/GeneralItemDescription"], GeneralItemDescription),
     }, {//购物车

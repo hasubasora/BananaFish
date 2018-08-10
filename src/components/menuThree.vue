@@ -56,14 +56,14 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params._type);
+    console.log(this.$route.params.Group_id);
     
     this.$axios({
       method: "POST",
       data: {
         pageindex: 1,
         pagesize: 10,
-        categoryid: this.$route.params._type
+        categoryid: this.$route.params.Group_id
       },
       url: this.$server.serverUrl + "/index/getcategoryproduct",
       responseType: "json"
@@ -77,7 +77,7 @@ export default {
   methods: {
     GoItemDes(i) {
        console.log(i);
-      this.$router.push({ name: "GeneralItemDescription", params: { _type: i } });
+      this.$router.push({ name: "GeneralItemDescription", params: { Good_id: i } });
     }
   }
 };

@@ -83,7 +83,7 @@ export default {
   methods: {
     GoThreeList(i) {
       console.log(i);
-      this.$router.push({ name: "menuThree", params: { _type: i } });
+      this.$router.push({ name: "menuThree", params: { Group_id: i } });
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
       <yd-layout class="GeneralItemDescription">
         <yd-navbar slot="navbar" title="商品详情">
-            <router-link to="#" slot="left">
+            <router-link to="" @click.native="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
@@ -68,14 +68,14 @@
         <yd-flexbox class="yd-nav-button ">
             <div class="iconfont icon-erji"></div>
             <div class="iconfont icon-gouwuche-copy-copy"></div>
-            <!-- <div class="iconfont icon-shoucang"></div> -->
+            <div class="iconfont icon-shoucang"></div>
 
             <yd-flexbox-item>  
                   <button  class="handleClick orange"  @click.native="handleClick" type="button">立即购买</button>
             </yd-flexbox-item>  
 
             <yd-flexbox-item>  
-                   <button  class="handleClick"  @click.native="handleClick" type="button">加入购物车</button>
+                   <button  class="handleClick"  @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
             </yd-flexbox-item>  
          
         </yd-flexbox>
@@ -93,12 +93,18 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params._type);
+    console.log(location);
     
+    sessionStorage.setItem("s", this.$route.params.Good_id);
+    localStorage.setItem("s", this.$route.params.Good_id);
+    console.log(this.$route.params.Good_id);
+    // 商品信息
     this.$axios({
       method: "POST",
       data: {
-        productid: this.$route.params._type
+        productid: this.$route.params.Good_id
+          ? this.$route.params.Good_id
+          : localStorage.getItem("s")
       },
       url: this.$server.serverUrl + "/index/getproductdetail",
       responseType: "json"
@@ -108,10 +114,11 @@ export default {
         console.log(this.GoodsList);
       }
     });
+    // 商品详情
     this.$axios({
       method: "POST",
       data: {
-        productid: 1263
+        productid: this.$route.params.Good_id
       },
       url: this.$server.serverUrl + "/index/getproductdetaildesc",
       responseType: "json"
@@ -121,6 +128,34 @@ export default {
         console.log(this.GoodsHtml);
       }
     });
+  },
+  methods: {
+    GoHistory(sid) {
+      // console.log(sid);
+      this.$router.go(-1);
+    },
+    addCart(i) {
+      console.log(i);
+      this.$axios({
+        method: "POST",
+        data: {
+          productid: this.$route.params.Good_id,
+          groupid: 0
+        },
+        url: this.$server.serverUrl + "/order/addshoppingcart",
+        responseType: "json"
+      }).then(response => {
+        switch (response.data.success) {
+          case 200:
+            break;
+          case 400:
+            this.$router.push({ name: "SignIn", ReturnUrl: "" });
+            break;
+          default:
+            break;
+        }
+      });
+    }
   }
 };
 </script>
@@ -163,13 +198,13 @@ export default {
     .MarketPrice {
       display: flex;
       justify-content: space-between;
-      >span {
+      > span {
         color: #ff5f17;
         font-size: 0.5rem;
       }
-      >i{
+      > i {
         color: #ccc;
-        font-size: .2rem;
+        font-size: 0.2rem;
       }
     }
   }
