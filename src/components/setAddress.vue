@@ -56,11 +56,13 @@
                 <option value="3">未知</option>
             </select>
         </yd-cell-item>
-    </yd-cell-group>
- <div>
+
+         <div>
         <yd-switch v-model="switch1"></yd-switch>
         <p>【model: switch1 = {{switch1}}】</p>
     </div>
+    </yd-cell-group>
+
     </yd-layout>
 </template>
 <script>
