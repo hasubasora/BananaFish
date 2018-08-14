@@ -35,6 +35,7 @@ export default {
       }).then(response => {
         if (response.data.success == 200) {
           console.log('登陆成功');
+          this.$router.push('/')
         }
       });
     }

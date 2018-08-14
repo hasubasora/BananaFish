@@ -68,6 +68,9 @@ export default {
       url: this.$server.serverUrl + "/index/getcategoryproduct",
       responseType: "json"
     }).then(response => {
+        if (response.data.success == 400) {
+          this.$router.push({ name: "SignIn" });
+        }
       if (response.data.success == 200) {
         this.GoodsList = response.data.rows;
         console.log(this.GoodsList);

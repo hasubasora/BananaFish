@@ -1,6 +1,6 @@
 <template>
 <div>
-    <yd-navbar title="NavBar">
+    <yd-navbar title="分类列表">
         <router-link to="/" slot="left">
             <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
@@ -74,6 +74,9 @@ export default {
       url: this.$server.serverUrl + "/index/getindexcategory",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsList = response.data.rows;
         console.log(this.GoodsList);

@@ -20,89 +20,194 @@
         <yd-flexbox-item>
         <yd-tab>
             <yd-tab-panel label="正在头筹">
-            <div class="goodsList" v-for="item in GoodsList" :key="item.id">
-                    <yd-flexbox class="backgoods">
-                    <yd-flexbox-item >
-                        <div class="goodsListOne">
-                        <span class="GroupId">第TCG{{item.GroupId}}期</span>
-                            <div class="goodsa">
-                                <span class="goodsatop">本期头筹奖品</span>
-                                <img :src="item.ProductImg" alt="">
-                                <p class="ProductTitle">{{item.ProductTitle}}</p>
-                                <div class="SubTitle">{{item.SubTitle}}</div>
-                                <div class="points">
-                                    市场价 <strong>￥{{item.MarketPrice}}</strong>
+              <div class="goodsList" v-for="item in GoodsList" :key="item.id">
+                      <yd-flexbox class="backgoods">
+                      <yd-flexbox-item >
+                          <div class="goodsListOne">
+                          <span class="GroupId">第TCG{{item.GroupId}}期</span>
+                              <div class="goodsa">
+                                  <span class="goodsatop">本期头筹奖品</span>
+                                  <img :src="item.ProductImg" alt="">
+                                  <p class="ProductTitle">{{item.ProductTitle}}</p>
+                                  <div class="SubTitle">{{item.SubTitle}}</div>
+                                  <div class="points">
+                                      市场价 <strong>￥{{item.MarketPrice}}</strong>
+                                  </div>
+                              </div>
+                          </div>
+                      </yd-flexbox-item >
+                      <yd-flexbox-item class="goodsListTwo">
+                            <yd-grids-group :rows="2" >
+                                <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id">
+                                    <span slot="text" >
+                                      <div class="goodsLittle">
+                                          <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
+                                          <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
+                                          <span>月销{{itemt.SaleCount}}件</span>
+                                          <strong>￥{{itemt.SalePrice}}</strong>
+                                          <img class="gwc" src="../assets/Img/gwc.png" alt="">
+                                      </div>
+                                    </span>
+                                </yd-grids-item>
+                            </yd-grids-group>
+                      </yd-flexbox-item>
+                  </yd-flexbox>
+
+              <yd-flexbox-item>
+              <div class="p_progress">
+              <div class="p_prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+              <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
+              <p><span>已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</span> <time>00:00:00</time></p>
+              </div>
+              </yd-flexbox-item>
+              </div>
+            </yd-tab-panel>
+            <yd-tab-panel label="正在揭晓">
+
+              <div class="goodsList" v-for="item in GoodsList" :key="item.id">
+                        <yd-flexbox class="backgoods">
+                        <yd-flexbox-item >
+                            <div class="goodsListOne">
+                            <span class="GroupId">第TCG{{item.GroupId}}期</span>
+                                <div class="goodsa">
+                                    <span class="goodsatop">本期头筹奖品</span>
+                                    <img :src="item.ProductImg" alt="">
+                                    <p class="ProductTitle">{{item.ProductTitle}}</p>
+                                    <div class="SubTitle">{{item.SubTitle}}</div>
+                                    <div class="points">
+                                        市场价 <strong>￥{{item.MarketPrice}}</strong>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </yd-flexbox-item >
-                    <yd-flexbox-item class="goodsListTwo">
-                          <yd-grids-group :rows="2" >
-                              <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id">
-                                 <span slot="text" >
-                                    <div class="goodsLittle">
-                                        <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
-                                        <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
-                                        <span>月销{{itemt.SaleCount}}件</span>
-                                        <strong>￥{{itemt.SalePrice}}</strong>
-                                        <img class="gwc" src="../assets/Img/gwc.png" alt="">
-                                    </div>
-                                 </span>
-                              </yd-grids-item>
-                          </yd-grids-group>
-                    </yd-flexbox-item>
-                </yd-flexbox>
+                        </yd-flexbox-item >
+                        <yd-flexbox-item class="goodsListTwo">
+                              <yd-grids-group :rows="2" >
+                                  <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id">
+                                      <span slot="text" >
+                                        <div class="goodsLittle">
+                                            <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
+                                            <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
+                                            <span>月销{{itemt.SaleCount}}件</span>
+                                            <strong>￥{{itemt.SalePrice}}</strong>
+                                            <img class="gwc" src="../assets/Img/gwc.png" alt="">
+                                        </div>
+                                      </span>
+                                  </yd-grids-item>
+                              </yd-grids-group>
+                        </yd-flexbox-item>
+                    </yd-flexbox>
 
-        <yd-flexbox-item>
-          <div class="p_progress">
-            <div class="p_prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
-            <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
-            <p><span>已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</span> <time>00:00:00</time></p>
-          </div>
-        </yd-flexbox-item>
- </div>
+              <yd-flexbox-item>
+              <div class="p_progress">
+               <div class="p_text">等待揭晓答案</div>
+              </div>
+              </yd-flexbox-item>
+              </div>
+              
             </yd-tab-panel>
-            <yd-tab-panel label="正在揭晓">我需要三件东西：爱情友谊和图书。然而这三者之间何其相通！炽热的爱情可以充实图书的内容，图书又是人们最忠实的朋友。</yd-tab-panel>
             <yd-tab-panel label="拔得头筹">
-
-
-        <yd-flexbox direction="vertical">
-            <yd-flexbox-item>
-              <span>第一期</span>
-            </yd-flexbox-item>
-            <yd-flexbox-item>
-                <yd-flexbox>
-                  <yd-flexbox-item>
-                    <div class="gjtx">
-                     <img src="../assets/Img/gjtx.png" alt="">
-                     <img src="../assets/Img/gjtx.png" alt=""> 
-                    </div>
+              <yd-flexbox direction="vertical">
+                  <!-- s -->
+                  <yd-flexbox-item >
+                    <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
+                        <div class="Grouporder_top"><span class="CurrentPeriod">第{{item.CurrentPeriod}}期</span></div>
+                        <div class="Grouporder_center">
+                          <div class="Grouporder_center_img">
+                              <img class="gjtx2" :src="item.UserIcon" alt=""> 
+                              <img class="gjtx1" src="../assets/Img/gjtx.png" alt="">
+                          </div>
+                          <div class="Grouporder_center_text">
+                            <p class="gj"><img src="../assets/Img/gj.png" alt=""><span>头筹幸运号码</span></p>
+                            <div class="fontTel"> {{item.LuckerNumber}}</div>
+                            <div class="OrderTitle"> {{item.OrderTitle}}</div>
+                            <div>头筹用户:{{item.NickName}}</div>
+                            <div>参与时间:{{item.CreateTime}}</div>
+                            <div>计算规则:{{item.Formula}}</div>
+                          </div>
+                        </div>
+                      </div>  
                   </yd-flexbox-item>
-                  <yd-flexbox-item>
-                    <p><img src="../assets/Img/gj.png" alt="">头筹幸运号码</p>
-                    <div>10086111111</div>
-                    <div>拔得头筹</div>
-                    <div>头筹用户</div>
-                    <div>参与时间</div>
-                    <div>计算规则</div>
-                  </yd-flexbox-item>
-               </yd-flexbox>
-            </yd-flexbox-item>
-            <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
-        </yd-flexbox>
-
-
-
-
-
+                    <!-- e -->
+              </yd-flexbox>
             </yd-tab-panel>
         </yd-tab>
         </yd-flexbox-item>
-        <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
+        <yd-flexbox-item>
+
+        </yd-flexbox-item>
       </yd-flexbox>
       </yd-layout>
 </template>
 <style lang="scss">
+.Grouporder {
+  margin: 0.3rem;
+  height: 3rem;
+  background-color: #fff;
+  position: relative;
+  .Grouporder_top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    .CurrentPeriod {
+      background: #ff5f17;
+      padding: 0 0.3rem;
+      color: #fff;
+    }
+  }
+  .Grouporder_center {
+    display: flex;
+    .Grouporder_center_img {
+      width: 3rem;
+      position: relative;
+      .gjtx1 {
+        position: absolute;
+        top: 0rem;
+        left: 0rem;
+        height: 3rem;
+        width: 3rem;
+      }
+      .gjtx2 {
+        position: absolute;
+        height: 1.8rem;
+        width: 1.8rem;
+        top: 0.5rem;
+        left: 0.4rem;
+        border-radius: 50%;
+      }
+    }
+    .Grouporder_center_text {
+      flex: 1;
+      padding-top: 0.5rem;
+      img {
+        width: 0.4rem;
+      }
+      .gj {
+        > span {
+          vertical-align: super;
+          margin-left: 0.2rem;
+        }
+      }
+      .orange {
+        color: #ff5f17;
+      }
+      .fontTel {
+        font-size: 0.5rem;
+        @extend .orange;
+      }
+      .OrderTitle {
+        font-size: 0.2rem;
+        @extend .orange;
+        overflow: hidden;
+        width: 4rem;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
 .ProTop {
   position: relative;
   margin-bottom: 1rem;
@@ -256,7 +361,7 @@
     }
     > span {
       color: #999;
-      font-size: 0.1rem;
+      font-size: 0.2rem;
     }
     .gwc {
       width: 0.6rem;
@@ -270,6 +375,11 @@
 .p_progress {
   padding: 0.2rem;
   position: relative;
+  .p_text {
+    font-size: 0.4rem;
+    color: red;
+    text-align: center;
+  }
   .p_prog {
     position: absolute;
     color: #fff;
@@ -291,7 +401,7 @@ export default {
   data() {
     return {
       GoodsList: [],
-      TheTop: []
+      Grouporder: []
     };
   },
   created() {
@@ -301,11 +411,26 @@ export default {
       url: this.$server.serverUrl + "/index/getproductgrouplist",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsList = response.data.rows;
         console.log(this.GoodsList);
       }
     });
+
+    // this.$axios({
+    //   method: "POST",
+    //   data: {},
+    //   url: this.$server.serverUrl + "/index/getwinnergrouporder",
+    //   responseType: "json"
+    // }).then(response => {
+    //   if (response.data.success == 200) {
+    //     this.TheTop = response.data.rows;
+    //     console.log(this.TheTop);
+    //   }
+    // });
 
     this.$axios({
       method: "POST",
@@ -313,9 +438,12 @@ export default {
       url: this.$server.serverUrl + "/index/getwinnergrouporder",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
-        this.TheTop = response.data.rows;
-        console.log(this.TheTop);
+        this.Grouporder = response.data.rows;
+        console.log(this.Grouporder);
       }
     });
   }

@@ -6,8 +6,13 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  data() {
+    return {};
+  },
+  methods: {}
 };
+
 </script>
 
 <style lang='scss'>
@@ -32,16 +37,6 @@ body {
 }
 .mt-progress-progress {
   background-color: #ff5f17;
-}
-
-@font-face {
-  font-family: "iconfont"; /* project id 784766 */
-  src: url("//at.alicdn.com/t/font_784766_11iejsqo3nw.eot");
-  src: url("//at.alicdn.com/t/font_784766_11iejsqo3nw.eot?#iefix")
-      format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_784766_11iejsqo3nw.woff") format("woff"),
-    url("//at.alicdn.com/t/font_784766_11iejsqo3nw.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_784766_11iejsqo3nw.svg#iconfont") format("svg");
 }
 
 

@@ -1,7 +1,7 @@
 <template>
       <yd-layout class="ItemDescription">
         <yd-navbar slot="navbar" title="头筹商品详情">
-            <router-link to="#" slot="left">
+            <router-link to="" @click.native='GoHistory' slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
@@ -24,18 +24,18 @@
                 <yd-grids-group :rows="2" >
                     <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index">
                         <span slot="text">
-                            <yd-flexbox>
-                                <div class="generalGoodsImg" style="width:1rem;"><img :src="item.ProductImg" alt="" width="50"></div>
+                            
+                            <yd-flexbox  @click.native="GoToItem(item.ProductId)">
+                                <div class="generalGoodsImg" style="width:1rem;"><img :src="item.ProductImg" alt="" width="50"></div>   
                                 <yd-flexbox-item>
                                  <p class="ProductTitle"> {{item.ProductTitle}}</p>
-                                 <p class="ProductTitle" style="color:#aaa;font-size:.2rem"> {{item.SubTitle}}</p>
                                  <strong>￥{{item.SalePrice}}</strong>
                                  <yd-button size="large" type="danger">购买夺筹</yd-button>
                                 </yd-flexbox-item>
                             </yd-flexbox>
                            
-                           
-                            </span>
+                        </span>
+
                     </yd-grids-item>
                 </yd-grids-group>
             </yd-flexbox-item>
@@ -63,20 +63,20 @@
                 
                 </yd-accordion>
             </yd-flexbox-item>
-            <yd-flexbox-item>
+            <!-- <yd-flexbox-item>
                  <p class="d_text">用户参与记录<span>本期于XXXXXXXX开始</span></p>
                    <yd-flexbox>
                         <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
                         <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
                    </yd-flexbox>
-            </yd-flexbox-item>
+            </yd-flexbox-item> -->
       
         </yd-flexbox>
        
 
-        <yd-button-group>
+        <!-- <yd-button-group>
             <yd-button size="large" @click.native="handleClick" type="danger">立即购买</yd-button>
-        </yd-button-group>
+        </yd-button-group> -->
 
     </yd-layout>
 </template>
@@ -88,15 +88,24 @@ export default {
       GoodsHtml: ""
     };
   },
+
+
+  // watch: {
+  //   // 如果路由有变化，会再次执行该方法
+  //   $route: "handleClick"
+  // },
   created() {
     this.$axios({
       method: "POST",
       data: {
-        Groupid: 2
+        Groupid: this.$route.params.ItemGood_id
       },
       url: this.$server.serverUrl + "/index/getproductgroupdetail",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsList = response.data.object;
         console.log(this.GoodsList);
@@ -105,16 +114,54 @@ export default {
     this.$axios({
       method: "POST",
       data: {
-        Groupid: 2
+        Groupid: this.$route.params.ItemGood_id
       },
       url: this.$server.serverUrl + "/index/getproductgroupdetaildesc",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsHtml = response.data.object;
         console.log(this.GoodsHtml);
       }
     });
+  },
+  methods: {
+    GoHistory(sid) {
+      // console.log(sid);
+      this.$router.go(-1);
+    },
+    GoToItem(id) {
+      console.log(id);
+
+      this.$router.push({
+        name: "GeneralItemDescription",
+        params: { Good_id: id }
+      });
+    },
+    handleClick() {
+      this.$axios({
+        method: "POST",
+        data: {
+          productid: this.$route.params.tid,
+          groupid: this.$route.params.ItemGood_id
+        },
+        url: this.$server.serverUrl + "/order/addshoppingcart",
+        responseType: "json"
+      }).then(response => {
+        switch (response.data.success) {
+          case 200:
+            break;
+          case 400:
+            this.$router.push({ name: "SignIn", ReturnUrl: "" });
+            break;
+          default:
+            break;
+        }
+      });
+    }
   }
 };
 </script>
@@ -227,7 +274,7 @@ export default {
     bottom: 0;
     > button {
       background-color: #ff5f17;
-      font-size: .3rem;
+      font-size: 0.3rem;
     }
   }
 }

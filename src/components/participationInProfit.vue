@@ -71,7 +71,7 @@
       top: 0.1rem;
       outline: 1px solid red;
       width: 2.1rem;
-      font-size: 0.1rem;
+      font-size: 0.2rem;
       .timeoutL {
         width: 1rem;
         text-align: center;

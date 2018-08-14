@@ -1,6 +1,6 @@
 <template>
     <div class="fh_title">
-       <img :src=TimeSrc alt="../assets/Img/fhyp.png">
+       <img src="../assets/Img/fhyp.png" alt="../assets/Img/fhyp.png">
        <router-link class="fh_title_all" to="home">更多商品<img src="../assets/Img/r.png" alt=""></router-link>
     </div>
 </template>
@@ -9,8 +9,7 @@
   position: relative;
   padding: 0 .2rem;
   > img {
-    height: 1rem;
-    width: auto;
+    width: 3rem;
   }
   .fh_title_all {
     font-size: 0.2rem;

@@ -65,10 +65,10 @@
       
         </yd-flexbox>
        
-        <yd-flexbox class="yd-nav-button ">
-            <div class="iconfont icon-erji"></div>
-            <div class="iconfont icon-gouwuche-copy-copy"></div>
-            <div class="iconfont icon-shoucang"></div>
+        <yd-flexbox class="yd-nav-button">
+            <router-link to="/" class='iconfonts'><div class="iconfont icon-shouye-copy"></div></router-link>
+            <router-link to="/" class='iconfonts'><div class="iconfont icon-erji"></div></router-link>
+           <router-link to="/" class='iconfonts'> <div class="iconfont icon-gouwuche-copy-copy"></div></router-link>
 
             <yd-flexbox-item>  
                   <button  class="handleClick orange"  @click.native="handleClick" type="button">立即购买</button>
@@ -93,8 +93,8 @@ export default {
     };
   },
   created() {
-    console.log(location);
-    
+    // console.log(location);
+
     sessionStorage.setItem("s", this.$route.params.Good_id);
     localStorage.setItem("s", this.$route.params.Good_id);
     console.log(this.$route.params.Good_id);
@@ -109,6 +109,9 @@ export default {
       url: this.$server.serverUrl + "/index/getproductdetail",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsList = response.data.object;
         console.log(this.GoodsList);
@@ -123,6 +126,9 @@ export default {
       url: this.$server.serverUrl + "/index/getproductdetaildesc",
       responseType: "json"
     }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsHtml = response.data.object;
         console.log(this.GoodsHtml);
@@ -145,12 +151,18 @@ export default {
         url: this.$server.serverUrl + "/order/addshoppingcart",
         responseType: "json"
       }).then(response => {
+        // this.GetMyId(response.data.success)
         switch (response.data.success) {
           case 200:
             break;
           case 400:
             this.$router.push({ name: "SignIn", ReturnUrl: "" });
             break;
+          case 500:
+            this.$dialog.toast({
+              mes: response.data.msg,
+              timeout: 1500
+            });
           default:
             break;
         }
@@ -162,14 +174,19 @@ export default {
 
 <style lang="scss">
 .GeneralItemDescription {
-  .iconfont {
-    width: 30%;
-    font-size: 0.6rem;
+  .iconfonts {
+    display: inline-block;
     text-align: center;
+    width: 30%;
+  }
+  .iconfont {
+    display: inline;
+    font-size: 0.6rem;
     color: #666;
   }
   .yd-scrollview {
     .swipe {
+      margin-bottom: 6rem;
       .mint-swipe {
         height: 5rem;
         background: #ffffff;
@@ -277,6 +294,7 @@ export default {
     background: #ffffff;
     border-top: 1px solid #ccc;
     padding: 0;
+    z-index: 99;
     position: fixed;
     width: 100%;
     display: flex;

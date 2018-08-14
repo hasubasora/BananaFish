@@ -11,7 +11,7 @@
       </div> -->
  
         	<!-- tabcontainer -->
-      <mt-tab-container class="page-tabbar-container" v-model="selected" style='border:1px solid red'>
+      <mt-tab-container class="page-tabbar-container" v-model="selected" >
         <mt-tab-container-item id="home">
           <!-- 轮播图 -->
             <div class="home">
@@ -61,38 +61,35 @@
           <ProductGroupList></ProductGroupList>
           <!-- <mt-cell v-for="n in 5" :title="'ProductGroupList ' + n" /> -->
         </mt-tab-container-item>
-        <mt-tab-container-item id="发现">
-          <!-- <mt-cell v-for="n in 7" :title="'发现 ' + n" /> -->
+        <mt-tab-container-item id="cart">
+          <!-- <mt-cell v-for="n in 7" :title="'cart ' + n" /> -->
+          <cart></cart>
         </mt-tab-container-item>
-        <mt-tab-container-item id="我的">
+        <mt-tab-container-item id="my">
           <div class="page-part">
-		   <!-- cell -->
-            <!-- <mt-cell v-for="n in 12" :title="'我的 ' + n" /> -->
+		        <UserInfo></UserInfo>
           </div>
-          <router-link to="/">
-		   <!-- button -->
-            <mt-button type="danger" size="large">退出</mt-button>
-          </router-link>
+
         </mt-tab-container-item>
       </mt-tab-container>
     <!-- </div> -->
  
     <mt-tabbar v-model="selected" fixed>
       <mt-tab-item id="home">
-        <img slot="icon" src="../assets/Img/home.png">
-        首页
+        <span class="iconfont IconList icon-shouye-copy"></span>
+       <p>首页</p> 
       </mt-tab-item>
       <mt-tab-item id="ProductGroupList">
-        <img slot="icon" src="../assets/logo.png">
-        头筹
+        <span class="iconfont IconList icon-touchou-copy"></span>
+         <p>头筹</p> 
       </mt-tab-item>
-      <mt-tab-item id="发现">
-        <img slot="icon" src="../assets/logo.png">
-        购物车
+      <mt-tab-item id="cart" >
+       <span class="iconfont IconList icon-gouwuche-copy"></span>
+         <p> 购物车</p> 
       </mt-tab-item>
-      <mt-tab-item id="我的">
-        <img slot="icon" src="../assets/logo.png">
-        我的
+      <mt-tab-item id="my">
+       <span class="iconfont IconList icon-wo"></span>
+        <p>我的</p> 
       </mt-tab-item>
     </mt-tabbar>
   </div>
@@ -107,17 +104,23 @@ export default {
       timesrc: require("../assets/Img/fhyp.png")
     };
   },
+  methods: {
+    shale() {
+      console.log(12313123);
+    }
+  },
   created() {
-    this.$axios({
-      method: "POST",
-      data: {},
-      url: this.$server.serverUrl+"/index/getindexcategory",
-      responseType: "json"
-    }).then(function(response) {
-      if (response.data.code == 12000) {
-        _this.msg = response.data.object.NoticeContent;
-      }
-    });
+    // this.$axios({
+    //   method: "POST",
+    //   data: {},
+    //   url: this.$server.serverUrl + "/index/getindexcategory",
+    //   responseType: "json"
+    // }).then(response => {
+    //   this.GetMyId(response.data.success);
+    //   if (response.data.code == 12000) {
+    //     _this.msg = response.data.object.NoticeContent;
+    //   }
+    // });
   },
   components: {
     swipe: swipe => require(["@/components/swipe"], swipe),
@@ -128,12 +131,30 @@ export default {
     GoodsList: GoodsList => require(["@/components/GoodsList"], GoodsList),
     GoodsList2: GoodsList2 => require(["@/components/GoodsList2"], GoodsList2),
     GoodsList3: GoodsList3 => require(["@/components/GoodsList3"], GoodsList3),
-    ProductGroupList: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList)
+    UserInfo: UserInfo => require(["@/components/UserInfo"], UserInfo),
+    cart: cart => require(["@/components/cart"], cart),
+    ProductGroupList: ProductGroupList =>
+      require(["@/components/ProductGroupList"], ProductGroupList)
   }
 };
 </script>
  
 <style lang='scss'>
+.IconList {
+  font-size: 0.5rem;
+  margin-bottom: 0.1rem;
+  display: block;
+}
+.mint-tab-item {
+  color: #888;
+  // .mint-tab-item-label {
+  //   color: #ff5f17;
+  // }
+}
+.mint-tabbar > .mint-tab-item.is-selected {
+  color: #ff5f17;
+}
+
 .page-tabbar {
   height: 100vh;
   overflow: scroll;
@@ -216,6 +237,4 @@ export default {
     width: 100%;
   }
 }
-
-
 </style>
