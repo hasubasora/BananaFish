@@ -119,7 +119,7 @@
 .bomBtn {
   border-top: 1px solid #cccccc;
   position: fixed;
-  bottom: 0;left: 0;
+  left: 0;
   bottom: 1rem;
   width: 100%;
   .c-orange {
@@ -216,25 +216,25 @@ export default {
       });
     },
     GetShoppingCart() {
-      // this.$axios({
-      //   method: "POST",
-      //   data: {},
-      //   url: this.$server.serverUrl + "/order/getshoppingcart",
-      //   responseType: "json"
-      // }).then(response => {
-      //   if (response.data.success == 400) {
-      //     this.$router.push({ name: "SignIn" });
-      //   }
-      //   if (response.data.success == 200) {
-      //     this.CartList = response.data.rows;
-      //     for (const iterator of this.CartList) {
-      //       console.log(iterator.GroupId);
-      //       if (iterator.GroupId < 0) {
-      //       } else {
-      //       }
-      //     }
-      //   }
-      // });
+      this.$axios({
+        method: "POST",
+        data: {},
+        url: this.$server.serverUrl + "/order/getshoppingcart",
+        responseType: "json"
+      }).then(response => {
+        if (response.data.success == 400) {
+          // this.$router.push({ name: "SignIn" });
+        }
+        if (response.data.success == 200) {
+          this.CartList = response.data.rows;
+          for (const iterator of this.CartList) {
+            console.log(iterator.GroupId);
+            if (iterator.GroupId < 0) {
+            } else {
+            }
+          }
+        }
+      });
     },
     DelGood(_id) {
       this.$axios({
@@ -245,7 +245,7 @@ export default {
         url: this.$server.serverUrl + "/order/delshoppingcart",
         responseType: "json"
       }).then(response => {
-         if (response.data.success == 400) {
+        if (response.data.success == 400) {
           this.$router.push({ name: "SignIn" });
         }
         if (response.data.success == 200) {

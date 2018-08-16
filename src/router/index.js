@@ -4,17 +4,17 @@ import Home from '@/components/Home'
 
 Vue.use(Router)
 Vue.prototype.$Router = Router;
-Vue.prototype.GetMyId = n => {
-    console.log('请求' + n);
-    if (n == 400) {
-        this.$router.push({ name: "SignIn" });
-    }
-};
+
 export default new Router({
     routes: [{
         path: '/',
         name: 'Home',
         component: Home
+    },
+    {
+        path: '/',
+        name: 'index',
+        component: index=> require(["@/components/productList"], productList),
     }, { //一级目录
         path: '/productList',
         name: 'productList',

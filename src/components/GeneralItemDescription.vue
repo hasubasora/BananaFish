@@ -154,6 +154,11 @@ export default {
         // this.GetMyId(response.data.success)
         switch (response.data.success) {
           case 200:
+            this.$dialog.toast({
+              mes: "加入购物车成功",
+              timeout: 1500,
+              icon: "success"
+            });
             break;
           case 400:
             this.$router.push({ name: "SignIn", ReturnUrl: "" });

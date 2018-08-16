@@ -20,7 +20,7 @@
                 <div class="classify">
                   <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
                   </div>
-                <div class="search"> <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="娘娘，娘娘，你好娘"></label></div>
+                <div class="search"> <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label></div>
                 <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
                 </div>
                 <swipe></swipe>
@@ -35,19 +35,19 @@
           </div>
            <!-- 商品列表 -->
            <div class="showtime">
-             <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+             <showtime TimeSrc='1'></showtime>
                <!-- 广告 -->
               <div class="bannerPad">
                   <img src="../assets/Img/banner.png" alt="广告">
                   <GoodsList></GoodsList>
               </div>
-              <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+              <showtime TimeSrc='2'></showtime>
                <!-- 广告 -->
               <div class="bannerPad">
                   <img src="../assets/Img/banner.png" alt="广告">
                   <GoodsList2></GoodsList2>
               </div>
-               <showtime TimeSrc='../assets/Img/fhyp.png'></showtime>
+               <showtime TimeSrc='3'></showtime>
                <!-- 广告 -->
               <div class="bannerPad">
                   <img src="../assets/Img/banner.png" alt="广告">

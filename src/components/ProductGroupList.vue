@@ -1,5 +1,5 @@
 <template>
-<yd-layout class="ProductGroupList">
+<div class="ProductGroupList">
       <yd-flexbox direction="vertical">
         <yd-flexbox-item class="ProTop">
             <img class="haibao" src="../assets/Img/haibao.jpg" alt="">
@@ -20,47 +20,8 @@
         <yd-flexbox-item>
         <yd-tab>
             <yd-tab-panel label="正在头筹">
-              <div class="goodsList" v-for="item in GoodsList" :key="item.id">
-                      <yd-flexbox class="backgoods">
-                      <yd-flexbox-item >
-                          <div class="goodsListOne">
-                          <span class="GroupId">第TCG{{item.GroupId}}期</span>
-                              <div class="goodsa">
-                                  <span class="goodsatop">本期头筹奖品</span>
-                                  <img :src="item.ProductImg" alt="">
-                                  <p class="ProductTitle">{{item.ProductTitle}}</p>
-                                  <div class="SubTitle">{{item.SubTitle}}</div>
-                                  <div class="points">
-                                      市场价 <strong>￥{{item.MarketPrice}}</strong>
-                                  </div>
-                              </div>
-                          </div>
-                      </yd-flexbox-item >
-                      <yd-flexbox-item class="goodsListTwo">
-                            <yd-grids-group :rows="2" >
-                                <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id">
-                                    <span slot="text" >
-                                      <div class="goodsLittle">
-                                          <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
-                                          <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
-                                          <span>月销{{itemt.SaleCount}}件</span>
-                                          <strong>￥{{itemt.SalePrice}}</strong>
-                                          <img class="gwc" src="../assets/Img/gwc.png" alt="">
-                                      </div>
-                                    </span>
-                                </yd-grids-item>
-                            </yd-grids-group>
-                      </yd-flexbox-item>
-                  </yd-flexbox>
-
-              <yd-flexbox-item>
-              <div class="p_progress">
-              <div class="p_prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
-              <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
-              <p><span>已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</span> <time>00:00:00</time></p>
-              </div>
-              </yd-flexbox-item>
-              </div>
+              <IsTheTop></IsTheTop>
+          
             </yd-tab-panel>
             <yd-tab-panel label="正在揭晓">
 
@@ -68,7 +29,7 @@
                         <yd-flexbox class="backgoods">
                         <yd-flexbox-item >
                             <div class="goodsListOne">
-                            <span class="GroupId">第TCG{{item.GroupId}}期</span>
+                            <span class="GroupId">第{{item.CurrentPeriod}}期</span>
                                 <div class="goodsa">
                                     <span class="goodsatop">本期头筹奖品</span>
                                     <img :src="item.ProductImg" alt="">
@@ -136,7 +97,7 @@
 
         </yd-flexbox-item>
       </yd-flexbox>
-      </yd-layout>
+      </div>
 </template>
 <style lang="scss">
 .Grouporder {
@@ -404,21 +365,10 @@ export default {
       Grouporder: []
     };
   },
+  components: {
+    IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop)
+  },
   created() {
-    this.$axios({
-      method: "POST",
-      data: {},
-      url: this.$server.serverUrl + "/index/getproductgrouplist",
-      responseType: "json"
-    }).then(response => {
-      if (response.data.success == 400) {
-        this.$router.push({ name: "SignIn" });
-      }
-      if (response.data.success == 200) {
-        this.GoodsList = response.data.rows;
-        console.log(this.GoodsList);
-      }
-    });
 
     // this.$axios({
     //   method: "POST",

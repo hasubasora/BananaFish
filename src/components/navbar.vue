@@ -2,8 +2,10 @@
   <div>
      <div class="navbar">
         <div class="center" v-for="(item,index) in navbars" :key='index'>
+          <router-link class="center border"  :to="item.href">
             <img :src='item.src' alt="">
             <span>{{item.name}}</span>
+          </router-link>
         </div>
     </div>
      <div class="news">
@@ -28,22 +30,22 @@ export default {
         {
           src: require("../assets/Img/nav.png"),
           name: "正在头筹",
-          href: ""
+          href: "ProductGroupList"
         },
         {
           src: require("../assets/Img/nav2.png"),
           name: "往期头筹",
-          href: ""
+          href: "ProductGroupList"
         },
         {
           src: require("../assets/Img/nav3.png"),
           name: "分红产品",
-          href: ""
+          href: "ProductGroupList"
         },
         {
           src: require("../assets/Img/nav4.png"),
           name: "分红指数",
-          href: ""
+          href: "MyRedData"
         },
         {
           src: require("../assets/Img/nav5.png"),
@@ -61,17 +63,21 @@ export default {
   justify-content: center;
   background: #fff;
   .center {
-    text-align: center;
     flex: 1;
     border: 1px solid #f5f5f5;
-    > img {
+    text-align: center;
+    .border {
+      border: none;
+    }
+    img {
+      display: inline-flex;
       width: 0.8rem;
       align-content: center;
       padding-top: 0.3rem;
     }
     > span {
       color: #888;
-      font-size: 0.3rem;
+      font-size: 0.2rem;
       margin: 0.1rem 0;
       display: block;
     }
@@ -88,9 +94,9 @@ export default {
     font-size: 0.25rem;
     > img {
       flex: 1;
-      height: 0.4rem;
+      height: 0.3rem;
       margin: 0.1rem;
-      width: 1.5rem;
+      width: 1.4rem;
     }
     .newsText {
       display: inline-block;
@@ -99,7 +105,8 @@ export default {
       text-overflow: ellipsis;
     }
     > span {
-      width: 1rem; margin: 0.1rem;
+      width: 1rem;
+      margin: 0.1rem;
     }
   }
 }

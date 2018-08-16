@@ -86,23 +86,26 @@ export default {
         pageindex: 1,
         pagesize: 6
       },
-      url: this.$server.serverUrl+"/index/getindexotherproduct",
+      url: this.$server.serverUrl + "/index/getindexotherproduct",
       responseType: "json"
     }).then(response => {
-         if (response.data.success == 400) {
-          this.$router.push({ name: "SignIn" });
-        }
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
       if (response.data.success == 200) {
         this.GoodsList = response.data.rows;
         console.log(this.GoodsList);
       }
     });
   },
-    methods: {
+  methods: {
     GoToItem(id) {
-       this.$router.push({ name: "GeneralItemDescription", params: { Good_id: id } });
+      this.$router.push({
+        name: "GeneralItemDescription",
+        params: { Good_id: id }
+      });
     }
-  },
+  }
 };
 </script>
 

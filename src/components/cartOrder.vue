@@ -55,7 +55,7 @@
     </yd-cell-item>
 
 <div v-for="(item,index) in GoodsList.rows" :key="index">
-    <yd-flexbox class='goodsList' v-for="(items,index) in item.LstProduct" :key="index">
+    <yd-flexbox class='goodsListOrder' v-for="(items,index) in item.LstProduct" :key="index">
         <img :src="items.ProductImg" alt="">
         <yd-flexbox-item>
             <p class="goodstitle"><span>{{items.ProductTitle}}</span><span>&nbsp;x{{items.BuyNum}}</span></p>
@@ -194,7 +194,7 @@ export default {
   font-size: 0.3rem;
 }
 
-.goodsList {
+.goodsListOrder {
   display: flex;
   border-bottom: 1px solid #cccc;
   padding: 0.3rem;

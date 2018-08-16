@@ -20,12 +20,11 @@
                  <span>头筹商品</span>{{GoodsList.ProductTitle}}
             </yd-flexbox-item>
             <yd-flexbox-item class="generalGoods">
-                <p>普通商品(如下山沟任选其中一可夺筹；多购多机会))</p>
+                <p>普通商品(如下选购任选其中一可夺筹；多购多机会))</p>
                 <yd-grids-group :rows="2" >
-                    <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index">
+                    <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index"   @click.native="GoToItem(item.ProductId)" href>
                         <span slot="text">
-                            
-                            <yd-flexbox  @click.native="GoToItem(item.ProductId)">
+                            <yd-flexbox>
                                 <div class="generalGoodsImg" style="width:1rem;"><img :src="item.ProductImg" alt="" width="50"></div>   
                                 <yd-flexbox-item>
                                  <p class="ProductTitle"> {{item.ProductTitle}}</p>
@@ -33,9 +32,7 @@
                                  <yd-button size="large" type="danger">购买夺筹</yd-button>
                                 </yd-flexbox-item>
                             </yd-flexbox>
-                           
                         </span>
-
                     </yd-grids-item>
                 </yd-grids-group>
             </yd-flexbox-item>
@@ -89,7 +86,6 @@ export default {
     };
   },
 
-
   // watch: {
   //   // 如果路由有变化，会再次执行该方法
   //   $route: "handleClick"
@@ -135,11 +131,11 @@ export default {
     },
     GoToItem(id) {
       console.log(id);
-
       this.$router.push({
         name: "GeneralItemDescription",
         params: { Good_id: id }
       });
+      return;
     },
     handleClick() {
       this.$axios({
@@ -153,6 +149,12 @@ export default {
       }).then(response => {
         switch (response.data.success) {
           case 200:
+          
+            this.$dialog.toast({
+              mes: "加入购物车成功",
+              timeout: 1500,
+              icon: "success"
+            });
             break;
           case 400:
             this.$router.push({ name: "SignIn", ReturnUrl: "" });

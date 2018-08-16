@@ -1,6 +1,6 @@
 <template>
 <div>
-    <yd-navbar title="头筹购物精选" style="z-index:2">
+    <yd-navbar title="购物精选" style="z-index:2">
         <router-link to="/productList" slot="left">
             <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
@@ -17,7 +17,7 @@
                   <div slot="img" class="goodLists"> 
                     
                      <div class="goodsImg">  
-                        <span class="ProductTitle">{{itemt.ProductTitle}}</span>
+                        <!-- <span class="ProductTitle">{{itemt.ProductTitle}}</span> -->
                        <img :src="itemt.ProductImg">
                      </div>
                      <div class="goodsTag"><span>优品购</span>精选优品包邮</div>
