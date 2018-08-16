@@ -2,7 +2,8 @@
         <yd-grids-group :rows="3" >
         <yd-grids-item  v-for="item in GoodsList" :key="item.id" >
             <span slot="text">
-            <router-link to=""  @click.native="GoToItem(item.Id)" class="goodsThree" ><img class="SalePriceImg" src="../assets/Img/gwc.png" alt="">
+            <router-link to=""  @click.native="GoToItem(item.Id)" class="goodsThree" >
+              <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
                  <img :src="item.ProductImg" class="ProductImg" alt="">
                 <div class="goodsDian" v-if="item.Integral>0"><span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
                 <div class="goodsDian" v-if="item.Integral<1"><span class="goodsBack">优品购</span></div>

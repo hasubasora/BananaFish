@@ -6,10 +6,10 @@
             <h4>{{item.titleH}}</h4>
             <h5>{{item.text}}</h5>
             <router-link class="linkClass" to="Home">{{item.btnTxt}}</router-link>
-            <div class="timeout">
+            <!-- <div class="timeout">
               <span class="timeoutL">正在夺筹</span>
               <span class="timeoutR">00:00:00</span>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

@@ -25,7 +25,7 @@
                                     <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
                                     <span>月销{{itemt.SaleCount}}件</span>
                                     <strong>￥{{itemt.SalePrice}}</strong>
-                                    <img class="gwc" src="../assets/Img/gwc.png" alt="">
+                                    <!-- <img class="gwc" src="../assets/Img/gwc.png" alt=""> -->
                                 </div>
                             </span>
                         </yd-grids-item>

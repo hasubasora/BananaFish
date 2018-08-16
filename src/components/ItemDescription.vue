@@ -17,10 +17,15 @@
             </div>
             </yd-flexbox-item>
             <yd-flexbox-item  class="theTopGood">
-                 <span>头筹商品</span>{{GoodsList.ProductTitle}}
+               <yd-flexbox>
+                    <yd-flexbox-item> <span class="spans">头筹商品</span></yd-flexbox-item>
+                    <yd-flexbox-item><span class="spanstitle"> {{GoodsList.ProductTitle}}</span></yd-flexbox-item>
+                    <yd-flexbox-item><span class="spansPrice">市场价:{{GoodsList.MarketPrice}} </span></yd-flexbox-item>
+               </yd-flexbox>
+                
             </yd-flexbox-item>
             <yd-flexbox-item class="generalGoods">
-                <p>普通商品(如下选购任选其中一可夺筹；多购多机会))</p>
+                <p>普通商品(如下选购任选其中一可夺筹，多购多机会)</p>
                 <yd-grids-group :rows="2" >
                     <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index"   @click.native="GoToItem(item.ProductId)" href>
                         <span slot="text">
@@ -149,7 +154,6 @@ export default {
       }).then(response => {
         switch (response.data.success) {
           case 200:
-          
             this.$dialog.toast({
               mes: "加入购物车成功",
               timeout: 1500,
@@ -194,13 +198,24 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    > span {
+    .spans {
       background: #ff5f17;
       line-height: 0.6rem;
       color: #ffffff;
       margin-right: 0.1rem;
       border-radius: 10px;
-      padding: 0.1rem 0.2rem;
+      padding: 0.05rem 0.2rem;
+    }
+    .spanstitle {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      width: 3.5rem;
+      display: inline-block;
+    }
+    .spansPrice {
+      display: inline-block;
+      height: 0.6rem;
     }
   }
   .generalGoods {

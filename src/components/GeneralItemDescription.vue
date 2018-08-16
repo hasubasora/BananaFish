@@ -15,19 +15,29 @@
                 
             </div>
             </yd-flexbox-item>
-           
-            <yd-flexbox-item  class="theTopGood">
-              <strong>{{GoodsList.ProductTitle}}</strong>
-              <p>{{GoodsList.SubTitle}}</p>
-              <div class="MarketPrice"><span>￥{{GoodsList.MarketPrice}}</span> <i>存库{{GoodsList.ProductStock}}件</i></div>
-            </yd-flexbox-item>
-       
+
+
             <yd-flexbox-item>
-                  <!-- <p class="d_text">截止至<b class="c-red"></b> 08-05 10:37，若没有凑足<b class="c-red">{{GoodsList.TotalNum}}</b>  人次，系统会自动取 消订单并在24小时内退款。</p> -->
+                <yd-flexbox class="theTopGood">
+                    <div class="ProductTitle">
+                        <strong>{{GoodsList.ProductTitle}}</strong>
+                    </div>
+                    <yd-flexbox-item>
+                        <div class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</div>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+                <yd-flexbox class=" theTopGood ">
+                    <yd-flexbox-item> <p class="oranges">￥{{GoodsList.SalePrice}}</p> </yd-flexbox-item>
+     
+                    <yd-flexbox-item>
+                        <p class="Integral">可获得积分：{{GoodsList.Integral}}</p>
+                    </yd-flexbox-item>
+                </yd-flexbox>
             </yd-flexbox-item>
+           
             <yd-flexbox-item>
                  <yd-accordion>
-                    <yd-accordion-item title="商品详情">
+                    <yd-accordion-item title="商品详情" open>
                         <div style="width:100%">
                            <div v-html="GoodsHtml.ProductDesc" ></div>
                         </div>
@@ -66,12 +76,14 @@
         </yd-flexbox>
        
         <yd-flexbox class="yd-nav-button">
-            <router-link to="/" class='iconfonts'><div class="iconfont icon-shouye-copy"></div></router-link>
-            <router-link to="/" class='iconfonts'><div class="iconfont icon-erji"></div></router-link>
-           <router-link to="/" class='iconfonts'> <div class="iconfont icon-gouwuche-copy-copy"></div></router-link>
+            <router-link to="/" class='iconfonts'><div class="iconfont icon-shouye-copy"></div>
+           </router-link>
+            <router-link to="/" class='iconfonts'><div class="iconfont icon-54"></div>
+           </router-link>
+           <router-link to="/" class='iconfonts'> <div class="iconfont icon-gouwuche-copy-copy"> </div></router-link>
 
             <yd-flexbox-item>  
-                  <button  class="handleClick orange"  @click.native="handleClick" type="button">立即购买</button>
+                  <button  class="handleClick oranges obacity" type="button">立即购买</button>
             </yd-flexbox-item>  
 
             <yd-flexbox-item>  
@@ -193,7 +205,7 @@ export default {
     .swipe {
       margin-bottom: 6rem;
       .mint-swipe {
-        height: 5rem;
+        height: 6rem;
         background: #ffffff;
         text-align: center;
         .mint-swipe-item {
@@ -205,18 +217,39 @@ export default {
       }
     }
   }
+
   .theTopGood {
-    background: #ffffff;
-    margin: 0.1rem 0;
-    padding: 0.2rem;
-    font-size: 0.3rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    > p {
-      font-size: 0.2rem;
-      color: #888;
+    &:nth-child(1) {
+      padding-bottom: 0;
     }
+    &:nth-child(2) {
+      border-bottom: 1px solid #f2f2f2;
+    }
+    background: #ffffff;
+    // margin: 0.1rem 0;
+    padding: 0.2rem;
+    font-size: 0.2rem;
+    .ProductTitle {
+      border-right: 1px solid #ccc;
+      width: 5rem;
+      padding-right: .2rem;
+      font-size: 0.3rem;
+    }
+    .t_MarketPrice {
+      text-align: center;
+      @extend .oranges;
+    }
+    .oranges {
+      // background-color: #ff9717;
+      color: #ff9717;
+      font-size: 0.3rem;
+    }
+    .Integral {
+      font-size: 0.2rem;
+      color: #ccc;
+      text-align: right;
+    }
+
     .MarketPrice {
       display: flex;
       justify-content: space-between;
@@ -261,12 +294,6 @@ export default {
     .generalGoodsImg {
       margin-right: 0.3rem;
     }
-    .ProductTitle {
-      overflow: hidden;
-      width: 2rem;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
   }
   .d_progress {
     background: #ffffff;
@@ -306,18 +333,21 @@ export default {
     left: 0;
     bottom: 0;
     .handleClick {
+      border-radius: 3rem;
       background-color: #ff5f17;
       font-size: 0.3rem;
       border: none;
+      margin: 0.1rem;
       outline: none;
-      height: 1rem;
+      height: 0.9rem;
       width: 2.3rem;
       color: #ffffff;
     }
-    .orange {
-      background-color: #ff9717;
-    }
   }
+
+.obacity{
+  opacity: 0;
+}
   // 用户评论区
   .comment {
     padding: 0.5rem;

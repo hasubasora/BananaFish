@@ -54,6 +54,9 @@
                   <GoodsList3></GoodsList3>
               </div>
            </div>
+
+           
+           <p class="bottomLink">———— 我是有底线的 ————</p>
             </div>
           <!-- <mt-cell v-for="n in 10" :title="'餐厅 ' + n" /> -->
         </mt-tab-container-item>
@@ -83,7 +86,8 @@
         <span class="iconfont IconList icon-touchou-copy"></span>
          <p>头筹</p> 
       </mt-tab-item>
-      <mt-tab-item id="cart" >
+      <mt-tab-item id="cart" class="_badge" >
+        <mt-badge class="badge" size="small" type="error" v-if="productNum>0">{{productNum}}</mt-badge>
        <span class="iconfont IconList icon-gouwuche-copy"></span>
          <p> 购物车</p> 
       </mt-tab-item>
@@ -101,7 +105,8 @@ export default {
   data() {
     return {
       selected: "home",
-      timesrc: require("../assets/Img/fhyp.png")
+      timesrc: require("../assets/Img/fhyp.png"),
+      productNum: 0
     };
   },
   methods: {
@@ -110,17 +115,51 @@ export default {
     }
   },
   created() {
-    // this.$axios({
-    //   method: "POST",
-    //   data: {},
-    //   url: this.$server.serverUrl + "/index/getindexcategory",
-    //   responseType: "json"
-    // }).then(response => {
-    //   this.GetMyId(response.data.success);
-    //   if (response.data.code == 12000) {
-    //     _this.msg = response.data.object.NoticeContent;
-    //   }
-    // });
+    this.$axios({
+      method: "GET",
+      data: {
+        // type: "m",
+        // mobile: "13660392096"
+      },
+      url:
+        "http://39.108.86.81:8090/login/getSmsCode?type=m&mobile=13660392096",
+      responseType: "json"
+    }).then(response => {
+      console.log(response.data);
+      if (response.data.code == 12000) {
+        _this.msg = response.data.object.NoticeContent;
+      }
+    });
+    this.$axios({
+      method: "POST",
+      data: {
+        mobile: "13660392096",
+        password: "123456",
+        smsCode: "022273"
+      },
+      url: "http://39.108.86.81:8090/member/registerMember ",
+      responseType: "json"
+    }).then(response => {
+      console.log(response.data);
+      if (response.data.code == 12000) {
+        _this.msg = response.data.object.NoticeContent;
+      }
+    });
+
+    this.$axios({
+      method: "POST",
+      data: {},
+      url: this.$server.serverUrl + "/order/getshoppingcartnum",
+      responseType: "json"
+    }).then(response => {
+      if (response.data.success == 400) {
+        this.$router.push({ name: "SignIn" });
+      }
+      if (response.data.success == 200) {
+        this.productNum = response.data.object.productNum;
+        console.log(this.GoodsList);
+      }
+    });
   },
   components: {
     swipe: swipe => require(["@/components/swipe"], swipe),
@@ -140,6 +179,17 @@ export default {
 </script>
  
 <style lang='scss'>
+._badge {
+  position: relative;
+  .badge {
+    position: absolute;
+    top: 0rem;
+  }
+}
+.bottomLink {
+  text-align: center;
+  color: #cccccc;
+}
 .IconList {
   font-size: 0.5rem;
   margin-bottom: 0.1rem;
@@ -205,7 +255,7 @@ export default {
 }
 .home {
   background: #f2f2f2;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 #search {
   border: none;
