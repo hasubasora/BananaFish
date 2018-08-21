@@ -23,7 +23,7 @@
     <div :val="items.Id" v-for="(items,index) in item.LstProduct" :key="index" class="LstProduct">
     <yd-flexbox>
           <div class="GoodList_top">
-            <label class="yd-checklist-item-icon" @click="IsCheck(items.Id,items.IsCheck)">
+            <label class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
               <input type="checkbox" v-model="items.IsCheck" > 
               <span class="yd-checklist-icon"><i></i></span></label>
           </div>
@@ -212,7 +212,8 @@ export default {
       }).then(response => {
         if (response.data.success == 200) {
           console.log(response.data);
-          this.GetShoppingCart();
+          console.log(123);
+          // this.GetShoppingCart();
         }
         if (response.data.success == 400) {
           this.$router.push({ name: "SignIn" });
@@ -220,6 +221,8 @@ export default {
       });
     },
     increase(_index, num) {
+      console.log('增加');
+      
       console.log(num);
       if (num > 999) {
         return;
@@ -227,6 +230,7 @@ export default {
       this.SetCartNum(_index, num);
     },
     reduce(_index, num) {
+      console.log('增加2');
       console.log(num);
       if (num < 1) {
         return;
@@ -302,19 +306,6 @@ export default {
   },
   created() {
     this.GetShoppingCart();
-    // this.$axios({
-    //   method: "POST",
-    //   data: {
-    //     productid: 1263
-    //   },
-    //   url: this.$server.serverUrl + "/order/checkshoppingcart",
-    //   responseType: "json"
-    // }).then(response => {
-    //   if (response.data.success == 200) {
-    //     this.GoodsHtml = response.data.object;
-    //     console.log(this.GoodsHtml);
-    //   }
-    // });
   }
 };
 </script>
