@@ -1,6 +1,6 @@
 <template>
     <yd-layout>
-        <yd-navbar slot="navbar" title="分红积分数据表">
+        <yd-navbar slot="navbar" title="分红积分数据表" height='.8rem' >
             <router-link to="" slot="left"  @click.native="GoHistory">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>

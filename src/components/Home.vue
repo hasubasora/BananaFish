@@ -20,7 +20,9 @@
                 <div class="classify">
                   <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
                   </div>
-                <div class="search"> <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label></div>
+                <div class="search"> 
+                  <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
+                  </div>
                 <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
                 </div>
                 <swipe></swipe>
@@ -64,7 +66,7 @@
           <ProductGroupList></ProductGroupList>
           <!-- <mt-cell v-for="n in 5" :title="'ProductGroupList ' + n" /> -->
         </mt-tab-container-item>
-        <mt-tab-container-item id="cart">
+        <mt-tab-container-item id="cart" style="margin-bottom:1.5rem">
           <!-- <mt-cell v-for="n in 7" :title="'cart ' + n" /> -->
           <cart></cart>
         </mt-tab-container-item>
@@ -117,12 +119,11 @@ export default {
   created() {
     this.$axios({
       method: "GET",
-      data: {
-        // type: "m",
-        // mobile: "13660392096"
+      params: {
+        type: "m",
+        mobile: "13660392096"
       },
-      url:
-        "http://39.108.86.81:8090/login/getSmsCode?type=m&mobile=13660392096",
+      url: "http://39.108.86.81:8090/login/getSmsCode",
       responseType: "json"
     }).then(response => {
       console.log(response.data);
@@ -130,15 +131,14 @@ export default {
         _this.msg = response.data.object.NoticeContent;
       }
     });
+    var params = new URLSearchParams();
+    params.append("mobile", 13660392096);
+    params.append("password", 13660392096);
+    params.append("smsCode", 996582);
     this.$axios({
       method: "POST",
-      data: {
-        mobile: "13660392096",
-        password: "123456",
-        smsCode: "022273"
-      },
-      url: "http://39.108.86.81:8090/member/registerMember ",
-      responseType: "json"
+      data: params,
+      url: "http://39.108.86.81:8090/member/registerMember "
     }).then(response => {
       console.log(response.data);
       if (response.data.code == 12000) {

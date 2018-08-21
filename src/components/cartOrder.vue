@@ -1,6 +1,6 @@
 <template>
-<yd-layout>
-    <yd-navbar slot="navbar" title="订单提交">
+<div>
+    <yd-navbar slot="navbar" title="订单提交" height='.8rem'>
         <router-link to="" slot="left" @click.native="GoHistory">
             <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
@@ -49,22 +49,24 @@
       
     </div>
 
-    <yd-cell-item class="bomBtn">
-        <span slot="left" class="c-orange">应付:￥{{GoodsList.Amount}}</span>
-        <button slot="right" type="button" @click="GoBuySometing">去付款</button>
-    </yd-cell-item>
 
-<div v-for="(item,index) in GoodsList.rows" :key="index">
-    <yd-flexbox class='goodsListOrder' v-for="(items,index) in item.LstProduct" :key="index">
-        <img :src="items.ProductImg" alt="">
-        <yd-flexbox-item>
-            <p class="goodstitle"><span>{{items.ProductTitle}}</span><span>&nbsp;x{{items.BuyNum}}</span></p>
-            <div class="goodstitle">&nbsp;</div>
-            <span class="dough">￥{{items.SalePrice}}</span>
-        </yd-flexbox-item>
-    </yd-flexbox>
+    <div v-for="(item,index) in GoodsList.rows" :key="index">
+        <yd-flexbox class='goodsListOrder' v-for="(items,index) in item.LstProduct" :key="index">
+            <img :src="items.ProductImg" alt="">
+            <yd-flexbox-item>
+                <p class="goodstitle"><span>{{items.ProductTitle}}</span><span>&nbsp;x{{items.BuyNum}}</span></p>
+                <div class="goodstitle">&nbsp;</div>
+                <span class="dough">￥{{items.SalePrice}}</span>
+            </yd-flexbox-item>
+        </yd-flexbox>
+    </div>
+
+
+    <yd-cell-item class="bomBtnOrder">
+        <span slot="left" class="c-orange">应付:￥{{GoodsList.Amount}}</span>
+        <button slot="right" class="BuyCart" type="button" @click="GoBuySometing">付款</button>
+    </yd-cell-item>
 </div>
-</yd-layout>
 </template>
 <script>
 export default {
@@ -139,7 +141,7 @@ export default {
             icon: "error"
           });
         }
-         if (response.data.success == 400) {
+        if (response.data.success == 400) {
           this.$router.push({ name: "SignIn" });
         }
       });
@@ -148,25 +150,27 @@ export default {
 };
 </script>
 <style lang="scss">
-.bomBtn {
-  border-top: 1px solid #cccccc;
+.bomBtnOrder {
+  border-top: 1px solid #f2f2f2;
   position: fixed;
+  display: flex;
   background: #fff;
-  bottom: 0;  bottom: 0;left: 0;
+  left: 0;
+  bottom: 0rem;
+  height: 1rem;
   width: 100%;
-  .c-orange {
-    color: #ff5f17;
-  }
-  > .yd-cell-right {
-    padding: 0;
-    > button {
-      color: #fff;
-      font-size: 0.3rem;
-      background-color: #ff5f17;
-      height: 1rem;
-      border: none;
-      width: 2rem;
-    }
+  align-self: center;
+  justify-content: flex-end;
+  .BuyCart {
+    border-radius: 20px;
+    background: #ff5f17;
+    font-size: 0.26rem;
+    color: #f2f2f2;
+    border: #ff5f17 1px solid;
+    width: 2rem;
+    align-self: center;
+    height: 0.8rem;
+    text-align: center;
   }
 }
 

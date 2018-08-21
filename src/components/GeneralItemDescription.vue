@@ -1,6 +1,6 @@
 <template>
       <yd-layout class="GeneralItemDescription">
-        <yd-navbar slot="navbar" title="商品详情">
+        <yd-navbar slot="navbar" title="商品详情" height='.8rem'>
             <router-link to="" @click.native="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
@@ -76,19 +76,18 @@
         </yd-flexbox>
        
         <yd-flexbox class="yd-nav-button">
-            <router-link to="/" class='iconfonts'><div class="iconfont icon-shouye-copy"></div>
-           </router-link>
-            <router-link to="/" class='iconfonts'><div class="iconfont icon-54"></div>
-           </router-link>
-           <router-link to="/" class='iconfonts'> <div class="iconfont icon-gouwuche-copy-copy"> </div></router-link>
+          <div class='iconfonts'>
+              <router-link to="/" > <yd-icon name="home-outline" color='#6A6A6A' size='.5rem'></yd-icon>
+              </router-link>
+                <router-link to="/" ><div class="iconfont icon-54"></div>
+              </router-link>
+              <router-link to="/" > <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon></router-link>
+          </div>
 
-            <yd-flexbox-item>  
-                  <button  class="handleClick oranges obacity" type="button">立即购买</button>
-            </yd-flexbox-item>  
-
-            <yd-flexbox-item>  
-                   <button  class="handleClick"  @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
-            </yd-flexbox-item>  
+            <div class="yd-nav-right-button">
+              <button  class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button><button  class="handleClick rightbtn"  @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
+            </div>
+           
          
         </yd-flexbox>
 
@@ -152,6 +151,33 @@ export default {
       // console.log(sid);
       this.$router.go(-1);
     },
+    BuyGood() {
+      this.$axios({
+        method: "POST",
+        data: {
+          productid: this.$route.params.Good_id
+        },
+        url: this.$server.serverUrl + "/order/buyitnow",
+        responseType: "json"
+      }).then(response => {
+        // this.GetMyId(response.data.success)
+        switch (response.data.success) {
+          case 200:
+            this.$router.push({ name: "cartOrder" });
+            break;
+          case 400:
+            this.$router.push({ name: "SignIn", ReturnUrl: "" });
+            break;
+          case 500:
+            this.$dialog.toast({
+              mes: response.data.msg,
+              timeout: 1500
+            });
+          default:
+            break;
+        }
+      });
+    },
     addCart(i) {
       console.log(i);
       this.$axios({
@@ -192,9 +218,15 @@ export default {
 <style lang="scss">
 .GeneralItemDescription {
   .iconfonts {
-    display: inline-block;
-    text-align: center;
-    width: 30%;
+    display: flex;
+    width: 2.8rem;
+    > a {
+      width: 1rem;
+      text-align: center;
+      height: 1rem;line-height: .8rem;
+      flex: 1;
+      padding: 0.1rem;
+    }
   }
   .iconfont {
     display: inline;
@@ -232,7 +264,7 @@ export default {
     .ProductTitle {
       border-right: 1px solid #ccc;
       width: 5rem;
-      padding-right: .2rem;
+      padding-right: 0.2rem;
       font-size: 0.3rem;
     }
     .t_MarketPrice {
@@ -333,21 +365,32 @@ export default {
     left: 0;
     bottom: 0;
     .handleClick {
-      border-radius: 3rem;
+      // border-radius: 3rem;
       background-color: #ff5f17;
       font-size: 0.3rem;
       border: none;
-      margin: 0.1rem;
+      // margin: 0.1rem;
       outline: none;
-      height: 0.9rem;
+      height: 0.8rem;
       width: 2.3rem;
       color: #ffffff;
     }
+    .rightbtn {
+      border-top-right-radius: 50px;
+      border-bottom-right-radius: 50px;
+    }
+    .leftbtn {
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
+    .leftColor{
+      background-color: #ffa617;
+    }
   }
 
-.obacity{
-  opacity: 0;
-}
+  .obacity {
+    opacity: 0;
+  }
   // 用户评论区
   .comment {
     padding: 0.5rem;

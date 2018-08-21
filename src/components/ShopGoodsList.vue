@@ -1,6 +1,6 @@
 <template>
   <div>
-       <yd-navbar title="订单详情">
+       <yd-navbar title="订单详情" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
         <router-link to="" @click.native="GoHistory" slot="left">
             <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>

@@ -1,6 +1,6 @@
 <template>
     <yd-layout>
-        <yd-navbar slot="navbar" title="地址编辑">
+        <yd-navbar slot="navbar" title="地址编辑" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
             <router-link to="" slot="left" @click.native="returnGo">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>

@@ -1,6 +1,6 @@
 <template>
     <yd-layout>
-        <yd-navbar slot="navbar" title="支付信息">
+        <yd-navbar slot="navbar" title="支付信息" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
             <router-link to="" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>

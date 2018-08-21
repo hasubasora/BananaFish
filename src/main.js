@@ -27,7 +27,7 @@ Vue.use(YDUI);
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios) //告诉vue 要用这个插件
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 Vue.prototype.$axios = axios;
 
 import Vuex from "vuex"

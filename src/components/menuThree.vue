@@ -1,6 +1,6 @@
 <template>
 <div>
-    <yd-navbar title="购物精选" style="z-index:2">
+    <yd-navbar title="购物精选" style="z-index:2" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
         <router-link to="/productList" slot="left">
             <yd-navbar-back-icon></yd-navbar-back-icon>
         </router-link>
