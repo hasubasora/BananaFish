@@ -45,9 +45,64 @@ Vue.use(VCharts)
 Vue.config.productionTip = false
 
 
+
+
+
+export const getNum = () => axios.post("http://h5.huizhisuo.xyz/order/getshoppingcartnum", {
+
+})
+  .then(function (response) {
+    CartNum = response.data.object.productNum
+    store.commit('increment', CartNum)
+    console.log(response.data.object.productNum);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+export let CartNum 
+
+
+
+// 实例化
+const store = new Vuex.Store({
+  state: { //需要储存的数据
+    counts: 0,
+    phoneSizeId: ''
+  },
+  //getters
+  getters: { //获取状态及里面的数据
+    getTotal(state) { //拿状态集里面的数据
+      return state.counts
+    }
+  },
+  // commit
+  mutations: { //动作 只能同步操作数据 不能做接口
+    // this.$store.commit('increment', this.price) //触发
+    increment(state, price) { //state 来改变 cound
+      // 变更状态
+      state.counts = price
+    },
+
+    decrement() {
+      state.counts -= price
+    }
+  },
+  //dispatch
+  actions: { //能在这里进行异步的操作 跟后端API接口放这里
+    //  this.$store.dispatch('increase', this.price) //触发
+    increase(context, price) { //做个中介再去执行
+      context.commit('increment', price)
+    }
+  }
+})
+
+
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'

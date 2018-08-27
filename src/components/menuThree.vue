@@ -114,7 +114,7 @@ export default {
             left: 1px;
             text-align: center;
             padding: 0.1rem;
-            background: #f5f5f5;
+            // background: #f5f5f5;
           }
         }
         .goodsTag {

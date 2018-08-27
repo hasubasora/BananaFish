@@ -46,6 +46,7 @@
     white-space: nowrap;
     line-height: 0.5rem;
     text-overflow: ellipsis;
+    color: #555;
   }
   .specification {
     color: #999;

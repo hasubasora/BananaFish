@@ -8,8 +8,10 @@
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+    };
   },
+ 
   methods: {}
 };
 
@@ -21,6 +23,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+
 }
 body {
   margin: 0;
@@ -31,10 +34,10 @@ body {
 .mt-progress-runway {
   background-color: #8a8a8a;
 }
-.mt-progress-runway,
-.mt-progress-progress {
-  border-radius: 10px;
-}
+// .mt-progress-runway,
+// .mt-progress-progress {
+//   border-radius: 10px;
+// }
 .mt-progress-progress {
   background-color: #ff5f17;
 }

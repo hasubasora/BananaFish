@@ -44,7 +44,7 @@
     font-size: 0.25rem;
     overflow: hidden;
     white-space: nowrap;
-    line-height: 0.5rem;
+    line-height: 0.5rem;  color: #555;
     text-overflow: ellipsis;
   }
   .specification {

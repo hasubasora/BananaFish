@@ -15,7 +15,8 @@
 <!-- 购物车 val 设置商品ID {{isCheckAll}}-->
 <div class="GroupId" v-for="item in CartList" :key="item.id">
     <div class="GroupIdTitle" >
-        <yd-checkbox v-model="isCheckAll" shape="circle" :change="checkAll">{{item.GroupTitle!=''?'头筹购：'+item.GroupTitle:'积分购'}}</yd-checkbox>
+        <!-- <yd-checkbox v-model="isCheckAll" shape="circle" :change="checkAll"></yd-checkbox> -->
+          {{item.GroupTitle!=''?'头筹购：'+item.GroupTitle:'积分购'}}
     </div>
 
     <yd-checklist v-model="checklist" ref="checklistDemo" :callback="change" :label="false" color="#FF5F17">
@@ -176,13 +177,16 @@
 }
 </style>
 <script>
+import {getNum,CartNum} from '../main.js'
 export default {
+  porps: ["todo"],
   data() {
     return {
       checklist: [],
       isCheckAll: false,
       spinner: 2,
       GeneralList: [],
+      productNum: CartNum,
       ProductList: [],
       CartList: [],
       isDel: true
@@ -200,19 +204,19 @@ export default {
       );
     },
     IsCheck(id, _IsCheck) {
+      //选
       console.log(_IsCheck);
       this.$axios({
         method: "POST",
         data: {
           Id: id,
-          Ischeck: !_IsCheck
+          Ischeck: _IsCheck
         },
         url: this.$server.serverUrl + "/order/checkshoppingcart",
         responseType: "json"
       }).then(response => {
         if (response.data.success == 200) {
           console.log(response.data);
-          console.log(123);
           // this.GetShoppingCart();
         }
         if (response.data.success == 400) {
@@ -221,17 +225,12 @@ export default {
       });
     },
     increase(_index, num) {
-      console.log('增加');
-      
-      console.log(num);
       if (num > 999) {
         return;
       }
       this.SetCartNum(_index, num);
     },
     reduce(_index, num) {
-      console.log('增加2');
-      console.log(num);
       if (num < 1) {
         return;
       }
@@ -249,6 +248,7 @@ export default {
       }).then(response => {
         if (response.data.success == 200) {
           console.log(response.data);
+          getNum()
           this.GetShoppingCart();
         }
         if (response.data.success == 400) {
@@ -296,8 +296,6 @@ export default {
       });
     },
     isDelFn() {
-      console.log(222);
-
       this.isDel = !this.isDel;
     },
     GoCartOrder() {

@@ -54,7 +54,7 @@
   .goodsName {
     font-size: 0.25rem;
     overflow: hidden;
-    white-space: nowrap;
+    white-space: nowrap;  color: #555;
     // text-overflow: ellipsis;
   }
   .specification {

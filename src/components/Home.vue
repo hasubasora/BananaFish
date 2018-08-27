@@ -1,36 +1,25 @@
 <template>
 
   <div class="page-tabbar">
-     
-    <!-- <div class="page-wrap"> -->
-      <!-- <div class="page-title">Tabbar</div> -->
-
-      <!-- <div>
-        <mt-cell class="page-part" title="当前选中" :value="selected" />
-        每一个mt-tab-item有1个id，mt-tabbar的v-model绑定值等于id时即选中。设置你的selected默认值为第一个mt-tab-item的id
-      </div> -->
- 
         	<!-- tabcontainer -->
-      <mt-tab-container class="page-tabbar-container" v-model="selected" >
-        <mt-tab-container-item id="home">
           <!-- 轮播图 -->
-            <div class="home">
-              <div class="bannerTop">
-                <div class="bannerCenter">
-                <div class="classify">
-                  <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
-                  </div>
-                <div class="search"> 
-                  <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
-                  </div>
-                <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
+          <div class="home">
+            <div class="bannerTop">
+              <div class="bannerCenter">
+              <div class="classify">
+                <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
                 </div>
-                <swipe></swipe>
-            </div>
-            <!-- 连接新闻 -->
-           <div class="navbarcompont">
-               <navbar></navbar> 
-           </div>
+              <div class="search"> 
+                <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
+                </div>
+              <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
+              </div>
+              <swipe></swipe>
+          </div>
+          <!-- 连接新闻 -->
+          <div class="navbarcompont">
+              <navbar></navbar> 
+          </div>
            <!-- 分红等 -->
           <div class="participationInProfit">
               <participationInProfit></participationInProfit>
@@ -56,48 +45,9 @@
                   <GoodsList3></GoodsList3>
               </div>
            </div>
-
-           
            <p class="bottomLink">———— 我是有底线的 ————</p>
-            </div>
-          <!-- <mt-cell v-for="n in 10" :title="'餐厅 ' + n" /> -->
-        </mt-tab-container-item>
-        <mt-tab-container-item id="ProductGroupList">
-          <ProductGroupList></ProductGroupList>
-          <!-- <mt-cell v-for="n in 5" :title="'ProductGroupList ' + n" /> -->
-        </mt-tab-container-item>
-        <mt-tab-container-item id="cart" style="margin-bottom:1.5rem">
-          <!-- <mt-cell v-for="n in 7" :title="'cart ' + n" /> -->
-          <cart></cart>
-        </mt-tab-container-item>
-        <mt-tab-container-item id="my">
-          <div class="page-part">
-		        <UserInfo></UserInfo>
-          </div>
-
-        </mt-tab-container-item>
-      </mt-tab-container>
-    <!-- </div> -->
- 
-    <mt-tabbar v-model="selected" fixed>
-      <mt-tab-item id="home">
-        <span class="iconfont IconList icon-shouye-copy"></span>
-       <p>首页</p> 
-      </mt-tab-item>
-      <mt-tab-item id="ProductGroupList">
-        <span class="iconfont IconList icon-touchou-copy"></span>
-         <p>头筹</p> 
-      </mt-tab-item>
-      <mt-tab-item id="cart" class="_badge" >
-        <mt-badge class="badge" size="small" type="error" v-if="productNum>0">{{productNum}}</mt-badge>
-       <span class="iconfont IconList icon-gouwuche-copy"></span>
-         <p> 购物车</p> 
-      </mt-tab-item>
-      <mt-tab-item id="my">
-       <span class="iconfont IconList icon-wo"></span>
-        <p>我的</p> 
-      </mt-tab-item>
-    </mt-tabbar>
+           </div>
+  
   </div>
 </template>
  
@@ -146,20 +96,7 @@ export default {
       }
     });
 
-    this.$axios({
-      method: "POST",
-      data: {},
-      url: this.$server.serverUrl + "/order/getshoppingcartnum",
-      responseType: "json"
-    }).then(response => {
-      if (response.data.success == 400) {
-        this.$router.push({ name: "SignIn" });
-      }
-      if (response.data.success == 200) {
-        this.productNum = response.data.object.productNum;
-        console.log(this.GoodsList);
-      }
-    });
+   
   },
   components: {
     swipe: swipe => require(["@/components/swipe"], swipe),

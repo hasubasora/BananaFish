@@ -81,7 +81,7 @@
               </router-link>
                 <router-link to="/" ><div class="iconfont icon-54"></div>
               </router-link>
-              <router-link to="/" > <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon></router-link>
+              <router-link to="/cart" > <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon></router-link>
           </div>
 
             <div class="yd-nav-right-button">
