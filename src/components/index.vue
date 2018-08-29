@@ -1,32 +1,37 @@
 <template>
-  <div class="homePage">
+    <div class="homePage">
 
-    <router-view :todo='GetShoppingCartNum'></router-view>
+        <router-view :todo='GetShoppingCartNum'></router-view>
+        <keep-alive>
+            <yd-tabbar fixed active-color="#aaa">
+                <yd-tabbar-item title="首页" link="/" active>
+                    <yd-icon name="home" slot="icon" size="0.54rem"></yd-icon>
+                </yd-tabbar-item>
+                <yd-tabbar-item title="头筹" link="ProductGroupList" active>
+                    <span slot="icon" class="iconfont IconList icon-touchou-copy"></span>
+                </yd-tabbar-item>
+                <yd-tabbar-item title="购物车" link="cart" active>
+                    <yd-icon name="shopcart" slot="icon" size="0.54rem"></yd-icon>
+                    <yd-badge slot="badge" type="danger">{{storeText?storeText:this.productNum}}</yd-badge>
+                </yd-tabbar-item>
+                <yd-tabbar-item title="个人中心" link="UserInfo" active>
+                    <yd-icon name="ucenter" slot="icon" size="0.54rem"></yd-icon>
+                </yd-tabbar-item>
 
-    <yd-tabbar fixed active-color="#aaa">
-      <yd-tabbar-item title="首页" link="/" active>
-        <yd-icon name="home" slot="icon" size="0.54rem"></yd-icon>
-      </yd-tabbar-item>
-      <yd-tabbar-item title="头筹" link="ProductGroupList" active>
-        <span slot="icon" class="iconfont IconList icon-touchou-copy"></span>
-      </yd-tabbar-item>
-      <yd-tabbar-item title="购物车" link="cart" active>
-        <yd-icon name="shopcart" slot="icon" size="0.54rem"></yd-icon>
-        <yd-badge slot="badge" type="danger">{{storeText?storeText:productNum}}</yd-badge>
-      </yd-tabbar-item>
-      <yd-tabbar-item title="个人中心" link="UserInfo" active>
-        <yd-icon name="ucenter" slot="icon" size="0.54rem"></yd-icon>
-      </yd-tabbar-item>
+            </yd-tabbar>
+        </keep-alive>
 
-    </yd-tabbar>
-  </div>
+    </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            productNum: 0
+            productNum: 0,
+            NavPage: [
+              
+            ]
         };
     },
     created() {

@@ -1,105 +1,119 @@
 <template>
-  <yd-layout class="GeneralItemDescription">
-    <yd-navbar slot="navbar" title="商品详情" height='.8rem'>
-      <router-link to="" @click.native="GoHistory" slot="left">
-        <yd-navbar-back-icon></yd-navbar-back-icon>
-      </router-link>
-    </yd-navbar>
+    <yd-layout class="GeneralItemDescription">
+        <yd-navbar slot="navbar" title="商品详情" height='.8rem'>
+            <router-link to="" @click.native="GoHistory" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
 
-    <yd-flexbox direction="vertical" class="swipe">
-      <yd-flexbox-item>
-        <mt-swipe :auto="4000">
-          <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id"><img :src="item.ImgUrl" alt=""></mt-swipe-item>
-        </mt-swipe>
-        <div class="goodtitle">
+        <yd-flexbox direction="vertical" class="swipe">
+            <yd-flexbox-item>
+                <mt-swipe :auto="4000">
+                    <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id"><img :src="item.ImgUrl" alt=""></mt-swipe-item>
+                </mt-swipe>
+                <div class="goodtitle">
 
-        </div>
-      </yd-flexbox-item>
+                </div>
+            </yd-flexbox-item>
 
-      <yd-flexbox-item>
-        <yd-flexbox class="theTopGood">
-          <div class="ProductTitle">
-            <strong>{{GoodsList.ProductTitle}}</strong>
-          </div>
-          <yd-flexbox-item>
-            <div class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</div>
-          </yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-flexbox class="theTopGood">
+                    <div class="ProductTitle">
+                        <strong>{{GoodsList.ProductTitle}}</strong>
+                    </div>
+                    <yd-flexbox-item>
+                        <div class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</div>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+                <yd-flexbox class=" theTopGood ">
+                    <yd-flexbox-item>
+                        <p class="oranges">￥{{GoodsList.SalePrice}}</p>
+                    </yd-flexbox-item>
+
+                    <yd-flexbox-item>
+                        <p class="Integral">可获得积分：{{GoodsList.Integral}}</p>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </yd-flexbox-item>
+
+            <yd-flexbox-item>
+                <yd-accordion>
+                    <yd-accordion-item title="商品详情" open>
+                        <div style="width:100%">
+                            <div v-html="GoodsHtml.ProductDesc"></div>
+                        </div>
+                    </yd-accordion-item>
+                </yd-accordion>
+                <yd-accordion>
+                    <yd-accordion-item title="宝贝评价">
+                        <div style="width:100%" class="comment">
+                            <yd-flexbox direction="vertical" v-for="items in GoodsList.LstComment" :key="items.id">
+                                <yd-flexbox-item class="UserInfo">
+                                    <img class="UserIcon" :src="items.UserIcon" alt="">
+                                    <!-- <img class="UserIcon" src="../assets/Img/bkc.jpg" alt=""> -->
+                                    <span class="NickName">{{ items.NickName }}</span>
+                                </yd-flexbox-item>
+                                <yd-flexbox-item class="CreateTime"> {{ items.CreateTime }}</yd-flexbox-item>
+                                <yd-flexbox-item class="Comment"> {{ items.Comment }}</yd-flexbox-item>
+
+                                <yd-flexbox-item>
+                                    <yd-lightbox class="ImgShow">
+                                        <yd-lightbox-img v-for="itemst in items.ImgShow" :key="itemst.id" :src="itemst.AttachPath"></yd-lightbox-img>
+                                    </yd-lightbox>
+                                </yd-flexbox-item>
+
+                            </yd-flexbox>
+
+                        </div>
+                    </yd-accordion-item>
+
+                </yd-accordion>
+            </yd-flexbox-item>
+
         </yd-flexbox>
-        <yd-flexbox class=" theTopGood ">
-          <yd-flexbox-item>
-            <p class="oranges">￥{{GoodsList.SalePrice}}</p>
-          </yd-flexbox-item>
 
-          <yd-flexbox-item>
-            <p class="Integral">可获得积分：{{GoodsList.Integral}}</p>
-          </yd-flexbox-item>
+        <yd-flexbox class="yd-nav-button">
+            <div class='iconfonts'>
+                <router-link to="/">
+                    <yd-icon name="home-outline" color='#6A6A6A' size='.5rem'></yd-icon>
+                </router-link>
+                <router-link to="/">
+                    <div class="iconfont icon-54"></div>
+                </router-link>
+                <router-link to="/cart">
+                    <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon>
+                </router-link>
+            </div>
+
+            <div class="yd-nav-right-button">
+                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
+                <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
+            </div>
+
+            <yd-popup v-model="show" position="bottom" height="60%">
+                <div class="GoodSuk">
+                    <div class="gotup" v-for="(item, index) in gotup" :key="index">
+                        <h3>{{item.AttName}}</h3>
+                        <div class="gptupBox">
+                            <span @click="TouchSku(itemt.AttValueId)" :class={isOrange:itemt.isTrue} v-for="(itemt, index) in item.LstAttValue" :key="index">{{itemt.AttValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <yd-button type="warning" style="margin: 30px;" @click.native="show = false">确定</yd-button>
+            </yd-popup>
+
         </yd-flexbox>
-      </yd-flexbox-item>
 
-      <yd-flexbox-item>
-        <yd-accordion>
-          <yd-accordion-item title="商品详情" open>
-            <div style="width:100%">
-              <div v-html="GoodsHtml.ProductDesc"></div>
-            </div>
-          </yd-accordion-item>
-        </yd-accordion>
-        <yd-accordion>
-          <yd-accordion-item title="宝贝评价">
-            <div style="width:100%" class="comment">
-              <yd-flexbox direction="vertical" v-for="items in GoodsList.LstComment" :key="items.id">
-                <yd-flexbox-item class="UserInfo">
-                  <img class="UserIcon" :src="items.UserIcon" alt="">
-                  <!-- <img class="UserIcon" src="../assets/Img/bkc.jpg" alt=""> -->
-                  <span class="NickName">{{ items.NickName }}</span>
-                </yd-flexbox-item>
-                <yd-flexbox-item class="CreateTime"> {{ items.CreateTime }}</yd-flexbox-item>
-                <yd-flexbox-item class="Comment"> {{ items.Comment }}</yd-flexbox-item>
-
-                <yd-flexbox-item>
-                  <yd-lightbox class="ImgShow">
-                    <yd-lightbox-img v-for="itemst in items.ImgShow" :key="itemst.id" :src="itemst.AttachPath"></yd-lightbox-img>
-                  </yd-lightbox>
-                </yd-flexbox-item>
-
-              </yd-flexbox>
-
-            </div>
-          </yd-accordion-item>
-
-        </yd-accordion>
-      </yd-flexbox-item>
-
-    </yd-flexbox>
-
-    <yd-flexbox class="yd-nav-button">
-      <div class='iconfonts'>
-        <router-link to="/">
-          <yd-icon name="home-outline" color='#6A6A6A' size='.5rem'></yd-icon>
-        </router-link>
-        <router-link to="/">
-          <div class="iconfont icon-54"></div>
-        </router-link>
-        <router-link to="/cart">
-          <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon>
-        </router-link>
-      </div>
-
-      <div class="yd-nav-right-button">
-        <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
-        <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
-      </div>
-
-    </yd-flexbox>
-
-  </yd-layout>
+    </yd-layout>
 </template>
 <script>
 export default {
     data() {
         return {
             GoodsList: [],
-            GoodsHtml: ""
+            GoodsHtml: "",
+            show: false,
+            gotup: []
         };
     },
     created() {
@@ -124,7 +138,16 @@ export default {
             }
             if (response.data.success == 200) {
                 this.GoodsList = response.data.object;
-                console.log(this.GoodsList);
+                this.gotup = this.GoodsList.LstAtt;
+
+                this.gotup.forEach((element, index) => {
+                    element.LstAttValue.forEach((elements, index) => {
+                        Object.assign(elements, {
+                            isTrue: false
+                        });
+                        console.log(elements);
+                    });
+                });
             }
         });
         // 商品详情
@@ -177,38 +200,53 @@ export default {
                 }
             });
         },
+        TouchSku(ValueId) {
+            console.log(ValueId);
+            this.gotup.forEach((element, index) => {
+                element.LstAttValue.forEach((elements, index) => {
+                    if (ValueId == elements.AttValueId) {
+                        Object.assign(elements, {
+                            isTrue: true
+                        });
+                        console.log(elements);
+                    }
+                });
+            });
+        },
         addCart(i) {
             console.log(i);
-            this.$axios({
-                method: "POST",
-                data: {
-                    productid: this.$route.params.Good_id,
-                    groupid: 0
-                },
-                url: this.$server.serverUrl + "/order/addshoppingcart",
-                responseType: "json"
-            }).then(response => {
-                // this.GetMyId(response.data.success)
-                switch (response.data.success) {
-                    case 200:
-                        this.$dialog.toast({
-                            mes: "加入购物车成功",
-                            timeout: 1500,
-                            icon: "success"
-                        });
-                        break;
-                    case 400:
-                        this.$router.push({ name: "SignIn", ReturnUrl: "" });
-                        break;
-                    case 500:
-                        this.$dialog.toast({
-                            mes: response.data.msg,
-                            timeout: 1500
-                        });
-                    default:
-                        break;
-                }
-            });
+            this.show = true;
+
+            // this.$axios({
+            //     method: "POST",
+            //     data: {
+            //         productid: this.$route.params.Good_id,
+            //         groupid: 0
+            //     },
+            //     url: this.$server.serverUrl + "/order/addshoppingcart",
+            //     responseType: "json"
+            // }).then(response => {
+            //     // this.GetMyId(response.data.success)
+            //     switch (response.data.success) {
+            //         case 200:
+            //             this.$dialog.toast({
+            //                 mes: "加入购物车成功",
+            //                 timeout: 1500,
+            //                 icon: "success"
+            //             });
+            //             break;
+            //         case 400:
+            //             this.$router.push({ name: "SignIn", ReturnUrl: "" });
+            //             break;
+            //         case 500:
+            //             this.$dialog.toast({
+            //                 mes: response.data.msg,
+            //                 timeout: 1500
+            //             });
+            //         default:
+            //             break;
+            //     }
+            // });
         }
     }
 };
@@ -427,6 +465,31 @@ export default {
                 margin: 0.05rem;
                 width: 100%;
                 height: 100%;
+            }
+        }
+    }
+}
+.GoodSuk {
+    padding: 0.2rem;
+    .gotup {
+        border-bottom: 1px solid #dedcdc;
+        padding: 0.2rem 0;
+        font-size: 0.36rem;
+        .gptupBox {
+            font-size: 0.25rem;
+            display: flex;
+            .isOrange {
+                background: #ff5f17;
+                border: 1px solid #ff5f17;
+                color: #f2f2f2;
+            }
+            > span {
+                border: 1px solid #dedcdc;
+                padding: 0.05rem 0.2rem;
+                border-radius: 5px;
+                background: #dedcdc;
+                margin: 0.2rem;
+                cursor: pointer;
             }
         }
     }

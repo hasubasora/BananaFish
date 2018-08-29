@@ -1,82 +1,83 @@
 <template>
-  <yd-layout class="ItemDescription">
-    <yd-navbar slot="navbar" title="头筹商品详情" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
-      <router-link to="" @click.native='GoHistory' slot="left">
-        <yd-navbar-back-icon></yd-navbar-back-icon>
-      </router-link>
-    </yd-navbar>
+    <yd-layout class="ItemDescription">
+        <yd-navbar slot="navbar" title="头筹商品详情" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
+            <router-link to="" @click.native='GoHistory' slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
 
-    <yd-flexbox direction="vertical" class="swipe">
-      <yd-flexbox-item>
-        <mt-swipe :auto="4000">
-          <mt-swipe-item><img :src="GoodsList.ProductImg" alt=""></mt-swipe-item>
-          <mt-swipe-item><img :src="GoodsList.ProductImg" alt=""></mt-swipe-item>
-        </mt-swipe>
-        <div class="goodtitle">
+        <yd-flexbox direction="vertical" class="swipe">
+            <yd-flexbox-item>
+                <mt-swipe :auto="4000">
+                    <mt-swipe-item><img :src="GoodsList.ProductImg" alt=""></mt-swipe-item>
+                    <mt-swipe-item><img :src="GoodsList.ProductImg" alt=""></mt-swipe-item>
+                </mt-swipe>
+                <div class="goodtitle">
 
-        </div>
-      </yd-flexbox-item>
-      <yd-flexbox-item class="theTopGood">
-        <yd-flexbox>
-          <yd-flexbox-item>
-            <span class="spans">头筹商品</span>
-          </yd-flexbox-item>
-          <yd-flexbox-item>
-            <span class="spanstitle"> {{GoodsList.ProductTitle}}</span>
-          </yd-flexbox-item>
-          <yd-flexbox-item>
-            <span class="spansPrice">市场价:{{GoodsList.MarketPrice}} </span>
-          </yd-flexbox-item>
-        </yd-flexbox>
+                </div>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="theTopGood">
+                <yd-flexbox>
+                    <yd-flexbox-item>
+                        <span class="spans">头筹商品</span>
+                    </yd-flexbox-item>
+                    <yd-flexbox-item>
+                        <span class="spanstitle"> {{GoodsList.ProductTitle}}</span>
+                    </yd-flexbox-item>
+                    <yd-flexbox-item>
+                        <span class="spansPrice">市场价:{{GoodsList.MarketPrice}} </span>
+                    </yd-flexbox-item>
+                </yd-flexbox>
 
-      </yd-flexbox-item>
-      <yd-flexbox-item class="generalGoods">
-        <p>普通商品(如下选购任选其中一可夺筹，多购多机会)</p>
-        <yd-grids-group :rows="2">
-          <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index" @click.native="GoToItem(item.ProductId)" href>
-            <span slot="text">
-              <yd-flexbox>
-                <div class="generalGoodsImg" style="width:1rem;"><img :src="item.ProductImg" alt="" width="50"></div>
-                <yd-flexbox-item>
-                  <p class="ProductTitle"> {{item.ProductTitle}}</p>
-                  <strong>￥{{item.SalePrice}}</strong>
-                  <yd-button size="large" type="danger">购买夺筹</yd-button>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="generalGoods">
+                <p>普通商品(如下选购任选其中一可夺筹，多购多机会)</p>
+                <yd-grids-group :rows="2">
+                    <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index" @click.native="GoToItem(item.ProductId)" href>
+                        <span slot="text">
+                            <yd-flexbox>
+                                <div class="generalGoodsImg" style="width:1rem;"><img :src="item.ProductImg" alt="" width="50"></div>
+                                <yd-flexbox-item>
+                                    <p class="ProductTitle"> {{item.ProductTitle}}</p>
+                                    <strong>￥{{item.SalePrice}}</strong>
+                                    <yd-button size="large" type="danger">购买夺筹</yd-button>
+                                </yd-flexbox-item>
+                            </yd-flexbox>
+                        </span>
+                    </yd-grids-item>
+                </yd-grids-group>
+            </yd-flexbox-item>
+            <yd-flexbox direction="vertical" style="width:100%" class="d_progress">
+                <yd-flexbox-item class="d_progress_top">
+                    <span>期号:{{GoodsList.GroupId}}</span>
+                    <span>免费包邮</span>
                 </yd-flexbox-item>
-              </yd-flexbox>
-            </span>
-          </yd-grids-item>
-        </yd-grids-group>
-      </yd-flexbox-item>
-      <yd-flexbox direction="vertical" style="width:100%" class="d_progress">
-        <yd-flexbox-item class="d_progress_top">
-          <span>期号:{{GoodsList.GroupId}}</span>
-          <span>免费包邮</span>
-        </yd-flexbox-item>
-        <yd-flexbox-item class="d_progress_center">
-          <div class="d_prog">{{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</div>
-          <mt-progress class="progress" :value="GoodsList.TotalNum-GoodsList.RemainNum" :bar-height="15"> {{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</mt-progress>
-        </yd-flexbox-item>
-        <yd-flexbox-item class="d_progress_bom">
-          <span>总需{{GoodsList.TotalNum}}人次</span>
-          <span>剩余
-            <b class="c-red">{{GoodsList.RemainNum}}</b>次</span>
-        </yd-flexbox-item>
-      </yd-flexbox>
+                <yd-flexbox-item class="d_progress_center">
+                    <div class="d_prog">{{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</div>
+                    <mt-progress class="progress" :value="GoodsList.TotalNum-GoodsList.RemainNum" :bar-height="15"> {{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</mt-progress>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="d_progress_bom">
+                    <span>总需{{GoodsList.TotalNum}}人次</span>
+                    <span>剩余
+                        <b class="c-red">{{GoodsList.RemainNum}}</b>次</span>
+                </yd-flexbox-item>
+            </yd-flexbox>
 
-      <yd-flexbox-item>
-        <!-- <p class="d_text">截止至<b class="c-red"></b> 08-05 10:37，若没有凑足<b class="c-red">{{GoodsList.TotalNum}}</b>  人次，系统会自动取 消订单并在24小时内退款。</p> -->
-      </yd-flexbox-item>
-      <yd-flexbox-item>
-        <yd-accordion>
-          <yd-accordion-item title="头筹商品详情">
-            <div style="width:100%">
-              <div v-html="GoodsHtml.ProductDesc"></div>
-            </div>
-          </yd-accordion-item>
+            <yd-flexbox-item>
+                <!-- <p class="d_text">截止至<b class="c-red"></b> 08-05 10:37，若没有凑足<b class="c-red">{{GoodsList.TotalNum}}</b>  人次，系统会自动取 消订单并在24小时内退款。</p> -->
+            </yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-accordion>
+                    <yd-accordion-item title="头筹商品详情">
+                        <div style="width:100%">
+                            <div v-html="GoodsHtml.ProductDesc"></div>
+                        </div>
+                    </yd-accordion-item>
 
-        </yd-accordion>
-      </yd-flexbox-item>
-      <!-- <yd-flexbox-item>
+                </yd-accordion>
+            </yd-flexbox-item>
+         
+            <!-- <yd-flexbox-item>
                  <p class="d_text">用户参与记录<span>本期于XXXXXXXX开始</span></p>
                    <yd-flexbox>
                         <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
@@ -84,20 +85,21 @@
                    </yd-flexbox>
             </yd-flexbox-item> -->
 
-    </yd-flexbox>
+        </yd-flexbox>
 
-    <!-- <yd-button-group>
+        <!-- <yd-button-group>
             <yd-button size="large" @click.native="handleClick" type="danger">立即购买</yd-button>
         </yd-button-group> -->
 
-  </yd-layout>
+    </yd-layout>
 </template>
 <script>
 export default {
     data() {
         return {
             GoodsList: [],
-            GoodsHtml: ""
+            GoodsHtml: "",
+            show: false
         };
     },
 
@@ -162,6 +164,7 @@ export default {
                 url: this.$server.serverUrl + "/order/addshoppingcart",
                 responseType: "json"
             }).then(response => {
+
                 switch (response.data.success) {
                     case 200:
                         this.$dialog.toast({
