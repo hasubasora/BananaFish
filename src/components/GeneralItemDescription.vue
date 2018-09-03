@@ -86,16 +86,18 @@
             </div>
 
             <div class="yd-nav-right-button">
-                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
                 <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
+                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
+
             </div>
 
             <yd-popup v-model="show" position="bottom" height="60%">
                 <div class="GoodSuk">
                     <div class="gotup" v-for="(item, index) in gotup" :key="index">
                         <h3>{{item.AttName}}</h3>
-                        <div class="gptupBox">
-                            <span @click="TouchSku(itemt.AttValueId)" :class={isOrange:itemt.isTrue} v-for="(itemt, index) in item.LstAttValue" :key="index">{{itemt.AttValue}}</span>
+                        <div class="gotupTab">
+                            <span @click="TouchSku(itemt.AttValueId)" :class={isOrange:itemt.isTrue,pointerEvents:elementSkus[index]} v-for="(itemt, index) in item.LstAttValue" :key="index">
+                                {{itemt.AttValue}}</span>
                         </div>
                     </div>
                 </div>
@@ -113,7 +115,9 @@ export default {
             GoodsList: [],
             GoodsHtml: "",
             show: false,
-            gotup: []
+            gotup: [],
+            LstSKU: [],
+            elementSkus: [false, false, true]
         };
     },
     created() {
@@ -139,15 +143,17 @@ export default {
             if (response.data.success == 200) {
                 this.GoodsList = response.data.object;
                 this.gotup = this.GoodsList.LstAtt;
+                this.LstSKU = this.GoodsList.LstSKU;
+                for (let i = 0; i < this.gotup.length; i++) {
+                    const element = this.gotup[i];
+                    console.log(element);
+                    for (let io = 0; io < element.LstAttValue.length; io++) {
+                        const elements = element.LstAttValue[io];
+                        this.$set(elements, "isTrue", false);
 
-                this.gotup.forEach((element, index) => {
-                    element.LstAttValue.forEach((elements, index) => {
-                        Object.assign(elements, {
-                            isTrue: false
-                        });
-                        console.log(elements);
-                    });
-                });
+                        console.log(this.gotup);
+                    }
+                }
             }
         });
         // 商品详情
@@ -202,16 +208,78 @@ export default {
         },
         TouchSku(ValueId) {
             console.log(ValueId);
-            this.gotup.forEach((element, index) => {
-                element.LstAttValue.forEach((elements, index) => {
-                    if (ValueId == elements.AttValueId) {
-                        Object.assign(elements, {
-                            isTrue: true
-                        });
-                        console.log(elements);
-                    }
-                });
-            });
+            console.info(this.LstSKU);
+
+            for (let i = 0; i < this.gotup.length; i++) {
+                const element = this.gotup[i];
+                // console.log("-AttId：" + element.AttId);
+                switch (element.AttId) {
+                    case 1:
+                        for (
+                            let io = 0;
+                            io < element.LstAttValue.length;
+                            io++
+                        ) {
+                            const elements = element.LstAttValue[io];
+                            if (
+                                ValueId == elements.AttValueId &&
+                                ValueId <= element.LstAttValue.length
+                            ) {
+                                this.$set(elements, "isTrue", !elements.isTrue);
+                            }
+                            if (ValueId != elements.AttValueId) {
+                                if (ValueId > element.LstAttValue.length) {
+                                    break;
+                                }
+                                this.$set(elements, "isTrue", false);
+                            }
+                        }
+                        this.elementSkus = [true, false, true, false];
+                        for (const [
+                            keys,
+                            elementSku
+                        ] of this.LstSKU.entries()) {
+                            let temp = elementSku.AttIds.split("|");
+                            console.log(elementSku.Stock);
+                            console.log(ValueId == temp[0].split(":")[1]);
+                            if (ValueId == temp[0].split(":")[1]) {
+                                console.log(temp[1].split(":")[1]);
+                                // this.elementSkus.push(temp[1].split(":")[1]);
+                            }
+                            console.log(this.elementSkus);
+                        }
+                        break;
+                    case 2:
+                        // console.log("ValueId:" + ValueId);
+                        for (
+                            let io = 0;
+                            io < element.LstAttValue.length;
+                            io++
+                        ) {
+                            const elements = element.LstAttValue[io];
+                            if (
+                                ValueId == elements.AttValueId &&
+                                ValueId >= element.LstAttValue.length
+                            ) {
+                                this.$set(elements, "isTrue", !elements.isTrue);
+                            }
+                            if (ValueId != elements.AttValueId) {
+                                if (ValueId < element.LstAttValue.length) {
+                                    break;
+                                }
+                                this.$set(elements, "isTrue", false);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                console.log(ValueId);
+                // console.log(elements);
+            }
+
+            console.log(this.gotup);
         },
         addCart(i) {
             console.log(i);
@@ -260,8 +328,8 @@ export default {
         > a {
             width: 1rem;
             text-align: center;
-            height: 1rem;
-            line-height: 0.8rem;
+            height: 0.8rem;
+            line-height: 0.7rem;
             flex: 1;
             padding: 0.1rem;
         }
@@ -413,14 +481,14 @@ export default {
             width: 2.3rem;
             color: #ffffff;
         }
-        .rightbtn {
-            border-top-right-radius: 50px;
-            border-bottom-right-radius: 50px;
-        }
-        .leftbtn {
-            border-top-left-radius: 50px;
-            border-bottom-left-radius: 50px;
-        }
+        // .rightbtn {
+        //     border-top-right-radius: 50px;
+        //     border-bottom-right-radius: 50px;
+        // }
+        // .leftbtn {
+        //     border-top-left-radius: 50px;
+        //     border-bottom-left-radius: 50px;
+        // }
         .leftColor {
             background-color: #ffa617;
         }
@@ -475,9 +543,10 @@ export default {
         border-bottom: 1px solid #dedcdc;
         padding: 0.2rem 0;
         font-size: 0.36rem;
-        .gptupBox {
+        .gotupTab {
             font-size: 0.25rem;
             display: flex;
+            flex-wrap: wrap;
             .isOrange {
                 background: #ff5f17;
                 border: 1px solid #ff5f17;
@@ -490,6 +559,12 @@ export default {
                 background: #dedcdc;
                 margin: 0.2rem;
                 cursor: pointer;
+            }
+            .pointerEvents {
+                pointer-events: none;
+                border: 1px dotted rgb(190, 190, 190);
+                background: #dedcdc;
+                color: rgb(190, 190, 190);
             }
         }
     }
