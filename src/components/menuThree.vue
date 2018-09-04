@@ -12,12 +12,13 @@
             <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
             </yd-tab-panel>
         </yd-tab>
+
         <!-- 商品列表 -->
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
             <yd-list theme="3" slot="list">
                 <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
                     <img slot="img" :src="item.ProductImg">
-                    <span slot="title">{{item.ProductTitle}}</span>
+                    <p slot="title" class="hideTwo">{{item.ProductTitle}}</p>
                     <yd-list-other slot="other">
                         <div>
                             <span class="demo-list-price">
@@ -162,9 +163,22 @@ export default {
 };
 </script>
 <style lang="scss">
+.yd-list-theme3 .yd-list-item .yd-list-title{
+        /* word-wrap: normal; */
+    text-overflow: ellipsis;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    /* text-align: justify; */
+    height: .8rem;
+}
+.hideTwo {
+    display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+    -webkit-box-orient: vertical; //从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+    -webkit-line-clamp: 2; //这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
+}
 .demo-list-price {
     font-size: 0.3rem;
     color: rgb(238, 97, 32);
-    font-weight: 600
+    font-weight: 600;
 }
 </style>
