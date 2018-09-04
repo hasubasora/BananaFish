@@ -10,37 +10,38 @@
 
         <yd-tab horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
             <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
-                <!-- 商品列表 -->
-                <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-                    <yd-list theme="3" slot="list">
-                        <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
-                            <img slot="img" :src="item.ProductImg">
-                            <span slot="title">{{item.ProductTitle}}</span>
-                            <yd-list-other slot="other">
-                                <div>
-                                    <span class="demo-list-price">
-                                        <em>¥</em>{{item.SalePrice}}</span>
-                                    <span class="demo-list-del-price">{{item.Integral}}积分</span>
-                                </div>
-                                <div>月销量{{item.SaleCount}}件</div>
-                            </yd-list-other>
-                        </yd-list-item>
-                    </yd-list>
-                    <!-- 商品列表 end-->
-                    <!-- 数据全部加载完毕显示 -->
-                    <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
-
-                    <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-                    <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
-
-                </yd-infinitescroll>
             </yd-tab-panel>
         </yd-tab>
+        <!-- 商品列表 -->
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <yd-list theme="3" slot="list">
+                <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
+                    <img slot="img" :src="item.ProductImg">
+                    <span slot="title">{{item.ProductTitle}}</span>
+                    <yd-list-other slot="other">
+                        <div>
+                            <span class="demo-list-price">
+                                <em>¥</em>{{item.SalePrice}}</span>
+                            <span class="demo-list-del-price">{{item.Integral}}积分</span>
+                        </div>
+                        <div>月销量{{item.SaleCount}}件</div>
+                    </yd-list-other>
+                </yd-list-item>
+            </yd-list>
+            <!-- 商品列表 end-->
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
+
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+
+        </yd-infinitescroll>
+
     </div>
 </template>
 <script>
-import Vue from 'vue';
-import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll';
+import Vue from "vue";
+import { InfiniteScroll } from "vue-ydui/dist/lib.rem/infinitescroll";
 /* 使用px：import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; */
 
 Vue.component(InfiniteScroll.name, InfiniteScroll);
@@ -162,7 +163,8 @@ export default {
 </script>
 <style lang="scss">
 .demo-list-price {
-    font-size: 0.4rem;
-    color: #555;
+    font-size: 0.3rem;
+    color: rgb(238, 97, 32);
+    font-weight: 600
 }
 </style>
