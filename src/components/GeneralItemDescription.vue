@@ -21,13 +21,12 @@
                     <div class="ProductTitle">
                         <strong>{{GoodsList.ProductTitle}}</strong>
                     </div>
-                    <yd-flexbox-item>
-                        <div class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</div>
-                    </yd-flexbox-item>
                 </yd-flexbox>
                 <yd-flexbox class=" theTopGood ">
                     <yd-flexbox-item>
-                        <p class="oranges">￥{{GoodsList.SalePrice}}</p>
+                        <p class="oranges">￥{{GoodsList.SalePrice}}
+                            <span class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</span>
+                        </p>
                     </yd-flexbox-item>
 
                     <yd-flexbox-item>
@@ -87,23 +86,51 @@
 
             <div class="yd-nav-right-button">
                 <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
-                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
-
             </div>
-
+            <div class="yd-nav-right-button">
+                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
+            </div>
             <yd-popup v-model="show" position="bottom" height="60%">
+                <div>
+                    <yd-flexbox>
+                        <div>
+                            <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
+                        </div>
+                        <yd-flexbox-item>
+                            <p class="oranges">￥
+                                <span>{{GoodsList.SalePrice}}</span>
+                            </p>
+                            <div>
+                                <span>库存{{Stock}}件</span>
+                            </div>
+                            <p>已选："{{GoodAttrs}}"</p>
+                        </yd-flexbox-item>
+                    </yd-flexbox>
+                </div>
                 <div class="GoodSuk">
-                    <div class="gotup" v-for="(item, index) in gotup" :key="index">
-                        <h3>{{item.AttName}}</h3>
+                    <div class="gotup" v-if="Gotup">
+                        <h3>{{Gotup.AttName}}</h3>
                         <div class="gotupTab">
-                            <span @click="TouchSku(itemt.AttValueId,index)" v-if="elementSku[index]" class="pointerEvents" v-for="(itemt, index) in item.LstAttValue" :key="index">
-                                {{itemt.AttValue}}{{elementSku[index]}}</span>
-                            <span @click="TouchSku(itemt.AttValueId,index)" v-if="!elementSku[index]" :class="{isOrange:itemt.isTrue}" v-for="(itemt, index) in item.LstAttValue" :key="index">
-                                {{itemt.AttValue}}{{elementSku[index]}}</span>
+                            <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110)" :class="{isOrange:itemt.isTrue}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
+                                {{itemt.AttValue}}
+                            </span>
+
                         </div>
                     </div>
+                    <div class="gotup" v-if="GotupAttr">
+                        <h3>{{GotupAttr.AttName}}</h3>
+                        <div class="gotupTab">
+                            <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,selectSKU[index])" :class="{isOrange:itemt.isTrue,'pointerEvents':elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
+                                {{itemt.AttValue}}
+                            </span>
+
+                        </div>
+                    </div>
+                    <div class="gotup">
+                        <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
+                    </div>
                 </div>
-                <yd-button type="warning" style="margin: 30px;" @click.native="show = false">确定</yd-button>
+                <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id,120)">确定</yd-button>
             </yd-popup>
 
         </yd-flexbox>
@@ -117,64 +144,27 @@ export default {
             GoodsList: [],
             GoodsHtml: "",
             show: false,
-            gotup: [],
-            LstSKU: [],
-            elementSku: [...true,]
+            Gotup: [],
+            GotupAttr: [],
+            GotupLen: 0,
+            selectSKU: [],
+            elementAttrSku: [],
+            GoodAttrs: [],
+            GoodsImg: "",
+            buyID: "", //商品ID
+            spinner: 0, //购买数量
+            Stock: 0 //存库
         };
     },
     created() {
         // console.log(location);
-
         sessionStorage.setItem("s", this.$route.params.Good_id);
         localStorage.setItem("s", this.$route.params.Good_id);
         console.log(this.$route.params.Good_id);
         // 商品信息
-        this.$axios({
-            method: "POST",
-            data: {
-                productid: this.$route.params.Good_id
-                    ? this.$route.params.Good_id
-                    : localStorage.getItem("s")
-            },
-            url: this.$server.serverUrl + "/index/getproductdetail",
-            responseType: "json"
-        }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
-            if (response.data.success == 200) {
-                this.GoodsList = response.data.object;
-                this.gotup = this.GoodsList.LstAtt;
-                this.LstSKU = this.GoodsList.LstSKU;
-                for (let i = 0; i < this.gotup.length; i++) {
-                    const element = this.gotup[i];
-                    // console.log(element);
-                    for (let io = 0; io < element.LstAttValue.length; io++) {
-                        const elements = element.LstAttValue[io];
-                        this.$set(elements, "isTrue", false);
-
-                        // console.log(this.gotup);
-                    }
-                }
-            }
-        });
+        this.GetProductDetail();
         // 商品详情
-        this.$axios({
-            method: "POST",
-            data: {
-                productid: this.$route.params.Good_id
-            },
-            url: this.$server.serverUrl + "/index/getproductdetaildesc",
-            responseType: "json"
-        }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
-            if (response.data.success == 200) {
-                this.GoodsHtml = response.data.object;
-                console.log(this.GoodsHtml);
-            }
-        });
+        this.GetProductDetailDesc();
     },
     methods: {
         GoHistory(sid) {
@@ -208,123 +198,145 @@ export default {
                 }
             });
         },
-        TouchSku(ValueId,key) {
+        TouchSku(ValueId, element, vid, buyID) {
             console.log(ValueId);
-            console.log('key'+key);
-            for (let i = 0; i < this.gotup.length; i++) {
-                const element = this.gotup[i];
-                console.log("-AttId：" + element.AttId);
-                console.error(i);
-                switch (i) {
-                    case 0:
-                        for (const [ keys, elementSkus ] of element.LstAttValue.entries()) {
-                            console.log(keys);
-                            console.log(elementSkus);
-                            console.log(elementSkus.SKU);
-                            console.log(elementSkus.isTrue);
-                            if (ValueId == elementSkus.AttValueId&&key<element.LstAttValue.length) {
-                                //点击的ID 和 JSON里面一样的 改变属性
-                                this.$set(
-                                    elementSkus,
-                                    "isTrue",
-                                    !elementSkus.isTrue
-                                );
-
-                                this.elementSku = [];
-                                for (let sku = 0; sku < element.LstAttValue.length; sku++) {
-                                    this.elementSku.push('ture');
-                                }
-                                for (const iterator of elementSkus.SKU) {
-                                    console.log(iterator.Stock);
-                                    if (iterator.Stock > 0) {
-                                        this.elementSku.push(false);
-                                    } else {
-                                        this.elementSku.push(true);
-                                    }
-                                }
+            if (buyID) {
+                console.log(buyID);
+                this.buyID = buyID.AttIds;
+                this.Stock = buyID.Stock;
+            }
+            for (const [keys, elementSkus] of element.entries()) {
+                console.log(keys);
+                console.log(elementSkus);
+                if (ValueId == elementSkus.AttValueId) {
+                    //点击的ID 和 JSON里面一样的 改变属性
+                    this.$set(elementSkus, "isTrue", !elementSkus.isTrue);
+                    if (vid == 110 && elementSkus.isTrue) {
+                        this.elementAttrSku = [];
+                        console.log(elementSkus.SKU);
+                        this.selectSKU = elementSkus.SKU;
+                        for (const iteratorSku of elementSkus.SKU) {
+                            if (iteratorSku.Stock > 0) {
+                                console.log(iteratorSku.Stock);
+                                this.elementAttrSku.push(false);
                             } else {
-                                this.$set(elementSkus, "isTrue", false);
-                            }
-                           
-                            console.log(this.elementSku);
-                        }
-
-                        //     let temp = elementSku.AttIds.split("|");
-                        //     console.log(elementSku.Stock);
-                        //     console.log(ValueId == temp[0].split(":")[1]);
-                        //     if (ValueId == temp[0].split(":")[1]) {
-                        //         console.log(temp[1].split(":")[1]);
-                        //         // this.elementSkus.push(temp[1].split(":")[1]);
-                        //     }
-                        //     console.log(this.elementSkus);
-                        // }
-                        break;
-                    case 1:
-                        // console.log("ValueId:" + ValueId);
-                        for (
-                            let io = 0;
-                            io < element.LstAttValue.length;
-                            io++
-                        ) {
-                            const elements = element.LstAttValue[io];
-                            if (
-                                ValueId == elements.AttValueId &&
-                                ValueId >= element.LstAttValue.length
-                            ) {
-                                this.$set(elements, "isTrue", !elements.isTrue);
-                            }
-                            if (ValueId != elements.AttValueId) {
-                                if (ValueId < element.LstAttValue.length) {
-                                    break;
-                                }
-                                this.$set(elements, "isTrue", false);
+                                this.elementAttrSku.push(true);
                             }
                         }
+                    } else if (vid == 110) {
+                        this.elementAttrSku = []; //清空xy选择
+                    }
+                } else {
+                    this.$set(elementSkus, "isTrue", false);
+                }
+            }
+        },
+        addCart(i,n) {
+            console.log(i);
+            console.log(this.show);
+            
+            if (this.Gotup&&!this.show) {
+                this.show = true;
+                return;
+            }
+            this.$axios({
+                method: "POST",
+                data: {
+                    productid: this.$route.params.Good_id,
+                    attids: this.buyID
+                },
+                url: this.$server.serverUrl + "/order/addshoppingcart",
+                responseType: "json"
+            }).then(response => {
+                // this.GetMyId(response.data.success)
+                switch (response.data.success) {
+                    case 200:
+                        this.show = false;
+                        this.$dialog.toast({
+                            mes: "加入购物车成功",
+                            timeout: 1500,
+                            icon: "success"
+                        });
                         break;
+                    case 400:
+                        this.$router.push({ name: "SignIn", ReturnUrl: "" });
+                        break;
+                    case 500:
+                        this.$dialog.toast({
+                            mes: response.data.msg,
+                            timeout: 1500
+                        });
                     default:
                         break;
                 }
-
-                console.log(ValueId);
-                // console.log(elements);
-            }
-
-            console.log(this.gotup);
+            });
         },
-        addCart(i) {
-            console.log(i);
-            this.show = true;
+        GetProductDetail() {
+            this.$axios({
+                method: "POST",
+                data: {
+                    productid: this.$route.params.Good_id
+                        ? this.$route.params.Good_id
+                        : localStorage.getItem("s")
+                },
+                url: this.$server.serverUrl + "/index/getproductdetail",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GoodsList = response.data.object; //整个
+                    this.Gotup = this.GoodsList.LstAtt[0];
+                    this.GotupAttr = this.GoodsList.LstAtt[1];
+                    this.GotupLen = this.GoodsList.LstAtt.length;
+                    console.info(this.Gotup);
+                    console.info(this.GotupAttr);
+                    if (this.Gotup) {
+                        for (const [
+                            keys,
+                            elementSkus
+                        ] of this.Gotup.LstAttValue.entries()) {
+                            console.log(keys);
+                            console.log(elementSkus);
+                            this.$set(elementSkus, "isTrue", false);
+                        }
+                    }
+                    if (this.GotupAttr) {
+                        for (const [
+                            keys,
+                            elementSkus
+                        ] of this.GotupAttr.LstAttValue.entries()) {
+                            console.log(keys);
+                            console.log(elementSkus);
+                            this.$set(elementSkus, "isTrue", false);
+                        }
+                    }
 
-            // this.$axios({
-            //     method: "POST",
-            //     data: {
-            //         productid: this.$route.params.Good_id,
-            //         groupid: 0
-            //     },
-            //     url: this.$server.serverUrl + "/order/addshoppingcart",
-            //     responseType: "json"
-            // }).then(response => {
-            //     // this.GetMyId(response.data.success)
-            //     switch (response.data.success) {
-            //         case 200:
-            //             this.$dialog.toast({
-            //                 mes: "加入购物车成功",
-            //                 timeout: 1500,
-            //                 icon: "success"
-            //             });
-            //             break;
-            //         case 400:
-            //             this.$router.push({ name: "SignIn", ReturnUrl: "" });
-            //             break;
-            //         case 500:
-            //             this.$dialog.toast({
-            //                 mes: response.data.msg,
-            //                 timeout: 1500
-            //             });
-            //         default:
-            //             break;
-            //     }
-            // });
+                    this.GoodsList.LstSKU.forEach((element, index) => {
+                        this.Stock += element.Stock;
+                    });
+                    this.GoodsImg = this.GoodsList.ProductImg[0].ImgUrl;
+                }
+            });
+        },
+        GetProductDetailDesc() {
+            this.$axios({
+                method: "POST",
+                data: {
+                    productid: this.$route.params.Good_id
+                },
+                url: this.$server.serverUrl + "/index/getproductdetaildesc",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GoodsHtml = response.data.object;
+                    // console.log(this.GoodsHtml);
+                }
+            });
         }
     }
 };
@@ -332,9 +344,14 @@ export default {
 
 <style lang="scss">
 .GeneralItemDescription {
+    .SetButton {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+    }
     .iconfonts {
         display: flex;
-        width: 2.8rem;
+        // width: 2.8rem;
         > a {
             width: 1rem;
             text-align: center;
@@ -375,23 +392,13 @@ export default {
         }
         background: #ffffff;
         // margin: 0.1rem 0;
-        padding: 0.2rem;
+        padding: 0.26rem;
         font-size: 0.2rem;
         .ProductTitle {
-            border-right: 1px solid #ccc;
-            width: 5rem;
             padding-right: 0.2rem;
             font-size: 0.3rem;
         }
-        .t_MarketPrice {
-            text-align: center;
-            @extend .oranges;
-        }
-        .oranges {
-            // background-color: #ff9717;
-            color: #ff9717;
-            font-size: 0.3rem;
-        }
+
         .Integral {
             font-size: 0.2rem;
             color: #ccc;
@@ -548,7 +555,7 @@ export default {
     }
 }
 .GoodSuk {
-    padding: 0.2rem;
+    padding: 0.2rem 0.2rem 1rem;
     .gotup {
         border-bottom: 1px solid #dedcdc;
         padding: 0.2rem 0;
@@ -578,6 +585,23 @@ export default {
             }
         }
     }
+}
+.oranges {
+    // background-color: #ff9717;
+    color: #ff4d17;
+    font-size: 0.4rem;
+    .t_MarketPrice {
+        text-align: center;
+        font-size: 0.16rem;
+        color: #888;
+    }
+}
+.GoodsImg {
+    border: 1px solid #ccc;
+    margin: 0.36rem;
+    width: 2rem;
+    height: 2rem;
+    display: block;
 }
 </style>
 
