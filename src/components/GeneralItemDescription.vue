@@ -96,8 +96,10 @@
                     <div class="gotup" v-for="(item, index) in gotup" :key="index">
                         <h3>{{item.AttName}}</h3>
                         <div class="gotupTab">
-                            <span @click="TouchSku(itemt.AttValueId)" :class={isOrange:itemt.isTrue,pointerEvents:elementSkus[index]} v-for="(itemt, index) in item.LstAttValue" :key="index">
-                                {{itemt.AttValue}}</span>
+                            <span @click="TouchSku(itemt.AttValueId,index)" v-if="elementSku[index]" class="pointerEvents" v-for="(itemt, index) in item.LstAttValue" :key="index">
+                                {{itemt.AttValue}}{{elementSku[index]}}</span>
+                            <span @click="TouchSku(itemt.AttValueId,index)" v-if="!elementSku[index]" :class="{isOrange:itemt.isTrue}" v-for="(itemt, index) in item.LstAttValue" :key="index">
+                                {{itemt.AttValue}}{{elementSku[index]}}</span>
                         </div>
                     </div>
                 </div>
@@ -117,7 +119,7 @@ export default {
             show: false,
             gotup: [],
             LstSKU: [],
-            elementSkus: [false, false, true]
+            elementSku: [...true,]
         };
     },
     created() {
@@ -146,12 +148,12 @@ export default {
                 this.LstSKU = this.GoodsList.LstSKU;
                 for (let i = 0; i < this.gotup.length; i++) {
                     const element = this.gotup[i];
-                    console.log(element);
+                    // console.log(element);
                     for (let io = 0; io < element.LstAttValue.length; io++) {
                         const elements = element.LstAttValue[io];
                         this.$set(elements, "isTrue", false);
 
-                        console.log(this.gotup);
+                        // console.log(this.gotup);
                     }
                 }
             }
@@ -206,50 +208,58 @@ export default {
                 }
             });
         },
-        TouchSku(ValueId) {
+        TouchSku(ValueId,key) {
             console.log(ValueId);
-            console.info(this.LstSKU);
-
+            console.log('key'+key);
             for (let i = 0; i < this.gotup.length; i++) {
                 const element = this.gotup[i];
-                // console.log("-AttId：" + element.AttId);
-                switch (element.AttId) {
-                    case 1:
-                        for (
-                            let io = 0;
-                            io < element.LstAttValue.length;
-                            io++
-                        ) {
-                            const elements = element.LstAttValue[io];
-                            if (
-                                ValueId == elements.AttValueId &&
-                                ValueId <= element.LstAttValue.length
-                            ) {
-                                this.$set(elements, "isTrue", !elements.isTrue);
-                            }
-                            if (ValueId != elements.AttValueId) {
-                                if (ValueId > element.LstAttValue.length) {
-                                    break;
+                console.log("-AttId：" + element.AttId);
+                console.error(i);
+                switch (i) {
+                    case 0:
+                        for (const [ keys, elementSkus ] of element.LstAttValue.entries()) {
+                            console.log(keys);
+                            console.log(elementSkus);
+                            console.log(elementSkus.SKU);
+                            console.log(elementSkus.isTrue);
+                            if (ValueId == elementSkus.AttValueId&&key<element.LstAttValue.length) {
+                                //点击的ID 和 JSON里面一样的 改变属性
+                                this.$set(
+                                    elementSkus,
+                                    "isTrue",
+                                    !elementSkus.isTrue
+                                );
+
+                                this.elementSku = [];
+                                for (let sku = 0; sku < element.LstAttValue.length; sku++) {
+                                    this.elementSku.push('ture');
                                 }
-                                this.$set(elements, "isTrue", false);
+                                for (const iterator of elementSkus.SKU) {
+                                    console.log(iterator.Stock);
+                                    if (iterator.Stock > 0) {
+                                        this.elementSku.push(false);
+                                    } else {
+                                        this.elementSku.push(true);
+                                    }
+                                }
+                            } else {
+                                this.$set(elementSkus, "isTrue", false);
                             }
+                           
+                            console.log(this.elementSku);
                         }
-                        this.elementSkus = [true, false, true, false];
-                        for (const [
-                            keys,
-                            elementSku
-                        ] of this.LstSKU.entries()) {
-                            let temp = elementSku.AttIds.split("|");
-                            console.log(elementSku.Stock);
-                            console.log(ValueId == temp[0].split(":")[1]);
-                            if (ValueId == temp[0].split(":")[1]) {
-                                console.log(temp[1].split(":")[1]);
-                                // this.elementSkus.push(temp[1].split(":")[1]);
-                            }
-                            console.log(this.elementSkus);
-                        }
+
+                        //     let temp = elementSku.AttIds.split("|");
+                        //     console.log(elementSku.Stock);
+                        //     console.log(ValueId == temp[0].split(":")[1]);
+                        //     if (ValueId == temp[0].split(":")[1]) {
+                        //         console.log(temp[1].split(":")[1]);
+                        //         // this.elementSkus.push(temp[1].split(":")[1]);
+                        //     }
+                        //     console.log(this.elementSkus);
+                        // }
                         break;
-                    case 2:
+                    case 1:
                         // console.log("ValueId:" + ValueId);
                         for (
                             let io = 0;

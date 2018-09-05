@@ -7,7 +7,7 @@
             <router-link to="#" slot="right">
             </router-link>
         </yd-navbar>
-
+        <yd-backtop></yd-backtop>
         <yd-tab horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
             <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
             </yd-tab-panel>
@@ -163,13 +163,13 @@ export default {
 };
 </script>
 <style lang="scss">
-.yd-list-theme3 .yd-list-item .yd-list-title{
-        /* word-wrap: normal; */
+.yd-list-theme3 .yd-list-item .yd-list-title {
+    /* word-wrap: normal; */
     text-overflow: ellipsis;
     /* white-space: nowrap; */
     overflow: hidden;
     /* text-align: justify; */
-    height: .8rem;
+    height: 0.8rem;
 }
 .hideTwo {
     display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。

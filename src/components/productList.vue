@@ -2,7 +2,7 @@
   <div>
     <yd-navbar title="分类列表" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
       <router-link to="/" slot="left">
-        <yd-navbar-back-icon></yd-navbar-back-icon>
+        <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
       </router-link>
 
       <router-link to="#" slot="right">
