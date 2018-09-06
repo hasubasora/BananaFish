@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yd-navbar slot="navbar" title="订单提交" height='.8rem'>
+    <yd-navbar slot="navbar" fixed title="订单提交" height='.8rem'>
       <router-link to="" slot="left" @click.native="GoHistory">
         <yd-navbar-back-icon></yd-navbar-back-icon>
       </router-link>
@@ -179,6 +179,7 @@ export default {
     background: #fffced;
     padding: 0.3rem;
     margin-bottom: 0.2rem;
+    
     .address_left {
         width: 1rem;
         text-align: center;

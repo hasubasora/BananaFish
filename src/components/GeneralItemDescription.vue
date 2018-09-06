@@ -1,9 +1,15 @@
 <template>
     <yd-layout class="GeneralItemDescription">
-        <yd-navbar slot="navbar" title="商品详情" height='.8rem'>
+        <yd-navbar slot="navbar" height='.8rem' fixed>
             <router-link to="" @click.native="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
+
+            <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px">
+                <yd-flexbox-item style="padding:.1rem .2rem;background:#A0A0A0;color:#fff">商品</yd-flexbox-item>
+                <yd-flexbox-item @click.native='GoDecs' style="padding:.1rem .2rem">详情</yd-flexbox-item>
+            </yd-flexbox>
+
         </yd-navbar>
 
         <yd-flexbox direction="vertical" class="swipe">
@@ -71,76 +77,82 @@
 
         </yd-flexbox>
 
-        <yd-flexbox class="yd-nav-button">
-            <div class='iconfonts'>
-                <router-link to="/">
-                    <yd-icon name="home-outline" color='#6A6A6A' size='.5rem'></yd-icon>
-                </router-link>
-                <router-link to="/">
-                    <div class="iconfont icon-54"></div>
-                </router-link>
-                <router-link to="/cart">
-                    <yd-icon name="shopcart-outline" color='#6A6A6A' size='.5rem'></yd-icon>
-                </router-link>
-            </div>
+        <keep-alive>
+            <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".16rem">
 
-            <div class="yd-nav-right-button">
-                <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
-            </div>
-            <div class="yd-nav-right-button">
-                <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
-            </div>
-            <yd-popup v-model="show" position="bottom" height="60%">
-                <div>
-                    <yd-flexbox>
+                <div class='iconfont_s'>
+                    <yd-tabbar-item title="首页" link="/" active>
+                        <yd-icon name="home" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
+                    </yd-tabbar-item>
+                    <yd-tabbar-item title="客服" link="/" active>
+                        <!-- <span slot="icon" class="marginTop02 iconfont icon-icon2" style="font-size:.4rem"></span> -->
+                        <span slot="icon" class="marginTop02 iconfont icon-54" style="font-size:.5rem; color:#ccc"></span>
+                    </yd-tabbar-item>
+                    <yd-tabbar-item title="购物车" link="/cart" active>
+                        <yd-icon name="shopcart" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
+                        <yd-badge slot="badge" type="danger">{{storeText?storeText:this.productNum}}</yd-badge>
+                    </yd-tabbar-item>
+
+                </div>
+
+                <div class="yd-nav-right-button">
+                    <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
+                </div>
+                <div class="yd-nav-right-button">
+                    <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
+                </div>
+            </yd-tabbar>
+        </keep-alive>
+
+        <yd-popup v-model="show" position="bottom" height="60%">
+            <div>
+                <yd-flexbox>
+                    <div>
+                        <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
+                    </div>
+                    <yd-flexbox-item>
+                        <p class="oranges">￥
+                            <span>{{GoodsList.SalePrice}}</span>
+                        </p>
                         <div>
-                            <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
+                            <span>库存{{Stock}}件</span>
                         </div>
-                        <yd-flexbox-item>
-                            <p class="oranges">￥
-                                <span>{{GoodsList.SalePrice}}</span>
-                            </p>
-                            <div>
-                                <span>库存{{Stock}}件</span>
-                            </div>
-                            <p>已选："{{GoodAttrs}}"</p>
-                        </yd-flexbox-item>
-                    </yd-flexbox>
-                </div>
-                <div class="GoodSuk">
-                    <div class="gotup" v-if="Gotup">
-                        <h3>{{Gotup.AttName}}</h3>
-                        <div class="gotupTab">
-                            <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110)" :class="{isOrange:itemt.isTrue}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
-                                {{itemt.AttValue}}
-                            </span>
+                        <p>已选："{{GoodAttrs}}"</p>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </div>
+            <div class="GoodSuk">
+                <div class="gotup" v-if="Gotup">
+                    <h3>{{Gotup.AttName}}</h3>
+                    <div class="gotupTab">
+                        <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110,itemt.AttValue,selectSKU[index])" :class="{isOrange:itemt.isTrue,'pointerEvents':elementSkuAttr[index]}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
+                            {{itemt.AttValue}}
+                        </span>
 
-                        </div>
-                    </div>
-                    <div class="gotup" v-if="GotupAttr">
-                        <h3>{{GotupAttr.AttName}}</h3>
-                        <div class="gotupTab">
-                            <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,selectSKU[index])" :class="{isOrange:itemt.isTrue,'pointerEvents':elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
-                                {{itemt.AttValue}}
-                            </span>
-
-                        </div>
-                    </div>
-                    <div class="gotup">
-                        <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
                     </div>
                 </div>
-                <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id,120)">确定</yd-button>
-            </yd-popup>
+                <div class="gotup" v-if="GotupAttr">
+                    <h3>{{GotupAttr.AttName}}</h3>
+                    <div class="gotupTab">
+                        <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,itemt.AttValue,selectSKU[index])" :class="{isOrange:itemt.isTrue,'pointerEvents':elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
+                            {{itemt.AttValue}}
+                        </span>
 
-        </yd-flexbox>
-
+                    </div>
+                </div>
+                <div class="gotup">
+                    <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
+                </div>
+            </div>
+            <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id,120)">确定</yd-button>
+        </yd-popup>
     </yd-layout>
 </template>
 <script>
 export default {
     data() {
         return {
+            productNum: 0,
             GoodsList: [],
             GoodsHtml: "",
             show: false,
@@ -148,9 +160,12 @@ export default {
             GotupAttr: [],
             GotupLen: 0,
             selectSKU: [],
+            GotupAttrSku: [],
             elementAttrSku: [],
+            elementSkuAttr: [],
             GoodAttrs: [],
             GoodsImg: "",
+            buyName: "",
             buyID: "", //商品ID
             spinner: 0, //购买数量
             Stock: 0 //存库
@@ -165,8 +180,37 @@ export default {
         this.GetProductDetail();
         // 商品详情
         this.GetProductDetailDesc();
+        //购物车数量
+        this.GetShoppingCartNum();
+    },
+    computed: {
+        storeText() {
+            return this.$store.state.counts;
+        }
     },
     methods: {
+        GetShoppingCartNum() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/order/getshoppingcartnum",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.productNum = response.data.object.productNum;
+                    console.log(this.productNum);
+                }
+            });
+        },
+        GoDecs() {
+            this.$router.push({
+                name: "Description",
+                params: { ItemGood_id: this.$route.params.Good_id }
+            });
+        },
         GoHistory(sid) {
             // console.log(sid);
             this.$router.go(-1);
@@ -198,44 +242,62 @@ export default {
                 }
             });
         },
-        TouchSku(ValueId, element, vid, buyID) {
-            console.log(ValueId);
+        TouchSku(ValueId, element, vid, buyName, buyID) {
+            if (buyName) {
+                this.GoodAttrs.splice(0, 1);
+                this.GoodAttrs.push(buyName);
+            }
             if (buyID) {
-                console.log(buyID);
+                // console.log(buyID);
                 this.buyID = buyID.AttIds;
                 this.Stock = buyID.Stock;
             }
             for (const [keys, elementSkus] of element.entries()) {
-                console.log(keys);
-                console.log(elementSkus);
+                // console.log(keys);
+                // console.log(elementSkus);
                 if (ValueId == elementSkus.AttValueId) {
                     //点击的ID 和 JSON里面一样的 改变属性
                     this.$set(elementSkus, "isTrue", !elementSkus.isTrue);
                     if (vid == 110 && elementSkus.isTrue) {
                         this.elementAttrSku = [];
-                        console.log(elementSkus.SKU);
+                        // console.log(elementSkus.SKU);
                         this.selectSKU = elementSkus.SKU;
                         for (const iteratorSku of elementSkus.SKU) {
                             if (iteratorSku.Stock > 0) {
-                                console.log(iteratorSku.Stock);
+                                // console.log(iteratorSku.Stock);
                                 this.elementAttrSku.push(false);
                             } else {
                                 this.elementAttrSku.push(true);
                             }
                         }
                     } else if (vid == 110) {
-                        this.elementAttrSku = []; //清空xy选择
+                        this.elementSkuAttr = []; //清空xy选择
+                    }
+                    //判断第二个属性 有没有 第一个属性
+                    if (vid == 100 && elementSkus.isTrue) {
+                        this.elementSkuAttr = [];
+                        // console.log(elementSkus.SKU);
+                        this.selectSKU = elementSkus.SKU;
+                        for (const iteratorSku of elementSkus.SKU) {
+                            if (iteratorSku.Stock > 0) {
+                                // console.log(iteratorSku.Stock);
+                                this.elementSkuAttr.push(false);
+                            } else {
+                                this.elementSkuAttr.push(true);
+                            }
+                        }
+                    } else if (vid == 100) {
+                        this.elementSkuAttr = []; //清空xy选择
                     }
                 } else {
                     this.$set(elementSkus, "isTrue", false);
                 }
             }
         },
-        addCart(i,n) {
+        addCart(i, n) {
             console.log(i);
-            console.log(this.show);
-            
-            if (this.Gotup&&!this.show) {
+
+            if (this.Gotup && !this.show) {
                 this.show = true;
                 return;
             }
@@ -243,7 +305,8 @@ export default {
                 method: "POST",
                 data: {
                     productid: this.$route.params.Good_id,
-                    attids: this.buyID
+                    attids: this.buyID,
+                    buynum: this.spinner
                 },
                 url: this.$server.serverUrl + "/order/addshoppingcart",
                 responseType: "json"
@@ -349,16 +412,16 @@ export default {
         left: 0;
         bottom: 0;
     }
-    .iconfonts {
+    .iconfont_s {
         display: flex;
         // width: 2.8rem;
         > a {
             width: 1rem;
             text-align: center;
             height: 0.8rem;
-            line-height: 0.7rem;
+            // line-height: 0.7rem;
             flex: 1;
-            padding: 0.1rem;
+            // padding: 0.1rem;
         }
     }
     .iconfont {
@@ -477,39 +540,6 @@ export default {
         background: #ffffff;
         padding: 0.2rem;
     }
-    .yd-nav-button {
-        background: #ffffff;
-        border-top: 1px solid #ccc;
-        padding: 0;
-        z-index: 99;
-        position: fixed;
-        width: 100%;
-        display: flex;
-        left: 0;
-        bottom: 0;
-        .handleClick {
-            // border-radius: 3rem;
-            background-color: #ff5f17;
-            font-size: 0.3rem;
-            border: none;
-            // margin: 0.1rem;
-            outline: none;
-            height: 0.8rem;
-            width: 2.3rem;
-            color: #ffffff;
-        }
-        // .rightbtn {
-        //     border-top-right-radius: 50px;
-        //     border-bottom-right-radius: 50px;
-        // }
-        // .leftbtn {
-        //     border-top-left-radius: 50px;
-        //     border-bottom-left-radius: 50px;
-        // }
-        .leftColor {
-            background-color: #ffa617;
-        }
-    }
 
     .obacity {
         opacity: 0;
@@ -602,6 +632,45 @@ export default {
     width: 2rem;
     height: 2rem;
     display: block;
+}
+.yd-nav-button {
+    background: #ffffff;
+    border-top: 1px solid #ccc;
+    padding: 0;
+    z-index: 99;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    left: 0;
+    bottom: 0;
+    .handleClick {
+        // border-radius: 3rem;
+        background-color: #ff5f17;
+        font-size: 0.3rem;
+        border: none;
+        // margin: 0.1rem;
+        outline: none;
+        height: 0.8rem;
+        width: 2.3rem;
+        color: #ffffff;
+    }
+    // .rightbtn {
+    //     border-top-right-radius: 50px;
+    //     border-bottom-right-radius: 50px;
+    // }
+    // .leftbtn {
+    //     border-top-left-radius: 50px;
+    //     border-bottom-left-radius: 50px;
+    // }
+    .leftColor {
+        background-color: #ffa617;
+    }
+    .yd-tabbar {
+        padding: 0;
+    }
+    .marginTop02 {
+        margin-top: 0.2rem;
+    }
 }
 </style>
 

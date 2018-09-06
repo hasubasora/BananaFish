@@ -1,6 +1,6 @@
 <template>
     <yd-layout class="ItemDescription">
-        <yd-navbar slot="navbar" title="头筹商品详情" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
+        <yd-navbar slot="navbar" fixed title="头筹商品详情" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
             <router-link to="" @click.native='GoHistory' slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
