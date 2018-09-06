@@ -216,10 +216,16 @@ export default {
             this.$router.go(-1);
         },
         BuyGood() {
+            console.log(this.buyID);
+            console.log(this.spinner);
+            console.log(this.$route.params.Good_id);
+            
             this.$axios({
                 method: "POST",
                 data: {
-                    productid: this.$route.params.Good_id
+                    productid: this.$route.params.Good_id,
+                    attids: this.buyID,
+                    buynum: this.spinner
                 },
                 url: this.$server.serverUrl + "/order/buyitnow",
                 responseType: "json"
