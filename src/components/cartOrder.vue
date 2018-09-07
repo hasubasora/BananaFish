@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="orderList">
     <yd-navbar slot="navbar" fixed title="订单提交" height='.8rem'>
       <router-link to="" slot="left" @click.native="GoHistory">
         <yd-navbar-back-icon></yd-navbar-back-icon>
@@ -92,6 +92,7 @@ export default {
                 console.log(response.data);
             }
         });
+        //获取收获地址
         this.$axios({
             method: "POST",
             data: {},
@@ -102,7 +103,7 @@ export default {
                 this.$router.push({ name: "SignIn" });
             }
             if (response.data.success == 200) {
-                this.address = response.data.object;
+                this.address = response.data.rows[0];
                 console.log(response.data);
             }
         });
@@ -113,7 +114,7 @@ export default {
             this.$router.go(-1);
         },
         GetAddress() {
-            this.$router.push({ name: "setAddress" });
+            this.$router.push({ name: "addressList" });
         },
         GoBuySometing() {
             this.$axios({
@@ -151,6 +152,9 @@ export default {
 };
 </script>
 <style lang="scss">
+.orderList{
+    margin: 1rem 0;
+}
 .bomBtnOrder {
     border-top: 1px solid #f2f2f2;
     position: fixed;

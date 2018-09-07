@@ -92,6 +92,10 @@ export default new Router({
       path: '/Description/:ItemGood_id',
       name: 'Description',
       component: Description => require(["@/components/Description"], Description),
+    },{ //设置
+      path: '/addressList/',
+      name: 'addressList',
+      component: addressList => require(["@/components/addressList"], addressList),
     },
   ]
 })

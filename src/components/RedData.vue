@@ -35,7 +35,7 @@
     <yd-cell-group>
       <yd-cell-item arrow>
         <span slot="left">
-          <i class="iconfont icon-lirun iconfonts"></i>
+          <i class="iconfont icon-lirun iconfont_is"></i>
         </span>
         <span slot="left">平台总积分：{{objectData.Integral}}</span>
       </yd-cell-item>
@@ -159,7 +159,7 @@ export default {
         font-size: 0.3rem;
     }
 }
-.iconfonts {
+.iconfont_is {
     color: #ff5f17;
     font-size: 0.5rem;
     margin-right: 0.1rem;
