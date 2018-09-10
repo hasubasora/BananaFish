@@ -6,13 +6,13 @@
             </router-link>
 
             <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px;overflow:hidden">
-                <yd-flexbox-item @click.native='GoDecs' style="padding:.1rem .2rem">详情</yd-flexbox-item>
-                <yd-flexbox-item style="padding:.1rem .2rem;background:#A0A0A0;color:#fff">商品</yd-flexbox-item>
+                <yd-flexbox-item @click.native='GoDecs' style="padding:.1rem .2rem">商品</yd-flexbox-item>
+                <yd-flexbox-item style="padding:.1rem .2rem;background:#A0A0A0;color:#fff">详情</yd-flexbox-item>
             </yd-flexbox>
 
         </yd-navbar>
 
-        <div v-html="GoodsHtml.ProductDesc"></div>
+        <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
     </div>
 </template>
 <script>
@@ -58,4 +58,12 @@ export default {
 };
 </script>
 <style lang="scss">
+.GoodsHtml{
+    margin-top: 1rem;
+  >p{
+      >img{
+          width: 100%;
+      }
+  }
+}
 </style>

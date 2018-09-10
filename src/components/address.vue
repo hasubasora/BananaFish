@@ -2,7 +2,7 @@
     <yd-layout>
         <yd-navbar slot="navbar" title="地址管理" height='.8rem'>
             <router-link to="#" slot="left">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
+                <yd-navbar-back-icon ></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
 

@@ -44,9 +44,7 @@
             <yd-flexbox-item>
                 <yd-accordion>
                     <yd-accordion-item title="商品详情" open>
-                        <div style="width:100%">
-                            <div v-html="GoodsHtml.ProductDesc"></div>
-                        </div>
+                        <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
                     </yd-accordion-item>
                 </yd-accordion>
                 <yd-accordion>
@@ -219,7 +217,7 @@ export default {
             console.log(this.buyID);
             console.log(this.spinner);
             console.log(this.$route.params.Good_id);
-            
+
             this.$axios({
                 method: "POST",
                 data: {
@@ -412,6 +410,13 @@ export default {
 </script>
 
 <style lang="scss">
+.GoodsHtml{
+  >p{
+      >img{
+          width: 100%;
+      }
+  }
+}
 .GeneralItemDescription {
     .SetButton {
         position: fixed;

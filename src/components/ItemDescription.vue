@@ -1,8 +1,8 @@
 <template>
     <yd-layout class="ItemDescription">
-        <yd-navbar slot="navbar" fixed title="头筹商品详情" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
+        <yd-navbar slot="navbar" fixed color="#f2f2f2" bgcolor="rgba(0,0,0,0)" height='.8rem' class="ItemDescription_top">
             <router-link to="" @click.native='GoHistory' slot="left">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
+                <yd-navbar-back-icon color="#111"></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
 
@@ -76,7 +76,7 @@
 
                 </yd-accordion>
             </yd-flexbox-item>
-         
+
             <!-- <yd-flexbox-item>
                  <p class="d_text">用户参与记录<span>本期于XXXXXXXX开始</span></p>
                    <yd-flexbox>
@@ -164,7 +164,6 @@ export default {
                 url: this.$server.serverUrl + "/order/addshoppingcart",
                 responseType: "json"
             }).then(response => {
-
                 switch (response.data.success) {
                     case 200:
                         this.$dialog.toast({
@@ -187,10 +186,16 @@ export default {
 
 <style lang="scss">
 .ItemDescription {
+    // margin-top: 1rem;
+    .ItemDescription_top {
+        &:after {
+            border-bottom: none;
+        }
+    }
     .yd-scrollview {
         .swipe {
             .mint-swipe {
-                height: 3rem;
+                height: 4rem;
                 background: #ffffff;
                 text-align: center;
                 .mint-swipe-item {

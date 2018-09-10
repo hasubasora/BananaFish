@@ -53,7 +53,7 @@ export default new Router({
       name: 'SignIn',
       component: SignIn => require(["@/components/SignIn"], SignIn),
     }, { //提交订单
-      path: '/cartOrder',
+      path: '/cartOrder/:address_GetId',
       name: 'cartOrder',
       component: cartOrder => require(["@/components/cartOrder"], cartOrder),
     }, { //提交订单
@@ -93,9 +93,9 @@ export default new Router({
       name: 'Description',
       component: Description => require(["@/components/Description"], Description),
     },{ //设置
-      path: '/addressList/',
-      name: 'addressList',
-      component: addressList => require(["@/components/addressList"], addressList),
+      path: '/selectAddress/',
+      name: 'selectAddress',
+      component: selectAddress => require(["@/components/selectAddress"], selectAddress),
     },
   ]
 })

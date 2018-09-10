@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+    <div id="app">
+        <router-view/>
+    </div>
 </template>
 
 <script>
@@ -28,6 +28,12 @@ body {
 .c-red {
     color: red;
 }
+.gray {
+    color: #aaa;
+}
+.green {
+    color: #09bb07;
+}
 .mt-progress-runway {
     background-color: #8a8a8a;
 }
@@ -38,5 +44,4 @@ body {
 .mt-progress-progress {
     background-color: #ff5f17;
 }
-
 </style>

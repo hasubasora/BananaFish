@@ -1,111 +1,72 @@
 <template>
-  <div class="ProductGroupList">
-    <yd-flexbox direction="vertical">
-      <yd-flexbox-item class="ProTop">
-        <img class="haibao" src="../assets/Img/haibao.jpg" alt="">
-        <div class="liucheng"> <img class="liuchengtu" src="../assets/Img/liucheng.png" alt=""></div>
-        <img class="haibaohd" src="../assets/Img/hd.png" alt="">
-        <img class="haibaowd" src="../assets/Img/wd.png" alt="">
-        <div class="ProductNews">
-          <img class="Productnew" src="../assets/Img/tt.png" alt="">
-          <yd-rollnotice autoplay="2000">
-            <yd-rollnotice-item>
-              <span style="color:#F00;"> 最新 </span>荣耀V9 3月超级钜惠！</yd-rollnotice-item>
-            <yd-rollnotice-item>
-              <span style="color:#F00;"> 最新 </span>3.23京东超级品牌日格力盛典</yd-rollnotice-item>
-            <yd-rollnotice-item>
-              <span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
-          </yd-rollnotice>
-          <span class="allText">|更多</span>
-        </div>
-
-      </yd-flexbox-item>
-      <yd-flexbox-item>
-        <yd-tab>
-          <yd-tab-panel label="正在头筹">
-            <IsTheTop></IsTheTop>
-
-          </yd-tab-panel>
-          <yd-tab-panel label="正在揭晓">
-
-            <div class="goodsList" v-for="item in GoodsList" :key="item.id">
-              <yd-flexbox class="backgoods">
-                <yd-flexbox-item>
-                  <div class="goodsListOne">
-                    <span class="GroupId">第{{item.CurrentPeriod}}期</span>
-                    <div class="goodsa">
-                      <span class="goodsatop">本期头筹奖品</span>
-                      <img :src="item.ProductImg" alt="">
-                      <p class="ProductTitle">{{item.ProductTitle}}</p>
-                      <div class="SubTitle">{{item.SubTitle}}</div>
-                      <div class="points">
-                        市场价
-                        <strong>￥{{item.MarketPrice}}</strong>
-                      </div>
-                    </div>
-                  </div>
-                </yd-flexbox-item>
-                <yd-flexbox-item class="goodsListTwo">
-                  <yd-grids-group :rows="2">
-                    <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id">
-                      <span slot="text">
-                        <div class="goodsLittle">
-                          <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
-                          <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
-                          <span>月销{{itemt.SaleCount}}件</span>
-                          <strong>￥{{itemt.SalePrice}}</strong>
-                          <img class="gwc" src="../assets/Img/gwc.png" alt="">
-                        </div>
-                      </span>
-                    </yd-grids-item>
-                  </yd-grids-group>
-                </yd-flexbox-item>
-              </yd-flexbox>
-
-              <yd-flexbox-item>
-                <div class="p_progress">
-                  <div class="p_text">等待揭晓答案</div>
+    <div class="ProductGroupList">
+        <yd-flexbox direction="vertical">
+            <yd-flexbox-item class="ProTop">
+                <img class="haibao" src="../assets/Img/haibao.jpg" alt="">
+                <div class="liucheng"> <img class="liuchengtu" src="../assets/Img/liucheng.png" alt=""></div>
+                <img class="haibaohd" src="../assets/Img/hd.png" alt="">
+                <img class="haibaowd" src="../assets/Img/wd.png" alt="">
+                <div class="ProductNews">
+                    <img class="Productnew" src="../assets/Img/tt.png" alt="">
+                    <yd-rollnotice autoplay="2000">
+                        <yd-rollnotice-item>
+                            <span style="color:#F00;"> 最新 </span>荣耀V9 3月超级钜惠！</yd-rollnotice-item>
+                        <yd-rollnotice-item>
+                            <span style="color:#F00;"> 最新 </span>3.23京东超级品牌日格力盛典</yd-rollnotice-item>
+                        <yd-rollnotice-item>
+                            <span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
+                    </yd-rollnotice>
+                    <span class="allText">|更多</span>
                 </div>
-              </yd-flexbox-item>
-            </div>
 
-          </yd-tab-panel>
-          <yd-tab-panel label="拔得头筹">
-            <yd-flexbox direction="vertical">
-              <!-- s -->
-              <yd-flexbox-item>
-                <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
-                  <div class="Grouporder_top">
-                    <span class="CurrentPeriod">第{{item.CurrentPeriod}}期</span>
-                  </div>
-                  <div class="Grouporder_center">
-                    <div class="Grouporder_center_img">
-                      <img class="gjtx2" :src="item.UserIcon" alt="">
-                      <img class="gjtx1" src="../assets/Img/gjtx.png" alt="">
-                    </div>
-                    <div class="Grouporder_center_text">
-                      <p class="gj"><img src="../assets/Img/gj.png" alt="">
-                        <span>头筹幸运号码</span>
-                      </p>
-                      <div class="fontTel"> {{item.LuckerNumber}}</div>
-                      <div class="OrderTitle"> {{item.OrderTitle}}</div>
-                      <div>头筹用户:{{item.NickName}}</div>
-                      <div>参与时间:{{item.CreateTime}}</div>
-                      <div>计算规则:{{item.Formula}}</div>
-                    </div>
-                  </div>
-                </div>
-              </yd-flexbox-item>
-              <!-- e -->
-            </yd-flexbox>
-          </yd-tab-panel>
-        </yd-tab>
-      </yd-flexbox-item>
-      <yd-flexbox-item>
+            </yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-tab>
+                    <yd-tab-panel label="正在头筹">
+                        <IsTheTop></IsTheTop>
 
-      </yd-flexbox-item>
-    </yd-flexbox>
-  </div>
+                    </yd-tab-panel>
+                    <yd-tab-panel label="正在揭晓">
+
+                        <InTheTop></InTheTop>
+
+                    </yd-tab-panel>
+                    <yd-tab-panel label="拔得头筹">
+                        <yd-flexbox direction="vertical">
+                            <!-- s -->
+                            <yd-flexbox-item>
+                                <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
+                                    <div class="Grouporder_top">
+                                        <span class="CurrentPeriod">第{{item.CurrentPeriod}}期</span>
+                                    </div>
+                                    <div class="Grouporder_center">
+                                        <div class="Grouporder_center_img">
+                                            <img class="gjtx2" :src="item.UserIcon" alt="">
+                                            <img class="gjtx1" src="../assets/Img/gjtx.png" alt="">
+                                        </div>
+                                        <div class="Grouporder_center_text">
+                                            <p class="gj"><img src="../assets/Img/gj.png" alt="">
+                                                <span>头筹幸运号码</span>
+                                            </p>
+                                            <div class="fontTel"> {{item.LuckerNumber}}</div>
+                                            <div class="OrderTitle"> {{item.OrderTitle}}</div>
+                                            <div>头筹用户:{{item.NickName}}</div>
+                                            <div>参与时间:{{item.CreateTime}}</div>
+                                            <div>计算规则:{{item.Formula}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </yd-flexbox-item>
+                            <!-- e -->
+                        </yd-flexbox>
+                    </yd-tab-panel>
+                </yd-tab>
+            </yd-flexbox-item>
+            <yd-flexbox-item>
+
+            </yd-flexbox-item>
+        </yd-flexbox>
+    </div>
 </template>
 <style lang="scss">
 .Grouporder {
@@ -176,7 +137,9 @@
         }
     }
 }
-
+.haibao {
+    width: 100%;
+}
 .ProTop {
     position: relative;
     margin-bottom: 1rem;
@@ -267,18 +230,21 @@
     .goodsa {
         width: 2.3rem;
         margin: 0.5rem 0 0 0;
-        border-radius: 8px;
+        border-radius: 5px;
         background: #fff;
         .goodsatop {
             display: block;
             background: #ff5f17;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
             color: #fff;
             height: 0.5rem;
             font-size: 0.2rem;
             line-height: 0.5rem;
             text-align: center;
+            .goodsatopImg {
+                width: 1rem;
+            }
         }
         .ProductTitle {
             font-size: 0.25rem;
@@ -310,6 +276,9 @@
     position: relative;
 }
 .goodsListTwo {
+    .yd-grids-txt {
+        white-space: normal;
+    }
     .yd-grids-item {
         padding: 0.1rem;
     }
@@ -323,14 +292,22 @@
             margin: auto;
         }
         .ProductTitlet {
-            font-size: 0.3rem;
-            overflow: hidden;
-            white-space: nowrap;
+            font-size: 0.16em;
+            height: 0.6rem;
             text-overflow: ellipsis;
+            overflow: hidden;
+            word-wrap: normal;
+            text-align: none;
+            display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+            -webkit-box-orient: vertical; //从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+            -webkit-line-clamp: 2; //这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
         }
         > span {
             color: #999;
-            font-size: 0.2rem;
+            font-size: 0.16rem;
+        }
+        > strong {
+            color: #ff5f17;
         }
         .gwc {
             width: 0.6rem;
@@ -345,7 +322,7 @@
     padding: 0.2rem;
     position: relative;
     .p_text {
-        font-size: 0.4rem;
+        font-size: 0.16rem;
         color: red;
         text-align: center;
     }
@@ -358,7 +335,7 @@
     }
     > p {
         color: #ff5f17;
-        font-size: 0.3rem;
+        font-size: 0.16rem;
         display: flex;
         justify-content: space-around;
     }
@@ -374,7 +351,8 @@ export default {
         };
     },
     components: {
-        IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop)
+        IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop),
+        InTheTop: InTheTop => require(["@/components/InTheTop"], InTheTop)
     },
     created() {
         // this.$axios({

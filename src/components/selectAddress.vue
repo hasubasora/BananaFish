@@ -5,8 +5,8 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
 
-            <router-link to="" @click.native="SetAddress" slot="right">
-               新增地址
+            <router-link to="" @click.native="CompileAddress('new')" slot="right">
+                新增地址
             </router-link>
         </yd-navbar>
         <div class="addressListsGroup">
@@ -19,14 +19,18 @@
                 </yd-flexbox-item>
                 <yd-flexbox-item>
                     <yd-flexbox>
-                        <yd-flexbox-item>{{item.Province}}{{item.CityName}}{{item.AreaName}}{{item.Address}}大富大贵发的是规范的各个辅导电饭锅和的风格都是国防大厦国防大厦国防大厦规范的费个</yd-flexbox-item>
+                        <yd-flexbox-item @click.native="SelectToDef(item.AddressId)">{{item.Province}}{{item.CityName}}{{item.AreaName}}{{item.Address}}</yd-flexbox-item>
                         <div class="SetGet" @click="CompileAddress(item.AddressId)">编辑</div>
                     </yd-flexbox>
 
                 </yd-flexbox-item>
                 <yd-flexbox-item>
-                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" v-if="item.IsDefault==1"> 设置默认</span>
-                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected gray" v-if="item.IsDefault!=1"> 设置默认</span>
+                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" v-if="item.IsDefault==1">
+                        <i> 设置默认</i>
+                    </span>
+                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected gray" v-if="item.IsDefault!=1">
+                        <i> 设置默认</i>
+                    </span>
                 </yd-flexbox-item>
             </yd-flexbox>
 
@@ -47,8 +51,18 @@ export default {
         this.GetAddressList();
     },
     methods: {
-        SetAddress() {
-            this.$router.push({ name: "setAddress" });
+        //新增地址
+        CompileAddress(uid) {
+            this.$router.push({
+                name: "setAddress",
+                params: { address_id: uid }
+            });
+        },
+        SelectToDef(num) {
+            this.$router.push({
+                name: "cartOrder",
+                params: { address_GetId: num }
+            });
         },
         GoHistory(sid) {
             // console.log(sid);
@@ -112,7 +126,10 @@ export default {
 .icon-selected {
     padding-right: 0.1rem;
     color: rgb(255, 92, 42);
-    font-size: 0.26rem;
+    font-size: 0.3rem;
+    > i {
+        font-size: 0.26rem;
+    }
 }
 .gray {
     color: #aaa;

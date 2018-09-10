@@ -1,6 +1,6 @@
 <template>
     <yd-layout>
-        <yd-navbar title="购物车" color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
+        <yd-navbar title="购物车" fixed color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
             <router-link to="#" slot="left">
                 <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
             </router-link>
@@ -13,57 +13,59 @@
             </router-link>
         </yd-navbar>
         <!-- 购物车 val 设置商品ID {{isCheckAll}}-->
-        <div class="GroupId" v-for="item in CartList" :key="item.id">
-            <div class="GroupIdTitle">
-                <!-- <yd-checkbox v-model="isCheckAll" shape="circle" :change="checkAll"></yd-checkbox> -->
-                {{item.GroupTitle!=''?item.GroupTitle:'积分购'}}
-            </div>
-
-            <yd-checklist v-model="checklist" ref="checklistDemo" :callback="change" :label="false" color="#FF5F17">
-
-                <div :val="items.Id" v-for="(items,index) in item.LstProduct" :key="index" class="LstProduct">
-                    <yd-flexbox>
-                        <div class="GoodList_top">
-                            <label class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
-                                <input type="checkbox" v-model="items.IsCheck">
-                                <span class="yd-checklist-icon">
-                                    <i></i>
-                                </span>
-                            </label>
-                        </div>
-
-                        <div class="GoodList_center"><img :src="items.ProductImg" class="demo-checklist-img"></div>
-
-                        <yd-flexbox-item class="GoodList_bom" v-show="isDel">
-                            <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
-                            <p class="c-red GoodList_Number">
-                                <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'':'赠'+items.Integral+'积分'}}</span>
-                                <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;">
-                                    <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
-                                    <input type="number" pattern="[1-9]*" v-model="items.BuyNum" disabled placeholder="" class="yd-spinner-input">
-                                    <a href="javascript:;" @click="increase(items.Id,items.BuyNum+1)"></a>
-                                </span>
-                            </p>
-                        </yd-flexbox-item>
-                        <yd-flexbox-item v-show="!isDel" class="GoodList_bom">
-                            <p>{{items.ProductTitle}}</p>
-                            <p class="c-red GoodList_Number">
-                                <span class="SalePrice">￥{{items.SalePrice}}</span>
-                                <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;border:0;text-align:right" @click='DelGood(items.Id)'>
-                                    <yd-icon name="delete" size=".5rem" class="DelGood"></yd-icon>
-                                </span>
-                            </p>
-
-                        </yd-flexbox-item>
-                    </yd-flexbox>
+        <div class="GroupBox">
+            <div class="GroupId_cart" v-for="item in CartList" :key="item.id">
+                <div class="GroupIdTitle">
+                    <!-- <yd-checkbox v-model="isCheckAll" shape="circle" :change="checkAll"></yd-checkbox> -->
+                    {{item.GroupTitle!=''?item.GroupTitle:'积分购'}}
                 </div>
 
-            </yd-checklist>
+                <yd-checklist v-model="checklist" ref="checklistDemo" :callback="change" :label="false" color="#FF5F17">
+
+                    <div :val="items.Id" v-for="(items,index) in item.LstProduct" :key="index" class="LstProduct">
+                        <yd-flexbox>
+                            <div class="GoodList_top">
+                                <label class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
+                                    <input type="checkbox" v-model="items.IsCheck">
+                                    <span class="yd-checklist-icon">
+                                        <i></i>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="GoodList_center"><img :src="items.ProductImg" class="demo-checklist-img"></div>
+
+                            <yd-flexbox-item class="GoodList_bom" v-show="isDel">
+                                <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
+                                <p class="c-red GoodList_Number">
+                                    <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'':'赠'+items.Integral+'积分'}}</span>
+                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;">
+                                        <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
+                                        <input type="number" pattern="[1-9]*" v-model="items.BuyNum" disabled placeholder="" class="yd-spinner-input">
+                                        <a href="javascript:;" @click="increase(items.Id,items.BuyNum+1)"></a>
+                                    </span>
+                                </p>
+                            </yd-flexbox-item>
+                            <yd-flexbox-item v-show="!isDel" class="GoodList_bom">
+                                <p>{{items.ProductTitle}}</p>
+                                <p class="c-red GoodList_Number">
+                                    <span class="SalePrice">￥{{items.SalePrice}}</span>
+                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;border:0;text-align:right" @click='DelGood(items.Id)'>
+                                        <yd-icon name="delete" size=".5rem" class="DelGood"></yd-icon>
+                                    </span>
+                                </p>
+
+                            </yd-flexbox-item>
+                        </yd-flexbox>
+                    </div>
+
+                </yd-checklist>
+            </div>
         </div>
 
         <!-- 底部栏 -->
         <div class="bomBtn">
-            <button class='BuyCart' type="button" :disabled='!isDel' @click="GoCartOrder">结算</button>
+            <button :class="[{'BuyCartt':!isDel},hasGoods?'BuyCart':'BuyCartt']" type="button" :disabled='!isDel||!hasGoods' @click="GoCartOrder">结算</button>
         </div>
         <!-- <yd-cell-item class="bomBtn">
      
@@ -78,10 +80,14 @@
     border: 1px solid #f2f2f2;
     margin-right: 0.5rem;
 }
-.GroupId {
+.GroupBox {
+    margin-top: 1rem;
+}
+.GroupId_cart {
     background: #fff;
     border-radius: 10px;
     margin: 0.2rem;
+
     .GroupIdTitle {
         padding: 0.26rem 0.3rem;
         border-bottom: 1px solid #f2f2f2;
@@ -163,6 +169,17 @@
         height: 0.8rem;
         text-align: center;
     }
+    .BuyCartt {
+        border-radius: 20px;
+        background: #c4c4c4;
+        font-size: 0.26rem;
+        color: #f2f2f2;
+        border: #c4c4c4 1px solid;
+        width: 2rem;
+        align-self: center;
+        height: 0.8rem;
+        text-align: center;
+    }
     .c-orange {
         color: #ff5f17;
     }
@@ -192,7 +209,9 @@ export default {
             productNum: CartNum,
             ProductList: [],
             CartList: [],
-            isDel: true
+            isDel: true,
+            isDef: false,
+            hasGoods: true
         };
     },
     methods: {
@@ -212,6 +231,7 @@ export default {
                 this.isCheckAll
             );
         },
+        //选中商品
         IsCheck(id, _IsCheck) {
             //选
             console.log(_IsCheck);
@@ -226,7 +246,7 @@ export default {
             }).then(response => {
                 if (response.data.success == 200) {
                     console.log(response.data);
-                    // this.GetShoppingCart();
+                    this.GetShoppingCart();
                 }
                 if (response.data.success == 400) {
                     this.$router.push({ name: "SignIn" });
@@ -265,6 +285,7 @@ export default {
                 }
             });
         },
+        //获取购物车商品
         GetShoppingCart() {
             this.$axios({
                 method: "POST",
@@ -273,19 +294,26 @@ export default {
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
-                    // this.$router.push({ name: "SignIn" });
+                    this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
                     for (const iterator of this.CartList) {
-                        // console.log(iterator.GroupId);
-                        if (iterator.GroupId < 0) {
-                        } else {
+                        console.log(iterator);
+                        for (const iterators of iterator.LstProduct) {
+                            if (iterators.IsCheck) {
+                                this.hasGoods = true;
+                                return;
+                            } else {
+                                this.hasGoods = false;
+                            }
                         }
                     }
+                    return;
                 }
             });
         },
+
         DelGood(_id) {
             this.$axios({
                 method: "POST",
@@ -305,7 +333,9 @@ export default {
             });
         },
         isDelFn() {
+            //切换删除
             this.isDel = !this.isDel;
+            this.isDef = !this.isDef;
         },
         GoCartOrder() {
             this.$router.push({ name: "cartOrder" });

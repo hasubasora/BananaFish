@@ -1,73 +1,72 @@
 <template>
-  <div class="orderList">
-    <yd-navbar slot="navbar" fixed title="订单提交" height='.8rem'>
-      <router-link to="" slot="left" @click.native="GoHistory">
-        <yd-navbar-back-icon></yd-navbar-back-icon>
-      </router-link>
-    </yd-navbar>
+    <div class="orderList">
+        <yd-navbar slot="navbar" fixed title="订单提交" height='.8rem'>
+            <router-link to="" slot="left" @click.native="GoHistory">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
 
-    <yd-flexbox class="address" @click.native="GetAddress" v-show="address">
-      <div class="address_left">
-        <h3 class="font25">{{address.ShipTo}}</h3>
-        <i class="moren">默认</i>
-      </div>
-      <yd-flexbox-item>
-        <div class="address_right">
-          <h3 class="font25">{{address.ShipPhone}}</h3>
-          <p>{{address.Province}}{{address.CityName}}{{address.AreaName}}{{address.Address}}</p>
-        </div>
-      </yd-flexbox-item>
-    </yd-flexbox>
-    <yd-flexbox class="address" style="font-size:.3rem" @click.native="GetAddress" v-show="!address">
-      请添加地址
-    </yd-flexbox>
+        <yd-flexbox class="address" @click.native="GetAddress" v-show="address">
+            <div class="address_left">
+                <h3 class="font25">{{address.ShipTo}}</h3>
+                <i class="moren">默认</i>
+            </div>
+            <yd-flexbox-item>
+                <div class="address_right">
+                    <h3 class="font25">{{address.ShipPhone}}</h3>
+                    <p>{{address.Province}}{{address.CityName}}{{address.AreaName}}{{address.Address}}</p>
+                </div>
+            </yd-flexbox-item>
+        </yd-flexbox>
+        <yd-flexbox class="address" style="font-size:.3rem" @click.native="GetAddress" v-show="!address">
+            请添加地址
+        </yd-flexbox>
 
-    <!-- <yd-cell-group>
-        <yd-cell-item arrow>
-            <span slot="left">优惠卷</span>
-            <span slot="right">没有可用优惠卷</span>
-        </yd-cell-item>
-    </yd-cell-group> -->
-    <div>
-      <yd-cell-group>
-        <yd-cell-item>
-          <span slot="left">商品金额</span>
-          <span slot="right">￥{{GoodsList.Amount}}</span>
-        </yd-cell-item>
+        <div>
+            <yd-cell-group>
+                <yd-cell-item>
+                    <span slot="left">商品金额</span>
+                    <span slot="right">￥{{GoodsList.Amount}}</span>
+                </yd-cell-item>
 
-        <!-- <yd-cell-item>
+                <!-- <yd-cell-item>
                 <span slot="left">优惠活动</span>
                 <span slot="right">右边内容二</span>
             </yd-cell-item> -->
 
-        <yd-cell-item>
-          <span slot="left">运费</span>
-          <span slot="right">￥{{GoodsList.ExpressAmount}}</span>
+                <yd-cell-item>
+                    <span slot="left">运费</span>
+                    <span slot="right">￥{{GoodsList.ExpressAmount}}</span>
+                </yd-cell-item>
+
+            </yd-cell-group>
+
+        </div>
+
+        <div v-for="(item,index) in GoodsList.rows" :key="index">
+            <yd-flexbox>
+                <yd-flexbox-item class="GroupTitle">{{item.GroupId?item.GroupTitle:'普通商品'}}</yd-flexbox-item>
+            </yd-flexbox>
+            <yd-flexbox class='goodsListOrder' v-for="(items,index) in item.LstProduct" :key="index">
+                <img :src="items.ProductImg" alt="">
+                <yd-flexbox-item>
+                    <p class="goodstitle">
+                        <span>{{items.ProductTitle}}</span>
+                        <span>&nbsp;x{{items.BuyNum}}</span>
+                    </p>
+                    <div class="goodstitle">&nbsp;</div>
+                    <span class="dough">￥{{items.SalePrice}}</span>
+                </yd-flexbox-item>
+            </yd-flexbox>
+        </div>
+
+        <yd-cell-item class="bomBtnOrder">
+            <span slot="left">合计:
+                <i class="c-red">￥{{GoodsList.Amount}}</i>
+            </span>
+            <button slot="right" class="BuyCart" type="button" @click="GoBuySometing">付款</button>
         </yd-cell-item>
-
-      </yd-cell-group>
-
     </div>
-
-    <div v-for="(item,index) in GoodsList.rows" :key="index">
-      <yd-flexbox class='goodsListOrder' v-for="(items,index) in item.LstProduct" :key="index">
-        <img :src="items.ProductImg" alt="">
-        <yd-flexbox-item>
-          <p class="goodstitle">
-            <span>{{items.ProductTitle}}</span>
-            <span>&nbsp;x{{items.BuyNum}}</span>
-          </p>
-          <div class="goodstitle">&nbsp;</div>
-          <span class="dough">￥{{items.SalePrice}}</span>
-        </yd-flexbox-item>
-      </yd-flexbox>
-    </div>
-
-    <yd-cell-item class="bomBtnOrder">
-      <span slot="left" class="c-orange">应付:￥{{GoodsList.Amount}}</span>
-      <button slot="right" class="BuyCart" type="button" @click="GoBuySometing">付款</button>
-    </yd-cell-item>
-  </div>
 </template>
 <script>
 export default {
@@ -103,7 +102,19 @@ export default {
                 this.$router.push({ name: "SignIn" });
             }
             if (response.data.success == 200) {
-                this.address = response.data.rows[0];
+                for (const iterator of response.data.rows) {
+                    if (this.$route.params.address_GetId) {
+                        console.log(this.$route.params.address_GetId);
+                        if (
+                            iterator.AddressId ==
+                            this.$route.params.address_GetId
+                        ) {
+                            this.address = iterator;
+                            return;
+                        }
+                    }
+                    iterator.IsDefault == 1 ? (this.address = iterator) : "";
+                }
                 console.log(response.data);
             }
         });
@@ -111,10 +122,10 @@ export default {
     methods: {
         GoHistory(sid) {
             // console.log(sid);
-            this.$router.go(-1);
+            this.$router.push("/cart");
         },
         GetAddress() {
-            this.$router.push({ name: "addressList" });
+            this.$router.push({ name: "selectAddress" });
         },
         GoBuySometing() {
             this.$axios({
@@ -152,7 +163,14 @@ export default {
 };
 </script>
 <style lang="scss">
-.orderList{
+.GroupTitle {
+    color: #cccccc;
+    padding: 0.1rem 0.3rem 0;
+    background: #ffffff;
+    margin-top: 0.2rem;
+    font-size: 0.2rem;
+}
+.orderList {
     margin: 1rem 0;
 }
 .bomBtnOrder {
@@ -183,7 +201,7 @@ export default {
     background: #fffced;
     padding: 0.3rem;
     margin-bottom: 0.2rem;
-    
+
     .address_left {
         width: 1rem;
         text-align: center;
@@ -221,7 +239,8 @@ export default {
     }
     .dough {
         padding: 0 0.3rem;
-        font-size: 0.4rem;
+        font-size: 0.26rem;
+        color: #ff5f17;
     }
 }
 </style>

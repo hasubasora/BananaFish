@@ -7,36 +7,38 @@
             <router-link to="#" slot="right">
             </router-link>
         </yd-navbar>
-        <yd-backtop></yd-backtop>
-        <yd-tab horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
-            <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
-            </yd-tab-panel>
-        </yd-tab>
+        <div class="menu">
+            <yd-backtop></yd-backtop>
+            <yd-tab horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
+                <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
+                </yd-tab-panel>
+            </yd-tab>
 
-        <!-- 商品列表 -->
-        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-            <yd-list theme="3" slot="list">
-                <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
-                    <img slot="img" :src="item.ProductImg">
-                    <p slot="title" class="hideTwo">{{item.ProductTitle}}</p>
-                    <yd-list-other slot="other">
-                        <div>
-                            <span class="demo-list-price">
-                                <em>¥</em>{{item.SalePrice}}</span>
-                            <span class="demo-list-del-price">{{item.Integral}}积分</span>
-                        </div>
-                        <div>月销量{{item.SaleCount}}件</div>
-                    </yd-list-other>
-                </yd-list-item>
-            </yd-list>
-            <!-- 商品列表 end-->
-            <!-- 数据全部加载完毕显示 -->
-            <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
+            <!-- 商品列表 -->
+            <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+                <yd-list theme="3" slot="list">
+                    <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
+                        <img slot="img" :src="item.ProductImg">
+                        <p slot="title" class="hideTwo">{{item.ProductTitle}}</p>
+                        <yd-list-other slot="other">
+                            <div>
+                                <span class="demo-list-price">
+                                    <em>¥</em>{{item.SalePrice}}</span>
+                                <span class="demo-list-del-price">{{item.Integral}}积分</span>
+                            </div>
+                            <div>月销量{{item.SaleCount}}件</div>
+                        </yd-list-other>
+                    </yd-list-item>
+                </yd-list>
+                <!-- 商品列表 end-->
+                <!-- 数据全部加载完毕显示 -->
+                <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
 
-            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+                <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+                <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
 
-        </yd-infinitescroll>
+            </yd-infinitescroll>
+        </div>
 
     </div>
 </template>
@@ -164,12 +166,12 @@ export default {
 </script>
 <style lang="scss">
 .yd-list-theme3 .yd-list-item .yd-list-title {
-    /* word-wrap: normal; */
     text-overflow: ellipsis;
-    /* white-space: nowrap; */
     overflow: hidden;
-    /* text-align: justify; */
-    height: 0.8rem;
+    text-align: none;
+    // height: 0.8rem;
+    /* white-space: nowrap; */
+    /* word-wrap: normal; */
 }
 .hideTwo {
     display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
@@ -180,5 +182,8 @@ export default {
     font-size: 0.3rem;
     color: rgb(238, 97, 32);
     font-weight: 600;
+}
+.menu{
+    margin-top: .8rem
 }
 </style>
