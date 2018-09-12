@@ -1,6 +1,6 @@
 <template>
   <yd-grids-group :rows="3">
-    <yd-grids-item v-for="item in GoodsList" :key="item.id">
+    <yd-grids-item v-for="item in recommendProduct" :key="item.id">
       <span slot="text">
         <router-link to="" @click.native="GoToItem(item.Id)" class="goodsThree">
           <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
@@ -79,6 +79,7 @@
 </style>
 <script>
 export default {
+    props:["recommendProduct"],
     data() {
         return {
             GoodsList: []

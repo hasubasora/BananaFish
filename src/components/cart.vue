@@ -159,7 +159,6 @@
     justify-content: flex-end;
     padding: 0.1rem;
     .BuyCart {
-        border-radius: 20px;
         background: #ff5f17;
         font-size: 0.26rem;
         color: #f2f2f2;
@@ -170,7 +169,6 @@
         text-align: center;
     }
     .BuyCartt {
-        border-radius: 20px;
         background: #c4c4c4;
         font-size: 0.26rem;
         color: #f2f2f2;
@@ -328,6 +326,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     console.log(response.data);
+                    getNum();
                     this.GetShoppingCart();
                 }
             });

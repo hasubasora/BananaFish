@@ -1,54 +1,54 @@
 <template>
 
-  <div class="page-tabbar">
-    <!-- tabcontainer -->
-    <!-- 轮播图 -->
-    <div class="home">
-      <div class="bannerTop">
-        <div class="bannerCenter">
-          <div class="classify">
-            <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
-          </div>
-          <div class="search">
-            <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
-          </div>
-          <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
+    <div class="page-tabbar">
+        <!-- tabcontainer -->
+        <!-- 轮播图 -->
+        <div class="home">
+            <div class="bannerTop">
+                <div class="bannerCenter">
+                    <div class="classify">
+                        <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
+                    </div>
+                    <div class="search">
+                        <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
+                    </div>
+                    <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
+                </div>
+                <swipe></swipe>
+            </div>
+            <!-- 连接新闻 -->
+            <div class="navbarcompont">
+                <navbar></navbar>
+            </div>
+            <!-- 分红等 -->
+            <div class="participationInProfit">
+                <participationInProfit></participationInProfit>
+            </div>
+            <!-- 商品列表 -->
+            <div class="showtime">
+                <showtime TimeSrc='1'></showtime>
+                <!-- 广告 -->
+                <div class="bannerPad">
+                    <img src="../assets/Img/banner.png" alt="广告">
+                    <GoodsList :post-title="TopObjectList"></GoodsList>
+                </div>
+                <showtime TimeSrc='2'></showtime>
+                <!-- 广告 -->
+                <div class="bannerPad">
+                    <img src="../assets/Img/banner.png" alt="广告">
+                    <GoodsList2 :post-head="IsTopObjectList"></GoodsList2>
+                </div>
+                <showtime TimeSrc='3'></showtime>
+                <!-- 广告 -->
+                <div class="bannerPad">
+                    <img src="../assets/Img/banner.png" alt="广告">
+                    <GoodsList3 :recommend-product="InTopObjectList"></GoodsList3>
+                </div>
+            </div>
+            <p class="bottomLink">———— 我是有底线的 ————</p>
         </div>
-        <swipe></swipe>
-      </div>
-      <!-- 连接新闻 -->
-      <div class="navbarcompont">
-        <navbar></navbar>
-      </div>
-      <!-- 分红等 -->
-      <div class="participationInProfit">
-        <participationInProfit></participationInProfit>
-      </div>
-      <!-- 商品列表 -->
-      <div class="showtime">
-        <showtime TimeSrc='1'></showtime>
-        <!-- 广告 -->
-        <div class="bannerPad">
-          <img src="../assets/Img/banner.png" alt="广告">
-          <GoodsList></GoodsList>
-        </div>
-        <showtime TimeSrc='2'></showtime>
-        <!-- 广告 -->
-        <div class="bannerPad">
-          <img src="../assets/Img/banner.png" alt="广告">
-          <GoodsList2></GoodsList2>
-        </div>
-        <showtime TimeSrc='3'></showtime>
-        <!-- 广告 -->
-        <div class="bannerPad">
-          <img src="../assets/Img/banner.png" alt="广告">
-          <GoodsList3></GoodsList3>
-        </div>
-      </div>
-      <p class="bottomLink">———— 我是有底线的 ————</p>
-    </div>
 
-  </div>
+    </div>
 </template>
  
 <script>
@@ -58,7 +58,11 @@ export default {
         return {
             selected: "home",
             timesrc: require("../assets/Img/fhyp.png"),
-            productNum: 0
+            productNum: 0,
+            TopObjectList: [],
+            IsTopObjectList:[],
+            InTopObjectList:[],
+
         };
     },
     methods: {
@@ -67,6 +71,20 @@ export default {
         }
     },
     created() {
+        this.$axios({
+            method: "POST",
+            data: {},
+            url: this.$server.serverUrl + "/index/IndexProduct",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 200) {
+                console.log(response.data);
+                this.TopObjectList = response.data.data.integralProduct;
+                this.IsTopObjectList = response.data.data.headProduct
+                this.InTopObjectList = response.data.data.recommendProduct
+            }
+        });
+
         this.$axios({
             method: "GET",
             params: {
@@ -193,8 +211,8 @@ export default {
     }
 }
 .home {
-    background: #f2f2f2;
-    margin-bottom: 2rem;
+    // background: #f2f2f2;
+    // margin-bottom: 1rem;
 }
 #search {
     border: none;

@@ -1,6 +1,6 @@
 <template>
   <yd-grids-group :rows="2">
-    <yd-grids-item v-for="item in GoodsList" :key="item.id">
+    <yd-grids-item v-for="item in postHead" :key="item.id">
       <router-link slot="text" to="" @click.native="GoToItem(item.GroupId)" class="goodsTwo">
         <!-- <img class="SalePriceImg" src="../assets/Img/go.png" alt=""> -->
         <img :src="item.ProductImg" class="ProductImg" alt="">
@@ -88,6 +88,7 @@
 </style>
 <script>
 export default {
+    props:['postHead'],
     data() {
         return {
             GoodsList: [],

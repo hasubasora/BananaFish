@@ -92,10 +92,14 @@ export default new Router({
       path: '/Description/:ItemGood_id',
       name: 'Description',
       component: Description => require(["@/components/Description"], Description),
-    },{ //设置
-      path: '/selectAddress/',
+    }, { //设置
+      path: '/selectAddress',
       name: 'selectAddress',
       component: selectAddress => require(["@/components/selectAddress"], selectAddress),
+    }, { //我的
+      path: '/MyInfo',
+      name: 'MyInfo',
+      component: MyInfo => require(["@/components/MyInfo"], MyInfo),
     },
   ]
 })

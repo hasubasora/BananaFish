@@ -1,22 +1,23 @@
 <template>
-  <yd-grids-group :rows="3">
-    <yd-grids-item v-for="item in GoodsList" :key="item.id">
-      <span slot="text">
-        <router-link to="" @click.native="GoToItem(item.Id)" class="goods">
-          <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
-          <img :src="item.ProductImg" class="ProductImg" alt="">
-          <div class="goodsDian">
-            <span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
-          <div class="goodsName">{{item.ProductTitle}}</div>
-          <!-- <div class="specification"> {{item.SubTitle}}</div> -->
-          <span class="SaleCount">月销{{item.SaleCount}}件</span>
-          <div class="SalePrice">
-            <strong>￥{{item.SalePrice}}</strong>
-          </div>
-        </router-link>
-      </span>
-    </yd-grids-item>
-  </yd-grids-group>
+    <yd-grids-group :rows="3">
+        <!-- postTitle 传过来的接受者 -->
+        <yd-grids-item v-for="item in postTitle" :key="item.id">
+            <span slot="text">
+                <router-link to="" @click.native="GoToItem(item.Id)" class="goods">
+                    <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
+                    <img :src="item.ProductImg" class="ProductImg" alt="">
+                    <div class="goodsDian">
+                        <span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
+                    <div class="goodsName">{{item.ProductTitle}}</div>
+                    <!-- <div class="specification"> {{item.SubTitle}}</div> -->
+                    <span class="SaleCount">月销{{item.SaleCount}}件</span>
+                    <div class="SalePrice">
+                        <strong>￥{{item.SalePrice}}</strong>
+                    </div>
+                </router-link>
+            </span>
+        </yd-grids-item>
+    </yd-grids-group>
 </template>
 <style lang="scss">
 .goods {
@@ -77,6 +78,7 @@
 </style>
 <script>
 export default {
+    props: ["postTitle"],
     data() {
         return {
             GoodsList: []
