@@ -10,30 +10,36 @@
             </router-link>
         </yd-navbar>
         <div class="addressListsGroup">
-            <yd-flexbox direction="vertical" class="addressGroup" v-for="(item, index) in addressList" :key="index">
-                <yd-flexbox-item>
-                    <yd-flexbox>
-                        <yd-flexbox-item>{{item.ShipTo}}</yd-flexbox-item>
-                        <yd-flexbox-item class="gray">{{item.ShipPhone}}</yd-flexbox-item>
-                    </yd-flexbox>
-                </yd-flexbox-item>
-                <yd-flexbox-item>
-                    <yd-flexbox>
-                        <yd-flexbox-item @click.native="SelectToDef(item.AddressId)">{{item.Province}}{{item.CityName}}{{item.AreaName}}{{item.Address}}</yd-flexbox-item>
+            <yd-preview :buttons="btns" v-for="(item, index) in addressList" :key="index">
+                <yd-preview-header>
+                    <div slot="left">{{item.ShipTo}}</div>
+                    <div slot="left">{{item.ShipPhone}}</div>
+                    <div slot="right"></div>
+                </yd-preview-header>
+
+                <div @click.native="SelectToDef(item.AddressId)" style="padding:0 .3rem;">
+                    <p>{{item.Province}}{{item.CityName}}{{item.AreaName}}{{item.Address}}</p>
+                </div>
+                <yd-preview-header>
+                    <div slot="left">
+                        <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" v-if="item.IsDefault==1">
+                            <i> 设为默认地址</i>
+                        </span>
+                        <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected gray" v-if="item.IsDefault!=1">
+                            <i> 设为默认地址</i>
+                        </span>
+                    </div>
+
+                    <div slot="right">
+                        <div class="SetGet" @click="CompileAddress(item.AddressId)">删除</div>
                         <div class="SetGet" @click="CompileAddress(item.AddressId)">编辑</div>
-                    </yd-flexbox>
-
-                </yd-flexbox-item>
-                <yd-flexbox-item>
-                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" v-if="item.IsDefault==1">
-                        <i> 设置默认</i>
-                    </span>
-                    <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected gray" v-if="item.IsDefault!=1">
-                        <i> 设置默认</i>
-                    </span>
-                </yd-flexbox-item>
-            </yd-flexbox>
-
+                    </div>
+                </yd-preview-header>
+            </yd-preview>
+            <div class="address">
+                <button type="button">
+                    <img src="../assets/Img/jia.png" alt=""> 新增地址</button>
+            </div>
         </div>
     </div>
 </template>
@@ -44,7 +50,8 @@ export default {
         return {
             addressList: "",
             checkbox6: ["1"],
-            radio1: 1
+            radio1: 1,
+            btns: []
         };
     },
     created() {
@@ -111,16 +118,40 @@ export default {
 .addressListsGroup {
     // border: 1px solid;
     margin: 1rem 0;
+    .address {
+        text-align: center;
+        > button {
+            width: 4rem;
+            color: #fff;
+            font-size: 0.26rem;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(
+                -90deg,
+                rgba(234, 63, 50, 1),
+                rgba(237, 121, 71, 1)
+            );
+            > img {
+                width: 0.6rem;
+            }
+            padding: 0.1rem;
+            vertical-align: middle;
+        }
+    }
     .addressGroup {
-        padding: 0.2rem;
-        margin: 0.1rem;
-        // border: 1px solid red;
+        padding: 0.3rem;
+        border-top: 1px solid #f2f2f2;
         background: #fff;
-        border-radius: 10px;
         .SetGet {
+            display: inline-block;
             padding: 0 0.1rem;
             @extend .gray;
         }
+    }
+    .SetGet {
+        display: inline-block;
+        padding: 0 0.1rem;
+        @extend .gray;
     }
 }
 .icon-selected {

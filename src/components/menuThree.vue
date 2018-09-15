@@ -165,17 +165,18 @@ export default {
 };
 </script>
 <style lang="scss">
-.yd-list-theme3 .yd-list-item .yd-list-title {
+
+.hideTwo {
+    display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
     text-overflow: ellipsis;
     overflow: hidden;
     text-align: none;
-    // height: 0.8rem;
-    /* white-space: nowrap; */
-    /* word-wrap: normal; */
-}
-.hideTwo {
-    display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
-    -webkit-box-orient: vertical; //从上到下垂直排列子元素（设置伸缩盒子的子元素排列方式）
+    height: 0.8rem;
+    white-space: normal;
+    word-wrap: normal;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
     -webkit-line-clamp: 2; //这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
 }
 .demo-list-price {
@@ -183,7 +184,7 @@ export default {
     color: rgb(238, 97, 32);
     font-weight: 600;
 }
-.menu{
-    margin-top: .8rem
+.menu {
+    margin-top: 0.8rem;
 }
 </style>

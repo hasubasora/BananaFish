@@ -24,9 +24,9 @@ export default new Router({
           name: 'cart',
           component: cart => require(["@/components/cart"], cart),
         }, { //个人信息
-          path: '/UserInfo',
-          name: 'UserInfo',
-          component: UserInfo => require(["@/components/UserInfo"], UserInfo),
+          path: '/MyInfo',
+          name: 'MyInfo',
+          component: MyInfo => require(["@/components/MyInfo"], MyInfo),
         },
       ]
     }, { //一级目录
@@ -96,10 +96,18 @@ export default new Router({
       path: '/selectAddress',
       name: 'selectAddress',
       component: selectAddress => require(["@/components/selectAddress"], selectAddress),
-    }, { //我的
-      path: '/MyInfo',
-      name: 'MyInfo',
-      component: MyInfo => require(["@/components/MyInfo"], MyInfo),
+    }, { //我的收益
+      path: '/MyEarnings',
+      name: 'MyEarnings',
+      component: MyEarnings => require(["@/components/MyEarnings"], MyEarnings),
+    }, { //普通订单详情
+      path: '/GeneralOrderDetails',
+      name: 'GeneralOrderDetails',
+      component: GeneralOrderDetails => require(["@/components/GeneralOrderDetails"], GeneralOrderDetails),
+    },{ //普通订单详情
+      path: '/TheTopOrderDetails',
+      name: 'TheTopOrderDetails',
+      component: TheTopOrderDetails => require(["@/components/TheTopOrderDetails"], TheTopOrderDetails),
     },
   ]
 })

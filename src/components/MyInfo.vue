@@ -8,13 +8,14 @@
                 <yd-flexbox>
                     <div class="InfoPic">
                         <img src="../assets/Img/bkc.jpg" alt="">
+                        <!-- <img :src="UserInfo.UserIcon" alt=""> -->
                     </div>
                     <yd-flexbox-item>
-                        <span class="UserName">名字名字名字</span>
+                        <span class="UserName">{{UserInfo.NickName}}</span>
                         <div class="UserInfo">分红指数</div>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
-                        <strong class="UserMoney">0.00</strong>
+                        <strong class="UserMoney">{{UserInfo.Balance}}</strong>
                         <span class="MoneyTitle">我的余额（元）</span>
                     </yd-flexbox-item>
                     <div class="withdrawal">
@@ -30,7 +31,7 @@
             <yd-flexbox-item>
                 <yd-flexbox class="MyIntegral">
                     <yd-flexbox-item>
-                        <span class="IntegralMsg">0000</span>
+                        <span class="IntegralMsg">{{UserInfo.UserIntegral}}</span>
                         <span class="IntegralTitle">我的积分</span>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
@@ -40,38 +41,23 @@
                 </yd-flexbox>
             </yd-flexbox-item>
             <yd-flexbox-item>
-                <yd-cell-group>
+                <yd-cell-group class="OrderList" @click.native="ToLink('ShopGoodsList',0)">
                     <yd-cell-item arrow>
                         <span slot="left">订单管理</span>
                         <span slot="right">查看全部</span>
                     </yd-cell-item>
                 </yd-cell-group>
             </yd-flexbox-item>
+            <!-- 订单栏目 -->
             <yd-flexbox-item class="IconList">
                 <yd-flexbox>
-                    <yd-flexbox-item>
-                        <img src="../assets/Img/dfk.png" alt="" class="IconImg">
-                        <span class="IconName">待付款</span>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <img src="../assets/Img/dfh.png" alt="" class="IconImg">
-                        <span class="IconName">待发货</span>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <img src="../assets/Img/dsh.png" alt="" class="IconImg">
-                        <span class="IconName">待收货</span>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <img src="../assets/Img/dpj.png" alt="" class="IconImg">
-                        <span class="IconName">待评价</span>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <img src="../assets/Img/sh.png" alt="" class="IconImg">
-                        <span class="IconName">售后</span>
+                    <yd-flexbox-item v-for="(item, index) in ListOne" :key="index" @click.native="ToLink(item.Link,index+1)">
+                        <img :src="item.imgUrl" alt="" class="IconImg">
+                        <span class="IconName"> {{item.iconName}}</span>
                     </yd-flexbox-item>
                 </yd-flexbox>
                 <yd-cell-group class="TopGroup">
-                    <yd-cell-item arrow>
+                    <yd-cell-item arrow class="arrow">
                         <span slot="left" class="TopGroupBack">我的头筹订单</span>
                         <span slot="right">查看全部</span>
                     </yd-cell-item>
@@ -106,13 +92,135 @@
                     </div>
                 </yd-cell-group>
             </yd-flexbox-item>
-            <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
-            <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-cell-group class="OrderList">
+                    <yd-cell-item>
+                        <span slot="left">邀请有奖</span>
+                    </yd-cell-item>
+                </yd-cell-group>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="IconList_two">
+                <yd-flexbox class=" invite">
+                    <yd-flexbox-item>
+                        <div class="inviteImg">
+                            <img src="../assets/Img/yq.png" alt="">
+                            <span>邀请有奖</span>
+                        </div>
+                    </yd-flexbox-item>
+                    <yd-flexbox-item>
+                        <div class="inviteImg borderccc">
+                            <img src="../assets/Img/td.png" alt="">
+                            <span>我的团队</span>
+                        </div>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </yd-flexbox-item>
+            <yd-flexbox-item>
+                <yd-cell-group class="OrderList">
+                    <yd-cell-item>
+                        <span slot="left">实用工具</span>
+                    </yd-cell-item>
+                </yd-cell-group>
+            </yd-flexbox-item>
+            <!-- 工具栏 -->
+            <yd-flexbox-item class="IconList ">
+                <yd-flexbox>
+                    <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink(itemt.Link)">
+                        <img :src="itemt.imgUrl" alt="" class="IconImg">
+                        <span class="IconName">{{itemt.iconName}}</span>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </yd-flexbox-item>
         </yd-flexbox>
     </div>
 </template>
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            ListOne: [
+                {
+                    iconName: "待付款",
+                    imgUrl: require("../assets/Img/dfk.png"),
+                    Link: "ShopGoodsList"
+                },
+                {
+                    iconName: "待发货",
+                    imgUrl: require("../assets/Img/dfh.png"),
+                    Link: "ShopGoodsList"
+                },
+                {
+                    iconName: "待收货",
+                    imgUrl: require("../assets/Img/dsh.png"),
+                    Link: "ShopGoodsList"
+                },
+                {
+                    iconName: "待评价",
+                    imgUrl: require("../assets/Img/dpj.png"),
+                    Link: "ShopGoodsList"
+                },
+                {
+                    iconName: "售后",
+                    imgUrl: require("../assets/Img/sh.png"),
+                    Link: "ShopGoodsList"
+                }
+            ],
+            ListTwo: [
+                {
+                    iconName: "收货地址",
+                    imgUrl: require("../assets/Img/shdz.png"),
+                    Link: "selectAddress"
+                },
+                {
+                    iconName: "客服",
+                    imgUrl: require("../assets/Img/kf.png"),
+                    Link: ""
+                },
+                {
+                    iconName: "帮助",
+                    imgUrl: require("../assets/Img/bz.png"),
+                    Link: ""
+                },
+                {
+                    iconName: "商务合作",
+                    imgUrl: require("../assets/Img/swhz.png"),
+                    Link: ""
+                },
+                {
+                    iconName: "加入我们",
+                    imgUrl: require("../assets/Img/jrwm.png"),
+                    Link: ""
+                }
+            ],
+            UserInfo:[]
+        };
+    },
+    created() {
+        this.GetUserInfo();
+    },
+    methods: {
+        ToLink(url, num) {
+            console.log(num);
+            this.$router.push({ name: url, query: { plan: num } });
+        },
+        GetUserInfo() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/account/getmyaccount",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    // this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    console.log(response.data.object);
+                    this.UserInfo = response.data.object;
+                }
+            });
+        }
+    }
+};
 </script>
 <style lang="scss">
 .myinfo {
@@ -124,6 +232,8 @@ export default {};
     padding: 0.2rem;
     .yd-cell-box {
         margin-bottom: 0;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
     }
     .GroupSetLink {
         height: 0.5rem;
@@ -133,6 +243,12 @@ export default {};
             position: absolute;
             top: 0.2rem;
             right: 0.2rem;
+        }
+    }
+    .OrderList {
+        .yd-cell {
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
         }
     }
     .GroupSetInfo {
@@ -218,14 +334,13 @@ export default {};
                 margin-left: 0.1rem;
             }
         }
-        .borderccc {
-            border-left: 1px solid #ccc;
-        }
     }
     .IconList {
         background: #fff;
         font-size: 0.1rem;
-        padding: 0.3rem 0;
+        margin-bottom: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
         .IconImg {
             width: 0.5rem;
             margin: auto;
@@ -235,17 +350,26 @@ export default {};
             display: block;
             text-align: center;
             line-height: 0.6rem;
-            font-size: .18rem;
+            font-size: 0.26rem;
         }
         .TopGroup {
             margin: 0.1rem;
             .yd-cell {
                 background: #f6f6f6;
+                border-radius: 8px;
+                &::after {
+                    border: none;
+                }
                 .yd-cell-item {
                     padding: 0;
                 }
                 .yd-cell-right {
-                    min-height: .8rem;
+                    min-height: 0.8rem;
+                }
+            }
+            .arrow {
+                &::after {
+                    border: none;
                 }
             }
             .TopGroupBack {
@@ -263,7 +387,7 @@ export default {};
                 .TopGoodsList {
                     position: relative;
                     text-align: center;
-                    margin-top: .2rem;
+                    margin-top: 0.2rem;
                     .TopGoodsImg {
                         width: 1rem;
                         height: 1rem;
@@ -286,6 +410,27 @@ export default {};
                 }
             }
         }
+    }
+    .IconList_two {
+        background: #fff;
+        font-size: 0.1rem;
+        padding-bottom: 0.2rem;
+        margin-bottom: 10px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .inviteImg {
+        text-align: center;
+        > img {
+            width: 0.7rem;
+            vertical-align: middle;
+        }
+        > span {
+            font-size: 0.26rem;
+        }
+    }
+    .borderccc {
+        border-left: 1px solid #ccc;
     }
 }
 </style>

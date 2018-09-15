@@ -113,7 +113,10 @@ export default {
                             return;
                         }
                     }
+                    console.log(iterator.IsDefault == 1);
+                    
                     iterator.IsDefault == 1 ? (this.address = iterator) : "";
+                    iterator.IsDefault == 1 ? (this.AddressId = iterator.AddressId) : "";
                 }
                 console.log(response.data);
             }
@@ -128,9 +131,10 @@ export default {
             this.$router.push({ name: "selectAddress" });
         },
         GoBuySometing() {
+          
             this.$axios({
                 method: "POST",
-                data: { addressid: this.address.Id },
+                data: { addressid: this.address.AddressId },
                 url: this.$server.serverUrl + "/order/addorder",
                 responseType: "json"
             }).then(response => {
