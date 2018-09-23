@@ -209,7 +209,7 @@
     }
     > .yd-cell-right {
         padding: 0;
-        > button {
+        > button { 
             color: #fff;
             font-size: 0.3rem;
             background-color: #ff5f17;

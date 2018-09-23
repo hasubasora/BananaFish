@@ -60,9 +60,8 @@ export default {
             timesrc: require("../assets/Img/fhyp.png"),
             productNum: 0,
             TopObjectList: [],
-            IsTopObjectList:[],
-            InTopObjectList:[],
-
+            IsTopObjectList: [],
+            InTopObjectList: []
         };
     },
     methods: {
@@ -80,10 +79,11 @@ export default {
             if (response.data.success == 200) {
                 console.log(response.data);
                 this.TopObjectList = response.data.data.integralProduct;
-                this.IsTopObjectList = response.data.data.headProduct
-                this.InTopObjectList = response.data.data.recommendProduct
+                this.IsTopObjectList = response.data.data.headProduct;
+                this.InTopObjectList = response.data.data.recommendProduct;
             }
         });
+
 
         this.$axios({
             method: "GET",
