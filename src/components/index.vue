@@ -1,7 +1,8 @@
 <template>
     <div class="homePage">
-
-        <router-view :todo='GetShoppingCartNum'></router-view>
+        <keep-alive>
+            <router-view :todo='GetShoppingCartNum'></router-view>
+        </keep-alive>
         <keep-alive>
             <yd-tabbar fixed active-color="#aaa">
                 <yd-tabbar-item title="首页" link="/" active>
@@ -17,7 +18,6 @@
                 <yd-tabbar-item title="个人中心" link="MyInfo" active>
                     <yd-icon name="ucenter" slot="icon" size="0.54rem"></yd-icon>
                 </yd-tabbar-item>
-
             </yd-tabbar>
         </keep-alive>
 
@@ -29,9 +29,7 @@ export default {
     data() {
         return {
             productNum: 0,
-            NavPage: [
-              
-            ]
+            NavPage: []
         };
     },
     created() {
@@ -68,7 +66,7 @@ export default {
 </script>
 <style lang="scss">
 .homePage {
-    margin-bottom: 1.8rem;
+    // padding-bottom: 2.5rem;
     .router-link-active {
         color: #ff5f17;
     }

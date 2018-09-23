@@ -212,8 +212,9 @@ export default {
         margin: 0.1rem 0;
         padding: 0.1rem;
         font-size: 0.3rem;
+        height: 0.8rem;
         color: #ff5f17;
-        overflow: hidden;
+        // overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         .spans {
@@ -280,7 +281,7 @@ export default {
         .d_progress_top {
             display: flex;
             justify-content: space-between;
-            align-items: left;
+            align-items: left;height: .5rem;
             font-size: 0.3rem;
         }
         .d_progress_bom {

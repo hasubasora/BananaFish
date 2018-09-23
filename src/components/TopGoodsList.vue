@@ -1,6 +1,6 @@
 <template>
     <div class="TopGoodsList">
-        <yd-navbar height='.8rem' color="#f2f2f2" bgcolor="#ff5f17" fixed>
+        <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" fixed>
             <router-link to="/" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
             </router-link>
@@ -23,7 +23,7 @@
                             <span>期号:{{itemt.GroupProduct.CurrentPeriod}}</span>
                         </div>
                         <div slot="left" style="text-align: center;">
-                            <img :src="itemt.GroupProduct.ProductImg" alt="" width="100">
+                            <img :src="itemt.GroupProduct.ProductImg" class="GoodsPic" alt="" width="100">
                             <p class="ProductTitle">
                                 {{itemt.GroupProduct.ProductTitle}}
                             </p>
@@ -35,7 +35,7 @@
                         <div slot="right"></div>
                     </yd-preview-item>
                     <!-- 商品列表 -->
-                    <yd-preview-item v-for="(GoodsInfo,itemIndex) in itemt.LstProduct" :key="GoodsInfo.id">
+                    <yd-preview-item v-for="(GoodsInfo,itemIndex) in itemt.LstProduct" :key="itemIndex">
                         <div slot="left">
                             <img class="ProductImgs" :src="GoodsInfo.ProductImg" alt=""></div>
                         <div slot="right">
@@ -44,7 +44,7 @@
                                     <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
                                     <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
                                     <p class="Integral">
-                                        <span>抽奖号码 {{itemt.LuckerNumber.split(",")[itemIndex+1]}}</span>
+                                        <!-- <span>抽奖号码 {{itemt.LuckerNumber.split(",")[itemIndex+1]}}</span> -->
                                     </p>
 
                                 </yd-flexbox-item>
@@ -66,16 +66,29 @@
                         <div slot="left"></div>
 
                         <div slot="right">
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
+                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" type="button">物流信息</button>
+                            <button class="orderBtn grayBtn" @click="OrderLogistics(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
+                            <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
+                            <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
                             <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==3" type="button">评价</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                            <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
                         </div>
                     </yd-preview-item>
                 </yd-preview>
             </yd-tab-panel>
         </yd-tab>
+        <yd-popup v-model="show1" position="center" width="90%">
+            <div style="background-color:#fff;padding:.1rem">
+                <!-- 支付方式 -->
+                <yd-cell-group title="支付方式">
+                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                        <span slot="left">{{PayListitem.payName}}</span>
+                        <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+                    </yd-cell-item>
+                    <yd-button size="large" @click.native="OrderPaying">确定</yd-button>
+                </yd-cell-group>
+            </div>
+        </yd-popup>
     </div>
 
 </template>
@@ -86,12 +99,16 @@ export default {
         return {
             tab2: 0,
             GoodsHtml: [],
+            show1: false,
+            picked: "",
+            PayList: [],
+            OrderID: "",
             items: [
                 { label: "全部", content: [] },
                 { label: "待付款", content: [] },
-                { label: "待发货", content: [] },
-                { label: "已发货", content: [] },
-                { label: "待评价", content: [] }
+                { label: "待开奖", content: [] },
+                { label: "已开奖", content: [] }
+                // { label: "待评价", content: [] }
             ],
             btns: []
         };
@@ -106,8 +123,30 @@ export default {
             this.items[Number(Qnum)].content = this.GoodsHtml;
             this.$dialog.loading.close();
         }, 1000);
+
+        this.$axios({
+            method: "POST",
+            data: {
+                Client: 0
+            },
+            url: this.$server.serverUrl + "/Paying/GetPayType",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 400) {
+                this.$router.push({ name: "SignIn" });
+            }
+            if (response.data.success == 200) {
+                this.PayList = response.data.list;
+                console.log(response.data);
+            }
+        });
     },
     methods: {
+        //显示选择框
+        ShowWindow(oid) {
+            this.show1 = true;
+            this.OrderID = oid;
+        },
         GoShopGoodslist() {
             this.$router.push({ name: "ShopGoodsList", query: { plan: 0 } });
         },
@@ -123,7 +162,7 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    orderstatus: sta - 1,
+                    orderstatus: sta,
                     pageindex: 1,
                     pagesize: 10
                 },
@@ -137,6 +176,109 @@ export default {
                     this.GoodsHtml = response.data.rows;
                     console.log("请求数据成功");
                     // console.log(this.GoodsHtml);
+                }
+            });
+        },
+        //关闭订单
+        closeOrder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/closemygrouporder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GetGoodsList(0);
+                    setTimeout(e => {
+                        this.items[Number(0)].content = this.GoodsHtml;
+                        this.tab2 = Number(0);
+                    }, 1000);
+                }
+            });
+        },
+        //订单支付
+        OrderPaying(id) {
+            if (!this.picked) {
+                this.$dialog.toast({
+                    mes: "请选择支付方式",
+                    timeout: 1500,
+                    icon: "error",
+                    callback: () => {
+                        // this.$router.push({ name: "SuccessOrder" });
+                    }
+                });
+                return;
+            }
+            window.location.href =
+                this.$server.serverUrl +
+                "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+                this.OrderID +
+                "&OrderIdList=&payType=" +
+                this.picked;
+            // this.$axios({
+            //     method: "POST",
+            //     data: {
+            //         orderId: id,
+            //         type: 1
+            //     },
+            //     url: this.$server.serverUrl + "/UserCenter/OrderPaying",
+            //     responseType: "json"
+            // }).then(response => {
+            //     if (response.data.success == 400) {
+            //         this.$router.push({ name: "SignIn" });
+            //     }
+            //     if (response.data.success == 200) {
+            //         this.GetGoodsList(0);
+            //         setTimeout(e => {
+            //             this.items[Number(0)].content = this.GoodsHtml;
+            //             this.tab2 = Number(0);
+            //         }, 1000);
+            //     }
+            // });
+        },
+        //确认收货
+        receivedmyorder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/receivedmygrouporder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GetGoodsList(0);
+                    setTimeout(e => {
+                        this.items[Number(0)].content = this.GoodsHtml;
+                        this.tab2 = Number(0);
+                    }, 1000);
+                }
+            });
+        },
+
+        OrderLogistics(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id,
+                    type: 1
+                },
+                url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    console.log(response.data);
                 }
             });
         },
@@ -183,6 +325,7 @@ export default {
         text-overflow: ellipsis;
         overflow: hidden;
         text-align: none;
+        text-align: left;
         display: -webkit-box;
         /*! autoprefixer: off */
         -webkit-box-orient: vertical;
@@ -275,6 +418,9 @@ export default {
         border-top-right-radius: 50px;
         padding: 0 0.3rem;
         color: #fff;
+    }
+    .GoodsPic {
+        width: 2.3rem;
     }
 }
 </style>

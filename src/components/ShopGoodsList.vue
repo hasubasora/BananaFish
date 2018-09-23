@@ -1,6 +1,6 @@
 <template>
     <div class="ShopGoodslist">
-        <yd-navbar height='.8rem' color="#f2f2f2" bgcolor="#ff5f17" fixed>
+        <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" fixed>
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
             </router-link>
@@ -42,22 +42,36 @@
 
                     <yd-preview-item>
                         <div slot="left"></div>
-                        <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount}}+{{itemt.ExpressAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
+                        <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount+itemt.ExpressAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
                     </yd-preview-item>
                     <yd-preview-item>
                         <div slot="left"></div>
 
                         <div slot="right">
+                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==3" type="button">评价</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                            <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
+                            <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
+                            <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
+                            <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==7" type="button">申请售后</button>
                         </div>
                     </yd-preview-item>
                 </yd-preview>
             </yd-tab-panel>
         </yd-tab>
+        <yd-popup v-model="show1" position="center" width="90%">
+            <div style="background-color:#fff;padding:.1rem">
+                <!-- 支付方式 -->
+                <yd-cell-group title="支付方式">
+                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                        <span slot="left">{{PayListitem.payName}}</span>
+                        <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+                    </yd-cell-item>
+                    <yd-button size="large" @click.native="OrderPaying">确定</yd-button>
+                </yd-cell-group>
+            </div>
+        </yd-popup>
     </div>
 
 </template>
@@ -67,41 +81,63 @@ export default {
     data() {
         return {
             tab2: 0,
+            show1: false,
+            picked: "",
+            PayList: [],
+            OrderID: "",
             GoodsHtml: [],
             items: [
                 { label: "全部", content: [] },
                 { label: "待付款", content: [] },
                 { label: "待发货", content: [] },
                 { label: "已发货", content: [] },
-                { label: "待评价", content: [] }
+                { label: "待评价", content: [] },
+                { label: "售后", content: [] }
             ],
-            btns: [
-                // {
-                //   text: "辅助操作",
-                //   click: () => {
-                //     alert("辅助操作");
-                //   }
-                // },
-                // {
-                //   color: "#F00",
-                //   text: "跳转首页",
-                //   link: { path: "/" }
-                // }
-            ]
+            btns: []
         };
     },
     created() {
         let Qnum = this.$route.query.plan;
-        this.GetGoodsList(Qnum);
+        if (Qnum == 5) {
+            this.GetGoodsList(8);
+        } else {
+            this.GetGoodsList(Qnum);
+        }
         this.$dialog.loading.open("拼命加载中...>_<");
         setTimeout(params => {
             console.log(Qnum);
-            this.items[Number(Qnum)].content = this.GoodsHtml;
             this.tab2 = Number(Qnum);
+            this.items[Number(Qnum)].content = this.GoodsHtml;
             this.$dialog.loading.close();
         }, 1000);
+
+        this.$axios({
+            method: "POST",
+            data: {
+                Client: 0
+            },
+            url: this.$server.serverUrl + "/Paying/GetPayType",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 400) {
+                this.$router.push({ name: "SignIn" });
+            }
+            if (response.data.success == 200) {
+                this.PayList = response.data.list;
+                console.log(response.data);
+            }
+        });
     },
     methods: {
+        //显示选择框
+        ShowWindow(oid) {
+            this.show1 = true;
+            this.OrderID = oid;
+        },
+        GoComment(a, b) {
+            this.$router.push({ name: "Comment", query: { plan: a, t: b } });
+        },
         GoTopGoodsList() {
             this.$router.push({ name: "TopGoodsList", query: { plan: 0 } });
         },
@@ -109,6 +145,70 @@ export default {
             this.$router.push({
                 name: "GeneralOrderDetails",
                 query: { OrderId: id }
+            });
+        },
+        //关闭订单
+        closeOrder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/closemyorder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GetGoodsList(0);
+                    setTimeout(e => {
+                        this.items[Number(0)].content = this.GoodsHtml;
+                        this.tab2 = Number(0);
+                    }, 1000);
+                }
+            });
+        },
+        //订单支付
+        OrderPaying(id) {
+            if (!this.picked) {
+                this.$dialog.toast({
+                    mes: "请选择支付方式",
+                    timeout: 1500,
+                    icon: "error",
+                    callback: () => {
+                        // this.$router.push({ name: "SuccessOrder" });
+                    }
+                });
+                return;
+            }
+            window.location.href =
+                this.$server.serverUrl +
+                "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
+                this.OrderID +
+                "&payType=" +
+                this.picked;
+        },
+        //确认收货
+        receivedmyorder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/receivedmyorder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.GetGoodsList(0);
+                    setTimeout(e => {
+                        this.items[Number(0)].content = this.GoodsHtml;
+                        this.tab2 = Number(0);
+                    }, 1000);
+                }
             });
         },
         GetGoodsList(sta) {
@@ -129,9 +229,10 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
-
                     // console.log(sta);
                     // console.log(this.GoodsHtml);
+                } else {
+                    this.$dialog.loading.close();
                 }
             });
         },
@@ -147,7 +248,9 @@ export default {
             setTimeout(() => {
                 this.tab2 = key;
                 this.$dialog.loading.close();
+
                 this.items[key].content = this.GoodsHtml;
+
                 //   "新内容【key:" + key + "】新内容_" + new Date().getTime();
             }, 1000);
         }
@@ -161,6 +264,7 @@ export default {
     .ProductImgs {
         width: 1.6rem;
     }
+
     .GoodsInfo {
         width: 1.2rem;
         > span {
@@ -177,6 +281,7 @@ export default {
         height: 0.8rem;
         text-overflow: ellipsis;
         overflow: hidden;
+        text-align: left;
         text-align: none;
         display: -webkit-box;
         /*! autoprefixer: off */

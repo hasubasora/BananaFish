@@ -1,11 +1,11 @@
 <template>
-    <yd-layout>
-        <yd-navbar slot="navbar" title="地址编辑" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
+    <div class="setAddress">
+        <yd-navbar slot="navbar" title="地址编辑" height='.8rem' color="#f2f2f2" class="titleColor">
             <router-link to="" slot="left" @click.native="returnGo">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
+                <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" slot="right" @click.native="verify(AddressId)">
-                保存
+            <router-link to="" color="#f2f2f2" slot="right" @click.native="verify(AddressId)">
+                <span style="color:#fff"> 保存</span>
             </router-link>
         </yd-navbar>
 
@@ -71,8 +71,11 @@
                 <span slot="left" style="color:red"> 删除收货地址</span>
             </yd-cell-item>
         </yd-cell-group>
-
-    </yd-layout>
+        <div class="s_address">
+            <button type="button" @click="verify(AddressId)">
+                保存新增</button>
+        </div>
+    </div>
 </template>
 <script>
 /* 前提是已经安装了 ydui-district */
@@ -274,6 +277,28 @@ export default {
     > i {
         font-size: 0.26rem;
         color: #555;
+    }
+}
+.setAddress {
+    .s_address {
+        text-align: center;
+        > button {
+            width: 4rem;
+            color: #fff;
+            font-size: 0.26rem;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(
+                -90deg,
+                rgba(234, 63, 50, 1),
+                rgba(237, 121, 71, 1)
+            );
+            > img {
+                width: 0.4rem;
+                vertical-align: middle;
+            }
+            padding: 0.2rem;
+        }
     }
 }
 </style>

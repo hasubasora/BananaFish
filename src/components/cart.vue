@@ -1,8 +1,8 @@
 <template>
-    <yd-layout>
-        <yd-navbar title="购物车" fixed color="#f2f2f2" bgcolor="#ff5f17" height='.8rem'>
+    <div class="cart">
+        <yd-navbar title="购物车" fixed color="#f2f2f2" class="titleColor" height='.8rem'>
             <router-link to="#" slot="left">
-                <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
+                <!-- /  <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon> -->
             </router-link>
 
             <!-- <img slot="center" src="http://static.ydcss.com/www/img/logo.png"/> -->
@@ -22,11 +22,15 @@
 
                 <yd-checklist v-model="checklist" ref="checklistDemo" :callback="change" :label="false" color="#FF5F17">
 
-                    <div :val="items.Id" v-for="(items,index) in item.LstProduct" :key="index" class="LstProduct">
+                    <div :val="items.Id" v-for="(items,index) in item.LstProduct" :key="index" class="LstProduct red" :style="items.Stock==0?'background:#f0f0f0':''">
                         <yd-flexbox>
                             <div class="GoodList_top">
-                                <label class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
-                                    <input type="checkbox" v-model="items.IsCheck">
+                                <!-- {{items.Stock}} -->
+                                <!-- 失效控制 -->
+                                <label v-if="items.Stock==0" style="text-align: center;display: block;">失效</label>
+
+                                <label v-if="items.Stock!=0" class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
+                                    <input type="checkbox" v-model="items.IsCheck" >
                                     <span class="yd-checklist-icon">
                                         <i></i>
                                     </span>
@@ -37,16 +41,17 @@
 
                             <yd-flexbox-item class="GoodList_bom" v-show="isDel">
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
+                                <p class="AttValueName">颜色分类：{{items.AttValueName}}</p>
                                 <p class="c-red GoodList_Number">
                                     <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'':'赠'+items.Integral+'积分'}}</span>
-                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;">
+                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0">
                                         <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
                                         <input type="number" pattern="[1-9]*" v-model="items.BuyNum" disabled placeholder="" class="yd-spinner-input">
                                         <a href="javascript:;" @click="increase(items.Id,items.BuyNum+1)"></a>
                                     </span>
                                 </p>
                             </yd-flexbox-item>
-                            <yd-flexbox-item v-show="!isDel" class="GoodList_bom">
+                            <yd-flexbox-item class="GoodList_bom" v-show="!isDel">
                                 <p>{{items.ProductTitle}}</p>
                                 <p class="c-red GoodList_Number">
                                     <span class="SalePrice">￥{{items.SalePrice}}</span>
@@ -60,6 +65,7 @@
                     </div>
 
                 </yd-checklist>
+
             </div>
         </div>
 
@@ -72,16 +78,28 @@
         <button slot="right" type="button" :disabled='!isDel' @click="GoCartOrder">去结算</button>
       
     </yd-cell-item> -->
-    </yd-layout>
+    </div>
 </template>
 <style lang="scss">
+.cart {
+    height: 100%;
+    // border: 1px solid;
+    position: absolute;
+    width: 100%;
+}
 .demo-checklist-img {
     width: 1.5rem;
     border: 1px solid #f2f2f2;
     margin-right: 0.5rem;
 }
 .GroupBox {
-    margin-top: 1rem;
+    margin: 1rem 0 2rem;
+    width: 100%;
+    position: absolute;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+    -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
 }
 .GroupId_cart {
     background: #fff;
@@ -124,6 +142,10 @@
     align-items: center;
 }
 .GoodList_bom {
+    .AttValueName{
+        font-size: .2rem;
+        color: #c4c4c4;
+    }
     .DelGood {
         color: red;
         cursor: pointer;
@@ -144,11 +166,15 @@
         }
     }
 }
-
+#scrollView {
+    // border: 1px solid;
+    height: 100%;
+    position: absolute;
+}
 .bomBtn {
     border-top: 1px solid #f2f2f2;
-    position: fixed;
-    z-index: 1;
+    position: absolute;
+    z-index: 999;
     display: flex;
     background: #fff;
     left: 0;
@@ -201,6 +227,7 @@ export default {
     data() {
         return {
             checklist: [],
+            noStock: false,
             isCheckAll: false,
             spinner: 2,
             GeneralList: [],
@@ -296,8 +323,11 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
+                    console.log(this.CartList.length == []);
+                    if (this.CartList.length == []) {
+                        this.hasGoods = false;
+                    }
                     for (const iterator of this.CartList) {
-                        console.log(iterator);
                         for (const iterators of iterator.LstProduct) {
                             if (iterators.IsCheck) {
                                 this.hasGoods = true;

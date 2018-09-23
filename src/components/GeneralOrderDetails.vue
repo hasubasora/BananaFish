@@ -65,7 +65,7 @@
                 <div slot="right">
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
-                    <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
+                    <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==0"  type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
                 </div>

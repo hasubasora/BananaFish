@@ -104,10 +104,58 @@ export default new Router({
       path: '/GeneralOrderDetails',
       name: 'GeneralOrderDetails',
       component: GeneralOrderDetails => require(["@/components/GeneralOrderDetails"], GeneralOrderDetails),
-    },{ //普通订单详情
+    }, { //普通订单详情
       path: '/TheTopOrderDetails',
       name: 'TheTopOrderDetails',
       component: TheTopOrderDetails => require(["@/components/TheTopOrderDetails"], TheTopOrderDetails),
+    }, { //我的代理
+      path: '/MyAgent',
+      name: 'MyAgent',
+      component: MyAgent => require(["@/components/MyAgent"], MyAgent),
+    }, { //我的代理
+      path: '/DirectMember',
+      name: 'DirectMember',
+      component: DirectMember => require(["@/components/DirectMember"], DirectMember),
+    }, { //物流
+      path: '/OrderLogistics',
+      name: 'OrderLogistics',
+      component: OrderLogistics => require(["@/components/OrderLogistics"], OrderLogistics),
+    }, { //提现
+      path: '/WithdrawDeposit',
+      name: 'WithdrawDeposit',
+      component: WithdrawDeposit => require(["@/components/WithdrawDeposit"], WithdrawDeposit),
+    }, { //余额
+      path: '/RemainingSum',
+      name: 'RemainingSum',
+      component: RemainingSum => require(["@/components/RemainingSum"], RemainingSum),
+    }, { //银行卡
+      path: '/BankCard',
+      name: 'BankCard',
+      component: BankCard => require(["@/components/BankCard"], BankCard),
+    }, { //银行卡
+      path: '/SetBankCard',
+      name: 'SetBankCard',
+      component: SetBankCard => require(["@/components/SetBankCard"], SetBankCard),
+    }, { //余额明细
+      path: '/TouchBalance',
+      name: 'TouchBalance',
+      component: TouchBalance => require(["@/components/TouchBalance"], TouchBalance),
+    }, { //余额明细
+      path: '/PayCard',
+      name: 'PayCard',
+      component: PayCard => require(["@/components/PayCard"], PayCard),
+    }, { //余额明细
+      path: '/Comment',
+      name: 'Comment',
+      component: Comment => require(["@/components/Comment"], Comment),
+    }, { //我的积分
+      path: '/MyPoints',
+      name: 'MyPoints',
+      component: MyPoints => require(["@/components/MyPoints"], MyPoints),
+    }, { //邀请
+      path: '/Invitations',
+      name: 'Invitations',
+      component: Invitations => require(["@/components/Invitations"], Invitations),
     },
   ]
 })

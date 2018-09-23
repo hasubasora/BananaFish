@@ -1,24 +1,27 @@
 <template>
-    <div class="myinfo">
+    <div class="myinfo" v-if="UserInfo.currentUser">
         <yd-flexbox direction="vertical">
             <yd-flexbox-item class="GroupSetLink">
-                <img src="../assets/Img/set.png" alt="" class="SetLink">
+                <router-link to="/Seting"> <img src="../assets/Img/set.png" alt="" class="SetLink"></router-link>
+
             </yd-flexbox-item>
             <yd-flexbox-item class="GroupSetInfo">
                 <yd-flexbox>
                     <div class="InfoPic">
-                        <img src="../assets/Img/bkc.jpg" alt="">
-                        <!-- <img :src="UserInfo.UserIcon" alt=""> -->
+                        <!-- <img v-if="!UserInfo.currentUser" src="../assets/Img/bkc.jpg" alt=""> -->
+                        <img v-if="UserInfo.currentUser" :src="UserInfo.currentUser.UserIcon" alt="">
                     </div>
-                    <yd-flexbox-item>
-                        <span class="UserName">{{UserInfo.NickName}}</span>
+                    <yd-flexbox-item @click.native="GoRedData">
+                        <span class="UserName">{{UserInfo.currentUser.NickName}}</span>
                         <div class="UserInfo">分红指数</div>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
-                        <strong class="UserMoney">{{UserInfo.Balance}}</strong>
-                        <span class="MoneyTitle">我的余额（元）</span>
+                        <router-link to="/RemainingSum">
+                            <strong class="UserMoney">{{UserInfo.balance}}</strong>
+                            <span class="MoneyTitle">我的余额（元）</span>
+                        </router-link>
                     </yd-flexbox-item>
-                    <div class="withdrawal">
+                    <div class="withdrawal" @click="ToLink('WithdrawDeposit',new Date())">
                         提现
                     </div>
                 </yd-flexbox>
@@ -30,12 +33,12 @@
             </yd-flexbox-item>
             <yd-flexbox-item>
                 <yd-flexbox class="MyIntegral">
-                    <yd-flexbox-item>
-                        <span class="IntegralMsg">{{UserInfo.UserIntegral}}</span>
+                    <yd-flexbox-item @click.native="ToLink('MyPoints',new Date())">
+                        <span class="IntegralMsg">{{UserInfo.integral}}</span>
                         <span class="IntegralTitle">我的积分</span>
                     </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <span class="IntegralMsg borderccc">0.000</span>
+                    <yd-flexbox-item @click.native="GoMyEarnings">
+                        <span class="IntegralMsg borderccc">{{UserInfo.profit}}</span>
                         <span class="IntegralTitle borderccc">我的收益</span>
                     </yd-flexbox-item>
                 </yd-flexbox>
@@ -51,42 +54,33 @@
             <!-- 订单栏目 -->
             <yd-flexbox-item class="IconList">
                 <yd-flexbox>
-                    <yd-flexbox-item v-for="(item, index) in ListOne" :key="index" @click.native="ToLink(item.Link,index+1)">
+                    <yd-flexbox-item v-for="(item, index) in ListOne" :key="index" @click.native="ToLink(item.Link,index+1)" class="badge">
+                        <yd-badge type="danger" v-if="index==0&&PendingPayment!=0" class="danger">{{PendingPayment}}</yd-badge>
+                        <yd-badge type="danger" v-if="index==1&&PendingDelivery!=0" class="danger">{{PendingDelivery}}</yd-badge>
+                        <yd-badge type="danger" v-if="index==2&&PendingReceived!=0" class="danger">{{PendingReceived}}</yd-badge>
+                        <yd-badge type="danger" v-if="index==3&&PendingEvaluated!=0" class="danger">{{PendingEvaluated}}</yd-badge>
+                        <yd-badge type="danger" v-if="index==4&&AfterSale!=0" class="danger">{{AfterSale}}</yd-badge>
                         <img :src="item.imgUrl" alt="" class="IconImg">
                         <span class="IconName"> {{item.iconName}}</span>
+
                     </yd-flexbox-item>
                 </yd-flexbox>
                 <yd-cell-group class="TopGroup">
-                    <yd-cell-item arrow class="arrow">
+                    <yd-cell-item arrow class="arrow" @click.native="ToLink('TopGoodsList',0)">
                         <span slot="left" class="TopGroupBack">我的头筹订单</span>
                         <span slot="right">查看全部</span>
                     </yd-cell-item>
                     <div class="TopGroupClass">
                         <yd-flexbox>
-                            <yd-flexbox-item>
+                            <yd-flexbox-item v-for="(item, index) in TopGoodList" :key="index">
                                 <div class="TopGoodsList">
-                                    <img src="../assets/Img/shop2.png" alt="" class="TopGoodsImg">
-                                    <span class="TopGoodsPug">即将开奖</span>
+                                    <img :src=item.ImgUrl alt="" class="TopGoodsImg">
+                                    <span class="TopGoodsPug">{{item.WinnerStr}}</span>
                                 </div>
-                                <p class="TopGoodsTitle">Apple/苹果Mac..</p>
-                                <div class="TopGoodsTitle">标号4021856450</div>
+                                <p class="TopGoodsTitle">{{item.OrderTitle}}</p>
+                                <div class="TopGoodsTitle">标号{{item.LuckerNumber}}</div>
                             </yd-flexbox-item>
-                            <yd-flexbox-item>
-                                <div class="TopGoodsList">
-                                    <img src="../assets/Img/shop2.png" alt="" class="TopGoodsImg">
-                                    <span class="TopGoodsPug">即将开奖</span>
-                                </div>
-                                <p class="TopGoodsTitle">Apple/苹果Mac..</p>
-                                <div class="TopGoodsTitle">标号4021856450</div>
-                            </yd-flexbox-item>
-                            <yd-flexbox-item>
-                                <div class="TopGoodsList">
-                                    <img src="../assets/Img/shop2.png" alt="" class="TopGoodsImg">
-                                    <span class="TopGoodsPug">即将开奖</span>
-                                </div>
-                                <p class="TopGoodsTitle">Apple/苹果Mac..</p>
-                                <div class="TopGoodsTitle">标号4021856450</div>
-                            </yd-flexbox-item>
+
                         </yd-flexbox>
 
                     </div>
@@ -102,13 +96,15 @@
             <yd-flexbox-item class="IconList_two">
                 <yd-flexbox class=" invite">
                     <yd-flexbox-item>
-                        <div class="inviteImg">
-                            <img src="../assets/Img/yq.png" alt="">
-                            <span>邀请有奖</span>
-                        </div>
+                        <router-link to="/Invitations">
+                            <div class="inviteImg">
+                                <img src="../assets/Img/yq.png" alt="">
+                                <span>邀请有奖</span>
+                            </div>
+                        </router-link>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
-                        <div class="inviteImg borderccc">
+                        <div class="inviteImg borderccc" @click="GoMyAgent">
                             <img src="../assets/Img/td.png" alt="">
                             <span>我的团队</span>
                         </div>
@@ -123,7 +119,7 @@
                 </yd-cell-group>
             </yd-flexbox-item>
             <!-- 工具栏 -->
-            <yd-flexbox-item class="IconList ">
+            <yd-flexbox-item class="IconList " style="margin-bottom:1rem;">
                 <yd-flexbox>
                     <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink(itemt.Link)">
                         <img :src="itemt.imgUrl" alt="" class="IconImg">
@@ -138,6 +134,11 @@
 export default {
     data() {
         return {
+            PendingPayment: 0, // 呆付款 是
+            PendingDelivery: 0, //  待发货 是
+            PendingReceived: 0, //  待收货 是
+            PendingEvaluated: 0, //  待评价 是
+            AfterSale: 0, // 收货 是
             ListOne: [
                 {
                     iconName: "待付款",
@@ -192,30 +193,64 @@ export default {
                     Link: ""
                 }
             ],
-            UserInfo:[]
+            UserInfo: [],
+            TopGoodList: []
         };
     },
     created() {
         this.GetUserInfo();
+        this.Getbadge();
     },
     methods: {
         ToLink(url, num) {
             console.log(num);
             this.$router.push({ name: url, query: { plan: num } });
         },
+        GoMyAgent() {
+            this.$router.push({ name: "MyAgent" });
+        },
+        GoMyEarnings() {
+            this.$router.push({ name: "MyEarnings" });
+        },
         GetUserInfo() {
             this.$axios({
                 method: "POST",
                 data: {},
-                url: this.$server.serverUrl + "/account/getmyaccount",
+                url: this.$server.serverUrl + "/UserCenter/index",
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
                     // this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-                    console.log(response.data.object);
-                    this.UserInfo = response.data.object;
+                    // console.log(response.data);
+                    this.UserInfo = response.data;
+                    this.TopGoodList = response.data.orderList;
+                }
+            });
+        },
+        GoRedData() {
+            this.$router.push({ name: "RedData" });
+        },
+        Getbadge() {
+            //小红点
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/Order/GetOrderNum",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    // this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    console.log(response.data.orderNum.AfterSale);
+                    let badge = response.data.orderNum;
+                    this.PendingPayment = badge.PendingPayment; // 呆付款 是
+                    this.PendingDelivery = badge.PendingDelivery; //  待发货 是
+                    this.PendingReceived = badge.PendingReceived; //  待收货 是
+                    this.PendingEvaluated = badge.PendingEvaluated; //  待评价 是
+                    this.AfterSale = badge.AfterSale; // 收货 是
                 }
             });
         }
@@ -224,6 +259,7 @@ export default {
 </script>
 <style lang="scss">
 .myinfo {
+    margin-bottom: 1rem;
     height: 100%;
     width: 100%;
     background: url(../assets/Img/bg.png) no-repeat;
@@ -291,7 +327,7 @@ export default {
         }
         .MoneyTitle {
             @extend .UserMoney;
-            font-size: 0.16rem;
+            font-size: 0.26rem;
         }
         .withdrawal {
             text-align: center;
@@ -336,6 +372,16 @@ export default {
         }
     }
     .IconList {
+        //小点
+        .badge {
+            position: relative;
+            top: 0;
+            left: 0;
+            .danger {
+                position: absolute;
+                right: 0.2rem;
+            }
+        }
         background: #fff;
         font-size: 0.1rem;
         margin-bottom: 10px;
@@ -384,6 +430,7 @@ export default {
             }
             .TopGroupClass {
                 height: 2rem;
+                width: 6.8rem;
                 .TopGoodsList {
                     position: relative;
                     text-align: center;
@@ -391,6 +438,7 @@ export default {
                     .TopGoodsImg {
                         width: 1rem;
                         height: 1rem;
+                        background: #fff;
                     }
                     .TopGoodsPug {
                         position: absolute;
@@ -407,6 +455,10 @@ export default {
                 }
                 .TopGoodsTitle {
                     text-align: center;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    width: 2rem;
                 }
             }
         }

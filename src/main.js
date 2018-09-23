@@ -47,10 +47,15 @@ Vue.config.productionTip = false
 
 
 
+export const GoBuySometing = (tc, pt, picked) => {
+  window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
+}
 
-export const getNum = () => axios.post("http://h5.huizhisuo.xyz/order/getshoppingcartnum", {
 
-})
+
+export const getNum = () => axios.post(serverUrl.serverUrl + "/order/getshoppingcartnum", {
+
+  })
   .then(function (response) {
     CartNum = response.data.object.productNum
     store.commit('increment', CartNum)
@@ -59,7 +64,7 @@ export const getNum = () => axios.post("http://h5.huizhisuo.xyz/order/getshoppin
   .catch(function (error) {
     console.log(error);
   });
-export let CartNum 
+export let CartNum
 
 
 
@@ -104,6 +109,8 @@ new Vue({
   el: '#app',
   store,
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })

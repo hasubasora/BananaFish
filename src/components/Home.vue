@@ -165,6 +165,7 @@ export default {
 .page-tabbar {
     height: 100vh;
     overflow: scroll;
+    padding-bottom: 2rem;
 }
 
 .page-wrap {

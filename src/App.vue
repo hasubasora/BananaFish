@@ -25,8 +25,11 @@ export default {
 body {
     margin: 0;
 }
+.c-white {
+    color: #fff !important;
+}
 .c-red {
-    color: red;
+    color: #ff6143 !important;
 }
 .gray {
     color: #aaa;
@@ -34,6 +37,7 @@ body {
 .green {
     color: #09bb07;
 }
+
 .mt-progress-runway {
     background-color: #8a8a8a;
 }
@@ -43,5 +47,8 @@ body {
 // }
 .mt-progress-progress {
     background-color: #ff5f17;
+}
+.titleColor {
+    background: linear-gradient(to left, #ea3f32, #ed7947);
 }
 </style>

@@ -13,16 +13,16 @@
         </yd-navbar>
 
         <yd-flexbox direction="vertical" class="swipe">
-            <yd-flexbox-item>
+            <div style="width:100%;">
                 <mt-swipe :auto="4000">
                     <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id"><img :src="item.ImgUrl" alt=""></mt-swipe-item>
                 </mt-swipe>
                 <div class="goodtitle">
 
                 </div>
-            </yd-flexbox-item>
+            </div>
 
-            <yd-flexbox-item>
+            <div class="theTopGoodA">
                 <yd-flexbox class="theTopGood">
                     <div class="ProductTitle">
                         <strong>{{GoodsList.ProductTitle}}</strong>
@@ -39,9 +39,9 @@
                         <p class="Integral">可获得积分：{{GoodsList.Integral}}</p>
                     </yd-flexbox-item>
                 </yd-flexbox>
-            </yd-flexbox-item>
-
-            <yd-flexbox-item>
+            </div>
+            <!-- ==== -->
+            <div class="wocaonima">
                 <yd-accordion>
                     <yd-accordion-item title="商品详情" open>
                         <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
@@ -71,12 +71,12 @@
                     </yd-accordion-item>
 
                 </yd-accordion>
-            </yd-flexbox-item>
-
+            </div>
+            <!-- ==== -->
         </yd-flexbox>
 
         <keep-alive>
-            <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".16rem">
+            <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem">
 
                 <div class='iconfont_s'>
                     <yd-tabbar-item title="首页" link="/" active>
@@ -94,10 +94,10 @@
                 </div>
 
                 <div class="yd-nav-right-button">
-                    <button class="handleClick rightbtn" @click="addCart(GoodsList.Id)" type="button">加入购物车</button>
+                    <button class="handleClick rightbtn" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
                 </div>
                 <div class="yd-nav-right-button">
-                    <button class="handleClick leftbtn leftColor" @click="BuyGood(GoodsList.Id)" type="button">一键购买</button>
+                    <button class="handleClick leftbtn leftColor" @click="addCart(GoodsList.Id,2)" type="button">一键购买</button>
                 </div>
             </yd-tabbar>
         </keep-alive>
@@ -110,7 +110,7 @@
                     </div>
                     <yd-flexbox-item>
                         <p class="oranges">￥
-                            <span>{{GoodsList.SalePrice}}</span>
+                            <span>{{price}}</span>
                         </p>
                         <div>
                             <span>库存{{Stock}}件</span>
@@ -135,14 +135,13 @@
                         <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,itemt.AttValue,selectSKU[index])" :class="{isOrange:itemt.isTrue,'pointerEvents':elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
                             {{itemt.AttValue}}
                         </span>
-
                     </div>
                 </div>
                 <div class="gotup">
                     <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
                 </div>
             </div>
-            <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id,120)">确定</yd-button>
+            <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id)">确定</yd-button>
         </yd-popup>
     </yd-layout>
 </template>
@@ -166,6 +165,7 @@ export default {
             buyName: "",
             buyID: "", //商品ID
             spinner: 0, //购买数量
+            price: 0,
             Stock: 0 //存库
         };
     },
@@ -213,11 +213,15 @@ export default {
             // console.log(sid);
             this.$router.go(-1);
         },
+        //立即购买
         BuyGood() {
             console.log(this.buyID);
             console.log(this.spinner);
             console.log(this.$route.params.Good_id);
-
+            if (this.Gotup && !this.show) {
+                this.show = true;
+                return;
+            }
             this.$axios({
                 method: "POST",
                 data: {
@@ -252,9 +256,10 @@ export default {
                 this.GoodAttrs.push(buyName);
             }
             if (buyID) {
-                // console.log(buyID);
+                console.log(buyID);
                 this.buyID = buyID.AttIds;
                 this.Stock = buyID.Stock;
+                this.price = buyID.SalePrice;
             }
             for (const [keys, elementSkus] of element.entries()) {
                 // console.log(keys);
@@ -298,45 +303,89 @@ export default {
                 }
             }
         },
-        addCart(i, n) {
-            console.log(i);
-
+        addCart(i, key) {
             if (this.Gotup && !this.show) {
                 this.show = true;
+                this.key = key;
                 return;
             }
-            this.$axios({
-                method: "POST",
-                data: {
-                    productid: this.$route.params.Good_id,
-                    attids: this.buyID,
-                    buynum: this.spinner
-                },
-                url: this.$server.serverUrl + "/order/addshoppingcart",
-                responseType: "json"
-            }).then(response => {
-                // this.GetMyId(response.data.success)
-                switch (response.data.success) {
-                    case 200:
-                        this.show = false;
-                        this.$dialog.toast({
-                            mes: "加入购物车成功",
-                            timeout: 1500,
-                            icon: "success"
-                        });
-                        break;
-                    case 400:
-                        this.$router.push({ name: "SignIn", ReturnUrl: "" });
-                        break;
-                    case 500:
-                        this.$dialog.toast({
-                            mes: response.data.msg,
-                            timeout: 1500
-                        });
-                    default:
-                        break;
-                }
-            });
+       
+
+            switch (this.key) {
+                case 1:
+                    //添加购物车
+                    this.$axios({
+                        method: "POST",
+                        data: {
+                            productid: this.$route.params.Good_id,
+                            attids: this.buyID,
+                            buynum: this.spinner
+                        },
+                        url: this.$server.serverUrl + "/order/addshoppingcart",
+                        responseType: "json"
+                    }).then(response => {
+                        // this.GetMyId(response.data.success)
+                        switch (response.data.success) {
+                            case 200:
+                                this.show = false;
+                                this.$dialog.toast({
+                                    mes: "加入购物车成功",
+                                    timeout: 1500,
+                                    icon: "success"
+                                });
+                                break;
+                            case 400:
+                                this.$router.push({
+                                    name: "SignIn",
+                                    ReturnUrl: ""
+                                });
+                                break;
+                            case 500:
+                                this.$dialog.toast({
+                                    mes: response.data.msg,
+                                    timeout: 1500
+                                });
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 2:
+                    //立即购买
+                    this.$axios({
+                        method: "POST",
+                        data: {
+                            productid: this.$route.params.Good_id,
+                            attids: this.buyID,
+                            buynum: this.spinner
+                        },
+                        url: this.$server.serverUrl + "/order/buyitnow",
+                        responseType: "json"
+                    }).then(response => {
+                        // this.GetMyId(response.data.success)
+                        switch (response.data.success) {
+                            case 200:
+                                this.$router.push({ name: "cartOrder" });
+                                break;
+                            case 400:
+                                this.$router.push({
+                                    name: "SignIn",
+                                    ReturnUrl: ""
+                                });
+                                break;
+                            case 500:
+                                this.$dialog.toast({
+                                    mes: response.data.msg,
+                                    timeout: 1500
+                                });
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
         },
         GetProductDetail() {
             this.$axios({
@@ -410,18 +459,22 @@ export default {
 </script>
 
 <style lang="scss">
-.GoodsHtml{
-  >p{
-      >img{
-          width: 100%;
-      }
-  }
+.GoodsHtml {
+    > p {
+        > img {
+            width: 100%;
+        }
+    }
 }
 .GeneralItemDescription {
+    margin-top: 0.8rem !important;
     .SetButton {
         position: fixed;
         left: 0;
         bottom: 0;
+    }
+    .theTopGoodA {
+        width: 100%;
     }
     .iconfont_s {
         display: flex;
@@ -540,7 +593,7 @@ export default {
             position: relative;
             .d_prog {
                 position: absolute;
-                top: 0.16rem;
+                top: 0.26rem;
                 left: 3.2rem;
                 z-index: 2;
             }
@@ -633,7 +686,7 @@ export default {
     font-size: 0.4rem;
     .t_MarketPrice {
         text-align: center;
-        font-size: 0.16rem;
+        font-size: 0.26rem;
         color: #888;
     }
 }

@@ -1,60 +1,50 @@
 <template>
-  <yd-layout>
-    <yd-navbar slot="navbar" title="分红积分数据表" height='.8rem'>
-      <router-link to="" slot="left" @click.native="GoHistory">
-        <yd-navbar-back-icon></yd-navbar-back-icon>
-      </router-link>
-    </yd-navbar>
+    <yd-layout>
+        <yd-navbar slot="navbar" title="分红积分数据表" height='.8rem'>
+            <router-link to="" slot="left" @click.native="GoHistory('Home')">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
 
-    <div class="RedDataTitle">
-      <p>
-        <router-link to="/RedData" class="write">平台分红数据</router-link>
-        <router-link to="/MyRedData">我的分红数据</router-link>
-      </p>
-    </div>
-    <router-view></router-view>
+        <div class="RedDataTitle">
+            <p>
+                <router-link to="/RedData" class="write">平台分红数据</router-link>
+                <router-link to="/MyRedData">我的分红数据</router-link>
+            </p>
+        </div>
+        <router-view></router-view>
 
-    <yd-flexbox direction="vertical" class="RedData">
-      <yd-flexbox-item>
-        <yd-flexbox>
-          <yd-flexbox-item class="font03">累计收益（元）</yd-flexbox-item>
-          <!-- <yd-flexbox-item class="font02">万份积分收益（元）</yd-flexbox-item> -->
+        <yd-flexbox direction="vertical" class="RedData">
+            <yd-flexbox-item class="font03">累计收益（元）</yd-flexbox-item>
+            <yd-flexbox-item class="font04">{{objectData.ProfitAmount}}</yd-flexbox-item>
+            <yd-flexbox-item>
+                <ve-line :data="chartData" height='5rem'></ve-line>
+            </yd-flexbox-item>
         </yd-flexbox>
-      </yd-flexbox-item>
-      <yd-flexbox-item>
-        <yd-flexbox>
-          <yd-flexbox-item class="font04">{{objectData.ProfitAmount}}</yd-flexbox-item>
-          <!-- <yd-flexbox-item class="font04">101.10</yd-flexbox-item> -->
-        </yd-flexbox>
-      </yd-flexbox-item>
-      <yd-flexbox-item>
-        <ve-line :data="chartData" height='5rem'></ve-line>
-      </yd-flexbox-item>
-    </yd-flexbox>
 
-    <yd-cell-group>
-      <yd-cell-item arrow>
-        <span slot="left">
-          <i class="iconfont icon-lirun iconfont_is"></i>
-        </span>
-        <span slot="left">平台总积分：{{objectData.Integral}}</span>
-      </yd-cell-item>
-    </yd-cell-group>
+        <!-- <yd-cell-group>
+            <yd-cell-item arrow>
+                <span slot="left">
+                    <i class="iconfont icon-lirun iconfont_is"></i>
+                </span>
+                <span slot="left">平台总积分：{{objectData.Integral}}</span>
+            </yd-cell-item>
+        </yd-cell-group> -->
 
-    <!-- <yd-cell-group >
+        <!-- <yd-cell-group >
             <yd-cell-item v-for="n in 10">
                 <span slot="left">2017-07-27</span>
                 <span slot="left" style="margin-left:1rem">5000/100000*500</span>
                 <span slot="right">25</span>
             </yd-cell-item>
         </yd-cell-group> -->
-    <div class="RedDataBtn">
-      <span class="iconfont icon-gouwuche-copy" @click="GoHistory"></span>
-      <button class="redbtntx" disabled="disabled" @click="GoHistory">去提现</button>
-      <button class="redbtn" disabled="disabled" @click="GoHistory">购物得积分</button>
-    </div>
+        <div class="RedDataBtn">
+            <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
+            <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
+            <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>
+        </div>
 
-  </yd-layout>
+    </yd-layout>
 </template>
 <script>
 export default {
@@ -68,15 +58,15 @@ export default {
             chartData: {
                 columns: ["IndexNumberDate", "Range"],
                 rows: [
-                    { IndexNumberDate: "2018-05-22", Range: 1 },
-                    { IndexNumberDate: "2018-05-23", Range: 22 },
-                    { IndexNumberDate: "2018-05-24", Range: 333 },
-                    { IndexNumberDate: "2018-05-25", Range: 444 },
-                    { IndexNumberDate: "2018-05-26", Range: 555 },
-                    { IndexNumberDate: "2018-05-27", Range: 666 },
-                    { IndexNumberDate: "2018-05-28", Range: 77 },
-                    { IndexNumberDate: "2018-05-29", Range: 888 },
-                    { IndexNumberDate: "2018-05-30", Range: 3 }
+                    // { IndexNumberDate: "2018-05-22", Range: 1 },
+                    // { IndexNumberDate: "2018-05-23", Range: 22 },
+                    // { IndexNumberDate: "2018-05-24", Range: 333 },
+                    // { IndexNumberDate: "2018-05-25", Range: 444 },
+                    // { IndexNumberDate: "2018-05-26", Range: 555 },
+                    // { IndexNumberDate: "2018-05-27", Range: 666 },
+                    // { IndexNumberDate: "2018-05-28", Range: 77 },
+                    // { IndexNumberDate: "2018-05-29", Range: 888 },
+                    // { IndexNumberDate: "2018-05-30", Range: 3 }
                 ]
             }
         };
@@ -90,8 +80,8 @@ export default {
     },
     methods: {
         GoHistory(sid) {
-            // console.log(sid);
-            this.$router.go(-1);
+            this.$router.push({ name: sid });
+            // this.$router.go(-1);
         },
         GetRedData() {
             this.$axios({
@@ -147,17 +137,27 @@ export default {
         padding: 0.1rem 0.3rem;
     }
     .font20 {
+        @extend .SetType;
         font-size: 0.8rem;
     }
     .font04 {
+        @extend .SetType;
+        padding: 0.2rem;
         font-size: 0.4rem;
     }
     .font02 {
+        @extend .SetType;
         font-size: 0.2rem;
     }
     .font03 {
+        padding: 0.2rem;
+        @extend .SetType;
         font-size: 0.3rem;
     }
+}
+.SetType {
+    color: #fff;
+    height: 1rem;
 }
 .iconfont_is {
     color: #ff5f17;

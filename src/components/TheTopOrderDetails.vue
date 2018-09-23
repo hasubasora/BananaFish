@@ -1,18 +1,20 @@
 <template>
     <div class="TheTopOrderDetails">
-        <yd-navbar title="订单详情" fixed>
-            <router-link to="" @click.native="GoShopGoodsList" slot="left">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
+        <yd-navbar title="订单详情" fixed class="titleColor" color="#fff">
+            <router-link to="" @click.native="GoShopGoodsList"  slot="left" >
+                <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
             </router-link>
 
         </yd-navbar>
-        <yd-preview-header class="GroupProduct">
+        <yd-preview-header class="GroupProduct" v-if="OrderIdList.GroupProduct">
             <div slot="left" class="GroupProduct_text">
                 <div class="Product_text">头筹奖品</div>
                 <span>期号:{{OrderIdList.GroupProduct.CurrentPeriod}}</span>
-            </div>
+                <span>{{OrderIdList.WinnerStr}}</span>
+            </div> 
+            
             <div slot="left" style="text-align: center;">
-                <img :src="OrderIdList.GroupProduct.ProductImg" alt="" width="100">
+                <img :src="OrderIdList.GroupProduct.ProductImg" class="GoodsPic" alt="" width="100">
                 <p class="ProductTitle">
                     {{OrderIdList.GroupProduct.ProductTitle}}
                 </p>
@@ -38,7 +40,7 @@
                 <yd-flexbox-item>
                     <p class="OrderGoodTitle">{{item.ProductTitle}}</p>
                     <span class="AttValueName">{{item.AttValueName}}&nbsp;</span>
-                    <div class="Integral">
+                    <div class="Integral" v-if="OrderIdList.LuckerNumber">
                         <span>开奖号码 {{OrderIdList.LuckerNumber.split(",")[itemIndex+1]}}</span>
                     </div>
                 </yd-flexbox-item>
@@ -50,7 +52,7 @@
         </div>
         <yd-flexbox-item>
             <yd-preview :buttons="btns">
-               
+
                 <yd-preview-item>
                     <div slot="left">商品总金额</div>
                     <div slot="right">¥{{allPrice}}</div>
@@ -61,7 +63,7 @@
                 </yd-preview-item>
                 <yd-preview-header class="headerPrice">
                     <div slot="left">实付金额</div>
-                    <div slot="right">¥{{allPrice+OrderIdList.ExpressAmount}}</div>
+                    <div slot="right" class="c-red">¥{{allPrice+OrderIdList.ExpressAmount}}</div>
                 </yd-preview-header>
             </yd-preview>
         </yd-flexbox-item>
@@ -93,7 +95,7 @@
     padding: 1rem 0;
     .GroupProduct {
         background: #fff;
-        height: 4rem;
+        height: 4.5rem;
         margin: 0;
         padding-top: 0.5rem;
         > img {
@@ -105,6 +107,8 @@
             word-wrap: normal;
             text-overflow: ellipsis;
             overflow: hidden;
+            border-bottom: #f2f2f2 1px solid;
+            padding-bottom: 0.1rem;
         }
         .red {
             color: #ea3f32;
@@ -238,6 +242,9 @@
     .OrderListMsg {
         background: #fff;
         padding: 0.3rem;
+    }
+    .GoodsPic {
+        width: 2.3rem;
     }
 }
 </style>

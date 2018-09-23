@@ -4,7 +4,7 @@
       <router-link slot="text" to="" @click.native="GoToItem(item.GroupId)" class="goodsTwo">
         <!-- <img class="SalePriceImg" src="../assets/Img/go.png" alt=""> -->
         <img :src="item.ProductImg" class="ProductImg" alt="">
-        <p style="background:#f3f3f3;font-size:.1rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
+        <p style="background:#f3f3f3;font-size:.26rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
         <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
         <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
 

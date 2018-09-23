@@ -3,7 +3,7 @@
     <img v-if="TimeSrc==1" src="../assets/Img/fhyp.png">
     <img v-if="TimeSrc==2" src="../assets/Img/tcbp.png">
     <img v-if="TimeSrc==3" src="../assets/Img/cnxh.png">
-    <router-link class="fh_title_all" to="productList">更多商品<img src="../assets/Img/r.png" alt=""></router-link>
+    <router-link class="fh_title_all" to="/menuThree/0">更多商品<img src="../assets/Img/r.png" alt=""></router-link>
   </div>
 </template>
 <style lang="scss">

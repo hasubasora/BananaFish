@@ -52,7 +52,7 @@ export default {
     data() {
         return {
             tab2: 1,
-            page: 1,
+            page: 2,
             pageSize: 10,
             items: [
                 { CateName: "促销", content: " " },
@@ -64,6 +64,8 @@ export default {
     },
     created() {
         console.log(this.$route.params.Group_id);
+        this.Group_id = this.$route.params.Group_id;
+        localStorage.setItem("GoodsKey", this.$route.params.Group_id);
         this.getCategory();
         this.getCategoryProduct(this.$route.params.Group_id);
     },
@@ -76,6 +78,8 @@ export default {
             });
         },
         loadList() {
+            console.log("id" + this.Group_id);
+
             this.$axios({
                 method: "POST",
                 data: {
@@ -89,15 +93,14 @@ export default {
                 const _list = response.data.rows;
                 this.rows = [...this.rows, ..._list];
                 if (_list.length < this.pageSize || this.page == 3) {
+                    console.log("所有数据加载完毕");
                     /* 所有数据加载完毕 */
                     this.$refs.infinitescrollDemo.$emit(
                         "ydui.infinitescroll.loadedDone"
                     );
-                    console.log(this.$refs.infinitescrollDemo);
-
                     return;
                 }
-                console.log(this.$refs.infinitescrollDemo);
+                console.log("单次请求数据完毕");
 
                 /* 单次请求数据完毕 */
                 this.$refs.infinitescrollDemo.$emit(
@@ -111,6 +114,10 @@ export default {
             console.log(label, key);
         },
         itemClick(key) {
+            console.log(key);
+            console.log(this.items[key]);
+            console.log(this.items[key].CategoryId);
+            localStorage.setItem("GoodsKey", this.items[key].CategoryId);
             this.Group_id = this.items[key].CategoryId;
             console.log(this.items[key].CategoryId);
             this.getCategoryProduct(this.items[key].CategoryId);
@@ -165,7 +172,6 @@ export default {
 };
 </script>
 <style lang="scss">
-
 .hideTwo {
     display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
     text-overflow: ellipsis;

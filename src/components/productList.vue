@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yd-navbar title="分类列表" fixed height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
+    <yd-navbar title="分类列表" fixed height='.8rem' color="#f2f2f2" class="titleColor">
       <router-link to="/" slot="left">
         <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
       </router-link>

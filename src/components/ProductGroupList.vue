@@ -197,13 +197,15 @@
             width: 1rem;
         }
     }
+    .yd-tab-panel {
+        background: transparent;
+        margin-bottom: 1rem;
+    }
 }
 .yd-flexbox-item {
     // padding: .1rem
 }
-.yd-tab-panel {
-    background: transparent;
-}
+
 .goodsList {
     background: #fff8dc;
     margin: 0.2rem 0.1rem;
@@ -292,7 +294,7 @@
             margin: auto;
         }
         .ProductTitlet {
-            font-size: 0.16em;
+            font-size: 0.26em;
             height: 0.6rem;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -306,7 +308,7 @@
         }
         > span {
             color: #999;
-            font-size: 0.16rem;
+            font-size: 0.26rem;
         }
         > strong {
             color: #ff5f17;
@@ -324,7 +326,7 @@
     padding: 0.2rem;
     position: relative;
     .p_text {
-        font-size: 0.16rem;
+        font-size: 0.26rem;
         color: red;
         text-align: center;
     }
@@ -337,7 +339,7 @@
     }
     > p {
         color: #ff5f17;
-        font-size: 0.16rem;
+        font-size: 0.26rem;
         display: flex;
         justify-content: space-around;
     }

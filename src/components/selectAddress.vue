@@ -1,12 +1,12 @@
 <template>
     <div class="addressLists">
-        <yd-navbar slot="navbar" fixed title="地址选择" height='.8rem'>
+        <yd-navbar slot="navbar" fixed title="地址选择" height='.8rem' class="titleColor" color='#fff'>
             <router-link to="" slot="left" @click.native="GoHistory">
-                <yd-navbar-back-icon></yd-navbar-back-icon>
+                <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
             </router-link>
 
-            <router-link to="" @click.native="CompileAddress('new')" slot="right">
-                新增地址
+            <router-link to="" @click.native="CompileAddress('new')" slot="right" >
+                <span style="color:#fff"> 新增地址</span>
             </router-link>
         </yd-navbar>
         <div class="addressListsGroup">
@@ -36,10 +36,7 @@
                     </div>
                 </yd-preview-header>
             </yd-preview>
-            <div class="address">
-                <button type="button">
-                    <img src="../assets/Img/jia.png" alt=""> 新增地址</button>
-            </div>
+          
         </div>
     </div>
 </template>
@@ -118,26 +115,7 @@ export default {
 .addressListsGroup {
     // border: 1px solid;
     margin: 1rem 0;
-    .address {
-        text-align: center;
-        > button {
-            width: 4rem;
-            color: #fff;
-            font-size: 0.26rem;
-            border: none;
-            border-radius: 60px;
-            background: linear-gradient(
-                -90deg,
-                rgba(234, 63, 50, 1),
-                rgba(237, 121, 71, 1)
-            );
-            > img {
-                width: 0.6rem;
-            }
-            padding: 0.1rem;
-            vertical-align: middle;
-        }
-    }
+   
     .addressGroup {
         padding: 0.3rem;
         border-top: 1px solid #f2f2f2;

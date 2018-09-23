@@ -1,7 +1,7 @@
 <template>
     <div class="MyEarnings">
         <yd-navbar title="我的收益" fixed>
-            <router-link to="#" slot="left">
+            <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
 
@@ -9,7 +9,7 @@
         <yd-flexbox-item class="MyEarningsList">
             <p class="MyEarningsList_text"><img src="" alt=""> 总收益
             </p>
-            <strong class="MyEarningsList_Pice">50</strong>
+            <strong class="MyEarningsList_Pice">{{SY.total}}</strong>
             <div class="MyEarningsList_Btn">
                 <button type="button">邀好友，赚收益</button>
             </div>
@@ -17,20 +17,58 @@
 
         <yd-flexbox direction="vertical" class="MyEarningsGroup">
             <yd-flexbox-item class="TheAgentTitleDes">
-                <p>本周总收益：666</p>
+                <p>本周总收益：{{SY.thisWeektotal}}</p>
             </yd-flexbox-item>
             <div class="TheAgent">
                 <span class="TheAgentTitle ">代理佣金</span>
-                <span class="TheAgentTitle bold">666</span>
+                <span class="TheAgentTitle bold">{{SY.thisWeekDL}}</span>
                 <span class="TheAgentTitle borderccc">直推佣金</span>
-                <span class="TheAgentTitle bold">666</span>
+                <span class="TheAgentTitle bold">{{SY.thisWeekZT}}</span>
             </div>
+        </yd-flexbox>
 
+        <yd-flexbox direction="vertical" class="MyEarningsGroup">
+            <yd-flexbox-item class="TheAgentTitleDes">
+                <p>上周总收益：{{SY.prevTotal}}</p>
+            </yd-flexbox-item>
+            <div class="TheAgent">
+                <span class="TheAgentTitle ">代理佣金</span>
+                <span class="TheAgentTitle bold">{{SY.prevWeekDL}}</span>
+                <span class="TheAgentTitle borderccc">直推佣金</span>
+                <span class="TheAgentTitle bold">{{SY.prevWeekZT}}</span>
+            </div>
         </yd-flexbox>
     </div>
 </template>
 <script>
-export default {};
+export default {
+    data() {
+        return {
+            SY: []
+        };
+    },
+    created() {
+        this.GetMyEarnings();
+    },
+    methods: {
+        GetMyEarnings() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/Agent/GetShouYi",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.SY = response.data.data;
+                    console.log(response.data);
+                }
+            });
+        }
+    }
+};
 </script>
 <style lang="scss">
 .MyEarnings {
