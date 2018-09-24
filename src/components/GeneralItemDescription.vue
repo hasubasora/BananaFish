@@ -308,9 +308,9 @@ export default {
                 this.show = true;
                 this.key = key;
                 return;
+            } else {
+                this.key = key;
             }
-       
-
             switch (this.key) {
                 case 1:
                     //添加购物车

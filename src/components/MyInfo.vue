@@ -89,7 +89,7 @@
             <yd-flexbox-item>
                 <yd-cell-group class="OrderList">
                     <yd-cell-item>
-                        <span slot="left">邀请有奖</span>
+                        <span slot="left">合伙人中心</span>
                     </yd-cell-item>
                 </yd-cell-group>
             </yd-flexbox-item>
@@ -99,7 +99,7 @@
                         <router-link to="/Invitations">
                             <div class="inviteImg">
                                 <img src="../assets/Img/yq.png" alt="">
-                                <span>邀请有奖</span>
+                                <span>合伙人中心</span>
                             </div>
                         </router-link>
                     </yd-flexbox-item>
@@ -188,7 +188,7 @@ export default {
                     Link: ""
                 },
                 {
-                    iconName: "加入我们",
+                    iconName: "服务协议",
                     imgUrl: require("../assets/Img/jrwm.png"),
                     Link: ""
                 }

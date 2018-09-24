@@ -1,7 +1,7 @@
 <template>
     <div class="TheTopOrderDetails">
         <yd-navbar title="订单详情" fixed class="titleColor" color="#fff">
-            <router-link to="" @click.native="GoShopGoodsList"  slot="left" >
+            <router-link to="" @click.native="GoShopGoodsList" slot="left">
                 <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
             </router-link>
 
@@ -11,8 +11,8 @@
                 <div class="Product_text">头筹奖品</div>
                 <span>期号:{{OrderIdList.GroupProduct.CurrentPeriod}}</span>
                 <span>{{OrderIdList.WinnerStr}}</span>
-            </div> 
-            
+            </div>
+
             <div slot="left" style="text-align: center;">
                 <img :src="OrderIdList.GroupProduct.ProductImg" class="GoodsPic" alt="" width="100">
                 <p class="ProductTitle">
@@ -24,6 +24,12 @@
 
             </div>
         </yd-preview-header>
+        <yd-cell-group title="支付方式">
+            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                <span slot="left">{{PayListitem.payName}}</span>
+                <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+            </yd-cell-item>
+        </yd-cell-group>
         <div class="OrderTitle">
             <span class="OrderTitle_text">{{OrderIdList.OrderStatusStr}}</span>
         </div>
@@ -82,7 +88,7 @@
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==1" type="button">退款</button>
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
-                    <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
+                    <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
                 </div>
@@ -254,13 +260,31 @@ export default {
         return {
             OrderIdList: [],
             btns: [],
+            PayList: [],
             allIntegral: 0,
+            picked: "",
             allPrice: 0,
             progress4: 0.01
         };
     },
 
     created() {
+        this.$axios({
+            method: "POST",
+            data: {
+                Client: 0
+            },
+            url: this.$server.serverUrl + "/Paying/GetPayType",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 400) {
+                this.$router.push({ name: "SignIn" });
+            }
+            if (response.data.success == 200) {
+                this.PayList = response.data.list;
+                console.log(response.data);
+            }
+        });
         this.$axios({
             method: "POST",
             data: {
@@ -286,6 +310,25 @@ export default {
         });
     },
     methods: {
+        GoBuySometingfn(OrderID) {
+            if (!this.picked) {
+                this.$dialog.toast({
+                    mes: "请选择支付方式",
+                    timeout: 1500,
+                    icon: "error",
+                    callback: () => {
+                        // this.$router.push({ name: "SuccessOrder" });
+                    }
+                });
+                return;
+            }
+            window.location.href =
+                this.$server.serverUrl +
+                "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+                OrderID +
+                "&OrderIdList=&payType=" +
+                this.picked;
+        },
         GoShopGoodsList() {
             this.$router.push({ name: "ShopGoodsList", query: { plan: 0 } });
         }

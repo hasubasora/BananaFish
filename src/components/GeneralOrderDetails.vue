@@ -16,6 +16,12 @@
                 <p>{{OrderIdList.ShipAddress}}</p>
             </div>
         </div>
+        <yd-cell-group title="支付方式">
+            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                <span slot="left">{{PayListitem.payName}}</span>
+                <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+            </yd-cell-item>
+        </yd-cell-group>
         <div class="OrderList" v-for="(item, index) in OrderIdList.LstProduct" :key="index">
             <yd-flexbox>
                 <img class="OrderImg" :src="item.ProductImg" alt="" width="60">
@@ -65,7 +71,7 @@
                 <div slot="right">
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
-                    <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==0"  type="button">立即付款</button>
+                    <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
                 </div>
@@ -182,12 +188,15 @@
 }
 </style>
 <script>
+import { GoBuySometing, GetPay } from "../main.js";
 export default {
     data() {
         return {
             OrderIdList: [],
             btns: [],
+            PayList: [],
             allIntegral: 0,
+            picked: "",
             allPrice: 0
         };
     },
@@ -213,8 +222,43 @@ export default {
                 }
             }
         });
+        this.$axios({
+            method: "POST",
+            data: {
+                Client: 0
+            },
+            url: this.$server.serverUrl + "/Paying/GetPayType",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 400) {
+                this.$router.push({ name: "SignIn" });
+            }
+            if (response.data.success == 200) {
+                this.PayList = response.data.list;
+                console.log(response.data);
+            }
+        });
     },
     methods: {
+        GoBuySometingfn(OrderID) {
+            if (!this.picked) {
+                this.$dialog.toast({
+                    mes: "请选择支付方式",
+                    timeout: 1500,
+                    icon: "error",
+                    callback: () => {
+                        // this.$router.push({ name: "SuccessOrder" });
+                    }
+                });
+                return;
+            }
+            window.location.href =
+                this.$server.serverUrl +
+                "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
+                OrderID +
+                "&payType=" +
+                this.picked;
+        },
         GoShopGoodsList() {
             this.$router.push({ name: "ShopGoodsList", query: { plan: 0 } });
         }

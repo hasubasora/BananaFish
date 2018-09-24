@@ -50,8 +50,31 @@ Vue.config.productionTip = false
 export const GoBuySometing = (tc, pt, picked) => {
   window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
 }
-
-
+//获取支付方式
+export const GetPay = () => {
+  //获取支付地址
+  let PayList = []
+  axios({
+    method: "POST",
+    data: {
+      Client: 0
+    },
+    url: serverUrl.serverUrl + "/Paying/GetPayType",
+    responseType: "json"
+  }).then(response => {
+    if (response.data.success == 400) {
+      this.$router.push({
+        name: "SignIn"
+      });
+    }
+    if (response.data.success == 200) {
+      PayList = response.data.list;
+      console.log(PayList);
+      
+      return PayList
+    }
+  });
+}
 
 export const getNum = () => axios.post(serverUrl.serverUrl + "/order/getshoppingcartnum", {
 

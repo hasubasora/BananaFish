@@ -20,17 +20,11 @@
                     <span slot="right" @click="GetAllPrice" class="c-red">全部提现</span>
                 </yd-cell-item>
             </yd-cell-group>
-
         </div>
-        <yd-cell-group title="单选">
-            <yd-cell-item type="radio">
-                <span slot="left">支付宝（{{PayNumber.DrawAccount}}）</span>
-                <input slot="right" type="radio" value="0" v-model="picked" @change="GetCardInfo(0)" />
-            </yd-cell-item>
-
-            <yd-cell-item type="radio">
-                <span slot="left">银行卡（{{CardNumber.DrawAccount}}）{{CardNumber.DrawAttributeName}}</span>
-                <input slot="right" type="radio" value="1" v-model="picked" @change="GetCardInfo(1)" />
+        <yd-cell-group title="提现方式">
+            <yd-cell-item type="radio" v-for="(item, index) in PayList" :key="index" v-if="PayNumber!=''">
+                <span slot="left" >{{item.name}}（{{PayNumber[index].DrawAccount?PayNumber[index].DrawAccount:''}}）</span>
+                <input slot="right" type="radio" :value=item.type v-model="picked" @change="GetCardInfo(index)" />
             </yd-cell-item>
 
             <!-- <yd-cell-item>
@@ -113,12 +107,14 @@ export default {
             picked: "",
             CardID: "",
             CardNumber: "",
-            PayNumber: 0
+            PayNumber: [],
+            PayList: []
         };
     },
     created() {
         this.GetCard();
         this.GetPrice();
+        this.GetWithdrawType();
     },
     methods: {
         GetCardInfo(dataIndex) {
@@ -129,7 +125,7 @@ export default {
                     }
                     break;
                 case 1:
-                    if (this.CardNumber == "") {
+                    if (this.PayNumber == "") {
                         this.$router.push({ name: "BankCard" });
                     }
                     break;
@@ -149,19 +145,23 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-                    console.log(response.data.list.length < 1);
-                    if (response.data.list.length > 0) {
-                        for (const iterator of response.data.list) {
-                            if (iterator.DrawType == 0) {
-                                console.log("有支付宝");
-                                this.PayNumber = iterator;
-                            }
-                            if (iterator.DrawType == 1) {
-                                console.log("有银行卡");
-                                this.CardNumber = iterator;
-                            }
-                        }
-                    }
+                    console.log(response.data.list);
+                    this.PayNumber=response.data.list;
+                }
+            });
+        },
+        GetWithdrawType() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/UserCenter/GetWithdrawType",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.PayList = response.data.Draw;
                 }
             });
         },

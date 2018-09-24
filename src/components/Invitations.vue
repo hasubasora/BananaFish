@@ -1,6 +1,6 @@
 <template>
     <div class="Invitations">
-        <yd-navbar title="邀请好友" fiexd>
+        <yd-navbar title="邀请好友" fixed>
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>

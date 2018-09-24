@@ -53,7 +53,7 @@ export default {
             }
             if (!this.telNum) {
                 this.$dialog.toast({
-                    mes: "输入银行绑定的手机号",
+                    mes: "输入手机号",
                     timeout: 1000
                 });
                 return;
