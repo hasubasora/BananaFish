@@ -22,8 +22,8 @@
             </yd-cell-group>
         </div>
         <yd-cell-group title="提现方式">
-            <yd-cell-item type="radio" v-for="(item, index) in PayList" :key="index" v-if="PayNumber!=''">
-                <span slot="left" >{{item.name}}（{{PayNumber[index].DrawAccount?PayNumber[index].DrawAccount:''}}）</span>
+            <yd-cell-item type="radio" v-for="(item, index) in PayList" :key="index">
+                <span slot="left" >{{item.name}}（{{PayNumber[index]?PayNumber[index].DrawAccount:''}}）</span>
                 <input slot="right" type="radio" :value=item.type v-model="picked" @change="GetCardInfo(index)" />
             </yd-cell-item>
 

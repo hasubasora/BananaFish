@@ -30,6 +30,9 @@ export default {
             start1: false
         };
     },
+    created(){
+       
+    },
     methods: {
         sendCode1() {
             this.$dialog.loading.open("发送中...");

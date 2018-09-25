@@ -48,7 +48,7 @@
                     </yd-accordion-item>
                 </yd-accordion>
                 <yd-accordion>
-                    <yd-accordion-item title="宝贝评价">
+                    <yd-accordion-item title="宝贝评价" @click.native="GetCommentList(GoodsList.Id)" open>
                         <div style="width:100%" class="comment">
                             <yd-flexbox direction="vertical" v-for="items in GoodsList.LstComment" :key="items.id">
                                 <yd-flexbox-item class="UserInfo">
@@ -66,7 +66,6 @@
                                 </yd-flexbox-item>
 
                             </yd-flexbox>
-
                         </div>
                     </yd-accordion-item>
 
@@ -201,6 +200,12 @@ export default {
                     this.productNum = response.data.object.productNum;
                     console.log(this.productNum);
                 }
+            });
+        },
+        GetCommentList(oid){
+             this.$router.push({
+                name: "TheEvaluationList",
+                params: { Good_id: oid }
             });
         },
         GoDecs() {
@@ -608,7 +613,7 @@ export default {
     .obacity {
         opacity: 0;
     }
-    // 用户评论区
+    // 用户评价区
     .comment {
         padding: 0.5rem;
         .yd-flexbox-vertical {

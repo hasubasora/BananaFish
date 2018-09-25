@@ -40,7 +40,7 @@
                             <img class="ProductImgs" :src="GoodsInfo.ProductImg" alt=""></div>
                         <div slot="right">
                             <yd-flexbox>
-                                <yd-flexbox-item>
+                                <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
                                     <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
                                     <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
                                     <p class="Integral">
@@ -70,7 +70,7 @@
                             <button class="orderBtn grayBtn" @click="OrderLogistics(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
                             <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
-                            <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==3" type="button">评价</button>
+                            <button class="orderBtn orangeBtn" @click="GoToComment(itemt.OrderId)" v-if="itemt.OrderStatus==3" type="button">评价</button>
                             <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
                         </div>
                     </yd-preview-item>
@@ -142,6 +142,18 @@ export default {
         });
     },
     methods: {
+        GoToComment(id) {
+            this.$router.push({
+                name: "Comment",
+                query: { OrderId: id }
+            });
+        },
+        GoToGoodsDes(id) {
+            this.$router.push({
+                name: "GeneralItemDescription",
+                params: { Good_id: id }
+            });
+        },
         //显示选择框
         ShowWindow(oid) {
             this.show1 = true;
@@ -193,11 +205,18 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-                    this.GetGoodsList(0);
-                    setTimeout(e => {
-                        this.items[Number(0)].content = this.GoodsHtml;
-                        this.tab2 = Number(0);
-                    }, 1000);
+                    this.$dialog.toast({
+                        mes: "取消成功",
+                        timeout: 1500,
+                        icon: "success",
+                        callback: () => {
+                            this.GetGoodsList(0);
+                            setTimeout(e => {
+                                this.items[Number(0)].content = this.GoodsHtml;
+                                this.tab2 = Number(0);
+                            }, 1000);
+                        }
+                    });
                 }
             });
         },

@@ -180,7 +180,7 @@ export default {
                 {
                     iconName: "帮助",
                     imgUrl: require("../assets/Img/bz.png"),
-                    Link: ""
+                    Link: "help"
                 },
                 {
                     iconName: "商务合作",

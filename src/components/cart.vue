@@ -30,7 +30,7 @@
                                 <label v-if="items.Stock==0" style="text-align: center;display: block;">失效</label>
 
                                 <label v-if="items.Stock!=0" class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
-                                    <input type="checkbox" v-model="items.IsCheck" >
+                                    <input type="checkbox" v-model="items.IsCheck">
                                     <span class="yd-checklist-icon">
                                         <i></i>
                                     </span>
@@ -96,10 +96,11 @@
     margin: 1rem 0 2rem;
     width: 100%;
     position: absolute;
-    overflow-y: scroll;
+
     top: 0;
     bottom: 0;
     -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
+    overflow-y: scroll;
 }
 .GroupId_cart {
     background: #fff;
@@ -142,8 +143,8 @@
     align-items: center;
 }
 .GoodList_bom {
-    .AttValueName{
-        font-size: .2rem;
+    .AttValueName {
+        font-size: 0.2rem;
         color: #c4c4c4;
     }
     .DelGood {
@@ -209,7 +210,7 @@
     }
     > .yd-cell-right {
         padding: 0;
-        > button { 
+        > button {
             color: #fff;
             font-size: 0.3rem;
             background-color: #ff5f17;

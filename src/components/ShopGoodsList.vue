@@ -23,13 +23,12 @@
                             <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
                         <div slot="right">
                             <yd-flexbox>
-                                <yd-flexbox-item>
+                                <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
                                     <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
                                     <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
                                     <p class="Integral">
                                         <span>积分奖励{{GoodsInfo.Integral}}分</span>
                                     </p>
-
                                 </yd-flexbox-item>
                                 <div class="GoodsInfo">
                                     <span>¥{{GoodsInfo.BuyPrice}}</span>
@@ -130,6 +129,12 @@ export default {
         });
     },
     methods: {
+        GoToGoodsDes(id) {
+            this.$router.push({
+                name: "GeneralItemDescription",
+                params: { Good_id: id }
+            });
+        },
         //显示选择框
         ShowWindow(oid) {
             this.show1 = true;

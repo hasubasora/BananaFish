@@ -156,6 +156,14 @@ export default new Router({
       path: '/Invitations',
       name: 'Invitations',
       component: Invitations => require(["@/components/Invitations"], Invitations),
+    },{ //评价列表
+      path: '/TheEvaluationList/:Good_id',
+      name: 'TheEvaluationList',
+      component: TheEvaluationList => require(["@/components/TheEvaluationList"], TheEvaluationList),
+    },{ //help
+      path: '/help',
+      name: 'help',
+      component: help => require(["@/components/help"], help),
     },
   ]
 })
