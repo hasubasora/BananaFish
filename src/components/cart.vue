@@ -96,7 +96,6 @@
     margin: 1rem 0 2rem;
     width: 100%;
     position: absolute;
-
     top: 0;
     bottom: 0;
     -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/

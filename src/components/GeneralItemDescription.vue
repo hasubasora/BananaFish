@@ -202,8 +202,8 @@ export default {
                 }
             });
         },
-        GetCommentList(oid){
-             this.$router.push({
+        GetCommentList(oid) {
+            this.$router.push({
                 name: "TheEvaluationList",
                 params: { Good_id: oid }
             });
@@ -309,13 +309,18 @@ export default {
             }
         },
         addCart(i, key) {
+            console.log(i);
+            console.log(key);
+            console.log(this.buyID);
+            console.log(this.spinner);
+            console.log(this.$route.params.Good_id);
+
             if (this.Gotup && !this.show) {
                 this.show = true;
                 this.key = key;
                 return;
-            } else {
-                this.key = key;
-            }
+            } 
+            
             switch (this.key) {
                 case 1:
                     //添加购物车

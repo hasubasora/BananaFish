@@ -10,9 +10,14 @@
                         <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
                     </div>
                     <div class="search">
-                        <!-- <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" id="search" placeholder="头筹商品...."></label> -->
+                        <router-link to="/SearchList">
+                            <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" disabled id="search" placeholder="头筹商品...."></label>
+                        </router-link>
                     </div>
-                    <div class="massage"><img src="../assets/Img/massage.png" alt=""></div>
+                    <div class="massage">
+                        <router-link to="/MessageQueue"><img src="../assets/Img/massage.png" alt=""></router-link>
+                    </div>
+
                 </div>
                 <swipe></swipe>
             </div>
@@ -83,7 +88,6 @@ export default {
                 this.InTopObjectList = response.data.data.recommendProduct;
             }
         });
-
 
         this.$axios({
             method: "GET",

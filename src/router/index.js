@@ -156,14 +156,26 @@ export default new Router({
       path: '/Invitations',
       name: 'Invitations',
       component: Invitations => require(["@/components/Invitations"], Invitations),
-    },{ //评价列表
+    }, { //评价列表
       path: '/TheEvaluationList/:Good_id',
       name: 'TheEvaluationList',
       component: TheEvaluationList => require(["@/components/TheEvaluationList"], TheEvaluationList),
-    },{ //help
+    }, { //help
       path: '/help',
       name: 'help',
       component: help => require(["@/components/help"], help),
+    }, { //搜索
+      path: '/SearchList',
+      name: 'SearchList',
+      component: SearchList => require(["@/components/SearchList"], SearchList),
+    }, { //消息
+      path: '/MessageQueue',
+      name: 'MessageQueue',
+      component: MessageQueue => require(["@/components/MessageQueue"], MessageQueue),
+    }, { //消息
+      path: '/Though',
+      name: 'Though',
+      component: Though => require(["@/components/Though"], Though),
     },
   ]
 })

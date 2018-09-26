@@ -99,7 +99,7 @@
                         <router-link to="/Invitations">
                             <div class="inviteImg">
                                 <img src="../assets/Img/yq.png" alt="">
-                                <span>合伙人中心</span>
+                                <span>邀请有奖</span>
                             </div>
                         </router-link>
                     </yd-flexbox-item>
@@ -175,7 +175,7 @@ export default {
                 {
                     iconName: "客服",
                     imgUrl: require("../assets/Img/kf.png"),
-                    Link: ""
+                    Link: "Though"
                 },
                 {
                     iconName: "帮助",
@@ -185,12 +185,12 @@ export default {
                 {
                     iconName: "商务合作",
                     imgUrl: require("../assets/Img/swhz.png"),
-                    Link: ""
+                    Link: "Though"
                 },
                 {
                     iconName: "服务协议",
                     imgUrl: require("../assets/Img/jrwm.png"),
-                    Link: ""
+                    Link: "Though"
                 }
             ],
             UserInfo: [],
@@ -202,9 +202,9 @@ export default {
         this.Getbadge();
     },
     methods: {
-        ToLink(url, num) {
+        ToLink(url, num, tit) {
             console.log(num);
-            this.$router.push({ name: url, query: { plan: num } });
+            this.$router.push({ name: url, query: { plan: num, Titles: tit } });
         },
         GoMyAgent() {
             this.$router.push({ name: "MyAgent" });
