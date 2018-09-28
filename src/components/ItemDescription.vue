@@ -47,7 +47,7 @@
                     </yd-grids-item>
                 </yd-grids-group>
             </yd-flexbox-item>
-            <yd-flexbox direction="vertical" style="width:100%" class="d_progress">
+            <div class="d_progress">
                 <yd-flexbox-item class="d_progress_top">
                     <span>期号:{{GoodsList.GroupId}}</span>
                     <span>免费包邮</span>
@@ -61,7 +61,7 @@
                     <span>剩余
                         <b class="c-red">{{GoodsList.RemainNum}}</b>次</span>
                 </yd-flexbox-item>
-            </yd-flexbox>
+            </div>
 
             <yd-flexbox-item>
                 <!-- <p class="d_text">截止至<b class="c-red"></b> 08-05 10:37，若没有凑足<b class="c-red">{{GoodsList.TotalNum}}</b>  人次，系统会自动取 消订单并在24小时内退款。</p> -->
@@ -278,10 +278,13 @@ export default {
     .d_progress {
         background: #ffffff;
         padding: 0.2rem;
+        width: 100%;
+        height: 2rem; 
         .d_progress_top {
             display: flex;
             justify-content: space-between;
-            align-items: left;height: .5rem;
+            align-items: left;
+            height: 0.5rem;
             font-size: 0.3rem;
         }
         .d_progress_bom {

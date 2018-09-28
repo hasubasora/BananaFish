@@ -52,7 +52,7 @@
                 </yd-cell-group>
             </yd-flexbox-item>
             <!-- 订单栏目 -->
-            <yd-flexbox-item class="IconList">
+            <yd-flexbox-item class="navList">
                 <yd-flexbox>
                     <yd-flexbox-item v-for="(item, index) in ListOne" :key="index" @click.native="ToLink(item.Link,index+1)" class="badge">
                         <yd-badge type="danger" v-if="index==0&&PendingPayment!=0" class="danger">{{PendingPayment}}</yd-badge>
@@ -93,7 +93,7 @@
                     </yd-cell-item>
                 </yd-cell-group>
             </yd-flexbox-item>
-            <yd-flexbox-item class="IconList_two">
+            <yd-flexbox-item class="navList_two">
                 <yd-flexbox class=" invite">
                     <yd-flexbox-item>
                         <router-link to="/Invitations">
@@ -119,7 +119,7 @@
                 </yd-cell-group>
             </yd-flexbox-item>
             <!-- 工具栏 -->
-            <yd-flexbox-item class="IconList " style="margin-bottom:1rem;">
+            <yd-flexbox-item class="navList " style="margin-bottom:1rem;">
                 <yd-flexbox>
                     <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink(itemt.Link)">
                         <img :src="itemt.imgUrl" alt="" class="IconImg">
@@ -371,7 +371,7 @@ export default {
             }
         }
     }
-    .IconList {
+    .navList {
         //小点
         .badge {
             position: relative;
@@ -387,6 +387,7 @@ export default {
         margin-bottom: 10px;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+        padding-top: 0.2rem;
         .IconImg {
             width: 0.5rem;
             margin: auto;
@@ -432,6 +433,7 @@ export default {
                 height: 2rem;
                 width: 6.8rem;
                 .TopGoodsList {
+                    width: 2.3rem;
                     position: relative;
                     text-align: center;
                     margin-top: 0.2rem;
@@ -463,7 +465,7 @@ export default {
             }
         }
     }
-    .IconList_two {
+    .navList_two {
         background: #fff;
         font-size: 0.1rem;
         padding-bottom: 0.2rem;

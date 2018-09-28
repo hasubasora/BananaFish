@@ -32,7 +32,7 @@ body {
     color: #ff6143 !important;
 }
 .gray {
-    color: #aaa;
+    color: #ccc;
 }
 .green {
     color: #09bb07;

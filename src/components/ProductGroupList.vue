@@ -24,17 +24,16 @@
                 <yd-tab>
                     <yd-tab-panel label="正在头筹">
                         <IsTheTop></IsTheTop>
-
                     </yd-tab-panel>
                     <yd-tab-panel label="正在揭晓">
-
                         <InTheTop></InTheTop>
-
                     </yd-tab-panel>
                     <yd-tab-panel label="拔得头筹">
                         <yd-flexbox direction="vertical">
                             <!-- s -->
                             <yd-flexbox-item>
+                                <div v-if="Grouporder==''" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无拔得头筹商品哦~去逛逛吧~</div>
+
                                 <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
                                     <div class="Grouporder_top">
                                         <span class="CurrentPeriod">第{{item.CurrentPeriod}}期</span>

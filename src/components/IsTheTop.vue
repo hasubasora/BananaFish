@@ -1,5 +1,7 @@
 <template>
     <div>
+        <div v-if="GoodsList==''" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无头筹商品哦~</div>
+
         <div class="goodsList" v-for="item in GoodsList" :key="item.id">
             <yd-flexbox class="backgoods">
                 <yd-flexbox-item>

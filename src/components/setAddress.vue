@@ -73,7 +73,7 @@
         </yd-cell-group>
         <div class="s_address">
             <button type="button" @click="verify(AddressId)">
-                保存新增</button>
+                保存地址</button>
         </div>
     </div>
 </template>

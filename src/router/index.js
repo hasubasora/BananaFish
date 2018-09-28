@@ -176,6 +176,10 @@ export default new Router({
       path: '/Though',
       name: 'Though',
       component: Though => require(["@/components/Though"], Though),
-    },
+    },{ //消息
+      path: '/www/:Good_id',
+      name: 'www',
+      component: www => require(["@/components/www"], www),
+    }
   ]
 })

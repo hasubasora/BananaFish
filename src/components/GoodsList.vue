@@ -1,7 +1,7 @@
 <template>
-    <yd-grids-group :rows="3">
+    <yd-grids-group :rows=postTitle.products_rowNum>
         <!-- postTitle 传过来的接受者 -->
-        <yd-grids-item v-for="item in postTitle" :key="item.id">
+        <yd-grids-item v-for="item in postTitle.products" :key="item.id">
             <span slot="text">
                 <router-link to="" @click.native="GoToItem(item.Id)" class="goods">
                     <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
