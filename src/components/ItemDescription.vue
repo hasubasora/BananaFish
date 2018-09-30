@@ -48,19 +48,19 @@
                 </yd-grids-group>
             </yd-flexbox-item>
             <div class="d_progress">
-                <yd-flexbox-item class="d_progress_top">
+                <div class="d_progress_top">
                     <span>期号:{{GoodsList.GroupId}}</span>
                     <span>免费包邮</span>
-                </yd-flexbox-item>
-                <yd-flexbox-item class="d_progress_center">
+                </div>
+                <div class="d_progress_center">
                     <div class="d_prog">{{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</div>
-                    <mt-progress class="progress" :value="GoodsList.TotalNum-GoodsList.RemainNum" :bar-height="15"> {{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</mt-progress>
-                </yd-flexbox-item>
-                <yd-flexbox-item class="d_progress_bom">
+                    <yd-progressbar type="line" class="progress" :progress="GoodsList.RemainNum/GoodsList.TotalNum" trail-width="4" trail-color="#FE5D51"></yd-progressbar>
+                </div>
+                <div class="d_progress_bom">
                     <span>总需{{GoodsList.TotalNum}}人次</span>
                     <span>剩余
                         <b class="c-red">{{GoodsList.RemainNum}}</b>次</span>
-                </yd-flexbox-item>
+                </div>
             </div>
 
             <yd-flexbox-item>
@@ -99,6 +99,7 @@ export default {
         return {
             GoodsList: [],
             GoodsHtml: "",
+            progress4: 1,
             show: false
         };
     },
@@ -211,7 +212,7 @@ export default {
         background: #ffffff;
         margin: 0.1rem 0;
         padding: 0.1rem;
-        font-size: 0.3rem;
+        font-size: 0.26rem;
         height: 0.8rem;
         color: #ff5f17;
         // overflow: hidden;
@@ -260,7 +261,7 @@ export default {
         }
         > p {
             background: #ffffff;
-            font-size: 0.3rem;
+            font-size: 0.26rem;
             text-align: center;
             margin: 0.1rem 0;
             padding: 0.1rem;
@@ -279,24 +280,30 @@ export default {
         background: #ffffff;
         padding: 0.2rem;
         width: 100%;
-        height: 2rem; 
+        height: 2rem;
         .d_progress_top {
             display: flex;
             justify-content: space-between;
             align-items: left;
             height: 0.5rem;
-            font-size: 0.3rem;
+            font-size: 0.26rem;
         }
         .d_progress_bom {
             @extend .d_progress_top;
         }
         .d_progress_center {
+            .progress {
+                svg {
+                    border-radius: 50px;
+                }
+            }
             position: relative;
             .d_prog {
                 position: absolute;
-                top: 0.16rem;
+                top: 0rem;
                 left: 3.2rem;
                 z-index: 2;
+                color: #f5f5f5;
             }
         }
     }
@@ -313,7 +320,7 @@ export default {
         bottom: 0;
         > button {
             background-color: #ff5f17;
-            font-size: 0.3rem;
+            font-size: 0.26rem;
         }
     }
 }

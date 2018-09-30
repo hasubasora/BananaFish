@@ -13,31 +13,16 @@
             </p>
         </div>
         <router-view></router-view>
-
-        <yd-flexbox direction="vertical" class="RedData">
-            <yd-flexbox-item class="font03">累计收益（元）</yd-flexbox-item>
-            <yd-flexbox-item class="font04">{{objectData.ProfitAmount}}</yd-flexbox-item>
-            <yd-flexbox-item>
+        <div class="RedData">
+            <div>累计收益（元)</div>
+            <p>{{objectData.ProfitAmount}}</p>
+            <div class="chartData">
+                <div class="bgred"></div>
                 <ve-line :data="chartData" height='5rem'></ve-line>
-            </yd-flexbox-item>
-        </yd-flexbox>
+            </div>
+        </div>
 
-        <!-- <yd-cell-group>
-            <yd-cell-item arrow>
-                <span slot="left">
-                    <i class="iconfont icon-lirun iconfont_is"></i>
-                </span>
-                <span slot="left">平台总积分：{{objectData.Integral}}</span>
-            </yd-cell-item>
-        </yd-cell-group> -->
-
-        <!-- <yd-cell-group >
-            <yd-cell-item v-for="n in 10">
-                <span slot="left">2017-07-27</span>
-                <span slot="left" style="margin-left:1rem">5000/100000*500</span>
-                <span slot="right">25</span>
-            </yd-cell-item>
-        </yd-cell-group> -->
+     
         <div class="RedDataBtn">
             <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
             <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
@@ -127,14 +112,29 @@ export default {
         }
     }
 }
+
 .RedData {
     background: #ff5f17;
     -webkit-scroll-touch: scroll;
+    font-size: 0.3rem;
 
-    .yd-flexbox {
-        justify-content: space-between;
-        color: #fff;
-        padding: 0.1rem 0.3rem;
+    justify-content: space-between;
+    color: #fff;
+    padding: 0.1rem 0.3rem;
+    .chartData {
+        position: relative;
+        .bgred {
+            width: 100%;
+            position: absolute;
+            z-index: 8;
+            height: .5rem;
+            // border: 1px solid;
+            background: #ff5f17;
+            // background: #fff
+        }
+    }
+    canvas {
+        width: 1rem;
     }
     .font20 {
         @extend .SetType;

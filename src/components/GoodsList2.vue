@@ -1,26 +1,26 @@
 <template>
-  <yd-grids-group :rows=postHead.products_rowNum>
-    <yd-grids-item v-for="item in postHead.products" :key="item.id">
-      <router-link slot="text" to="" @click.native="GoToItem(item.GroupId)" class="goodsTwo">
-        <!-- <img class="SalePriceImg" src="../assets/Img/go.png" alt=""> -->
-        <img :src="item.ProductImg" class="ProductImg" alt="">
-        <p style="background:#f3f3f3;font-size:.26rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
-        <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
-        <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress>
+    <yd-grids-group :rows="postHead.products_rowNum">
+        <yd-grids-item v-for="item in postHead.products" :key="item.id">
+            <router-link slot="text" to="" @click.native="GoToItem(item.GroupId)" class="goodsTwo">
+                <!-- <img class="SalePriceImg" src="../assets/Img/go.png" alt=""> -->
+                <img :src="item.ProductImg" class="ProductImg" alt="">
+                <p style="background:#f3f3f3;font-size:.26rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
+                <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+                <!-- <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress> -->
+                <yd-progressbar class="progress" type="line" :progress="item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
+                <div class="RemainNum">已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</div>
+                <div class="goodsName">
+                    <span class="goodsBack">头筹价</span>{{item.ProductTitle}}</div>
+                <!-- <div class="specification"> {{item.SubTitle}}</div> -->
+                <span class="ProductStock">头筹价</span>
 
-        <div class="RemainNum">已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</div>
-        <div class="goodsName">
-          <span class="goodsBack">头筹价</span>{{item.ProductTitle}}</div>
-        <!-- <div class="specification"> {{item.SubTitle}}</div> -->
-        <span class="ProductStock">头筹价</span>
+                <div class="SalePrice">
+                    <strong>￥{{item.MinSalePrice}}-{{item.MaxSalePrice}}</strong>
+                </div>
+            </router-link>
+        </yd-grids-item>
 
-        <div class="SalePrice">
-          <strong>￥{{item.MinSalePrice}}-{{item.MaxSalePrice}}</strong>
-        </div>
-      </router-link>
-    </yd-grids-item>                      
-
-  </yd-grids-group>
+    </yd-grids-group>
 </template>
 <style lang="scss">
 .goodsTwo {
@@ -46,12 +46,19 @@
         height: 2rem;
         width: 2rem;
     }
-
+    .progress {
+        > svg {
+            // border: 1px solid;
+            border-radius: 50px;
+            margin: 0.1rem 0;
+        }
+    }
     .prog {
         position: absolute;
         color: #fff;
-        top: 0.13rem;
-        left: -0.5rem;
+        top: 0.1rem;
+        left: -0.4rem;
+        font-size: 0.3rem;
         z-index: 9;
     }
     .goodsName {
@@ -88,11 +95,11 @@
 </style>
 <script>
 export default {
-    props:['postHead'],
+    props: ["postHead"],
     data() {
         return {
             GoodsList: [],
-            progress4: 0.6
+            progress4: 0
         };
     },
     created() {
@@ -110,7 +117,7 @@ export default {
             }
             if (response.data.success == 200) {
                 this.GoodsList = response.data.rows;
-                console.log(this.GoodsList);
+                // console.log(this.GoodsList);
             }
         });
     },

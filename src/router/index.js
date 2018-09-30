@@ -53,7 +53,7 @@ export default new Router({
       name: 'SignIn',
       component: SignIn => require(["@/components/SignIn"], SignIn),
     }, { //提交订单
-      path: '/cartOrder/:address_GetId',
+      path: '/cartOrder',
       name: 'cartOrder',
       component: cartOrder => require(["@/components/cartOrder"], cartOrder),
     }, { //提交订单
@@ -180,6 +180,10 @@ export default new Router({
       path: '/www/:Good_id',
       name: 'www',
       component: www => require(["@/components/www"], www),
+    },{ //消息
+      path: '/MessageText/:Text_id',
+      name: 'MessageText',
+      component: MessageText => require(["@/components/MessageText"], MessageText),
     }
   ]
 })

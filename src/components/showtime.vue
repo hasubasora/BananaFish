@@ -1,18 +1,19 @@
 <template>
-  <div class="fh_title">
-    <img  :src=TimeSrc.TitleSrc>
-    <router-link class="fh_title_all"  to="/menuThree/0">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
-  </div>
+    <div class="fh_title">
+        <img :src=TimeSrc.TitleSrc>
+        <router-link class="fh_title_all" to="/menuThree/0">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
+    </div>
 </template>
 <style lang="scss">
 .fh_title {
     position: relative;
     padding: 0.2rem;
     > img {
-        width: 3rem;
+        width: auto;
+        height: 0.26rem;
     }
     .fh_title_all {
-        font-size: 0.2rem;
+        font-size: 0.26rem;
         line-height: 0.2rem;
         position: absolute;
         right: 0.2rem;

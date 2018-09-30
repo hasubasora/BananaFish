@@ -1,5 +1,5 @@
 <template>
-    <yd-grids-group :rows=postTitle.products_rowNum>
+    <yd-grids-group :rows="postTitle.products_rowNum">
         <!-- postTitle 传过来的接受者 -->
         <yd-grids-item v-for="item in postTitle.products" :key="item.id">
             <span slot="text">
@@ -32,7 +32,9 @@
         color: #ff5f17;
         .goodsBack {
             text-align: center;
-            padding: 0.05rem 0.2rem;
+            width: 0.8rem;
+            display: inline-block;
+            height: 0.31rem;
             border-radius: 5px;
             background: #ff5f17;
             color: #fff;

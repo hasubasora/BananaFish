@@ -320,8 +320,9 @@ export default {
                 this.key = key;
                 return;
             } 
+            console.log(this.key);
             
-            switch (this.key) {
+            switch (this.key||key) {
                 case 1:
                     //添加购物车
                     this.$axios({

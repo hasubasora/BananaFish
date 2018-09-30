@@ -20,14 +20,14 @@
                     <yd-preview-header class="GroupProduct">
                         <div slot="left" class="GroupProduct_text">
                             <div class="Product_text">头筹奖品</div>
-                            <span>期号:{{itemt.GroupProduct.CurrentPeriod}}</span>
+                            <span>期号:{{itemt.GroupProduct?itemt.GroupProduct.CurrentPeriod:""}}</span>
                         </div>
                         <div slot="left" style="text-align: center;">
-                            <img :src="itemt.GroupProduct.ProductImg" class="GoodsPic" alt="" width="100">
+                            <img :src="itemt.GroupProduct?itemt.GroupProduct.ProductImg:''" class="GoodsPic" alt="" width="100">
                             <p class="ProductTitle">
-                                {{itemt.GroupProduct.ProductTitle}}
+                                {{itemt.GroupProduct?itemt.GroupProduct.ProductTitle:""}}
                             </p>
-                            <span class="red">价值￥{{itemt.GroupProduct.SalePrice}} </span>
+                            <span class="red">价值￥{{itemt.GroupProduct?itemt.GroupProduct.SalePrice:""}} </span>
                         </div>
                     </yd-preview-header>
                     <yd-preview-item>

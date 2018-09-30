@@ -15,16 +15,16 @@
                 </div>
 
             </div>
-            <swipe></swipe>
+            <swipe :banners='banners'></swipe>
 
         </div>
         <div class="GroupList">
             <div class="navbarcompont">
-                <navbar></navbar>
+                <navbar :headNews='headNews'></navbar>
             </div>
             <!-- 分红等 -->
             <div class="participationInProfit">
-                <participationInProfit></participationInProfit>
+                <participationInProfit :InProfit='InProfit'></participationInProfit>
             </div>
             <div class="showtime" v-for="(item, index) in TopObjectList" :key="index">
                 <showtime :TimeSrc="item"></showtime>
@@ -49,7 +49,10 @@ export default {
             selected: "home",
             timesrc: require("../assets/Img/fhyp.png"),
             productNum: 0,
-            TopObjectList: []
+            TopObjectList: [],
+            banners: [],
+            headNews: [],
+            InProfit: []
         };
     },
     methods: {
@@ -67,6 +70,10 @@ export default {
             if (response.data.success == 200) {
                 console.log(response.data.data.IndexProductLst);
                 this.TopObjectList = response.data.data.IndexProductLst;
+                this.banners = response.data.data.broadcastAd;
+                this.headNews = response.data.data.headNews;
+                this.InProfit = [...response.data.data.bonusSuperiorAd,...response.data.data.headDetonatingAd];
+                console.log(this.InProfit);
             }
         });
     },
@@ -137,11 +144,10 @@ export default {
     .GroupList {
         padding: 0 0.2rem 1rem;
     }
-    .participationInProfit{
+    .participationInProfit {
         // height: 3rem;
         // border: 1px solid red;
-        margin-top: .2rem;
+        margin-top: 0.2rem;
     }
-   
 }
 </style>

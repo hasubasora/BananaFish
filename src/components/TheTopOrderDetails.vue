@@ -46,9 +46,9 @@
                 <yd-flexbox-item>
                     <p class="OrderGoodTitle">{{item.ProductTitle}}</p>
                     <span class="AttValueName">{{item.AttValueName}}&nbsp;</span>
-                    <div class="Integral" v-if="OrderIdList.LuckerNumber">
+                    <!-- <div class="Integral" v-if="OrderIdList.LuckerNumber">
                         <span>开奖号码 {{OrderIdList.LuckerNumber.split(",")[itemIndex+1]}}</span>
-                    </div>
+                    </div> -->
                 </yd-flexbox-item>
                 <div class="OrderPrice">
                     <span>￥{{item.BuyPrice}}</span>
@@ -68,14 +68,16 @@
                     <div slot="right">￥{{OrderIdList.ExpressAmount}}</div>
                 </yd-preview-item>
                 <yd-preview-header class="headerPrice">
-                    <div slot="left">实付金额</div>
+                    <div slot="left">应付金额</div>
                     <div slot="right" class="c-red">¥{{allPrice+OrderIdList.ExpressAmount}}</div>
                 </yd-preview-header>
             </yd-preview>
         </yd-flexbox-item>
 
         <yd-flexbox direction="vertical" class="OrderListMsg">
-            <yd-flexbox-item>本期开奖获得者：{{OrderIdList.WinnerUserName}}</yd-flexbox-item>
+            <yd-flexbox-item>幸运号码：{{OrderIdList.LuckerNumber?OrderIdList.LuckerNumber:'暂无'}}
+            </yd-flexbox-item>
+            <yd-flexbox-item class="c-red">本期开奖获得者：{{OrderIdList.WinnerUserName?OrderIdList.WinnerUserName:'暂无'}}</yd-flexbox-item>
             <yd-flexbox-item>订单编号：{{OrderIdList.OrderId}}</yd-flexbox-item>
             <yd-flexbox-item>下单时间：{{OrderIdList.CreateTime}}</yd-flexbox-item>
             <yd-flexbox-item>支付方式：{{OrderIdList.PaymentType}}</yd-flexbox-item>
@@ -85,7 +87,7 @@
             <yd-preview-item>
                 <div slot="left"></div>
                 <div slot="right">
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==1" type="button">退款</button>
+                    <!-- <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==1" type="button">退款</button> -->
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
                     <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
                     <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
@@ -248,6 +250,9 @@
     .OrderListMsg {
         background: #fff;
         padding: 0.3rem;
+        .yd-flexbox-item {
+            padding: 0.1rem 0;
+        }
     }
     .GoodsPic {
         width: 2.3rem;

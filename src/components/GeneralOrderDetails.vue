@@ -53,7 +53,7 @@
                     <div slot="right">￥{{OrderIdList.ExpressAmount}}</div>
                 </yd-preview-item>
                 <yd-preview-header class="headerPrice">
-                    <div slot="left">实付金额</div>
+                    <div slot="left">应付金额</div>
                     <div slot="right">¥{{allPrice+OrderIdList.ExpressAmount}}</div>
                 </yd-preview-header>
             </yd-preview>

@@ -79,7 +79,7 @@
     </div>
 </template>
 <script>
- import  {GoBuySometing}  from "../main.js";
+import { GoBuySometing } from "../main.js";
 export default {
     data() {
         return {
@@ -185,15 +185,16 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-                    console.log();
-                     
                     this.$dialog.toast({
                         mes: "提交成功",
                         timeout: 1500,
                         icon: "success",
                         callback: () => {
-                            GoBuySometing()
-                            this.h5axiox(response.data.GroupOrderIdList,response.data.OrderIdList);
+                            GoBuySometing();
+                            this.h5axiox(
+                                response.data.GroupOrderIdList,
+                                response.data.OrderIdList
+                            );
                             // this.$router.push({ name: "SuccessOrder" });
                         }
                     });
@@ -208,13 +209,24 @@ export default {
                 if (response.data.success == 400) {
                     this.$router.push({ name: "SignIn" });
                 }
+                if (response.data.success == 401) {
+                    this.$router.push({
+                        name: "SignIn",
+                        query: { Good_name: "1" }
+                    });
+                }
             });
         },
         //提交支付
-        h5axiox(tc,pt) {
-           window.location.href= this.$server.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList="+tc+"&OrderIdList="+pt+"&payType="+this.picked;
-            
-           
+        h5axiox(tc, pt) {
+            window.location.href =
+                this.$server.serverUrl +
+                "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+                tc +
+                "&OrderIdList=" +
+                pt +
+                "&payType=" +
+                this.picked;
         }
     }
 };
@@ -229,6 +241,7 @@ export default {
 }
 .orderList {
     margin: 1rem 0;
+    width: 100%;
     position: absolute;
     top: 0;
     left: 0;

@@ -1,54 +1,47 @@
 <template>
-    <div class="MessageQueue">
+    <div class="MessageText">
         <yd-navbar slot="navbar" title="消息" height='.8rem' fixed>
-            <router-link to="/" slot="left">
+            <router-link to="" slot="left" @click.native="ToMsg">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
 
         </yd-navbar>
-        <yd-cell-group>
-            <yd-cell-item arrow type="link" href="" @click.native='ToMsg(item.Id)' v-for="(item, index) in arrow" :key="index">
-                <span slot="left">
-                    <div :class="['IsRead',{IsGary:item.IsRead}]"></div>
-                </span>
-                <span slot="left" class="title">{{item.Title}}</span>
-                <span slot="right">查看全部</span>
-            </yd-cell-item>
-        </yd-cell-group>
+        <div class="MessageTextGrpup" v-html="MessageTextGrpup">
 
+        </div>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            arrow: []
+            MessageTextGrpup: ""
         };
     },
     created() {
         this.$axios({
             method: "POST",
-            data: {},
-            url: this.$server.serverUrl + "/Account/GetMyMessageLst",
+            data: { Id: this.$route.params.Text_id },
+            url: this.$server.serverUrl + "/Account/GetMyMessage",
             responseType: "json"
         }).then(response => {
             if (response.data.success == 400) {
                 this.$router.push({ name: "SignIn" });
             }
             if (response.data.success == 200) {
-                this.arrow = response.data.list;
+                this.MessageTextGrpup = response.data.model.Content;
             }
         });
     },
     methods: {
         ToMsg(id) {
-            this.$router.push({ name: "MessageText", params: { Text_id: id } });
+            this.$router.go(-1);
         }
     }
 };
 </script>
 <style lang="scss">
-.MessageQueue {
+.MessageText {
     padding: 0.8rem 0;
     .IsRead {
         background: red;

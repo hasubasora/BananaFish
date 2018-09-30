@@ -70,7 +70,7 @@
                         <span slot="left" class="TopGroupBack">我的头筹订单</span>
                         <span slot="right">查看全部</span>
                     </yd-cell-item>
-                    <div class="TopGroupClass">
+                    <div class="TopGroupClass" v-if="TopGoodList.length>0">
                         <yd-flexbox>
                             <yd-flexbox-item v-for="(item, index) in TopGoodList" :key="index">
                                 <div class="TopGoodsList">

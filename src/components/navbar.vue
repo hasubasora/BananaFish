@@ -1,32 +1,33 @@
 <template>
-  <div>
-    <div class="navbar">
-      <div class="center" v-for="(item,index) in navbars" :key='index'>
-        <router-link class="center border" :to="item.href">
-          <img :src='item.src' alt="">
-          <span>{{item.name}}</span>
-        </router-link>
-      </div>
+    <div>
+        <div class="navbar">
+            <div class="center" v-for="(item,index) in navbars" :key='index'>
+                <router-link class="center border" :to="item.href">
+                    <img :src='item.src' alt="">
+                    <span>{{item.name}}</span>
+                </router-link>
+            </div>
+        </div>
+        <div class="news">
+            <div class="newsBox">
+                <img src="../assets/Img/news.png" alt="">
+                <yd-rollnotice autoplay="2000" align='left'>
+                    <yd-rollnotice-item v-for="(item, index) in headNews" :key="index">
+                        <p class="headNewsText">
+                            <span style="color:#F00;"> 荐 </span>
+                            <span style="">{{item}}</span>
+                        </p>
+                    </yd-rollnotice-item>
+                </yd-rollnotice>
+                <span class="allText">|更多</span>
+            </div>
+        </div>
     </div>
-    <div class="news">
-      <div class="newsBox">
-        <img src="../assets/Img/news.png" alt="">
-        <yd-rollnotice autoplay="2000">
-          <yd-rollnotice-item>
-            <span style="color:#F00;"> 最新 </span>荣耀V9 3月超级钜惠！</yd-rollnotice-item>
-          <yd-rollnotice-item>
-            <span style="color:#F00;"> 最新 </span>3.23京东超级品牌日格力盛典</yd-rollnotice-item>
-          <yd-rollnotice-item>
-            <span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
-        </yd-rollnotice>
-        <span class="allText">|更多</span>
-      </div>
-    </div>
-  </div>
 </template>
 <script>
 export default {
     name: "navbar",
+    props: ["headNews"],
     data() {
         return {
             navbars: [
@@ -52,7 +53,7 @@ export default {
                 },
                 {
                     src: require("../assets/Img/nav5.png"),
-                    name: "邀请有利",
+                    name: "邀请有奖",
                     href: ""
                 }
             ]
@@ -85,6 +86,13 @@ export default {
             display: block;
         }
     }
+}
+.headNewsText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
 .news {
     justify-content: center;
