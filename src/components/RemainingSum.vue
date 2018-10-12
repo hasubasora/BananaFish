@@ -11,7 +11,7 @@
         <div class="wd_back">
             <span class="wd_back_txt">账户余额</span>
             <p class="wd_back_price">￥{{price}}</p>
-            <button type="button" class="wd_back_btn" @click="GoBankCard('SetBankCard')">银行卡</button>
+            <!-- <button type="button" class="wd_back_btn" @click="GoBankCard('SetBankCard')">银行卡</button> -->
         </div>
         <div class="wd_button">
             <router-link type="button" to="/WithdrawDeposit">提现</router-link>

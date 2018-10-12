@@ -15,29 +15,34 @@
                 </div>
 
             </div>
-            <swipe :banners='banners'></swipe>
+            <keep-alive>
+                <swipe :banners='banners'></swipe>
+            </keep-alive>
 
         </div>
-        <div class="GroupList">
-            <div class="navbarcompont">
-                <navbar :headNews='headNews'></navbar>
-            </div>
-            <!-- 分红等 -->
-            <div class="participationInProfit">
-                <participationInProfit :InProfit='InProfit'></participationInProfit>
-            </div>
-            <div class="showtime" v-for="(item, index) in TopObjectList" :key="index">
-                <showtime :TimeSrc="item"></showtime>
-                <div class="bannerPad" v-if="item.RecommendType==0">
-                    <img :src=item.productAd[0].Src alt="广告">
-                    <GoodsList :post-title="item"></GoodsList>
+        <keep-alive>
+
+            <div class="GroupList">
+                <div class="navbarcompont">
+                    <navbar :headNews='headNews'></navbar>
                 </div>
-                <div class="bannerPad" v-if="item.RecommendType==1">
-                    <img :src=item.productAd[0].Src alt="广告">
-                    <GoodsList2 :post-head="item"></GoodsList2>
+                <!-- 分红等 -->
+                <div class="participationInProfit">
+                    <participationInProfit :InProfit='InProfit'></participationInProfit>
+                </div>
+                <div class="showtime" v-for="(item, index) in TopObjectList" :key="index">
+                    <showtime :TimeSrc="item"></showtime>
+                    <div class="bannerPad" v-if="item.RecommendType==0">
+                        <img :src=item.productAd[0].Src alt="广告">
+                        <GoodsList :post-title="item"></GoodsList>
+                    </div>
+                    <div class="bannerPad" v-if="item.RecommendType==1">
+                        <img :src=item.productAd[0].Src alt="广告">
+                        <GoodsList2 :post-head="item"></GoodsList2>
+                    </div>
                 </div>
             </div>
-        </div>
+        </keep-alive>
 
     </div>
 </template>
@@ -72,7 +77,10 @@ export default {
                 this.TopObjectList = response.data.data.IndexProductLst;
                 this.banners = response.data.data.broadcastAd;
                 this.headNews = response.data.data.headNews;
-                this.InProfit = [...response.data.data.bonusSuperiorAd,...response.data.data.headDetonatingAd];
+                this.InProfit = [
+                    ...response.data.data.bonusSuperiorAd,
+                    ...response.data.data.headDetonatingAd
+                ];
                 console.log(this.InProfit);
             }
         });
@@ -123,6 +131,7 @@ export default {
                     }
                     #search {
                         border: none;
+                        opacity: 1;
                         outline: none;
                         border-radius: 15rem;
                         width: 5rem;

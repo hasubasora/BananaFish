@@ -54,7 +54,8 @@
                 </div>
                 <div class="d_progress_center">
                     <div class="d_prog">{{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</div>
-                    <yd-progressbar type="line" class="progress" :progress="GoodsList.RemainNum/GoodsList.TotalNum" trail-width="4" trail-color="#FE5D51"></yd-progressbar>
+
+                    <yd-progressbar type="line" class="progress" :progress='1-(GoodsList?GoodsList.RemainNum:0/GoodsList?GoodsList.TotalNum:0)' trail-width="4" trail-color="#FE5D51"></yd-progressbar>
                 </div>
                 <div class="d_progress_bom">
                     <span>总需{{GoodsList.TotalNum}}人次</span>
@@ -77,13 +78,17 @@
                 </yd-accordion>
             </yd-flexbox-item>
 
-            <!-- <yd-flexbox-item>
-                 <p class="d_text">用户参与记录<span>本期于XXXXXXXX开始</span></p>
-                   <yd-flexbox>
-                        <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
-                        <yd-flexbox-item>yd-flexbox-item</yd-flexbox-item>
-                   </yd-flexbox>
-            </yd-flexbox-item> -->
+            <yd-flexbox-item>
+                <p class="d_text">参与用户<span>&nbsp;本期于{{GoodsList.SId}}开始</span></p>
+                <yd-flexbox v-for="(item, index) in LstOrder" :key="index" style="padding:.2rem;background:#fff;border-bottom:1px solid #f2f2f2">
+                    <img :src="item.UserIcon" alt="" style="border-radius:500px;width:1rem;height:1rem;margin-right:.2rem">
+                    <!-- <yd-flexbox-item>{{item.UserIcon}}</yd-flexbox-item> -->
+                    <yd-flexbox-item>
+                        <div>{{item.NickName}}</div>
+                        <div>{{item.CreateTime}}</div>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </yd-flexbox-item>
 
         </yd-flexbox>
 
@@ -97,10 +102,11 @@
 export default {
     data() {
         return {
-            GoodsList: [],
+            GoodsList: "",
             GoodsHtml: "",
             progress4: 1,
-            show: false
+            show: false,
+            LstOrder: []
         };
     },
 
@@ -122,6 +128,7 @@ export default {
             }
             if (response.data.success == 200) {
                 this.GoodsList = response.data.object;
+                this.LstOrder = response.data.object.LstOrder;
                 console.log(this.GoodsList);
             }
         });

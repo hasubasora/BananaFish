@@ -28,7 +28,7 @@
             </yd-flexbox-item>
             <yd-flexbox-item>
                 <p class="VipTime">
-                    <img src="../assets/Img/VIP3x.png" alt="">本期积分收益以开放领取，立即领取
+                    <img src="../assets/Img/VIP3x.png" alt="">本期积分收益已开放领取，立即领取
                 </p>
             </yd-flexbox-item>
             <yd-flexbox-item>
@@ -200,6 +200,24 @@ export default {
     created() {
         this.GetUserInfo();
         this.Getbadge();
+
+
+        
+
+         this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/index/GetConfig",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    // this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    // console.log(response.data);
+                   
+                }
+            });
     },
     methods: {
         ToLink(url, num, tit) {

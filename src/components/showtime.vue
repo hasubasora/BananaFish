@@ -1,7 +1,8 @@
 <template>
     <div class="fh_title">
         <img :src=TimeSrc.TitleSrc>
-        <router-link class="fh_title_all" to="/menuThree/0">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
+        <router-link v-if="TimeSrc.RecommendType<1" class="fh_title_all" to="/menuThree/0">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
+        <router-link v-if="TimeSrc.RecommendType>0" class="fh_title_all" to="/ProductGroupList">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
     </div>
 </template>
 <style lang="scss">

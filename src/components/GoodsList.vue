@@ -34,7 +34,7 @@
             text-align: center;
             width: 0.8rem;
             display: inline-block;
-            height: 0.31rem;
+            height: 0.31rem;margin-right: .1rem;
             border-radius: 5px;
             background: #ff5f17;
             color: #fff;

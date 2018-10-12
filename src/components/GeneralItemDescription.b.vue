@@ -1,98 +1,82 @@
 <template>
-    <div class="www">
+    <yd-layout class="GeneralItemDescription">
         <yd-navbar slot="navbar" height='.8rem' fixed>
             <router-link to="" @click.native="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
 
             <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px">
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]">商品</yd-flexbox-item>
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">详情</yd-flexbox-item>
-
+                <yd-flexbox-item style="padding:.1rem .2rem;background:#A0A0A0;color:#fff">商品</yd-flexbox-item>
+                <yd-flexbox-item @click.native='GoDecs' style="padding:.1rem .2rem">详情</yd-flexbox-item>
             </yd-flexbox>
 
         </yd-navbar>
 
-        <div class="swipe" ref="GroupGood">
-            <yd-scrollnav height='.6rem' :callback='NavCallback'>
-                <yd-scrollnav-panel :label="item.label" v-for="(item, key) in list" :key="key">
-                    <!-- 内容 -->
-                    <div class="GroupSwipe" v-if="key==0">
-                        <mt-swipe :auto="4000">
-                            <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id"><img :src="item.ImgUrl" alt=""></mt-swipe-item>
-                        </mt-swipe>
-                        <p class="goodtitle">
-                            {{GoodsList.ProductTitle}}
-                        </p>
-                        <div class="theTopGood">
-                            <p class="c-red t_Price">￥{{GoodsList.SalePrice}}
-                                <span class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</span>
-                            </p>
-                            <div class="Integral">可获得积分：{{GoodsList.Integral}}
-                            </div>
-                        </div>
-                        <!-- <yd-cell-group style="border-top:.2rem solid #f2f2f2">
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">规格&nbsp;</i>
-                                </span>
-                                <span slot="left">选择 颜色分类</span>
-                            </yd-cell-item>
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">参数&nbsp;</i>
-                                </span>
-                                <span slot="left">品牌 颜色分类...</span>
-                            </yd-cell-item>
-                        </yd-cell-group> -->
+        <yd-flexbox direction="vertical" class="swipe">
+            <div style="width:100%;">
+                <mt-swipe :auto="4000">
+                    <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id"><img :src="item.ImgUrl" alt=""></mt-swipe-item>
+                </mt-swipe>
+                <div class="goodtitle">
+
+                </div>
+            </div>
+
+            <div class="theTopGoodA">
+                <yd-flexbox class="theTopGood">
+                    <div class="ProductTitle">
+                        <strong>{{GoodsList.ProductTitle}}</strong>
                     </div>
-                    <p v-if="key>0" class="gray" style="text-align:center;padding:.2rem 0">———— {{item.label}} ————</p>
+                </yd-flexbox>
+                <yd-flexbox class=" theTopGood ">
+                    <yd-flexbox-item>
+                        <p class="oranges">￥{{GoodsList.SalePrice}}
+                            <span class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</span>
+                        </p>
+                    </yd-flexbox-item>
 
-                    <!-- 详细 -->
-
-                    <div v-if="key==1" class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
-                    <yd-backtop></yd-backtop>
-                    <!-- 详细 -->
-
-                    <!-- 评价 -->
-                    <yd-cell-group v-if="key==2">
-                        <yd-cell-item arrow @click.native="GetCommentList(GoodsList.Id)">
-                            <span slot="left">
-                                <i>宝贝评价(0)</i>
-                            </span>
-                            <span slot="right">
-                                查看全部
-                            </span>
-                        </yd-cell-item>
-                        <div v-for="items in GoodsList.LstComment" :key="items.id">
-                            <div class="CommentList">
-                                <div class="UserInfo">
+                    <yd-flexbox-item>
+                        <p class="Integral">可获得积分：{{GoodsList.Integral}}</p>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+            </div>
+            <!-- ==== -->
+            <div class="wocaonima">
+                <yd-accordion>
+                    <yd-accordion-item title="商品详情" open>
+                        <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
+                    </yd-accordion-item>
+                </yd-accordion>
+                <yd-accordion>
+                    <yd-accordion-item title="宝贝评价" @click.native="GetCommentList(GoodsList.Id)" open>
+                        <div style="width:100%" class="comment">
+                            <yd-flexbox direction="vertical" v-for="items in GoodsList.LstComment" :key="items.id">
+                                <yd-flexbox-item class="UserInfo">
                                     <img class="UserIcon" :src="items.UserIcon" alt="">
                                     <!-- <img class="UserIcon" src="../assets/Img/bkc.jpg" alt=""> -->
-                                    <div class="UserInfoText">
-                                        <span class="NickName">{{ items.NickName }}</span>
-                                        <span class="NickName">规格</span>
-                                    </div>
-                                </div>
-                                <div class="CreateTime">{{ items.CreateTime }}</div>
-                                <div class="Comment">
-                                    {{ items.Comment }}
-                                </div>
-                                <yd-lightbox class="ImgShow">
-                                    <yd-lightbox-img v-for="itemst in items.ImgShow" :key="itemst.id" :src="itemst.AttachPath"></yd-lightbox-img>
-                                </yd-lightbox>
+                                    <span class="NickName">{{ items.NickName }}</span>
+                                </yd-flexbox-item>
+                                <yd-flexbox-item class="CreateTime"> {{ items.CreateTime }}</yd-flexbox-item>
+                                <yd-flexbox-item class="Comment"> {{ items.Comment }}</yd-flexbox-item>
 
-                            </div>
+                                <yd-flexbox-item>
+                                    <yd-lightbox class="ImgShow">
+                                        <yd-lightbox-img v-for="itemst in items.ImgShow" :key="itemst.id" :src="itemst.AttachPath"></yd-lightbox-img>
+                                    </yd-lightbox>
+                                </yd-flexbox-item>
+
+                            </yd-flexbox>
                         </div>
-                    </yd-cell-group>
-                    <!-- 评价 -->
+                    </yd-accordion-item>
 
-                </yd-scrollnav-panel>
-            </yd-scrollnav>
-        </div>
+                </yd-accordion>
+            </div>
+            <!-- ==== -->
+        </yd-flexbox>
 
         <keep-alive>
             <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem">
+
                 <div class='iconfont_s'>
                     <yd-tabbar-item title="首页" link="/" active>
                         <yd-icon name="home" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
@@ -116,21 +100,24 @@
                 </div>
             </yd-tabbar>
         </keep-alive>
+
         <yd-popup v-model="show" position="bottom" height="60%">
-            <yd-flexbox>
-                <div>
-                    <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
+            <div>
+                <yd-flexbox>
+                    <div>
+                        <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
                     </div>
-                    <yd-flexbox-item>
-                        <p class="oranges">￥
-                            <span>{{price}}</span>
-                        </p>
-                        <div>
-                            <span>库存{{Stock}}件</span>
-                        </div>
-                        <p>已选："{{GoodAttrs}}"</p>
-                    </yd-flexbox-item>
-            </yd-flexbox>
+                        <yd-flexbox-item>
+                            <p class="oranges">￥
+                                <span>{{price}}</span>
+                            </p>
+                            <div>
+                                <span>库存{{Stock}}件</span>
+                            </div>
+                            <p>已选："{{GoodAttrs}}"</p>
+                        </yd-flexbox-item>
+                </yd-flexbox>
+            </div>
             <div class="GoodSuk">
                 <div class="gotup" v-if="Gotup">
                     <h3>{{Gotup.AttName}}</h3>
@@ -155,283 +142,17 @@
             </div>
             <yd-button type="warning" class="SetButton" size="large" style="margin-top: 30px;" @click.native="addCart(GoodsList.Id)">确定</yd-button>
         </yd-popup>
-
-    </div>
+    </yd-layout>
 </template>
-<style lang="scss">
-.www {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    // border: 1px solid red;
-    .flexboxNav {
-        padding: 0.1rem 0.2rem;
-    }
-    .flexbox {
-        padding: 0.1rem 0.2rem;
-        background: #a0a0a0;
-        color: #fff;
-    }
-    .swipe {
-        position: relative;
-        top: 0.75rem;
-        left: 0;
-        width: 100%;
-        height: 95%;
-        -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
-        overflow-y: scroll;
-        // border: 1px solid blue;
-        background: #f2f2f2;
-        padding: 0.7rem 0;
-        .GroupSwipe {
-            width: 100%;
-            // height: 5rem;
-            background: #ffffff;
-            // margin-bottom: 6rem;
-            .mint-swipe {
-                height: 7rem;
-                background: #ffffff;
-                text-align: center;
-                .mint-swipe-item {
-                    border: 1xp solid;
-                    img {
-                        height: 100%;
-                        width: auto;
-                    }
-                }
-            }
-            .goodtitle {
-                padding: 0.2rem;
-                font-size: 0.3rem;
-                font-weight: 600;
-            }
-            .theTopGood {
-                display: flex;
-                &:nth-child(1) {
-                    padding-bottom: 0;
-                }
-                &:nth-child(2) {
-                    border-bottom: 1px solid #f2f2f2;
-                }
-                background: #ffffff;
-                // margin: 0.1rem 0;
-                padding: 0.26rem;
-                font-size: 0.2rem;
-                .ProductTitle {
-                    padding-right: 0.2rem;
-                    font-size: 0.3rem;
-                }
-                .Integral {
-                    align-self: right;
-                    font-size: 0.2rem;
-                    color: #ccc;
-                    align-self: flex-end;
-                    flex: 1;
-                    text-align: right;
-                }
-                .t_Price {
-                    font-size: 0.3rem;
-                    font-weight: 600;
-                    flex: 1;
-                    align-self: flex-start;
-                }
-                .t_MarketPrice {
-                    display: flex;
-                    justify-content: space-between;
-                    color: #ccc;
-                    font-size: 0.2rem;
-                    font-weight: 500;
-                    text-decoration: line-through;
-                }
-            }
-        }
-        .CommentList {
-            width: 100%;
-            height: auto;
-            .UserInfo {
-                display: flex;
-                padding: 0.2rem 0.5rem;
-                .UserInfoText {
-                    display: flex;
-                    flex-direction: column;
-                    padding: 0.1rem 0.3rem;
-                    font-size: 0.26rem;
-                }
-                img {
-                    width: 1.2rem;
-                    height: 1.2rem;
-                    border-radius: 50px;
-                }
-            }
-            .CreateTime {
-                padding: 0 0.5rem;
-                color: #888;
-                font-size: 0.2rem;
-            }
-            .Comment {
-                padding: 0.1rem 0.5rem 0.3rem;
-                color: #555;
-                font-size: 0.26rem;
-            }
-            .ImgShow {
-                width: 1rem;
-                display: flex;
-                margin-bottom: 0.5rem;
-                > img {
-                    margin: 0.05rem;
-                    width: 100%;
-                    height: 100%;
-                }
-            }
-        }
-    }
-    .yd-scrollnav {
-        .yd-scrollnav-tab {
-            position: fixed;
-            z-index: 999;
-            width: 2.5rem;
-            top: 0.1rem;
-            left: 2.2rem;
-            opacity: 0;
-            // top: -0.6rem;
-            .yd-scrollnav-toggle {
-                display: none;
-            }
-            .yd-scrollnav-tab-item {
-                display: flex;
-                margin-left: 0.5rem;
-                overflow: hidden;
-                li {
-                    flex: 1;
-                }
-            }
-        }
-    }
-    .GoodsHtml {
-        > img {
-            width: 100%;
-        }
-    }
-    .yd-nav-button {
-        background: #ffffff;
-        border-top: 1px solid #ccc;
-        padding: 0;
-        z-index: 99;
-        position: fixed;
-        width: 100%;
-        display: flex;
-        left: 0;
-        bottom: 0;
-        .handleClick {
-            // border-radius: 3rem;
-            background-color: #ff5f17;
-            font-size: 0.3rem;
-            border: none;
-            // margin: 0.1rem;
-            outline: none;
-            height: 0.8rem;
-            width: 2.3rem;
-            color: #ffffff;
-        }
-
-        .leftColor {
-            background-color: #ffa617;
-        }
-        .yd-tabbar {
-            padding: 0;
-        }
-        .marginTop02 {
-            margin-top: 0.2rem;
-        }
-        .iconfont_s {
-            display: flex;
-            // width: 2.8rem;
-            > a {
-                width: 1rem;
-                text-align: center;
-                height: 0.8rem;
-                // line-height: 0.7rem;
-                flex: 1;
-                // padding: 0.1rem;
-            }
-        }
-    }
-    .SetButton {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        z-index: 19980321;
-    }
-    .GoodSuk {
-        padding: 0.2rem 0.2rem 1rem;
-        .gotup {
-            border-bottom: 1px solid #dedcdc;
-            padding: 0.2rem 0;
-            font-size: 0.36rem;
-            .gotupTab {
-                font-size: 0.25rem;
-                display: flex;
-                flex-wrap: wrap;
-                .isOrange {
-                    background: #ff5f17;
-                    border: 1px solid #ff5f17;
-                    color: #f2f2f2;
-                }
-                > span {
-                    border: 1px solid #dedcdc;
-                    padding: 0.05rem 0.2rem;
-                    border-radius: 5px;
-                    background: #dedcdc;
-                    margin: 0.2rem;
-                    cursor: pointer;
-                }
-                .pointerEvents {
-                    pointer-events: none;
-                    border: 1px dotted rgb(190, 190, 190);
-                    background: #dedcdc;
-                    color: rgb(190, 190, 190);
-                }
-            }
-        }
-    }
-    .GoodsImg {
-        border: 1px solid #ccc;
-        margin: 0.36rem;
-        width: 2rem;
-        height: 2rem;
-        display: block;
-    }
-    .oranges {
-        color: #ff4d17;
-        font-size: 0.4rem;
-        .t_MarketPrice {
-            text-align: center;
-            font-size: 0.26rem;
-            color: #888;
-        }
-    }
-}
-</style>
-
 <script>
 import { getNum } from "../main.js";
-
 export default {
     data() {
         return {
             productNum: 0,
-            list: [
-                { label: "宝贝" },
-                { label: "详情" }
-                // { label: "评价" },
-                // { label: "推荐" }
-            ],
             GoodsList: [],
             GoodsHtml: "",
             show: false,
-            flexNav: false,
             Gotup: [],
             GotupAttr: [],
             GotupLen: 0,
@@ -449,23 +170,11 @@ export default {
             Stock: 0 //存库
         };
     },
-    mounted() {
-        console.log(this.$refs.GroupGood);
-
-        this.scroll = this.$refs.GroupGood; //获取dom
-        this.$refs.GroupGood.addEventListener(
-            "scroll",
-            () => {
-                console.log(this.$refs.GroupGood.scrollTop);
-            },
-            false
-        );
-    },
     created() {
         // console.log(location);
         sessionStorage.setItem("s", this.$route.params.Good_id);
         localStorage.setItem("s", this.$route.params.Good_id);
-        console.log(this.$route.params.Good_id);
+        // console.log(this.$route.params.Good_id);
         // 商品信息
         this.GetProductDetail();
         // 商品详情
@@ -479,9 +188,6 @@ export default {
         }
     },
     methods: {
-        NavCallback() {
-            this.flexNav = !this.flexNav;
-        },
         GetShoppingCartNum() {
             this.$axios({
                 method: "POST",
@@ -494,7 +200,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
-                    console.log(this.productNum);
+                    // console.log(this.productNum);
                 }
             });
         },
@@ -504,7 +210,12 @@ export default {
                 params: { Good_id: oid }
             });
         },
-
+        GoDecs() {
+            this.$router.push({
+                name: "Description",
+                params: { ItemGood_id: this.$route.params.Good_id }
+            });
+        },
         GoHistory(sid) {
             this.$router.go(-1);
         },
@@ -708,6 +419,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GoodsList = response.data.object; //整个
+                    this.GotupLength = this.GoodsList.LstAtt.length;
                     this.Gotup = this.GoodsList.LstAtt[0];
                     this.GotupAttr = this.GoodsList.LstAtt[1];
                     this.GotupLen = this.GoodsList.LstAtt.length;
@@ -718,8 +430,8 @@ export default {
                             keys,
                             elementSkus
                         ] of this.Gotup.LstAttValue.entries()) {
-                            console.log(keys);
-                            console.log(elementSkus);
+                            // console.log(keys);
+                            // console.log(elementSkus);
                             this.$set(elementSkus, "isTrue", false);
                         }
                     }
@@ -728,14 +440,15 @@ export default {
                             keys,
                             elementSkus
                         ] of this.GotupAttr.LstAttValue.entries()) {
-                            console.log(keys);
-                            console.log(elementSkus);
+                            // console.log(keys);
+                            // console.log(elementSkus);
                             this.$set(elementSkus, "isTrue", false);
                         }
                     }
 
                     this.GoodsList.LstSKU.forEach((element, index) => {
                         this.Stock += element.Stock;
+                        this.price = element.SalePrice;
                     });
                     this.GoodsImg = this.GoodsList.ProductImg[0].ImgUrl;
                 }
@@ -762,3 +475,285 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.GoodsHtml {
+    > p {
+        > img {
+            width: 100%;
+        }
+    }
+}
+.GeneralItemDescription {
+    margin-top: 0.8rem !important;
+    .SetButton {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+    }
+    .theTopGoodA {
+        width: 100%;
+    }
+    .iconfont_s {
+        display: flex;
+        // width: 2.8rem;
+        > a {
+            width: 1rem;
+            text-align: center;
+            height: 0.8rem;
+            // line-height: 0.7rem;
+            flex: 1;
+            // padding: 0.1rem;
+        }
+    }
+    .iconfont {
+        display: inline;
+        font-size: 0.6rem;
+        color: #666;
+    }
+    .yd-scrollview {
+        .swipe {
+            margin-bottom: 6rem;
+            .mint-swipe {
+                height: 6rem;
+                background: #ffffff;
+                text-align: center;
+                .mint-swipe-item {
+                    > img {
+                        height: 100%;
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
+
+    .theTopGood {
+        &:nth-child(1) {
+            padding-bottom: 0;
+        }
+        &:nth-child(2) {
+            border-bottom: 1px solid #f2f2f2;
+        }
+        background: #ffffff;
+        // margin: 0.1rem 0;
+        padding: 0.26rem;
+        font-size: 0.2rem;
+        .ProductTitle {
+            padding-right: 0.2rem;
+            font-size: 0.3rem;
+        }
+
+        .Integral {
+            font-size: 0.2rem;
+            color: #ccc;
+            text-align: right;
+        }
+
+        .MarketPrice {
+            display: flex;
+            justify-content: space-between;
+            > span {
+                color: #ff5f17;
+                font-size: 0.5rem;
+            }
+            > i {
+                color: #ccc;
+                font-size: 0.2rem;
+            }
+        }
+    }
+    .generalGoods {
+        .yd-grids-txt {
+            text-align: left;
+        }
+        .yd-grids-2 {
+            margin: 0.1rem;
+        }
+        .yd-btn-danger {
+            background-color: #ff5f17;
+            height: 0.4rem;
+            border-radius: 5px;
+            font-size: 0.26rem;
+            width: 1.5rem;
+            margin-left: 0.2rem;
+        }
+        .yd-grids-item:after {
+            border-bottom: 0.1rem solid #f5f5f5;
+        }
+        .yd-grids-item:not(:nth-child(2n)):before {
+            border-right: 0.1rem solid #f5f5f5;
+        }
+        > p {
+            background: #ffffff;
+            font-size: 0.3rem;
+            text-align: center;
+            margin: 0.1rem 0;
+            padding: 0.1rem;
+        }
+        .generalGoodsImg {
+            margin-right: 0.3rem;
+        }
+    }
+    .d_progress {
+        background: #ffffff;
+        padding: 0.2rem;
+        .d_progress_top {
+            display: flex;
+            justify-content: space-between;
+            align-items: left;
+            font-size: 0.3rem;
+        }
+        .d_progress_bom {
+            @extend .d_progress_top;
+        }
+        .d_progress_center {
+            position: relative;
+            .d_prog {
+                position: absolute;
+                top: 0.26rem;
+                left: 3.2rem;
+                z-index: 2;
+            }
+        }
+    }
+    .d_text {
+        margin-top: 0.1rem;
+        background: #ffffff;
+        padding: 0.2rem;
+    }
+
+    .obacity {
+        opacity: 0;
+    }
+    // 用户评价区
+    .comment {
+        padding: 0.5rem;
+        .yd-flexbox-vertical {
+            border-bottom: #ccc 1px solid;
+            margin: 0.5rem 0;
+        }
+        .UserInfo {
+            .UserIcon {
+                height: 1rem;
+                width: 1rem;
+                vertical-align: middle;
+                border-radius: 50%;
+            }
+            .NickName {
+                font-size: 0.3rem;
+                margin-left: 0.3rem;
+            }
+        }
+        .CreateTime {
+            padding: 0.1rem;
+            color: #888;
+            font-size: 0.2rem;
+        }
+        .Comment {
+            padding: 0.1rem;
+            font-size: 0.3rem;
+        }
+        .ImgShow {
+            width: 1rem;
+            display: flex;
+            margin-bottom: 0.5rem;
+            > img {
+                margin: 0.05rem;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+.GoodSuk {
+    padding: 0.2rem 0.2rem 1rem;
+
+    .gotup {
+        border-bottom: 1px solid #dedcdc;
+        padding: 0.2rem 0;
+        font-size: 0.36rem;
+        .gotupTab {
+            font-size: 0.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            .isOrange {
+                background: #ff5f17;
+                border: 1px solid #ff5f17;
+                color: #f2f2f2;
+            }
+            > span {
+                border: 1px solid #dedcdc;
+                padding: 0.05rem 0.2rem;
+                border-radius: 5px;
+                background: #dedcdc;
+                margin: 0.2rem;
+                cursor: pointer;
+            }
+            .pointerEvents {
+                pointer-events: none;
+                border: 1px dotted rgb(190, 190, 190);
+                background: #dedcdc;
+                color: rgb(190, 190, 190);
+            }
+        }
+    }
+}
+.oranges {
+    // background-color: #ff9717;
+    color: #ff4d17;
+    font-size: 0.4rem;
+    .t_MarketPrice {
+        text-align: center;
+        font-size: 0.26rem;
+        color: #888;
+    }
+}
+.GoodsImg {
+    border: 1px solid #ccc;
+    margin: 0.36rem;
+    width: 2rem;
+    height: 2rem;
+    display: block;
+}
+.yd-nav-button {
+    background: #ffffff;
+    border-top: 1px solid #ccc;
+    padding: 0;
+    z-index: 99;
+    position: fixed;
+    width: 100%;
+    display: flex;
+    left: 0;
+    bottom: 0;
+    .handleClick {
+        // border-radius: 3rem;
+        background-color: #ff5f17;
+        font-size: 0.3rem;
+        border: none;
+        // margin: 0.1rem;
+        outline: none;
+        height: 0.8rem;
+        width: 2.3rem;
+        color: #ffffff;
+    }
+    // .rightbtn {
+    //     border-top-right-radius: 50px;
+    //     border-bottom-right-radius: 50px;
+    // }
+    // .leftbtn {
+    //     border-top-left-radius: 50px;
+    //     border-bottom-left-radius: 50px;
+    // }
+    .leftColor {
+        background-color: #ffa617;
+    }
+    .yd-tabbar {
+        padding: 0;
+    }
+    .marginTop02 {
+        margin-top: 0.2rem;
+    }
+}
+</style>
+

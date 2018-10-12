@@ -88,7 +88,7 @@ export default {
                 method: "POST",
                 data: {
                     MobilePhone: this.username,
-                    type: 0,
+                    type: 0, //登陆注册 0 
                     ImgCode: this.ImgCode
                 },
                 url: this.$server.serverUrl + "/index/GetCode",

@@ -195,6 +195,32 @@ export default {
                                 response.data.GroupOrderIdList,
                                 response.data.OrderIdList
                             );
+                            this.$dialog.confirm({
+                                title: "支付信息",
+                                mes: "是否已支付完成？",
+                                opts: [
+                                    {
+                                        txt: "取消",
+                                        color: false,
+                                        callback: () => {
+                                            this.$dialog.toast({
+                                                mes: "取消支付",
+                                                timeout: 1000
+                                            });
+                                        }
+                                    },
+                                    {
+                                        txt: "确定",
+                                        color: true,
+                                        callback: () => {
+                                            this.$router.push({
+                                                name: "MyInfo"
+                                            });
+                                        }
+                                    }
+                                ]
+                            });
+
                             // this.$router.push({ name: "SuccessOrder" });
                         }
                     });

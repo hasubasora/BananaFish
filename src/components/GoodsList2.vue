@@ -6,8 +6,7 @@
                 <img :src="item.ProductImg" class="ProductImg" alt="">
                 <p style="background:#f3f3f3;font-size:.26rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
                 <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
-                <!-- <mt-progress class="progress" :value="item.TotalNum-item.RemainNum" :bar-height="20"> {{item.RemainNum+'/'+item.TotalNum}}</mt-progress> -->
-                <yd-progressbar class="progress" type="line" :progress="item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
+                <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
                 <div class="RemainNum">已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</div>
                 <div class="goodsName">
                     <span class="goodsBack">头筹价</span>{{item.ProductTitle}}</div>

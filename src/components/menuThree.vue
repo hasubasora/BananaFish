@@ -1,6 +1,6 @@
 <template>
     <div>
-        <yd-navbar title="购物精选" fixed style="z-index:2" height='.8rem' color="#f2f2f2" bgcolor="#ff5f17">
+        <yd-navbar title="购物精选" fixed style="z-index:2" height='.8rem' color="#f2f2f2" class="titleColor">
             <router-link to="/productList" slot="left">
                 <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
             </router-link>
@@ -9,7 +9,7 @@
         </yd-navbar>
         <div class="menu">
             <yd-backtop></yd-backtop>
-            <yd-tab horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
+            <yd-tab class="ydTabNav" horizontal-scroll v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
                 <yd-tab-panel v-for="item in items" :label="item.CateName" :key="item.CateName">
                 </yd-tab-panel>
             </yd-tab>
@@ -61,6 +61,15 @@ export default {
             rows: [],
             Group_id: 0
         };
+    },
+    mounted() {
+        let _w = parseInt(
+            document.getElementsByClassName("yd-tab-nav")[0].style.width
+        );
+
+        console.log(
+            (document.getElementsByClassName("yd-tab-nav")[0].style.width = 110)
+        );
     },
     created() {
         console.log(this.$route.params.Group_id);
@@ -176,8 +185,9 @@ export default {
     display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
     text-overflow: ellipsis;
     overflow: hidden;
-    text-align: none;
-    height: 0.8rem;
+    // text-align: none;
+    // height: 0.8rem;
+    line-height: 0.3rem;
     white-space: normal;
     word-wrap: normal;
     /*! autoprefixer: off */
@@ -186,11 +196,17 @@ export default {
     -webkit-line-clamp: 2; //这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
 }
 .demo-list-price {
+    display: block;
     font-size: 0.3rem;
     color: rgb(238, 97, 32);
     font-weight: 600;
 }
 .menu {
     margin-top: 0.8rem;
+    .ydTabNav {
+        .yd-tab-nav {
+            // width: (10)+px !important
+        }
+    }
 }
 </style>

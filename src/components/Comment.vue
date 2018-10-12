@@ -29,8 +29,7 @@
                 <div class="divImg">
                     <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
                     <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
-                        <img class="upImg" src="../assets/Img/upload.png" alt="" width="100" type="file">
-
+                        <img class="upImg" src="../assets/Img/upload.png" alt="" width="100" >
                         <input @change="uploadChange($event,index)" :disabled=isBtn type="file" name="files" id="upInput" accept="image/*" multiple="multiple">
                     </form>
                 </div>
@@ -215,9 +214,10 @@ export default {
                 // var files = event.target.files[0];
                 console.log(event.target.files);
 
-                var formData = new FormData(
-                    document.getElementById("uploadForm2")[0]
-                );
+                var formData = new FormData(document.getElementById("uploadForm2")[0]);
+
+                console.log(formData);
+
                 if (event.target.files.length > 10) {
                     this.$dialog.toast({
                         mes: "上传图片最多十张！",
@@ -228,6 +228,7 @@ export default {
                 for (const iterator of event.target.files) {
                     formData.append("file", iterator, iterator.name);
                 }
+                console.log(formData);
 
                 this.$axios({
                     method: "POST",

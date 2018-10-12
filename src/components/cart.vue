@@ -41,7 +41,7 @@
 
                             <yd-flexbox-item class="GoodList_bom" v-show="isDel">
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
-                                <p class="AttValueName">颜色分类：{{items.AttValueName}}</p>
+                                <p class="AttValueName">{{items.AttValueName}}&nbsp;</p>
                                 <p class="c-red GoodList_Number">
                                     <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'':'赠'+items.Integral+'积分'}}</span>
                                     <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0">
@@ -71,6 +71,7 @@
 
         <!-- 底部栏 -->
         <div class="bomBtn">
+            <div class="BuyCart c-red AllSalePrice">合计：￥{{AllSalePrice}}</div>
             <button :class="[{'BuyCartt':!isDel},hasGoods?'BuyCart':'BuyCartt']" type="button" :disabled='!isDel||!hasGoods' @click="GoCartOrder">结算</button>
         </div>
         <!-- <yd-cell-item class="bomBtn">
@@ -184,6 +185,15 @@
     align-self: center;
     justify-content: flex-end;
     padding: 0.1rem;
+    .AllSalePrice {
+        line-height: 0.8rem;
+        border: none !important;
+        background: #fff !important;
+        font-size: 0.3rem;
+        width: 5rem !important;
+        text-align: right !important;
+        margin-right: 0.2rem;
+    }
     .BuyCart {
         background: #ff5f17;
         font-size: 0.26rem;
@@ -221,7 +231,7 @@
 }
 </style>
 <script>
-import { getNum, CartNum } from "../main.js";
+import { getNum } from "../main.js";
 export default {
     porps: ["todo"],
     data() {
@@ -231,9 +241,9 @@ export default {
             isCheckAll: false,
             spinner: 2,
             GeneralList: [],
-            productNum: CartNum,
             ProductList: [],
             CartList: [],
+            AllSalePrice: 0, //quanbujine
             isDel: true,
             isDef: false,
             hasGoods: true
@@ -323,15 +333,18 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
-                    console.log(this.CartList.length == []);
+                    // console.log(this.CartList.length == []);
                     if (this.CartList.length == []) {
                         this.hasGoods = false;
                     }
+                    this.AllSalePrice = 0;
                     for (const iterator of this.CartList) {
                         for (const iterators of iterator.LstProduct) {
                             if (iterators.IsCheck) {
+                                this.AllSalePrice += iterators.SalePrice;
+                                // console.log(iterators.SalePrice);
                                 this.hasGoods = true;
-                                return;
+                                // return;
                             } else {
                                 this.hasGoods = false;
                             }

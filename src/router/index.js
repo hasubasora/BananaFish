@@ -172,18 +172,26 @@ export default new Router({
       path: '/MessageQueue',
       name: 'MessageQueue',
       component: MessageQueue => require(["@/components/MessageQueue"], MessageQueue),
-    }, { //消息
+    }, { //shangwuhezuo
       path: '/Though',
       name: 'Though',
       component: Though => require(["@/components/Though"], Though),
-    },{ //消息
+    }, { //消息
       path: '/www/:Good_id',
       name: 'www',
       component: www => require(["@/components/www"], www),
-    },{ //消息
+    }, { //消息
       path: '/MessageText/:Text_id',
       name: 'MessageText',
       component: MessageText => require(["@/components/MessageText"], MessageText),
-    }
+    }, { //HTML
+      path: '/OrderLogisticsApp',
+      name: 'OrderLogisticsApp',
+      component: OrderLogisticsApp => require(["@/components/OrderLogisticsApp"], OrderLogisticsApp),
+    }, { //HTML
+      path: '/HtmlApp',
+      name: 'HtmlApp',
+      component: HtmlApp => require(["@/components/HtmlApp"], HtmlApp),
+    },
   ]
 })

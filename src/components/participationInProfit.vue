@@ -2,10 +2,10 @@
   <div class="participation">
     <div class="participationBox" v-for="(item,index) in InProfit" :key='index'>
       <img class="participationImg" :src="item.Src" alt="">
-      <!-- <div class="title">{{item.Title}}</div>
+      <div class="title">{{item.Title}}</div>
       <h4>{{item.Title}}</h4>
-      <h5>&nbsp;</h5>
-      <router-link class="linkClass" :to='item.Link'>立即查看</router-link> -->
+      <h5>{{item.Title}}</h5>
+      <router-link class="linkClass" :to="item.Link">立即抢购</router-link>
       <!-- <div class="timeout">
               <span class="timeoutL">正在夺筹</span>
               <span class="timeoutR">00:00:00</span>
@@ -21,7 +21,7 @@
         flex: 1;
         background: #fff;
         width: 3.5rem;
-        height: 2rem;
+        height: 2.5rem;
         border-radius: 5px;
         &:nth-child(1) {
             margin-right: 0.1rem;
@@ -30,7 +30,7 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 3.5rem;
+            width: 1.8rem;
         }
         .title {
             text-align: center;
@@ -96,7 +96,8 @@
 
 <script>
 export default {
-    name: "participation",props:['InProfit'],
+    name: "participation",
+    props:['InProfit'],
     data() {
         return {
             points: [

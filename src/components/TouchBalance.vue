@@ -5,17 +5,17 @@
                 <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
-        <yd-cell-group>
+        <yd-cell-group v-if="Tblist.length!=0">
             <yd-cell-item v-for="(item, index) in Tblist" :key="index">
                 <span slot="left">
                     <strong class="Tb_list">{{item.Remark}}</strong>
                     <i class="Tb_list_m">{{item.CreateTime}}</i>
                 </span>
                 <span slot="right" v-if="item.Money>0" class="c-red">+{{item.Money}}</span>
-                <span slot="right" v-if="item.Money<0" >{{item.Money}}</span>
+                <span slot="right" v-if="item.Money<0">{{item.Money}}</span>
             </yd-cell-item>
-
         </yd-cell-group>
+        <p v-if="Tblist.length==0" style="text-align:center;font-size:.3 rem">暂无明细</p>
     </div>
 </template>
 <script>

@@ -11,7 +11,7 @@
             <yd-cell-group>
                 <yd-cell-item>
                     <span slot="left" style="font-size:1rem;">￥</span>
-                    <yd-input slot="right" class="wd_input" v-model="input6" regex="^\d{3,12}$" :placeholder='shabi+""' required></yd-input>
+                    <yd-input slot="right" class="wd_input" v-model="input6" type="number" regex="^\d{3,12}$" :placeholder='shabi+""' required></yd-input>
                 </yd-cell-item>
                 <yd-cell-item>
                     <span slot="left">
@@ -195,17 +195,17 @@ export default {
                 });
                 return;
             }
-            if (this.input6.length < 3) {
-                this.$dialog.toast({
-                    mes: "请输入整数提现金额",
-                    timeout: 1500,
-                    icon: "error",
-                    callback: () => {
-                        return;
-                    }
-                });
-                return;
-            }
+            // if (this.input6.length < 3) {
+            //     this.$dialog.toast({
+            //         mes: "请输入整数提现金额",
+            //         timeout: 1500,
+            //         icon: "error",
+            //         callback: () => {
+            //             return;
+            //         }
+            //     });
+            //     return;
+            // }
             if (this.input6 > this.shabi) {
                 this.$dialog.toast({
                     mes: "余额不足",

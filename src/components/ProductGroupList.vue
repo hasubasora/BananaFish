@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="Grouporder_center_text">
                                             <p class="gj"><img src="../assets/Img/gj.png" alt="">
-                                                <span>头筹幸运号码</span>
+                                                <span>头筹中奖号码</span>
                                             </p>
                                             <div class="fontTel"> {{item.LuckerNumber}}</div>
                                             <div class="OrderTitle"> {{item.OrderTitle}}</div>

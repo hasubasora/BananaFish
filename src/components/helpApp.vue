@@ -2,7 +2,7 @@
     <div class="help">
         <yd-accordion>
             <yd-accordion-item :title=item.title v-for="(item, index) in helpList" :key="index">
-                <div style="padding: .24rem;" v-html="item.html">
+                <div style="padding: .24rem; line-height:.28rem" v-html="item.html">
 
                 </div>
             </yd-accordion-item>

@@ -75,7 +75,7 @@
         </yd-flexbox-item>
 
         <yd-flexbox direction="vertical" class="OrderListMsg">
-            <yd-flexbox-item>幸运号码：{{OrderIdList.LuckerNumber?OrderIdList.LuckerNumber:'暂无'}}
+            <yd-flexbox-item>头筹号码：{{OrderIdList.LuckerNumber?OrderIdList.LuckerNumber:'暂无'}}
             </yd-flexbox-item>
             <yd-flexbox-item class="c-red">本期开奖获得者：{{OrderIdList.WinnerUserName?OrderIdList.WinnerUserName:'暂无'}}</yd-flexbox-item>
             <yd-flexbox-item>订单编号：{{OrderIdList.OrderId}}</yd-flexbox-item>
