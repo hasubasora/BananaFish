@@ -33,7 +33,8 @@
                                 <span class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</span>
                             </p>
                             <div class="Integral">可获得积分：{{GoodsList.Integral}}
-                                <div>存库：{{GoodsList.ProductStock}}</div>
+                                <div>已销售：{{GoodsList.SaleCount}}</div>
+                                <!-- <div>存库：{{GoodsList.ProductStock}}</div> -->
                             </div>
                         </div>
                         <!-- <yd-cell-group style="border-top:.2rem solid #f2f2f2">
@@ -114,7 +115,7 @@
                 </div>
 
                 <div class="yd-nav-right-button">
-                    <button class="handleClick rightbtn" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
+                    <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
                 </div>
                 <div class="yd-nav-right-button">
                     <button class="handleClick leftbtn leftColor" @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
@@ -345,6 +346,9 @@
         display: flex;
         left: 0;
         bottom: 0;
+        .yd-nav-right-button {
+            width: 100%;
+        }
         .handleClick {
             // border-radius: 3rem;
             background-color: #ff5f17;
@@ -353,7 +357,8 @@
             // margin: 0.1rem;
             outline: none;
             height: 0.8rem;
-            width: 2.3rem;
+            width: 100%;
+            // width: 2.3rem;
             color: #ffffff;
         }
 
@@ -435,7 +440,7 @@
 </style>
 
 <script>
-import { getNum } from "../main.js";
+import { getNum, LOGIN_SUCCESS } from "../main.js";
 
 export default {
     data() {
@@ -509,9 +514,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
                     console.log(this.productNum);
@@ -715,6 +718,7 @@ export default {
                         responseType: "json"
                     }).then(response => {
                         // this.GetMyId(response.data.success)
+                        LOGIN_SUCCESS(response.data.success);
                         switch (response.data.success) {
                             case 200:
                                 this.show = false;
@@ -725,12 +729,7 @@ export default {
                                 });
                                 getNum();
                                 break;
-                            case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
-                                break;
+
                             case 500:
                                 this.$dialog.toast({
                                     mes: response.data.msg,
@@ -754,16 +753,12 @@ export default {
                         responseType: "json"
                     }).then(response => {
                         // this.GetMyId(response.data.success)
+                        LOGIN_SUCCESS(response.data.success);
                         switch (response.data.success) {
                             case 200:
                                 this.$router.push({ name: "cartOrder" });
                                 break;
-                            case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
-                                break;
+
                             case 500:
                                 this.$dialog.toast({
                                     mes: response.data.msg,

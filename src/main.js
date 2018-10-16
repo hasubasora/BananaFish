@@ -14,7 +14,7 @@ Vue.use(Mint);
 
 /**
  * YDUI
- */   
+ */
 import YDUI from 'vue-ydui'; /* 相当于import YDUI from 'vue-ydui/ydui.rem.js' */
 import 'vue-ydui/dist/ydui.rem.css';
 /* 使用px：import 'vue-ydui/dist/ydui.px.css'; */
@@ -46,7 +46,37 @@ Vue.config.productionTip = false
 
 
 
+export const LOGIN_SUCCESS = (success) => {
+  switch (success) {
+    case 200:
+      console.log('获取成功！');
+      break;
+    case 300:
+      console.log('请求错误，请刷新重试！');
 
+      break;
+    case 400:
+      console.log('你还没有登陆，请登陆！');
+      router.push({
+        name: "SignIn",
+        query: {
+          Good_name: "2"
+        }
+      });
+      break;
+    case 401:
+      console.log('请绑定手机号！');
+      router.push({
+        name: "SignIn",
+        query: {
+          Good_name: "1"
+        }
+      });
+      break;
+    default:
+      break;
+  }
+}
 export const GoBuySometing = (tc, pt, picked) => {
 
   window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
@@ -71,7 +101,7 @@ export const GetPay = () => {
     if (response.data.success == 200) {
       PayList = response.data.list;
       console.log(PayList);
-      
+
       return PayList
     }
   });
@@ -133,6 +163,7 @@ new Vue({
   el: '#app',
   store,
   router,
+ 
   components: {
     App
   },

@@ -1,6 +1,6 @@
 <template>
     <yd-layout>
-        <yd-navbar slot="navbar" title="分红积分数据表" height='.8rem'>
+        <yd-navbar slot="navbar" title="积分积分数据表" height='.8rem'>
             <router-link to="" slot="left" @click.native="GoHistory('Home')">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
@@ -8,8 +8,8 @@
 
         <div class="RedDataTitle">
             <p>
-                <router-link to="/RedData" class="write">平台分红数据</router-link>
-                <router-link to="/MyRedData">我的分红数据</router-link>
+                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`" class="write">平台积分数据</router-link>
+                <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`">我的积分数据</router-link>
             </p>
         </div>
         <router-view></router-view>
@@ -21,9 +21,8 @@
                 <ve-line :data="chartData" height='5rem'></ve-line>
             </div>
         </div>
-
      
-        <div class="RedDataBtn">
+        <div class="RedDataBtn" v-if="!this.$route.query.IsAPP">
             <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
             <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
             <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>
@@ -72,8 +71,8 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    pageindex: 1,
-                    pagesize: 7
+                    // pageindex: 1,
+                    // pagesize: 7
                 },
                 url: this.$server.serverUrl + "/account/getindexnumber",
                 responseType: "json"

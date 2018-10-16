@@ -9,7 +9,7 @@
         <div class="wd_back">
             <span class="wd_back_txt">我的积分</span>
             <p class="wd_back_price">￥{{price}}</p>
-            <button type="button" class="wd_back_btn" @click="GoBankCard('RedData')">分红指数</button>
+            <button type="button" class="wd_back_btn" @click="GoBankCard('RedData')">积分指数</button>
         </div>
         <yd-preview :buttons="btns">
             <yd-preview-header v-if="priceList.length>0" v-for="(item, index) in priceList" :key="index">

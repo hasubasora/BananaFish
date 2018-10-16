@@ -19,7 +19,7 @@
             <yd-flexbox-item class="theTopGood">
                 <yd-flexbox>
                     <yd-flexbox-item>
-                        <span class="spans">头筹商品</span>
+                        <span class="spans">头筹奖品</span>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
                         <span class="spanstitle"> {{GoodsList.ProductTitle}}</span>
@@ -31,7 +31,7 @@
 
             </yd-flexbox-item>
             <yd-flexbox-item class="generalGoods">
-                <p>普通商品(如下选购任选其中一可夺筹，多购多机会)</p>
+                <p>头筹商品(如下选购任选其中一可夺筹，多购多机会)</p>
                 <yd-grids-group :rows="2">
                     <yd-grids-item v-for="(item,index) in GoodsList.LstProduct" :key="index" @click.native="GoToItem(item.ProductId)" href>
                         <span slot="text">

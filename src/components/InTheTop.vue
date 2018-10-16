@@ -5,9 +5,10 @@
             <yd-flexbox class="backgoods">
                 <yd-flexbox-item>
                     <div class="goodsListOne">
-                        <span class="GroupId">第TCG{{item.CurrentPeriod}}期</span>
+                        <!-- <span class="GroupId">第TCG{{item.CurrentPeriod}}期</span> -->
                         <div class="goodsa" @click="GoToItem(item.GroupId)">
                             <span class="goodsatop">本期头筹奖品</span>
+                            <!-- <span class="goodsatop">等待揭晓</span> -->
                             <img class="goodsatopImg" :src="item.ProductImg" alt="">
                             <p class="ProductTitle">{{item.ProductTitle}}</p>
                             <div class="SubTitle">{{item.SubTitle}}</div>
@@ -36,6 +37,7 @@
             </yd-flexbox>
 
             <yd-flexbox-item>
+               
                 <div class="p_progress">
                    正在等待揭晓...
                 </div>

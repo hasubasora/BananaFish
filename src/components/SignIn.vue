@@ -1,10 +1,14 @@
 <template>
     <div class="phone">
-        <yd-navbar title="绑定手机号" fixed>
+        <yd-navbar title="绑定手机号" fixed v-if="this.$route.query.Good_name==1">
             <router-link to="" @click.native="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-
+        </yd-navbar>
+        <yd-navbar title="登陆注册" fixed v-if="this.$route.query.Good_name==2">
+            <router-link to="" @click.native="GoHistory" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
         </yd-navbar>
         <yd-cell-group>
             <yd-cell-item>
@@ -29,9 +33,9 @@
             <span slot="left">密码：</span>
             <yd-input slot="right" type="password" v-model="password" placeholder="请输入密码"></yd-input>
         </yd-cell-item> -->
-            <yd-button size="large" @click.native="LoginInfo" type="primary">绑定</yd-button>
+            <yd-button v-if="this.$route.query.Good_name==1" size="large" @click.native="LoginInfo" type="primary">绑定</yd-button>
+            <yd-button size="large" v-if="this.$route.query.Good_name==2" @click.native="LoginInfo" type="primary">登陆/注册</yd-button>
             <yd-button size="large" @click.native="ToHome" type="hollow">返回首页</yd-button>
-            <!-- <yd-button size="large" @click.native="LoginInfo" type="primary">登陆/注册</yd-button> -->
 
         </yd-cell-group>
     </div>
@@ -55,7 +59,7 @@ export default {
         };
     },
     created() {
-        // alert(this.$route.query.Good_name)
+        // alert(this.$route.query.Good_name);
         console.log(
             (this.codeImg =
                 this.$server.serverUrl + "/index/GetImgCode/" + Math.random())
@@ -63,7 +67,7 @@ export default {
     },
     methods: {
         ToHome() {
-            this.$router.push('/');
+            this.$router.push("/");
         },
         GoHistory(sid) {
             // console.log(sid);
@@ -88,7 +92,7 @@ export default {
                 method: "POST",
                 data: {
                     MobilePhone: this.username,
-                    type: 0, //登陆注册 0 
+                    type: 0, //登陆注册 0
                     ImgCode: this.ImgCode
                 },
                 url: this.$server.serverUrl + "/index/GetCode",
@@ -115,52 +119,55 @@ export default {
             });
         },
         LoginInfo() {
-            this.$axios({
-                method: "POST",
-                data: {
-                    phone: this.username,
-                    oldPhone: "",
-                    code: this.password
-                },
-                url: this.$server.serverUrl + "/account/UpdatePhone",
-                responseType: "json"
-            }).then(response => {
-                if (response.data.success == 200) {
-                    this.$router.push({
-                        name: "cartOrder"
-                        // params: { Good_id: this.$route.query.Good_name }
-                    });
-                }
-                if (response.data.success == 300) {
-                    this.$dialog.alert({
-                        mes: response.data.msg
-                    });
-                    return;
-                }
-            });
-
-            // this.$axios({
-            //     method: "POST",
-            //     data: {
-            //         username: this.username,
-            //         code: this.password,
-            //         returnurl: ""
-            //     },
-            //     url: this.$server.serverUrl + "/account/loginorregister",
-            //     responseType: "json"
-            // }).then(response => {
-            //     if (response.data.success == 200) {
-            //         console.log("登陆成功");
-            //         this.$dialog.alert({ mes: "登陆成功！" });
-            //         this.$router.push("/");
-            //     }
-            //     if (response.data.success == 300) {
-            //         this.$dialog.alert({
-            //             mes: response.data.msg
-            //         });
-            //         return;
-            //     }
-            // });
+            if (this.$route.query.Good_name == 1) {
+                this.$axios({
+                    method: "POST",
+                    data: {
+                        phone: this.username,
+                        oldPhone: "",
+                        code: this.password
+                    },
+                    url: this.$server.serverUrl + "/account/UpdatePhone",
+                    responseType: "json"
+                }).then(response => {
+                    if (response.data.success == 200) {
+                        this.$router.push({
+                            name: "cartOrder"
+                            // params: { Good_id: this.$route.query.Good_name }
+                        });
+                    }
+                    if (response.data.success == 300) {
+                        this.$dialog.alert({
+                            mes: response.data.msg
+                        });
+                        return;
+                    }
+                });
+            }
+            if (this.$route.query.Good_name == 2) {
+                this.$axios({
+                    method: "POST",
+                    data: {
+                        username: this.username,
+                        code: this.password,
+                        returnurl: ""
+                    },
+                    url: this.$server.serverUrl + "/account/loginorregister",
+                    responseType: "json"
+                }).then(response => {
+                    if (response.data.success == 200) {
+                        console.log("登陆成功");
+                        this.$dialog.alert({ mes: "登陆成功！" });
+                        this.$router.push("/");
+                    }
+                    if (response.data.success == 300) {
+                        this.$dialog.alert({
+                            mes: response.data.msg
+                        });
+                        return;
+                    }
+                });
+            }
         }
     }
 };

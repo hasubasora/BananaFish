@@ -13,7 +13,7 @@
                     </div>
                     <yd-flexbox-item @click.native="GoRedData">
                         <span class="UserName">{{UserInfo.currentUser.NickName}}</span>
-                        <div class="UserInfo">分红指数</div>
+                        <div class="UserInfo">积分指数</div>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
                         <router-link to="/RemainingSum">
@@ -131,6 +131,7 @@
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -201,23 +202,17 @@ export default {
         this.GetUserInfo();
         this.Getbadge();
 
-
-        
-
-         this.$axios({
-                method: "POST",
-                data: {},
-                url: this.$server.serverUrl + "/index/GetConfig",
-                responseType: "json"
-            }).then(response => {
-                if (response.data.success == 400) {
-                    // this.$router.push({ name: "SignIn" });
-                }
-                if (response.data.success == 200) {
-                    // console.log(response.data);
-                   
-                }
-            });
+        this.$axios({
+            method: "POST",
+            data: {},
+            url: this.$server.serverUrl + "/index/GetConfig",
+            responseType: "json"
+        }).then(response => {
+            LOGIN_SUCCESS(response.data.success);
+            if (response.data.success == 200) {
+                // console.log(response.data);
+            }
+        });
     },
     methods: {
         ToLink(url, num, tit) {
@@ -237,9 +232,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/index",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    // this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     // console.log(response.data);
                     this.UserInfo = response.data;
@@ -248,7 +241,7 @@ export default {
             });
         },
         GoRedData() {
-            this.$router.push({ name: "RedData" });
+            this.$router.push({ name: "MyRedData" });
         },
         Getbadge() {
             //小红点
@@ -258,9 +251,7 @@ export default {
                 url: this.$server.serverUrl + "/Order/GetOrderNum",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    // this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     console.log(response.data.orderNum.AfterSale);
                     let badge = response.data.orderNum;

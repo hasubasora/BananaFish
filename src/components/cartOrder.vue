@@ -79,7 +79,7 @@
     </div>
 </template>
 <script>
-import { GoBuySometing } from "../main.js";
+import { GoBuySometing, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -96,9 +96,7 @@ export default {
             url: this.$server.serverUrl + "/order/getorderconfirm",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.GoodsList = response.data;
                 console.log(response.data);
@@ -113,9 +111,7 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
                 console.log(response.data);
@@ -129,9 +125,7 @@ export default {
             url: this.$server.serverUrl + "/order/getaddress",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 for (const iterator of response.data.rows) {
                     if (this.$route.params.address_GetId) {
@@ -181,9 +175,7 @@ export default {
                 url: this.$server.serverUrl + "/order/addorder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "提交成功",
@@ -233,7 +225,10 @@ export default {
                     });
                 }
                 if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
+                    this.$router.push({
+                        name: "SignIn",
+                        query: { Good_name: "2" }
+                    });
                 }
                 if (response.data.success == 401) {
                     this.$router.push({

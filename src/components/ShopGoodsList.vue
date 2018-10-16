@@ -47,8 +47,8 @@
                         <div slot="left"></div>
 
                         <div slot="right">
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" type="button">物流信息</button>
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
+                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
+                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
                             <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
                             <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
@@ -129,6 +129,12 @@ export default {
         });
     },
     methods: {
+        OrderLogistics(oid) {
+            this.$router.push({
+                name: "OrderLogistics",
+                query: { Good_id: oid }
+            });
+        },
         GoToGoodsDes(id) {
             this.$router.push({
                 name: "GeneralItemDescription",
@@ -208,11 +214,16 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
+                    this.$dialog.toast({
+                        mes: "确认成功",
+                        timeout: 1500,
+                        icon: "success"
+                    });
                     this.GetGoodsList(0);
                     setTimeout(e => {
                         this.items[Number(0)].content = this.GoodsHtml;
                         this.tab2 = Number(0);
-                    }, 1000);
+                    }, 1500);
                 }
             });
         },

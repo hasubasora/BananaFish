@@ -43,12 +43,12 @@ export default {
                 },
                 {
                     src: require("../assets/Img/nav3.png"),
-                    name: "分红产品",
+                    name: "积分产品",
                     href: "ProductGroupList"
                 },
                 {
                     src: require("../assets/Img/nav4.png"),
-                    name: "分红指数",
+                    name: "积分指数",
                     href: "MyRedData"
                 },
                 {

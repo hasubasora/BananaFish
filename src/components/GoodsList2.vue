@@ -31,8 +31,8 @@
         text-align: center;
         padding: 0.05rem 0.2rem;
         border-radius: 5px;
-        line-height: 0.4rem;
-        font-size: 0.2rem;
+        // line-height: 0.4rem;
+        // font-size: 0.2rem;
         background: #ff5f17;
         color: #fff;
         margin-right: 0.2rem;
@@ -57,15 +57,17 @@
         color: #fff;
         top: 0.1rem;
         left: -0.4rem;
-        font-size: 0.3rem;
+        font-size: 0.2rem;
         z-index: 9;
     }
     .goodsName {
+           text-align: left;
         font-size: 0.25rem;
         overflow: hidden;
         white-space: nowrap;
+        line-height: 0.5rem;
+        text-overflow: ellipsis;
         color: #555;
-        // text-overflow: ellipsis;
     }
     .specification {
         color: #999;

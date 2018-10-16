@@ -26,7 +26,7 @@
                 <div class="navbarcompont">
                     <navbar :headNews='headNews'></navbar>
                 </div>
-                <!-- 分红等 -->
+                <!-- 积分等 -->
                 <div class="participationInProfit">
                     <participationInProfit :InProfit='InProfit'></participationInProfit>
                 </div>

@@ -2,11 +2,8 @@
     <div class="ProductGroupList">
         <yd-flexbox direction="vertical">
             <yd-flexbox-item class="ProTop">
-                <img class="haibao" src="../assets/Img/haibao.jpg" alt="">
-                <div class="liucheng"> <img class="liuchengtu" src="../assets/Img/liucheng.png" alt=""></div>
-                <img class="haibaohd" src="../assets/Img/hd.png" alt="">
-                <img class="haibaowd" src="../assets/Img/wd.png" alt="">
-                <div class="ProductNews">
+                <img class="haibao" src="../assets/Img/haibao.png" alt="">
+                <!-- <div class="ProductNews">
                     <img class="Productnew" src="../assets/Img/tt.png" alt="">
                     <yd-rollnotice autoplay="2000">
                         <yd-rollnotice-item>
@@ -17,7 +14,7 @@
                             <span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
                     </yd-rollnotice>
                     <span class="allText">|更多</span>
-                </div>
+                </div> -->
 
             </yd-flexbox-item>
             <yd-flexbox-item>
@@ -141,7 +138,7 @@
 }
 .ProTop {
     position: relative;
-    margin-bottom: 1rem;
+    // margin-bottom: 1rem;
     .liucheng {
         position: absolute;
         top: 4.5rem;
@@ -169,110 +166,48 @@
 }
 .ProductGroupList {
     margin-bottom: 1rem;
-    background: url("../assets/Img/bg.jpg") center;
+    // background: url("../assets/Img/bg.jpg") center;
     background-size: 100%;
-    .ProductNews {
-        width: 6.5rem;
-        position: absolute;
-        top: 6.1rem;
-        right: 0.5rem;
-        background: #f9d86c;
-        border-radius: 15px;
-        margin: auto;
-        display: flex;
-        margin-bottom: 1rem;
-        .Productnew {
-            width: 1rem;
-            height: 0.25rem;
-            margin: 0.15rem 0.1rem;
-        }
-        .yd-rollnotice {
-            background: #f9d86c;
-        }
-        .allText {
-            height: 0.5rem;
-            margin: 0 0.1rem;
-            line-height: 0.5rem;
-            width: 1rem;
-        }
-    }
+    // .ProductNews {
+    //     width: 6.5rem;
+    //     position: absolute;
+    //     top: 0rem;
+    //     right: 0.5rem;
+    //     // background: #f9d86c;
+    //     border-radius: 15px;
+    //     margin: auto;
+    //     display: flex;
+    //     margin-bottom: 1rem;
+    //     .Productnew {
+    //         width: 1rem;
+    //         height: 0.25rem;
+    //         margin: 0.15rem 0.1rem;
+    //     }
+    //     // .yd-rollnotice {
+    //     //     background: #f9d86c;
+    //     // }
+    //     .allText {
+    //         height: 0.5rem;
+    //         margin: 0 0.1rem;
+    //         line-height: 0.5rem;
+    //         width: 1rem;
+    //     }
+    // }
     .yd-tab-panel {
         background: transparent;
         margin-bottom: 1rem;
     }
 }
-.yd-flexbox-item {
-    // padding: .1rem
-}
 
 .goodsList {
-    background: #fff8dc;
+    background: #ffffff;
     margin: 0.2rem 0.1rem;
-    padding: 0.1rem;
+    padding: 0.1rem 0.1rem 0.1rem 0;
     .yd-grids-2 {
         width: 4.6rem;
     }
 }
-.goodsListOne {
-    width: 2.4rem;
-    .GroupId {
-        position: absolute;
-        top: 0;
-        left: 0;
-        background: #ff5f17;
-        color: #fff;
-        width: 2.4rem;
-        font-size: 0.25rem;
-        text-align: center;
-        line-height: 0.5rem;
-        border-bottom-right-radius: 10px;
-        display: inline-block;
-    }
-    .goodsa {
-        width: 2.3rem;
-        margin: 0.5rem 0 0 0;
-        border-radius: 5px;
-        background: #fff;
-        .goodsatop {
-            display: block;
-            background: #ff5f17;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            color: #fff;
-            height: 0.5rem;
-            font-size: 0.2rem;
-            line-height: 0.5rem;
-            text-align: center;
-            .goodsatopImg {
-                width: 1rem;
-            }
-        }
-        .ProductTitle {
-            font-size: 0.25rem;
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 0 0.1rem;
-            text-overflow: ellipsis;
-        }
-        .SubTitle {
-            font-size: 0.2rem;
-            padding: 0.1rem 0;
-            line-height: 0.4rem;
-            overflow: hidden;
-            color: #999;
-            padding: 0 0.1rem;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .points {
-            color: #999;
-            strong {
-                font-size: 0.4rem;
-                color: #555;
-            }
-        }
-    }
-}
+
 .yd-grids-txt {
     position: relative;
 }
@@ -293,9 +228,9 @@
             margin: auto;
         }
         .ProductTitlet {
-            font-size: 0.26em;
-            height: 0.6rem;
-            text-overflow: ellipsis;
+            font-size: 0.2rem;
+            // height: 0.6rem;
+            text-overflow: ellipsis;line-height: .26rem;
             overflow: hidden;
             word-wrap: normal;
             text-align: none;
@@ -307,7 +242,7 @@
         }
         > span {
             color: #999;
-            font-size: 0.26rem;
+            font-size: 0.2rem;
         }
         > strong {
             color: #ff5f17;
@@ -321,9 +256,26 @@
         }
     }
 }
+.p_button {
+    display: inline-block;
+    width: 3rem;
+    text-align: center;
+    line-height: 1rem;
+    button {
+        border: 1px solid rgba(102, 102, 102, 1);
+        border-radius: 8px;
+        padding: .1rem;
+        margin: .2rem;
+    }
+}
 .p_progress {
+    display: inline-block;
     padding: 0.2rem;
     position: relative;
+    width: 100%;
+    .yd-progressbar{
+        height: auto;
+    }
     .p_text {
         font-size: 0.26rem;
         color: red;
@@ -331,16 +283,18 @@
     }
     .p_prog {
         position: absolute;
+        font-size: 0.26rem;
         color: #fff;
         z-index: 2;
         top: 0.31rem;
-        left: 3rem;
+        left: 45%;
     }
     > p {
-        color: #ff5f17;
+        // color: #ff5f17;
         font-size: 0.26rem;
         display: flex;
         justify-content: space-around;
+        text-align: right
     }
 }
 </style>

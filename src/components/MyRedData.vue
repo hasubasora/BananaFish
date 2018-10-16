@@ -1,19 +1,20 @@
 <template>
     <yd-layout>
-        <yd-navbar slot="navbar" title="分红积分数据表" height='.8rem'>
+        <yd-navbar slot="navbar" title="积分积分数据表" height='.8rem'>
             <router-link to="" slot="left" @click.native="GoHistory('Home')">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
         <div class="RedDataTitle">
             <p>
-                <router-link to="/RedData">平台分红数据</router-link>
-                <router-link to="/MyRedData" class="write">我的分红数据</router-link>
+                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`">平台积分数据</router-link>
+                <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`" class="write">我的积分数据</router-link>
             </p>
         </div>
         <yd-flexbox direction="vertical" class="RedData">
             <yd-flexbox-item class="font03">
-                <div>我的积分（分）</div><p class="font20">{{objectData.MyIntegral}}</p>
+                <div>我的积分（分）</div>
+                <p class="font20">{{objectData.MyIntegral}}</p>
             </yd-flexbox-item>
 
             <yd-flexbox-item>
@@ -69,7 +70,7 @@
                 <span slot="right">{{item.Profit}}</span>
             </yd-cell-item>
         </yd-cell-group>
-        <div class="RedDataBtn">
+        <div class="RedDataBtn" v-if="!this.$route.query.IsAPP">
             <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
             <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
             <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>

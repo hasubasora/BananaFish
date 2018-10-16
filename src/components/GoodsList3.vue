@@ -6,7 +6,7 @@
           <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
           <img :src="item.ProductImg" class="ProductImg" alt="">
           <div class="goodsDian" v-if="item.Integral>0">
-            <span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
+            <span class="goodsBack">积分购</span>{{item.Integral}}积分</div>
           <div class="goodsDian" v-if="item.Integral<1">
             <span class="goodsBack">优品购</span>
           </div>

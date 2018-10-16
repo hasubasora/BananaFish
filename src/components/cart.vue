@@ -43,7 +43,7 @@
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
                                 <p class="AttValueName">{{items.AttValueName}}&nbsp;</p>
                                 <p class="c-red GoodList_Number">
-                                    <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'':'赠'+items.Integral+'积分'}}</span>
+                                    <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'赠'+items.Integral+'积分':''}}</span>
                                     <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0">
                                         <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
                                         <input type="number" pattern="[1-9]*" v-model="items.BuyNum" disabled placeholder="" class="yd-spinner-input">
@@ -72,6 +72,7 @@
         <!-- 底部栏 -->
         <div class="bomBtn">
             <div class="BuyCart c-red AllSalePrice">合计：￥{{AllSalePrice}}</div>
+       
             <button :class="[{'BuyCartt':!isDel},hasGoods?'BuyCart':'BuyCartt']" type="button" :disabled='!isDel||!hasGoods' @click="GoCartOrder">结算</button>
         </div>
         <!-- <yd-cell-item class="bomBtn">
@@ -156,8 +157,11 @@
         padding-right: 0.2rem;
         color: #555;
     }
+    .yd-spinner-input {
+        color: #555;
+    }
     .GoodList_Number {
-        padding-top: 0.2rem;
+        // padding-top: 0.2rem;
         display: flex;
         justify-content: space-between;
         .SalePrice {
@@ -231,7 +235,7 @@
 }
 </style>
 <script>
-import { getNum } from "../main.js";
+import { getNum, LOGIN_SUCCESS } from "../main.js";
 export default {
     porps: ["todo"],
     data() {
@@ -283,9 +287,7 @@ export default {
                     console.log(response.data);
                     this.GetShoppingCart();
                 }
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
             });
         },
         increase(_index, num) {
@@ -315,9 +317,7 @@ export default {
                     getNum();
                     this.GetShoppingCart();
                 }
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
             });
         },
         //获取购物车商品
@@ -328,9 +328,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcart",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
                     // console.log(this.CartList.length == []);
@@ -338,18 +336,26 @@ export default {
                         this.hasGoods = false;
                     }
                     this.AllSalePrice = 0;
+                    //计算价格
                     for (const iterator of this.CartList) {
                         for (const iterators of iterator.LstProduct) {
                             if (iterators.IsCheck) {
                                 this.AllSalePrice += iterators.SalePrice;
-                                // console.log(iterators.SalePrice);
+                            }
+                        }
+                    }
+                    //设置选中
+                    for (const iterator of this.CartList) {
+                        for (const iterators of iterator.LstProduct) {
+                            if (iterators.IsCheck) {
                                 this.hasGoods = true;
-                                // return;
+                                return;
                             } else {
                                 this.hasGoods = false;
                             }
                         }
                     }
+
                     return;
                 }
             });
@@ -364,9 +370,7 @@ export default {
                 url: this.$server.serverUrl + "/order/delshoppingcart",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     console.log(response.data);
                     getNum();

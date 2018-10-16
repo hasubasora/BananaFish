@@ -13,7 +13,7 @@
             </yd-accordion-item>
         </yd-accordion>
 
-        <p class="Copyright">Copyright 2018&copy;广州格卓电子科技有限公司 版权所有</p>
+        <!-- <p class="Copyright">Copyright 2018&copy;广州格卓电子科技有限公司 版权所有</p> -->
 
     </div>
 </template>

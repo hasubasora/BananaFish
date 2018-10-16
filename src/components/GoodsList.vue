@@ -7,7 +7,7 @@
                     <!-- <img class="SalePriceImg" src="../assets/Img/gwc.png" alt=""> -->
                     <img :src="item.ProductImg" class="ProductImg" alt="">
                     <div class="goodsDian">
-                        <span class="goodsBack">分红购</span>{{item.Integral}}积分</div>
+                        <span class="goodsBack">积分购</span>{{item.Integral}}积分</div>
                     <div class="goodsName">{{item.ProductTitle}}</div>
                     <!-- <div class="specification"> {{item.SubTitle}}</div> -->
                     <span class="SaleCount">月销{{item.SaleCount}}件</span>

@@ -19,6 +19,7 @@
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -32,9 +33,7 @@ export default {
             url: this.$server.serverUrl + "/Account/GetMyMessageLst",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.arrow = response.data.list;
             }

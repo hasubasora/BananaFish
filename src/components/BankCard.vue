@@ -1,7 +1,7 @@
 <template>
     <div class="BankCard">
         <yd-navbar fixed slot="navbar" title="设置银行卡" height='.8rem' color='#fff' class="titleColor">
-            <router-link to="/WithdrawDeposit" slot="left" >
+            <router-link to="/WithdrawDeposit" slot="left">
                 <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
             </router-link>
 
@@ -48,6 +48,7 @@
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -98,9 +99,10 @@ export default {
                     "/UserCenter/SaveMemberDrawAccount",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                // if (response.data.success == 400) {
+                //     this.$router.push({ name: "SignIn" });
+                // }
+                LOGIN_SUCCESS(response.data.success)
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.$dialog.toast({
@@ -108,7 +110,7 @@ export default {
                         timeout: 1500,
                         icon: "success",
                         callback: () => {
-                           this.$router.push({ name: "WithdrawDeposit" });
+                            this.$router.push({ name: "WithdrawDeposit" });
                         }
                     });
                 }
@@ -129,7 +131,10 @@ export default {
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
+                    this.$router.push({
+                        name: "SignIn",
+                        query: { Good_name: "2" }
+                    });
                 }
                 if (response.data.success == 200) {
                     console.log(response.data);

@@ -44,6 +44,7 @@
             <div class="wocaonima">
                 <yd-accordion>
                     <yd-accordion-item title="商品详情" open>
+                        
                         <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
                     </yd-accordion-item>
                 </yd-accordion>
@@ -93,7 +94,7 @@
                 </div>
 
                 <div class="yd-nav-right-button">
-                    <button class="handleClick rightbtn" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
+                    <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
                 </div>
                 <div class="yd-nav-right-button">
                     <button class="handleClick leftbtn leftColor" @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
@@ -611,7 +612,7 @@ export default {
             position: relative;
             .d_prog {
                 position: absolute;
-                top: 0.26rem;
+                // top: 0.26rem;
                 left: 3.2rem;
                 z-index: 2;
             }

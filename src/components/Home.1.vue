@@ -25,7 +25,7 @@
             <div class="navbarcompont">
                 <navbar></navbar>
             </div>
-            <!-- 分红等 -->
+            <!-- 积分等 -->
             <div class="participationInProfit">
                 <participationInProfit></participationInProfit>
             </div>
@@ -260,7 +260,7 @@ export default {
 .navbarcompont {
     margin: 0 0.2rem 0.2rem;
 }
-//分红准备
+//积分准备
 
 .participationInProfit {
     width: 100%;

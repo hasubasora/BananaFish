@@ -29,7 +29,7 @@
                 <div class="divImg">
                     <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
                     <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
-                        <img class="upImg" src="../assets/Img/upload.png" alt="" width="100" >
+                        <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
                         <input @change="uploadChange($event,index)" :disabled=isBtn type="file" name="files" id="upInput" accept="image/*" multiple="multiple">
                     </form>
                 </div>
@@ -38,6 +38,7 @@
 
         </div>
         <yd-button size="large" type="primary" class="primary" @click.native="primary">发布</yd-button>
+        <yd-button size="large" type="primary" class="primary" @click.native="wxprimary">测试图片发布</yd-button>
     </div>
 
 </template>
@@ -117,6 +118,7 @@
 }
 </style>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -135,6 +137,54 @@ export default {
         this.getCommentgoods();
     },
     methods: {
+        wxprimary() {
+            let that = this;
+            wx.chooseImage({
+                count: 1,
+                sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+                success: function(res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    console.log(localIds);
+                    that.uploadImg(localIds[0]);
+                }
+            });
+        },
+        //具体上传图片
+        uploadImg: function(e) {
+            console.log(e);
+            wx.uploadImage({
+                localId: e, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function(res) {
+                    serverId = res.serverId;
+                    // $.ajax({
+                    //     url: "/uploadImg",
+                    //     dataType: "json",
+                    //     async: false,
+                    //     contentType:
+                    //         "application/x-www-form-urlencoded; charset=UTF-8",
+                    //     data: { mediaId: serverId },
+                    //     type: "POST",
+                    //     timeout: 30000,
+                    //     success: function(data, textStatus) {
+                    //         $("#imgUrl").val(data);
+                    //         $.toast("上传成功", "text");
+                    //     },
+                    //     error: function(
+                    //         XMLHttpRequest,
+                    //         textStatus,
+                    //         errorThrown
+                    //     ) {
+                    //         $.toast("上传错误,请稍候重试!", "text");
+                    //     }
+                    // });
+                },
+                fail: function(error) {
+                    $.toast("上传错误,请稍候重试!", "text");
+                }
+            });
+        },
         primary() {
             this.ComList = [];
             let objectCom = {};
@@ -161,9 +211,7 @@ export default {
                 url: this.$server.serverUrl + "/account/getmyorderDetail",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     this.rows = response.data.rows.LstProduct;
                     this.OrderId = response.data.rows.OrderId;
@@ -178,6 +226,7 @@ export default {
         },
         //提交评价
         addComment(ComList) {
+            return;
             this.isBtn = true;
             this.$axios({
                 method: "POST",
@@ -189,9 +238,7 @@ export default {
                 url: this.$server.serverUrl + "/Order/ProductComment",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "评价成功",
@@ -211,10 +258,19 @@ export default {
         },
         uploadChange(event, _index) {
             if (event.target.files.length > 0) {
-                // var files = event.target.files[0];
+                var files = event.target.files[0];
                 console.log(event.target.files);
-
-                var formData = new FormData(document.getElementById("uploadForm2")[0]);
+                this.type = files.type;
+                console.log(files);
+                console.log(files.type);
+                console.log(formData);
+                // 如果没有文件类型，则通过后缀名判断（解决微信及360浏览器无法获取图片类型问题）
+                if (!this.type) {
+                    this.type = this.mime[file.name.match(/\.([^\.]+)$/i)[1]];
+                }
+                var formData = new FormData(
+                    document.getElementById("uploadForm2")[0]
+                );
 
                 console.log(formData);
 
@@ -226,26 +282,29 @@ export default {
                     return;
                 }
                 for (const iterator of event.target.files) {
+                    console.log(iterator.type);
+
                     formData.append("file", iterator, iterator.name);
                 }
                 console.log(formData);
+                console.log("上传图片OK");
 
-                this.$axios({
-                    method: "POST",
-                    data: formData,
-                    params: {
-                        dir: 0
-                    },
-                    url: this.$server.serverUrl + "/UpLoad/Img",
-                    responseType: "json",
-                    headers: { "Content-Type": "multipart/form-data" }
-                }).then(response => {
-                    console.log(response.data);
-                    const _list = response.data.paths;
-                    this.$set(this.my_array, _index, _list);
-                    console.log(_list);
-                    console.log(this.my_array);
-                });
+                // this.$axios({
+                //     method: "POST",
+                //     data: formData,
+                //     params: {
+                //         dir: 0
+                //     },
+                //     url: this.$server.serverUrl + "/UpLoad/Img",
+                //     responseType: "json",
+                //     headers: { "Content-Type": "multipart/form-data" }
+                // }).then(response => {
+                //     console.log(response.data);
+                //     const _list = response.data.paths;
+                //     this.$set(this.my_array, _index, _list);
+                //     console.log(_list);
+                //     console.log(this.my_array);
+                // });
             }
         }
     }

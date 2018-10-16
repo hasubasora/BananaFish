@@ -152,7 +152,7 @@ export default {
                     url: ""
                 },
                 {
-                    title: "分红指数",
+                    title: "积分指数",
                     icon: "icon-xianhua",
                     style: "orange",
                     url: "/RedData"
