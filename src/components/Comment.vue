@@ -137,54 +137,7 @@ export default {
         this.getCommentgoods();
     },
     methods: {
-        wxprimary() {
-            let that = this;
-            wx.chooseImage({
-                count: 1,
-                sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-                sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-                success: function(res) {
-                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-                    console.log(localIds);
-                    that.uploadImg(localIds[0]);
-                }
-            });
-        },
-        //具体上传图片
-        uploadImg: function(e) {
-            console.log(e);
-            wx.uploadImage({
-                localId: e, // 需要上传的图片的本地ID，由chooseImage接口获得
-                isShowProgressTips: 1, // 默认为1，显示进度提示
-                success: function(res) {
-                    serverId = res.serverId;
-                    // $.ajax({
-                    //     url: "/uploadImg",
-                    //     dataType: "json",
-                    //     async: false,
-                    //     contentType:
-                    //         "application/x-www-form-urlencoded; charset=UTF-8",
-                    //     data: { mediaId: serverId },
-                    //     type: "POST",
-                    //     timeout: 30000,
-                    //     success: function(data, textStatus) {
-                    //         $("#imgUrl").val(data);
-                    //         $.toast("上传成功", "text");
-                    //     },
-                    //     error: function(
-                    //         XMLHttpRequest,
-                    //         textStatus,
-                    //         errorThrown
-                    //     ) {
-                    //         $.toast("上传错误,请稍候重试!", "text");
-                    //     }
-                    // });
-                },
-                fail: function(error) {
-                    $.toast("上传错误,请稍候重试!", "text");
-                }
-            });
-        },
+      
         primary() {
             this.ComList = [];
             let objectCom = {};

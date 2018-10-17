@@ -14,7 +14,7 @@
                 <span class="ProductStock">头筹价</span>
 
                 <div class="SalePrice">
-                    <strong>￥{{item.MinSalePrice}}-{{item.MaxSalePrice}}</strong>
+                    <strong>￥{{item.MinSalePrice.toFixed(2)}}-{{item.MaxSalePrice.toFixed(2)}}</strong>
                 </div>
             </router-link>
         </yd-grids-item>

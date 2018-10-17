@@ -29,14 +29,14 @@
                 <span slot="left">手机号：</span>
                 <input slot="right" type="tel" v-model="s_tel" placeholder="请输入手机号" maxlength="11">
             </yd-cell-item>
-            <yd-cell-item>
+            <!-- <yd-cell-item>
                 <span slot="left" @click="changeIsDefault(0)" class="iconfont icon-selected green" v-if="IsDefault==1">
                     <i> 设置默认</i>
                 </span>
                 <span slot="left" @click="changeIsDefault(1)" class="iconfont icon-selected gray" v-if="IsDefault!=1">
                     <i> 设置默认</i>
                 </span>
-            </yd-cell-item>
+            </yd-cell-item> -->
         </yd-cell-group>
 
         <yd-cell-group v-if="!hasList">
@@ -59,14 +59,14 @@
                 <span slot="left">手机号：</span>
                 <input slot="right" type="tel" v-model="s_tel" placeholder="请输入手机号" maxlength="11">
             </yd-cell-item>
-            <yd-cell-item>
+            <!-- <yd-cell-item>
                 <span slot="left" @click="changeIsDefault(0)" class="iconfont icon-selected green" v-if="IsDefault==1">
                     <i> 设置默认</i>
                 </span>
                 <span slot="left" @click="changeIsDefault(1)" class="iconfont icon-selected gray" v-if="IsDefault!=1">
                     <i> 设置默认</i>
                 </span>
-            </yd-cell-item>
+            </yd-cell-item> -->
             <yd-cell-item @click.native='delAddress()'>
                 <span slot="left" style="color:red"> 删除收货地址</span>
             </yd-cell-item>

@@ -12,7 +12,7 @@
                     <!-- <div class="specification"> {{item.SubTitle}}</div> -->
                     <span class="SaleCount">月销{{item.SaleCount}}件</span>
                     <div class="SalePrice">
-                        <strong>￥{{item.SalePrice}}</strong>
+                        <strong>￥{{item.SalePrice.toFixed(2)}}</strong>
                     </div>
                 </router-link>
             </span>
