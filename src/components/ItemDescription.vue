@@ -16,20 +16,26 @@
 
                 </div>
             </yd-flexbox-item>
-            <yd-flexbox-item class="theTopGood">
+
+            <div class="theTopGood">
                 <yd-flexbox>
-                    <yd-flexbox-item>
+                    <div>
                         <span class="spans">头筹奖品</span>
-                    </yd-flexbox-item>
+                    </div>
                     <yd-flexbox-item>
                         <span class="spanstitle"> {{GoodsList.ProductTitle}}</span>
                     </yd-flexbox-item>
+                </yd-flexbox>
+                <yd-flexbox>
                     <yd-flexbox-item>
                         <span class="spansPrice">市场价:{{GoodsList.MarketPrice}} </span>
                     </yd-flexbox-item>
+                    <yd-flexbox-item>
+                        <span class="spanstitle"> {{OrangeGetUnTime(GoodsList.EndTotalSeconds)}}</span>
+                    </yd-flexbox-item>
                 </yd-flexbox>
+            </div>
 
-            </yd-flexbox-item>
             <yd-flexbox-item class="generalGoods">
                 <p>头筹商品(如下选购任选其中一可夺筹，多购多机会)</p>
                 <yd-grids-group :rows="2">
@@ -55,7 +61,7 @@
                 <div class="d_progress_center">
                     <div class="d_prog">{{GoodsList.RemainNum+'/'+GoodsList.TotalNum}}</div>
 
-                    <yd-progressbar type="line" class="progress" :progress='1-(GoodsList?GoodsList.RemainNum:0/GoodsList?GoodsList.TotalNum:0)' trail-width="4" trail-color="#FE5D51"></yd-progressbar>
+                    <yd-progressbar type="line" class="progress" v-if="GoodsList" :progress='1-GoodsList.RemainNum/GoodsList.TotalNum' trail-width="4" trail-color="#FE5D51"></yd-progressbar>
                 </div>
                 <div class="d_progress_bom">
                     <span>总需{{GoodsList.TotalNum}}人次</span>
@@ -99,6 +105,8 @@
     </yd-layout>
 </template>
 <script>
+import { GetUnTime } from "../main.js";
+
 export default {
     data() {
         return {
@@ -130,6 +138,14 @@ export default {
                 this.GoodsList = response.data.object;
                 this.LstOrder = response.data.object.LstOrder;
                 console.log(this.GoodsList);
+                 let eTime = setInterval(e => {
+                        this.$set(
+                            this.GoodsList,
+                            "EndTotalSeconds",
+                            this.GoodsList.EndTotalSeconds - 1
+                        );
+                        // console.log(this.GoodsList.EndTotalSeconds);
+                }, 1000);
             }
         });
         this.$axios({
@@ -150,6 +166,9 @@ export default {
         });
     },
     methods: {
+        OrangeGetUnTime(d) {
+            return GetUnTime(d);
+        },
         GoHistory(sid) {
             // console.log(sid);
             this.$router.go(-1);
@@ -216,11 +235,11 @@ export default {
         }
     }
     .theTopGood {
+        width: 100%;
         background: #ffffff;
         margin: 0.1rem 0;
         padding: 0.1rem;
         font-size: 0.26rem;
-        height: 0.8rem;
         color: #ff5f17;
         // overflow: hidden;
         white-space: nowrap;
@@ -228,6 +247,7 @@ export default {
         .spans {
             background: #ff5f17;
             line-height: 0.6rem;
+
             color: #ffffff;
             margin-right: 0.1rem;
             border-radius: 10px;
@@ -242,7 +262,6 @@ export default {
         }
         .spansPrice {
             display: inline-block;
-            height: 0.6rem;
         }
     }
     .generalGoods {

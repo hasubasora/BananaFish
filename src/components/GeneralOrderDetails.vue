@@ -69,8 +69,8 @@
             <yd-preview-item>
                 <div slot="left"></div>
                 <div slot="right">
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" @click="closeOrder(itemt.OrderId)" type="button">取消订单</button>
                     <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
@@ -240,6 +240,41 @@ export default {
         });
     },
     methods: {
+        OrderLogistics(oid) {
+            this.$router.push({
+                name: "OrderLogistics",
+                query: { Good_id: oid }
+            });
+        },
+        //关闭订单
+        closeOrder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/closemygrouporder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.$dialog.toast({
+                        mes: "取消成功",
+                        timeout: 1500,
+                        icon: "success",
+                        callback: () => {
+                            this.GetGoodsList(0);
+                            setTimeout(e => {
+                                this.items[Number(0)].content = this.GoodsHtml;
+                                this.tab2 = Number(0);
+                            }, 1000);
+                        }
+                    });
+                }
+            });
+        },
         GoBuySometingfn(OrderID) {
             if (!this.picked) {
                 this.$dialog.toast({

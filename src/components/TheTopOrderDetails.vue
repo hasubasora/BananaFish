@@ -7,6 +7,7 @@
 
         </yd-navbar>
         <yd-preview-header class="GroupProduct" v-if="OrderIdList.GroupProduct">
+
             <div slot="left" class="GroupProduct_text">
                 <div class="Product_text">头筹奖品</div>
                 <span>期号:{{OrderIdList.GroupProduct.CurrentPeriod}}</span>
@@ -31,7 +32,7 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="OrderTitle">
-            <span class="OrderTitle_text">{{OrderIdList.OrderStatusStr}}</span>
+            <span class="OrderTitle_text">{{OrderIdList.OrderStatusStr}}{{GetUnTime(OrderIdList.EndTotalSeconds)}}</span>
         </div>
         <div class="OrderAddress">
             <div><img src="../assets/Img/address.png" alt=""></div>
@@ -88,8 +89,8 @@
                 <div slot="left"></div>
                 <div slot="right">
                     <!-- <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==1" type="button">退款</button> -->
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" type="button">物流信息</button>
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" type="button">取消订单</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="OrderLogistics(OrderIdList.OrderId)" type="button">物流信息</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" @click="closeOrder(OrderIdList.OrderId)" type="button">取消订单</button>
                     <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
@@ -260,6 +261,7 @@
 }
 </style>
 <script>
+import { GetUnTime } from "../main.js";
 export default {
     data() {
         return {
@@ -290,31 +292,77 @@ export default {
                 console.log(response.data);
             }
         });
-        this.$axios({
-            method: "POST",
-            data: {
-                orderId: this.$route.query.OrderId
-            },
-            url: this.$server.serverUrl + "/account/getmygrouporderDetail",
-            responseType: "json"
-        }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
-            if (response.data.success == 200) {
-                this.OrderIdList = response.data.rows;
-                console.log(response.data);
-                this.progress4 =
-                    this.OrderIdList.GroupProduct.RemainNum /
-                    this.OrderIdList.GroupProduct.TotalNum;
-                for (const iterator of this.OrderIdList.LstProduct) {
-                    this.allIntegral += iterator.Integral;
-                    this.allPrice += iterator.BuyPrice;
-                }
-            }
-        });
+        this.porderDetail();
     },
     methods: {
+        porderDetail() {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: this.$route.query.OrderId
+                },
+                url: this.$server.serverUrl + "/account/getmygrouporderDetail",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.OrderIdList = response.data.rows;
+                    console.log(response.data);
+                    let eTime = setInterval(e => {
+                        this.$set(
+                            this.OrderIdList,
+                            "EndTotalSeconds",
+                            this.OrderIdList.EndTotalSeconds - 1
+                        );
+                    }, 1000);
+                    this.progress4 =
+                        this.OrderIdList.GroupProduct.RemainNum /
+                        this.OrderIdList.GroupProduct.TotalNum;
+                    for (const iterator of this.OrderIdList.LstProduct) {
+                        this.allIntegral += iterator.Integral;
+                        this.allPrice += iterator.BuyPrice;
+                    }
+                }
+            });
+        },
+        OrderLogistics(oid) {
+            this.$router.push({
+                name: "OrderLogistics",
+                query: { Good_id: oid }
+            });
+        },
+        //关闭订单
+        closeOrder(id) {
+            this.$axios({
+                method: "POST",
+                data: {
+                    orderId: id
+                },
+                url: this.$server.serverUrl + "/account/closemygrouporder",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+                    this.$dialog.toast({
+                        mes: "取消成功",
+                        timeout: 1500,
+                        icon: "success",
+                        callback: () => {
+                            this.porderDetail();
+                        }
+                    });
+                }
+            });
+        },
+        GetUnTime(d) {
+            if (d > 0) {
+                return GetUnTime(d, 1);
+            }
+        },
         GoBuySometingfn(OrderID) {
             if (!this.picked) {
                 this.$dialog.toast({

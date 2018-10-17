@@ -5,7 +5,6 @@ Vue.use(Router)
 Vue.prototype.$Router = Router;
 
 export default new Router({
-  // mode: 'history',
   routes: [{
       path: '/',
       name: 'index',
@@ -54,7 +53,7 @@ export default new Router({
       name: 'SignIn',
       component: SignIn => require(["@/components/SignIn"], SignIn),
     }, { //提交订单
-      path: '/cartOrder',
+      path: '/cartOrder/:sid',
       name: 'cartOrder',
       component: cartOrder => require(["@/components/cartOrder"], cartOrder),
     }, { //提交订单

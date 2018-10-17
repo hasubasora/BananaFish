@@ -92,13 +92,14 @@ export default {
     created() {
         this.$axios({
             method: "POST",
-            data: {},
+            data: { orderType: this.$route.params.sid },
             url: this.$server.serverUrl + "/order/getorderconfirm",
             responseType: "json"
         }).then(response => {
             LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.GoodsList = response.data;
+                this.orderType;
                 console.log(response.data);
             }
         });
@@ -171,7 +172,10 @@ export default {
             }
             this.$axios({
                 method: "POST",
-                data: { addressid: this.address.AddressId },
+                data: {
+                    addressid: this.address.AddressId,
+                    orderType: this.$route.params.sid
+                },
                 url: this.$server.serverUrl + "/order/addorder",
                 responseType: "json"
             }).then(response => {

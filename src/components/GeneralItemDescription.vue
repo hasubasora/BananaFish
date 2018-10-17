@@ -469,6 +469,7 @@ export default {
             GoodsImg: "",
             buyName: "",
             buyID: "", //商品ID
+            ProductType: 0,
             spinner: 0, //购买数量
             price: 0,
             Stock: 0 //存库
@@ -756,7 +757,10 @@ export default {
                         LOGIN_SUCCESS(response.data.success);
                         switch (response.data.success) {
                             case 200:
-                                this.$router.push({ name: "cartOrder" });
+                                this.$router.push({
+                                    name: "cartOrder",
+                                    params: { sid: this.ProductType }
+                                });
                                 break;
 
                             case 500:
@@ -794,6 +798,7 @@ export default {
                     this.GotupAttr = this.GoodsList.LstAtt[1]; //第二个属性
                     this.GotupLen = this.GoodsList.LstAtt.length;
                     this.price = this.GoodsList.SalePrice;
+                    this.ProductType = this.GoodsList.ProductType;
                     // this.Stock = this.GoodsList.ProductStock;
                     // console.info(this.Gotup);
                     // console.info(this.GotupAttr);

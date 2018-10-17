@@ -311,6 +311,7 @@ export default {
         IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop),
         InTheTop: InTheTop => require(["@/components/InTheTop"], InTheTop)
     },
+   
     created() {
         // this.$axios({
         //   method: "POST",

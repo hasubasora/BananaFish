@@ -11,15 +11,15 @@
         <div class="news">
             <div class="newsBox">
                 <img src="../assets/Img/news.png" alt="">
-                <yd-rollnotice autoplay="2000" align='left'>
-                    <yd-rollnotice-item v-for="(item, index) in headNews" :key="index">
-                        <p class="headNewsText">
-                            <span style="color:#F00;"> 荐 </span>
+                <yd-slider autoplay="3000">
+                    <yd-slider-item v-for="(item, index) in headNews" :key="index">
+                        <!-- <p class="headNewsText"> -->
+                            <!-- <span style="color:#F00;"> 荐 </span> -->
                             <span style="">{{item}}</span>
-                        </p>
-                    </yd-rollnotice-item>
-                </yd-rollnotice>
-                <span class="allText">|更多</span>
+                        <!-- </p> -->
+                    </yd-slider-item>
+                </yd-slider>
+                <!-- <span class="allText">|更多</span> -->
             </div>
         </div>
     </div>
@@ -100,14 +100,28 @@ export default {
     background: #fff;
     .newsBox {
         width: 6.8rem;
-        height: 0.7rem;
+        // height: 0.7rem;
         display: flex;
         font-size: 0.25rem;
         > img {
             flex: 1;
             height: 0.3rem;
             margin: 0.1rem;
-            width: 1.4rem;
+            width: auto;
+        }
+        .yd-slider-item {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            .headNewsText{
+                font-size: .26rem;
+            }
+        }
+        .yd-slider {
+            line-height: 0.5rem;
+        }
+        .yd-slider-pagination {
+            display: none;
         }
         .newsText {
             display: inline-block;

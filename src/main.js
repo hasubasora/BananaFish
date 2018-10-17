@@ -77,6 +77,50 @@ export const LOGIN_SUCCESS = (success) => {
       break;
   }
 }
+
+
+export const GetUnTime = (d, n) => {
+  var date3 = d * 1000; //时间差的毫秒数
+  //------------------------------
+  //计算出相差天数
+  var days = Math.floor(date3 / (24 * 3600 * 1000));
+  //计算出小时数
+  var leave1 = date3 % (24 * 3600 * 1000); //计算天数后剩余的毫秒数
+  var hours = Math.floor(leave1 / (3600 * 1000));
+  let _hours = hours.toString().length < 2 ? +'0' + hours.toString() : hours
+  //计算相差分钟数
+  var leave2 = leave1 % (3600 * 1000); //计算小时数后剩余的毫秒数
+  var minutes = Math.floor(leave2 / (60 * 1000));
+  let _minutes = minutes.toString().length < 2 ? +'0' + minutes.toString() : minutes
+
+  //计算相差秒数
+  var leave3 = leave2 % (60 * 1000); //计算分钟数后剩余的毫秒数
+  var seconds = Math.round(leave3 / 1000);
+  let _seconds = seconds.toString().length < 2 ? +'0' + seconds.toString() : seconds
+  if (n == 1) {
+    return (
+      _hours +
+      ": " +
+      _minutes +
+      ":" +
+      _seconds
+    );
+  } else {
+    return (
+      " 距结束 " +
+      days +
+      "天 " +
+      _hours +
+      ": " +
+      _minutes +
+      ":" +
+      _seconds
+    );
+  }
+
+}
+
+
 export const GoBuySometing = (tc, pt, picked) => {
 
   window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
@@ -163,7 +207,7 @@ new Vue({
   el: '#app',
   store,
   router,
- 
+
   components: {
     App
   },

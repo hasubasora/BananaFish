@@ -15,7 +15,7 @@
                 <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
                     <yd-preview-header @click.native="ToTheTopOrderDetails(itemt.OrderId)">
                         <div slot="left">订单编号:{{itemt.OrderId}}</div>
-                        <div slot="right">{{itemt.OrderStatusStr}}</div>
+                        <div slot="right">{{GetUnTime(itemt.EndTotalSeconds)}}{{itemt.OrderStatusStr}}</div>
                     </yd-preview-header>
                     <yd-preview-header class="GroupProduct">
                         <div slot="left" class="GroupProduct_text">
@@ -66,7 +66,6 @@
                         <div slot="left"></div>
 
                         <div slot="right">
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="OrderLogistics(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
                             <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
@@ -94,6 +93,8 @@
 </template>
 
 <script>
+import { GetUnTime } from "../main.js";
+
 export default {
     data() {
         return {
@@ -142,6 +143,11 @@ export default {
         });
     },
     methods: {
+        GetUnTime(d) {
+            if (d > 0) {
+                return GetUnTime(d, 1);
+            }
+        },
         GoToComment(id) {
             this.$router.push({
                 name: "Comment",
@@ -187,6 +193,18 @@ export default {
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
                     console.log("请求数据成功");
+                    let eTime = setInterval(e => {
+                        for (const iterator of this.GoodsHtml) {
+                            // console.log(iterator.EndTotalSeconds);
+                            this.$set(
+                                iterator,
+                                "EndTotalSeconds",
+                                iterator.EndTotalSeconds - 1
+                            );
+                            // console.log(iterator.EndTotalSeconds);
+                        }
+                    }, 1000);
+
                     // console.log(this.GoodsHtml);
                 }
             });
@@ -282,24 +300,27 @@ export default {
                 }
             });
         },
-
-        OrderLogistics(id) {
-            this.$axios({
-                method: "POST",
-                data: {
-                    orderId: id,
-                    type: 1
-                },
-                url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
-                responseType: "json"
-            }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
-                if (response.data.success == 200) {
-                    console.log(response.data);
-                }
+        OrderLogistics(oid) {
+            this.$router.push({
+                name: "OrderLogistics",
+                query: { Good_id: oid }
             });
+            // this.$axios({
+            //     method: "POST",
+            //     data: {
+            //         orderId: id,
+            //         type: 1
+            //     },
+            //     url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
+            //     responseType: "json"
+            // }).then(response => {
+            //     if (response.data.success == 400) {
+            //         this.$router.push({ name: "SignIn" });
+            //     }
+            //     if (response.data.success == 200) {
+            //         console.log(response.data);
+            //     }
+            // });
         },
 
         fn(label, key) {
