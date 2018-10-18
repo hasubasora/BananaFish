@@ -35,7 +35,7 @@
         .wd_back_price {
             display: block;
             font-weight: bold;
-            font-size: 0.5rem;
+            font-size: .8rem;
             color: #ff6143;
             margin-bottom: 0.2rem;
         }

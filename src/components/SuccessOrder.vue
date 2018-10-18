@@ -13,7 +13,7 @@
         </div>
         <div class="btmPrimary">
             <yd-button size="large" type="primary" @click.native="GoHome('Home')">首页</yd-button>
-            <yd-button size="large" type="warning" @click.native="GoHome('MyInfo')">个人中心</yd-button>
+            <yd-button size="large" type="warning" @click.native="GoHome('MyInfo')">我的中心</yd-button>
         </div>
 
     </yd-layout>

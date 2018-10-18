@@ -27,9 +27,10 @@
                             <div class="GoodList_top">
                                 <!-- {{items.Stock}} -->
                                 <!-- 失效控制 -->
-                                <label v-if="items.Stock==0" style="text-align: center;display: block;">失效</label>
+                                <label v-if="items.Stock==0" style="text-align: center;display: block;color:#ccc">失效</label>
+                                <label v-if="items.ProductStatus==0" style="text-align: center;display: block;color:#ccc">失效</label>
 
-                                <label v-if="items.Stock!=0" class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
+                                <label v-if="items.Stock!=0&&items.ProductStatus!=0" class="yd-checklist-item-icon" @change="IsCheck(items.Id,items.IsCheck)">
                                     <input type="checkbox" v-model="items.IsCheck">
                                     <span class="yd-checklist-icon">
                                         <i></i>
@@ -43,8 +44,8 @@
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
                                 <p class="AttValueName">{{items.AttValueName}}&nbsp;</p>
                                 <p class="c-red GoodList_Number">
-                                    <span class="SalePrice">￥{{items.SalePrice}}&nbsp;&nbsp;{{item.GroupTitle?'赠'+items.Integral+'积分':''}}</span>
-                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0">
+                                    <span class="SalePrice">￥{{items.SalePrice.toFixed(2)}}&nbsp;&nbsp;{{item.GroupTitle?'赠'+items.Integral+'积分':''}}</span>
+                                    <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0&&items.ProductStatus!=0">
                                         <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
                                         <input type="number" pattern="[1-9]*" v-model="items.BuyNum" disabled placeholder="" class="yd-spinner-input">
                                         <a href="javascript:;" @click="increase(items.Id,items.BuyNum+1)"></a>
@@ -54,7 +55,7 @@
                             <yd-flexbox-item class="GoodList_bom" v-show="!isDel">
                                 <p>{{items.ProductTitle}}</p>
                                 <p class="c-red GoodList_Number">
-                                    <span class="SalePrice">￥{{items.SalePrice}}</span>
+                                    <span class="SalePrice">￥{{items.SalePrice.toFixed(2)}}</span>
                                     <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;border:0;text-align:right" @click='DelGood(items.Id)'>
                                         <yd-icon name="delete" size=".5rem" class="DelGood"></yd-icon>
                                     </span>
@@ -71,8 +72,8 @@
 
         <!-- 底部栏 -->
         <div class="bomBtn">
-            <div class="BuyCart c-red AllSalePrice">合计：￥{{AllSalePrice}}</div>
-       
+            <div class="BuyCart c-red AllSalePrice">合计：￥{{AllSalePrice.toFixed(2)}}</div>
+
             <button :class="[{'BuyCartt':!isDel},hasGoods?'BuyCart':'BuyCartt']" type="button" :disabled='!isDel||!hasGoods' @click="GoCartOrder">结算</button>
         </div>
         <!-- <yd-cell-item class="bomBtn">
@@ -158,7 +159,7 @@
         color: #555;
     }
     .yd-spinner-input {
-        color: #555;
+        color: rgb(0, 0, 0) !important;
     }
     .GoodList_Number {
         // padding-top: 0.2rem;

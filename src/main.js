@@ -100,18 +100,18 @@ export const GetUnTime = (d, n) => {
   if (n == 1) {
     return (
       _hours +
-      ": " +
+      ":" +
       _minutes +
       ":" +
       _seconds
     );
   } else {
     return (
-      " 距结束 " +
+      "距结束" +
       days +
       "天 " +
       _hours +
-      ": " +
+      ":" +
       _minutes +
       ":" +
       _seconds
@@ -119,7 +119,14 @@ export const GetUnTime = (d, n) => {
   }
 
 }
-
+export const SalesReturnApplyFor=(id)=>{
+  router.push({
+    name: "SalesReturnApplyFor",
+    query: {
+      orderId: id
+    }
+  });
+}
 
 export const GoBuySometing = (tc, pt, picked) => {
 

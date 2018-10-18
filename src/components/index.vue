@@ -15,7 +15,7 @@
                     <yd-icon name="shopcart" slot="icon" size="0.54rem"></yd-icon>
                     <yd-badge slot="badge" type="danger">{{storeText?storeText:this.productNum}}</yd-badge>
                 </yd-tabbar-item>
-                <yd-tabbar-item title="个人中心" link="MyInfo" active>
+                <yd-tabbar-item title="我的" link="MyInfo" active>
                     <yd-icon name="ucenter" slot="icon" size="0.54rem"></yd-icon>
                 </yd-tabbar-item>
             </yd-tabbar>

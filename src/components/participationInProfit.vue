@@ -5,7 +5,7 @@
                 <!-- <img class="participationImg" :src="item.Src" alt=""> -->
                 <div class="title">{{item.Title}}</div>
                 <h4>{{item.Title}}</h4>
-                <h5>{{item.Title}}</h5>
+                <!-- <h5>{{item.Title}}</h5> -->
                 <router-link class="linkClass" :to="item.Link">立即抢购</router-link>
                 <!-- <div class="timeout">
               <span class="timeoutL">正在夺筹</span>

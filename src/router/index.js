@@ -192,8 +192,8 @@ export default new Router({
       path: '/HtmlApp',
       name: 'HtmlApp',
       component: HtmlApp => require(["@/components/HtmlApp"], HtmlApp),
-    }, { //详情
-      path: '/SalesReturnApplyFor',
+    }, { //退款详情
+      path: '/SalesReturnApplyFor/:orderId',
       name: 'SalesReturnApplyFor',
       component: SalesReturnApplyFor => require(["@/components/SalesReturnApplyFor"], SalesReturnApplyFor),
     },

@@ -70,7 +70,7 @@
                 <span slot="right">{{item.Profit}}</span>
             </yd-cell-item>
         </yd-cell-group>
-        <div class="RedDataBtn" v-if="!this.$route.query.IsAPP">
+        <div class="RedDataBtn" v-if="this.$route.query.IsAPP=='undefined'">
             <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
             <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
             <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>

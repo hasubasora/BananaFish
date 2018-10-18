@@ -12,6 +12,7 @@
                 </div>
                 <div class="massage">
                     <router-link to="/MessageQueue"><img src="../assets/Img/massage.png" alt=""></router-link>
+                    <yd-badge type="danger" style="position:absolute;top:0;right:0">{{MessageNum}}</yd-badge>
                 </div>
 
             </div>
@@ -57,15 +58,27 @@ export default {
             TopObjectList: [],
             banners: [],
             headNews: [],
-            InProfit: []
+            InProfit: [],
+            MessageNum:0
         };
     },
     methods: {
-        shale() {
-            console.log(12313123);
+        GetMyMessageNum() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/Account/GetMyMessageNum",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    this.MessageNum=response.data.num
+                    console.log(response.data.num);
+                }
+            });
         }
     },
     created() {
+        this.GetMyMessageNum()
         this.$axios({
             method: "POST",
             data: {},
@@ -143,6 +156,7 @@ export default {
             }
             .massage {
                 padding: 0.1rem;
+                position: relative;
                 img {
                     width: 0.8rem;
                     height: auto;

@@ -11,7 +11,7 @@
             <yd-cell-group>
                 <yd-cell-item>
                     <span slot="left" style="font-size:1rem;">￥</span>
-                    <yd-input slot="right" class="wd_input" v-model="input6" type="number" regex="^\d{3,12}$" :placeholder='shabi+""' required></yd-input>
+                    <yd-input slot="right" class="wd_input" v-model="input6" type="number" regex="^\d{1,12}$" :placeholder='shabi+""' required></yd-input>
                 </yd-cell-item>
                 <yd-cell-item>
                     <span slot="left">
@@ -23,8 +23,8 @@
         </div>
         <yd-cell-group title="提现方式">
             <yd-cell-item type="radio" v-for="(item, index) in PayList" :key="index">
-                <span slot="left" >{{item.name}}（{{PayNumber[index]?PayNumber[index].DrawAccount:''}}）</span>
-                <input slot="right" type="radio" :value=item.type v-model="picked" @change="GetCardInfo(index)" />
+                <span slot="left">{{item.name}}（{{PayNumber[index]?PayNumber[index].DrawAccount:''}}）</span>
+                <input slot="right" type="radio" :value=item.type v-model="picked" @click="GetCardInfo(index)" />
             </yd-cell-item>
 
             <!-- <yd-cell-item>
@@ -120,12 +120,12 @@ export default {
         GetCardInfo(dataIndex) {
             switch (dataIndex) {
                 case 0:
-                    if (this.PayNumber == "") {
+                    if (this.PayNumber[dataIndex] == undefined) {
                         this.$router.push({ name: "PayCard" });
                     }
                     break;
                 case 1:
-                    if (this.PayNumber == "") {
+                    if (this.PayNumber[dataIndex] == undefined) {
                         this.$router.push({ name: "BankCard" });
                     }
                     break;
@@ -146,7 +146,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     console.log(response.data.list);
-                    this.PayNumber=response.data.list;
+                    this.PayNumber = response.data.list;
                 }
             });
         },

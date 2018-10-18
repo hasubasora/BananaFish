@@ -187,7 +187,7 @@ export default {
     overflow: hidden;
     // text-align: none;
     // height: 0.8rem;
-    line-height: 0.3rem;
+    // line-height: 0.3rem;
     white-space: normal;
     word-wrap: normal;
     /*! autoprefixer: off */
@@ -203,10 +203,8 @@ export default {
 }
 .menu {
     margin-top: 0.8rem;
-    .ydTabNav {
-        .yd-tab-nav {
-            // width: (10)+px !important
-        }
+    .yd-list-title {
+        height: unset !important;
     }
 }
 </style>

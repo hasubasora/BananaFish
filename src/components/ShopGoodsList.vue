@@ -48,11 +48,13 @@
 
                         <div slot="right">
                             <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button> -->
+                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">退货退款</button>
                             <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
                             <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
                             <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
                             <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                            <!-- <router-link to='"/SalesReturnApplyFor"+itemt.OrderId'>退货退款</router-link> -->
                             <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==7" type="button">申请售后</button>
                         </div>
                     </yd-preview-item>
@@ -76,6 +78,7 @@
 </template>
 
 <script>
+import {SalesReturnApplyFor} from '../main.js'
 export default {
     data() {
         return {
@@ -129,6 +132,9 @@ export default {
         });
     },
     methods: {
+        SalesReturnApplyFor(id){
+            SalesReturnApplyFor(id)
+        },
         OrderLogistics(oid) {
             this.$router.push({
                 name: "OrderLogistics",

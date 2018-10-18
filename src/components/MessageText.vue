@@ -42,6 +42,13 @@ export default {
 </script>
 <style lang="scss">
 .MessageText {
+    background: #fff;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    .MessageTextGrpup{
+        padding: .2rem;
+    }
     padding: 0.8rem 0;
     .IsRead {
         background: red;
