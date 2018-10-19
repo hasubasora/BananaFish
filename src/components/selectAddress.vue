@@ -68,7 +68,7 @@ export default {
                 params: { address_GetId: num }
             });
         },
-        GoHistory(sid) {
+        GoHistory() {
             // console.log(sid);
             this.$router.go(-1);
         },

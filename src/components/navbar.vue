@@ -54,7 +54,7 @@ export default {
                 {
                     src: require("../assets/Img/nav5.png"),
                     name: "邀请有奖",
-                    href: ""
+                    href: "Invitations"
                 }
             ]
         };

@@ -48,7 +48,7 @@
 
                         <div slot="right">
                             <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button> -->
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">退货退款</button>
+                            <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">申请退货</button> -->
                             <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
                             <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
                             <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
@@ -132,9 +132,7 @@ export default {
         });
     },
     methods: {
-        SalesReturnApplyFor(id){
-            SalesReturnApplyFor(id)
-        },
+      
         OrderLogistics(oid) {
             this.$router.push({
                 name: "OrderLogistics",

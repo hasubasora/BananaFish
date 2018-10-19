@@ -234,12 +234,7 @@ export default {
                         query: { Good_name: "2" }
                     });
                 }
-                if (response.data.success == 401) {
-                    this.$router.push({
-                        name: "SignIn",
-                        query: { Good_name: "1" }
-                    });
-                }
+               
             });
         },
         //提交支付

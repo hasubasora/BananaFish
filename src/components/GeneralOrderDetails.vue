@@ -30,6 +30,7 @@
                     <span class="AttValueName">{{item.AttValueName}}&nbsp;</span>
                     <div class="Integral">
                         <span>积分奖励{{item.Integral}}分</span>
+                        <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor()" type="button">申请退货</button>
                     </div>
                 </yd-flexbox-item>
                 <div class="OrderPrice">
@@ -69,8 +70,8 @@
             <yd-preview-item>
                 <div slot="left"></div>
                 <div slot="right">
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" @click="closeOrder(itemt.OrderId)" type="button">取消订单</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="OrderLogistics(OrderIdList.OrderId)" type="button">物流信息</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==0" @click="closeOrder(OrderIdList.OrderId)" type="button">取消订单</button>
                     <button class="orderBtn orangeBtn" @click="GoBuySometingfn(OrderIdList.OrderId)" v-if="OrderIdList.OrderStatus==0" type="button">立即付款</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==3" type="button">评价</button>
                     <button class="orderBtn orangeBtn" v-if="OrderIdList.OrderStatus==2" type="button">确认收货</button>
@@ -159,7 +160,9 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        .orderBtn {
+      
+    }
+      .orderBtn {
             height: 0.5rem;
             width: 1.4rem;
             border: none;
@@ -180,7 +183,6 @@
             border: 1px solid;
             color: #555;
         }
-    }
     .OrderListMsg {
         background: #fff;
         padding: 0.3rem;
@@ -240,6 +242,14 @@ export default {
         });
     },
     methods: {
+        SalesReturnApplyFor(id) {
+            this.$router.push({
+                name: "SalesReturnApplyFor",
+                query: {
+                    orderId: id
+                }
+            });
+        },
         OrderLogistics(oid) {
             this.$router.push({
                 name: "OrderLogistics",

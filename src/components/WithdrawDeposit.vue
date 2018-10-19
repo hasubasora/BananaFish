@@ -217,7 +217,8 @@ export default {
                 });
                 return;
             }
-            if (!this.picked) {
+
+            if (!this.picked && this.picked != 0) {
                 this.$dialog.toast({
                     mes: "选择提现方式",
                     timeout: 1500,
@@ -239,6 +240,12 @@ export default {
             }).then(response => {
                 if (response.data.success == 400) {
                     this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 401) {
+                    this.$router.push({
+                        name: "SignIn",
+                        query: { Good_name: "1" }
+                    });
                 }
                 if (response.data.success == 200) {
                     this.price = response.data.balance;

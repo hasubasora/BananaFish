@@ -131,6 +131,7 @@ export const SalesReturnApplyFor=(id)=>{
 export const GoBuySometing = (tc, pt, picked) => {
 
   window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
+  
 }
 //获取支付方式
 export const GetPay = () => {

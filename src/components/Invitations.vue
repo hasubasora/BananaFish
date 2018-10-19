@@ -5,37 +5,36 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
+        <yd-slider autoplay="3000">
+            <yd-slider-item v-for="(bk,index) in datalist" :key="index">
+                    <img :src="bk">
+            </yd-slider-item>
 
-        <yd-flexbox direction="vertical">
+        </yd-slider>
+        <!-- <yd-flexbox direction="vertical">
             <yd-flexbox-item>
                 <div class="carousel-containner">
                     <ul class="wrap">
                         <li class="poster-item" v-for="(bk,index) in datalist" :key="index" :style="cssList[index]" v-touch:swipeleft="pre" v-touch:swiperight="next">
                             <div class="bkImg"><img :src="bk"></div>
                             <div class="bkName">
-                                <!-- <span>《{{bk.goodsName}}》</span> -->
+
                             </div>
                         </li>
                     </ul>
-                    <!-- <div class="bkDes">
-                        <p>{{goodDes}}</p>
-                    </div> -->
                     <img src="../assets/Img/bbbtm.png" alt="" class="bbtm">
-
                 </div>
             </yd-flexbox-item>
             <yd-flexbox-item class="bbtm2bg">
                 <img src="../assets/Img/hhh.png" alt="" class="bbtm2">
                 <div class="hdgz"> <img src="../assets/Img/tubiao.png" alt="">活动规则</div>
                 <p class="ptext">1. 好友在淘宝、超级返、商城返利、理财返利下单，单个商品应付金额>=6 9元，返利到账后，每邀请1位好友您将获得20元的现金奖励，多邀多得， 奖励无上限。（好友的订单不包括1元购、满减等活动订单，同时不包含虚 拟类目商品如话费充值、游戏点卡充值、购买网站会员等）。 2. 您每推荐一个好友注册</p>
-
             </yd-flexbox-item>
-
-        </yd-flexbox>
+        </yd-flexbox> -->
     </div>
 </template>
 <style lang="scss">
-.Invitations{
+.Invitations {
     padding-top: 1rem;
 }
 .hdgz {
@@ -48,7 +47,7 @@
     }
 }
 .ptext {
-    padding: .2rem .5rem .2rem;
+    padding: 0.2rem 0.5rem 0.2rem;
     font-size: 0.26rem;
 }
 .bbtm {
@@ -317,7 +316,7 @@ export default {
                 var startX, startY;
                 //返回角度
                 function GetSlideAngle(dx, dy) {
-                    return Math.atan2(dy, dx) * 180 / Math.PI;
+                    return (Math.atan2(dy, dx) * 180) / Math.PI;
                 }
                 //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
                 function GetSlideDirection(startX, startY, endX, endY) {

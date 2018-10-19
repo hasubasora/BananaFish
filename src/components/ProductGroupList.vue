@@ -3,18 +3,9 @@
         <yd-flexbox direction="vertical">
             <yd-flexbox-item class="ProTop">
                 <img class="haibao" src="../assets/Img/haibao.png" alt="">
-                <!-- <div class="ProductNews">
-                    <img class="Productnew" src="../assets/Img/tt.png" alt="">
-                    <yd-rollnotice autoplay="2000">
-                        <yd-rollnotice-item>
-                            <span style="color:#F00;"> 最新 </span>荣耀V9 3月超级钜惠！</yd-rollnotice-item>
-                        <yd-rollnotice-item>
-                            <span style="color:#F00;"> 最新 </span>3.23京东超级品牌日格力盛典</yd-rollnotice-item>
-                        <yd-rollnotice-item>
-                            <span style="color:#F00;"> 最新 </span>京东服饰 早春新品低至7折</yd-rollnotice-item>
-                    </yd-rollnotice>
-                    <span class="allText">|更多</span>
-                </div> -->
+                <router-link to="/HtmlApp?Good_id=touchouguize">
+                    <img src="../assets/Img/ttgj.png" alt="" class="tttiele">
+                </router-link>
 
             </yd-flexbox-item>
             <yd-flexbox-item>
@@ -136,6 +127,12 @@
 .haibao {
     width: 100%;
 }
+.tttiele {
+    position: absolute;
+    top: 0.2rem;
+    left: 0;
+    width: 2rem;
+}
 .ProTop {
     position: relative;
     // margin-bottom: 1rem;
@@ -230,7 +227,8 @@
         .ProductTitlet {
             font-size: 0.2rem;
             // height: 0.6rem;
-            text-overflow: ellipsis;line-height: .26rem;
+            text-overflow: ellipsis;
+            line-height: 0.26rem;
             overflow: hidden;
             word-wrap: normal;
             text-align: none;
@@ -264,8 +262,8 @@
     button {
         border: 1px solid rgba(102, 102, 102, 1);
         border-radius: 8px;
-        padding: .1rem;
-        margin: .2rem;
+        padding: 0.1rem;
+        margin: 0.2rem;
     }
 }
 .p_progress {
@@ -273,7 +271,7 @@
     padding: 0.2rem;
     position: relative;
     width: 100%;
-    .yd-progressbar{
+    .yd-progressbar {
         height: auto;
     }
     .p_text {
@@ -294,7 +292,7 @@
         font-size: 0.26rem;
         display: flex;
         justify-content: space-around;
-        text-align: right
+        text-align: right;
     }
 }
 </style>
@@ -311,7 +309,7 @@ export default {
         IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop),
         InTheTop: InTheTop => require(["@/components/InTheTop"], InTheTop)
     },
-   
+
     created() {
         // this.$axios({
         //   method: "POST",

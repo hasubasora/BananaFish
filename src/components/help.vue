@@ -1,7 +1,7 @@
 <template>
     <div class="help">
         <yd-navbar title="帮助">
-            <router-link to="/" slot="left">
+            <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>

@@ -121,7 +121,7 @@
             <!-- 工具栏 -->
             <yd-flexbox-item class="navList " style="margin-bottom:1rem;">
                 <yd-flexbox>
-                    <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink(itemt.Link,index)">
+                    <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink_bom(itemt.Link,index)">
                         <img :src="itemt.imgUrl" alt="" class="IconImg">
                         <span class="IconName">{{itemt.iconName}}</span>
                     </yd-flexbox-item>
@@ -181,7 +181,7 @@ export default {
                 {
                     iconName: "帮助",
                     imgUrl: require("../assets/Img/bz.png"),
-                    Link: 'this.GetConfig.groupRulesUr.split('/')[2]'
+                    Link: "help"
                 },
                 {
                     iconName: "商务合作",
@@ -212,32 +212,50 @@ export default {
             LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.GetConfig = response.data.data;
-                console.log(this.GetConfig.groupRulesUr.split('/'));
+                console.log(this.GetConfig.groupRulesUr.split("/"));
             }
         });
     },
     methods: {
-        ToLink(url, num, tit) {
-            // switch (num) {
-            //     case 3:
-            //           this.$router.push({
-            //         name: url,
-            //         query: { plan: num, Titles: tit }
-            //     });
-            //         break;
-            
-            //     default:
-            //         break;
-            // }
-            console.log(num);
-            if (num == 1) {
-                window.location.href = this.GetConfig.customerServiceUrl;
-            } else {
-                this.$router.push({
-                    name: url,
-                    query: { plan: num, Titles: tit }
-                });
+        ToLink_bom(url, num, tit) {
+            switch (num) {
+                case 0:
+                    this.$router.push({
+                        name: url,
+                    });
+                    break;
+                case 1:
+                    window.location.href = this.GetConfig.customerServiceUrl;
+                    break;
+                case 2:
+                    this.$router.push({
+                        name: url,
+                        query: { plan: num, Titles: tit }
+                    });
+                    break;
+                case 3:
+                    this.$router.push({
+                        name: url,
+                        query: { plan: num, Good_id: "shangwuhezuo" }
+                    });
+                    break;
+                case 4:
+                    this.$router.push({
+                        name: url,
+                        query: { plan: num, Good_id: "fuwuxieyi" }
+                    });
+                    break;
+                default:
+                    break;
             }
+            console.log(num);
+        },
+        ToLink(url, num, tit) {
+            console.log(num);
+            this.$router.push({
+                name: url,
+                query: { plan: num, Titles: tit }
+            });
         },
         GoMyAgent() {
             this.$router.push({ name: "MyAgent" });
