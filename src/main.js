@@ -53,7 +53,6 @@ export const LOGIN_SUCCESS = (success) => {
       break;
     case 300:
       console.log('请求错误，请刷新重试！');
-
       break;
     case 400:
       console.log('你还没有登陆，请登陆！');
@@ -178,7 +177,8 @@ export let CartNum
 const store = new Vuex.Store({
   state: { //需要储存的数据
     counts: 0,
-    phoneSizeId: ''
+    phoneSizeId: '',
+    SetGoods:null
   },
   //getters
   getters: { //获取状态及里面的数据
@@ -191,7 +191,7 @@ const store = new Vuex.Store({
     // this.$store.commit('increment', this.price) //触发
     increment(state, price) { //state 来改变 cound
       // 变更状态
-      state.counts = price
+      state.SetGoods = price
     },
 
     decrement() {

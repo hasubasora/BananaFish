@@ -23,23 +23,32 @@
                                 <div v-if="Grouporder==''" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无拔得头筹商品哦~去逛逛吧~</div>
 
                                 <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
-                                    <div class="Grouporder_top">
-                                        <span class="CurrentPeriod">第{{item.CurrentPeriod}}期</span>
-                                    </div>
-                                    <div class="Grouporder_center">
-                                        <div class="Grouporder_center_img">
-                                            <img class="gjtx2" :src="item.UserIcon" alt="">
-                                            <img class="gjtx1" src="../assets/Img/gjtx.png" alt="">
+                                    <!-- 上半截 -->
+                                    <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i class="c-red">{{item.NickName}}</i>拔得头筹</span></div>
+                                    <!-- 下半截 -->
+                                    <div class="ModelProduct" v-if="item.ModelProduct">
+                                        <!-- 左边 -->
+                                        <div class="ModelProductLeft">
+                                            <span class="tag titleColor">本期头筹奖品</span>
+                                            <img class="GoodImg" :src="item.ModelProduct.ProductImg" alt="">
+                                            <p class="GoodTitle">{{item.ModelProduct.ProductTitle}}</p>
+                                            <div><span>市场价</span> <span>{{item.ModelProduct.MarketPrice}}</span></div>
+                                            <p>查看本期头筹</p>
                                         </div>
-                                        <div class="Grouporder_center_text">
-                                            <p class="gj"><img src="../assets/Img/gj.png" alt="">
-                                                <span>头筹中奖号码</span>
-                                            </p>
-                                            <div class="fontTel"> {{item.LuckerNumber}}</div>
-                                            <div class="OrderTitle"> {{item.OrderTitle}}</div>
-                                            <div>头筹用户:{{item.NickName}}</div>
-                                            <div>参与时间:{{item.CreateTime}}</div>
-                                            <div>计算规则:{{item.Formula}}</div>
+                                        <!-- 右边 -->
+                                        <div class="ModelProductLeft">
+                                            <p class="ModelProductWin"><img src="../assets/Img/gj.png" alt=""><span>头筹中奖号码 {{item.ModelProduct.WinnerNumber}}</span></p>
+                                            <div class="ModelProductMsg">
+                                                <h5>本期中奖者消费：<strong>{{item.ModelProduct.WinnerAmount}}</strong></h5>
+                                                <span>头筹人数：{{item.TotalNum}}人/次 </span>
+                                                <span>结束时间：{{item.EndTime}} </span>
+                                                <span>本期参考期数：{{item.ModelProduct.ReferencePeriod}} </span>
+                                                <span>本期参考开奖号码：{{item.ModelProduct.ReferenceLotteryNumber}} </span>
+                                                <div class="ModelProductMsgBom">
+                                                    <button class="orderBtn grayBtn">第TCG{{item.GroupId}}期</button>
+                                                    <router-link :to="item.Link" class="linkBom titleColor">去权威网站查看</router-link>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -57,70 +66,80 @@
 </template>
 <style lang="scss">
 .Grouporder {
+    border-radius: 5px;
     margin: 0.3rem;
-    height: 3rem;
+    // height: 3rem;
     background-color: #fff;
     position: relative;
-    .Grouporder_top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
+    font-size: 0.26rem;
+    .UserIcon {
+        padding: 0.2rem;
         text-align: center;
-        .CurrentPeriod {
-            background: #ff5f17;
-            padding: 0 0.3rem;
-            color: #fff;
+        border-bottom: 1px solid #f2f2f2;
+        img {
+            width: 0.5rem;
+            vertical-align: top;
+            margin-right: 0.2rem;
+            border-radius: 50px;
         }
     }
-    .Grouporder_center {
+    .ModelProduct {
         display: flex;
-        .Grouporder_center_img {
-            width: 3rem;
+        .ModelProductLeft {
+            &:nth-last-child(1) {
+                border-left: 1px solid #f2f2f2;
+            }
+            padding: 0.2rem;
             position: relative;
-            .gjtx1 {
+            display: inline-block;
+            .tag {
                 position: absolute;
-                top: 0rem;
-                left: 0rem;
-                height: 3rem;
-                width: 3rem;
+                color: #fff;
+                top: 0;
+                left: 0;
+                height: 0.5rem;
+                line-height: 0.5rem;
+                padding: 0 0.2rem;
+                border-top-right-radius: 50px;
+                border-bottom-right-radius: 50px;
             }
-            .gjtx2 {
-                position: absolute;
-                height: 1.8rem;
-                width: 1.8rem;
-                top: 0.5rem;
-                left: 0.4rem;
-                border-radius: 50%;
-            }
-        }
-        .Grouporder_center_text {
-            flex: 1;
-            padding-top: 0.5rem;
-            img {
-                width: 0.4rem;
-            }
-            .gj {
-                > span {
-                    vertical-align: super;
-                    margin-left: 0.2rem;
+            .ModelProductWin {
+                padding: 0.26rem;
+                // border: 1px solid #666666;
+                box-shadow: 0 0 1px 1px #666;
+                border-radius: 5px;
+                text-align: center;
+                img {
+                    vertical-align: middle;
+                    width: 0.3rem;
                 }
             }
-            .orange {
-                color: #ff5f17;
+            .ModelProductMsg {
+                span {
+                    display: block;
+                    line-height: 0.4rem;
+                    font-size: 0.28rem;
+                }
+                .ModelProductMsgBom {
+                    .linkBom {
+                        color: #fff;
+                        height: 0.5rem;
+                        line-height: 0.5rem;
+                        display: inline-block;
+                        padding: 0 0.2rem;
+                    }
+                }
             }
-            .fontTel {
-                font-size: 0.5rem;
-                @extend .orange;
-            }
-            .OrderTitle {
-                font-size: 0.2rem;
-                @extend .orange;
-                overflow: hidden;
-                width: 4rem;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
+        }
+        .GoodTitle {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 2rem;
+        }
+        .GoodImg {
+            width: 2rem;
+            margin-top: 0.5rem;
         }
     }
 }
@@ -163,33 +182,8 @@
 }
 .ProductGroupList {
     margin-bottom: 1rem;
-    // background: url("../assets/Img/bg.jpg") center;
     background-size: 100%;
-    // .ProductNews {
-    //     width: 6.5rem;
-    //     position: absolute;
-    //     top: 0rem;
-    //     right: 0.5rem;
-    //     // background: #f9d86c;
-    //     border-radius: 15px;
-    //     margin: auto;
-    //     display: flex;
-    //     margin-bottom: 1rem;
-    //     .Productnew {
-    //         width: 1rem;
-    //         height: 0.25rem;
-    //         margin: 0.15rem 0.1rem;
-    //     }
-    //     // .yd-rollnotice {
-    //     //     background: #f9d86c;
-    //     // }
-    //     .allText {
-    //         height: 0.5rem;
-    //         margin: 0 0.1rem;
-    //         line-height: 0.5rem;
-    //         width: 1rem;
-    //     }
-    // }
+
     .yd-tab-panel {
         background: transparent;
         margin-bottom: 1rem;
@@ -311,18 +305,6 @@ export default {
     },
 
     created() {
-        // this.$axios({
-        //   method: "POST",
-        //   data: {},
-        //   url: this.$server.serverUrl + "/index/getwinnergrouporder",
-        //   responseType: "json"
-        // }).then(response => {
-        //   if (response.data.success == 200) {
-        //     this.TheTop = response.data.rows;
-        //     console.log(this.TheTop);
-        //   }
-        // });
-
         this.$axios({
             method: "POST",
             data: {},

@@ -212,7 +212,7 @@ export default {
             LOGIN_SUCCESS(response.data.success);
             if (response.data.success == 200) {
                 this.GetConfig = response.data.data;
-                console.log(this.GetConfig.groupRulesUr.split("/"));
+                // console.log(this.GetConfig.groupRulesUr.split("/"));
             }
         });
     },

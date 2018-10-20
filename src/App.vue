@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <router-view/>
+        <router-view />
     </div>
 </template>
 
@@ -50,5 +50,18 @@ body {
 }
 .titleColor {
     background: linear-gradient(to left, #ea3f32, #ed7947);
+}
+.orderBtn {
+    height: 0.5rem;
+    width: 1.4rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 0.3rem;
+}
+.grayBtn {
+    background: #fff;
+    border: 1px solid;
+    color: #555;
 }
 </style>

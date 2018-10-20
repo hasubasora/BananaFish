@@ -4,7 +4,6 @@
             <router-link to="" @click.native="GoShopGoodsList" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-
         </yd-navbar>
         <div class="OrderTitle">
             <span class="OrderTitle_text">{{OrderIdList.OrderStatusStr}}</span>
@@ -28,14 +27,15 @@
                 <yd-flexbox-item>
                     <p class="OrderGoodTitle">{{item.ProductTitle}}</p>
                     <span class="AttValueName">{{item.AttValueName}}&nbsp;</span>
+
                     <div class="Integral">
-                        <span>积分奖励{{item.Integral}}分</span>
-                        <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor()" type="button">申请退货</button>
+                        <div class="IntegralText"> <span>积分奖励{{item.Integral}}分</span></div>
                     </div>
                 </yd-flexbox-item>
                 <div class="OrderPrice">
                     <span>￥{{item.BuyPrice}}</span>
                     <span>x{{item.BuyNumber}}</span>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor(item.ProductId,item)" type="button">申请退货</button>
                 </div>
             </yd-flexbox>
         </div>
@@ -133,17 +133,22 @@
         }
         .AttValueName {
             display: block;
-            height: 0.5rem;
+            // height: 0.5rem;
             font-size: 0.2rem;
             color: #ccc;
         }
         .Integral {
+            display: flex;
+            width: 100%;
             text-align: left;
-            > span {
-                background: #ffe1df;
-                color: #ea3f32;
-                padding: 0.02rem 0.1rem;
-                font-size: 0.2rem;
+            .IntegralText {
+                flex: 1;
+                span {
+                    background: #ffe1df;
+                    color: #ea3f32;
+                    padding: 0.02rem 0.1rem;
+                    font-size: 0.2rem;
+                }
             }
         }
     }
@@ -160,29 +165,28 @@
         bottom: 0;
         left: 0;
         width: 100%;
-      
     }
-      .orderBtn {
-            height: 0.5rem;
-            width: 1.4rem;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-            margin-top: 0.3rem;
-        }
-        .orangeBtn {
-            color: #fff;
-            background: linear-gradient(
-                -90deg,
-                rgba(234, 63, 50, 1),
-                rgba(237, 121, 71, 1)
-            );
-        }
-        .grayBtn {
-            background: #fff;
-            border: 1px solid;
-            color: #555;
-        }
+    .orderBtn {
+        height: 0.5rem;
+        width: 1.4rem;
+        border: none;
+        border-radius: 5px;
+        outline: none;
+        margin-top: 0.3rem;
+    }
+    .orangeBtn {
+        color: #fff;
+        background: linear-gradient(
+            -90deg,
+            rgba(234, 63, 50, 1),
+            rgba(237, 121, 71, 1)
+        );
+    }
+    .grayBtn {
+        background: #fff;
+        border: 1px solid;
+        color: #555;
+    }
     .OrderListMsg {
         background: #fff;
         padding: 0.3rem;
@@ -242,11 +246,13 @@ export default {
         });
     },
     methods: {
-        SalesReturnApplyFor(id) {
+        SalesReturnApplyFor(id,obj) {
+            this.$store.commit('increment', obj) //触发
             this.$router.push({
                 name: "SalesReturnApplyFor",
                 query: {
-                    orderId: id
+                    oid: this.$route.query.OrderId,
+                    bid: id
                 }
             });
         },
