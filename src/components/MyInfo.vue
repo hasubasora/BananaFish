@@ -221,7 +221,7 @@ export default {
             switch (num) {
                 case 0:
                     this.$router.push({
-                        name: url,
+                        name: url
                     });
                     break;
                 case 1:
@@ -252,6 +252,9 @@ export default {
         },
         ToLink(url, num, tit) {
             console.log(num);
+            if (num == 4) {
+                num = 7;
+            }
             this.$router.push({
                 name: url,
                 query: { plan: num, Titles: tit }

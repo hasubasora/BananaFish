@@ -4,7 +4,7 @@
             <router-link to="/ShopGoodsList/?plan=0" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="/ShopGoodsList/?plan=0" slot="right">
+            <router-link to="" @click.native="ReturnApplication" slot="right">
                 提交
             </router-link>
         </yd-navbar>
@@ -42,14 +42,20 @@
                 <div>
                     <h5>退款信息</h5>
                 </div>
-                <div><img src="" alt="" srcset=""><span>退货地址：</span></div>
-                <div>退款原因： ></div>
-                <div>退款金额： ></div>
-                <div>申请件数：1></div>
-                <div>申请时间：201810-16 12:08 ></div>
+                <div class="GoodId"><img :src="GoodId.ProductImg" alt="" srcset=""><span>{{GoodId.ProductTitle}}退款信息退款信息退款信息退款信息退款信息</span></div>
+                <yd-cell-item arrow type="label">
+                    <span slot="left">退款原因：</span>
+                    <select slot="right" v-model="ExpressageSelect" @change="ExpressageSelects">
+                        <option value=""></option>
+                        <option :value=index v-if="lsLogisticsCompany" v-for="(item, index) in lsLogisticsCompany" :key="index">{{item.LogisticsCompanyName}}</option>
+                    </select>
+                </yd-cell-item>
+                <div>退款金额：{{GoodId.BuyPrice}}</div>
+                <div>申请件数：{{GoodId.BuyNumber}}</div>
+                <div>申请时间：{{new Date().getTime()}}</div>
                 <yd-cell-group>
                     <yd-cell-item>
-                        <yd-textarea slot="right" placeholder="请输入您的银行卡卡号和密码" maxlength="50"></yd-textarea>
+                        <yd-textarea v-model="ExpMsg" slot="right" placeholder="请输入您的银行卡卡号和密码" maxlength="50"></yd-textarea>
                     </yd-cell-item>
                 </yd-cell-group>
             </div>
@@ -78,6 +84,19 @@
     .Expressage {
         background: #fff;
     }
+    .GoodId {
+        img {
+            width: 1rem;
+            // border: 1px solid;
+            vertical-align: top;
+        }
+        span {
+            width: 5rem;
+            margin-left: 0.1rem;
+            // border: 1px solid;
+            display: inline-block;
+        }
+    }
 }
 </style>
 <script>
@@ -91,12 +110,38 @@ export default {
             sBtn2: false,
             sBtn3: false,
             Expressage: "",
-            ExpressageSelect: ""
+            ExpressageSelect: "",
+            OrderIdList: "",
+            GoodId: "",
+            ExpMsg: ""
         };
     },
     created() {
+        this.$axios({
+            method: "POST",
+            data: {
+                orderId: this.$route.query.oid
+            },
+            url: this.$server.serverUrl + "/account/getmyorderDetail",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 400) {
+                this.$router.push({ name: "SignIn" });
+            }
+            if (response.data.success == 200) {
+                this.OrderIdList = response.data.rows;
+                console.log(response.data);
+
+                if (this.OrderIdList.OrderId == this.$route.query.oid) {
+                    for (const iterator of this.OrderIdList.LstProduct) {
+                        this.GoodId = iterator;
+                        break;
+                    }
+                }
+            }
+        });
         //退货申请
-        this.ReturnApplication();
+        // this.ReturnApplication();
         //获取退货地址信息
         this.GetReturnAddress();
     },
@@ -104,27 +149,22 @@ export default {
         ExpressageSelects(e) {
             console.log(e);
             console.log(this.ExpressageSelect);
+            console.log(this.ExpMsg);
         },
         ReturnApplication() {
             this.$axios({
                 method: "POST",
                 data: {
-                    OrderId: "",
-                    OrderItemId: "",
+                    OrderId: "" + this.$route.query.oid,
+                    OrderItemId: this.$route.query.bid,
                     ShipmentName: "",
                     ShipmentNumber: "",
-                    RefundInstruction: ""
+                    RefundInstruction: this.ExpMsg
                 },
                 url: this.$server.serverUrl + "/order/ReturnApplication",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
-                if (response.data.success == 200) {
-                    console.log(response.data);
-                    this.CardList = response.data.list;
-                }
+               
             });
         },
         GetReturnAddress() {

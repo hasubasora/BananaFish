@@ -104,7 +104,7 @@
                 border-bottom-right-radius: 50px;
             }
             .ModelProductWin {
-                padding: 0.26rem;
+                padding: 0.2rem;
                 // border: 1px solid #666666;
                 box-shadow: 0 0 1px 1px #666;
                 border-radius: 5px;
@@ -115,6 +115,9 @@
                 }
             }
             .ModelProductMsg {
+                h5 {
+                    line-height: 0.5rem;
+                }
                 span {
                     display: block;
                     line-height: 0.4rem;
