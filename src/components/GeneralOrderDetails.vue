@@ -35,7 +35,7 @@
                 <div class="OrderPrice">
                     <span>￥{{item.BuyPrice}}</span>
                     <span>x{{item.BuyNumber}}</span>
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor(item.ProductId,item)" type="button">申请退货</button>
+                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor(item.OrderItemId,item)" type="button">申请退货</button>
                 </div>
             </yd-flexbox>
         </div>

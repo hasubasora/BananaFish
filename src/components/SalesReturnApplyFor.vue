@@ -4,9 +4,9 @@
             <router-link to="/ShopGoodsList/?plan=0" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" @click.native="ReturnApplication" slot="right">
+            <div @click="ReturnApplication" slot="right">
                 提交
-            </router-link>
+            </div>
         </yd-navbar>
         <div class="SalesGroup">
             <p class="SalesStatus">退款状态</p>
@@ -19,7 +19,7 @@
                 <div class="DangerGroup">
                     <yd-button type="danger" v-if="sBtn" class="titleColor" @click.native="setFocusHander">填写物流单号</yd-button>
                     <yd-button type="danger" v-if="sBtn2" class="titleColor" @click.native="SaveExpressage">保存</yd-button>
-                    <yd-button type="danger" v-if="sBtn3" class="titleColor">修改</yd-button>
+                    <yd-button type="danger" v-if="sBtn3" class="titleColor" @click.native="SelectExpressage">修改</yd-button>
                 </div>
             </div>
             <div class="Expressage" v-if="sBtn2">
@@ -43,16 +43,18 @@
                     <h5>退款信息</h5>
                 </div>
                 <div class="GoodId"><img :src="GoodId.ProductImg" alt="" srcset=""><span>{{GoodId.ProductTitle}}退款信息退款信息退款信息退款信息退款信息</span></div>
-                <yd-cell-item arrow type="label">
+                <yd-cell-item arrow type="label" class="GoodIdItem">
                     <span slot="left">退款原因：</span>
-                    <select slot="right" v-model="ExpressageSelect" @change="ExpressageSelects">
-                        <option value=""></option>
-                        <option :value=index v-if="lsLogisticsCompany" v-for="(item, index) in lsLogisticsCompany" :key="index">{{item.LogisticsCompanyName}}</option>
+                    <select slot="right" v-model="buxih">
+                        <option value="0">不喜欢</option>
+                        <option value="1">不喜欢</option>
+                        <option value="2">不喜欢</option>
+                        <option value="3">不喜欢</option>
                     </select>
                 </yd-cell-item>
                 <div>退款金额：{{GoodId.BuyPrice}}</div>
                 <div>申请件数：{{GoodId.BuyNumber}}</div>
-                <div>申请时间：{{new Date().getTime()}}</div>
+                <div>申请时间：{{new Date().toLocaleDateString()}}{{new Date().toLocaleTimeString()}}</div>
                 <yd-cell-group>
                     <yd-cell-item>
                         <yd-textarea v-model="ExpMsg" slot="right" placeholder="请输入您的银行卡卡号和密码" maxlength="50"></yd-textarea>
@@ -80,6 +82,12 @@
         padding: 0.3rem;
         background: #fff;
         margin-bottom: 0.2rem;
+    }
+    .GoodIdItem {
+        padding: 0;
+        .yd-cell-item:not(:last-child):after {
+            border: none;
+        }
     }
     .Expressage {
         background: #fff;
@@ -113,7 +121,8 @@ export default {
             ExpressageSelect: "",
             OrderIdList: "",
             GoodId: "",
-            ExpMsg: ""
+            ExpMsg: "",
+            buxih: ""
         };
     },
     created() {
@@ -146,26 +155,32 @@ export default {
         this.GetReturnAddress();
     },
     methods: {
+        buxih() {
+            console.log(this.buxih);
+        },
         ExpressageSelects(e) {
             console.log(e);
             console.log(this.ExpressageSelect);
-            console.log(this.ExpMsg);
         },
         ReturnApplication() {
+            if (this.buxih=='') {
+                
+            }
+            if (this.ExpressageSelect=='') {
+                
+            }
             this.$axios({
                 method: "POST",
                 data: {
-                    OrderId: "" + this.$route.query.oid,
+                    OrderId:  this.$route.query.oid,
                     OrderItemId: this.$route.query.bid,
-                    ShipmentName: "",
-                    ShipmentNumber: "",
+                    ShipmentName: this.ExpressageSelect,
+                    ShipmentNumber: this.Expressage,
                     RefundInstruction: this.ExpMsg
                 },
                 url: this.$server.serverUrl + "/order/ReturnApplication",
                 responseType: "json"
-            }).then(response => {
-               
-            });
+            }).then(response => {});
         },
         GetReturnAddress() {
             this.$axios({
@@ -192,6 +207,11 @@ export default {
         SaveExpressage() {
             this.sBtn2 = false;
             this.sBtn3 = true;
+            this.Expressage = this.input10;
+        },
+        SelectExpressage() {
+            this.sBtn2 = true;
+            this.sBtn3 = false;
         }
     }
 };
