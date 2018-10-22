@@ -72,7 +72,9 @@ export default {
         GoHistory(sid) {
             // console.log(sid);
             this.$router.go(-1);
-            this.$dialog.toast({ mes: "请绑定手机" });
+            if (this.$route.query.Good_name == 1) {
+                this.$dialog.toast({ mes: "请绑定手机" });
+            }
         },
         GetImgCode() {
             this.codeImg =

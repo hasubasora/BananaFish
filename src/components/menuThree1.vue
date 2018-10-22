@@ -65,7 +65,8 @@ export default {
             data: {
                 pageindex: 1,
                 pagesize: 10,
-                categoryid: this.$route.params.Group_id
+                categoryid: this.$route.params.Group_id,
+                RecommendType:0
             },
             url: this.$server.serverUrl + "/index/getcategoryproduct",
             responseType: "json"

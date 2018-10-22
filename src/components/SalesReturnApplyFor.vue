@@ -42,8 +42,8 @@
                 <div>
                     <h5>退款信息</h5>
                 </div>
-                <div class="GoodId"><img :src="GoodId.ProductImg" alt="" srcset=""><span>{{GoodId.ProductTitle}}退款信息退款信息退款信息退款信息退款信息</span></div>
-                <yd-cell-item arrow type="label" class="GoodIdItem">
+                <div class="GoodId"><img :src="GoodId.ProductImg" alt="" srcset=""><span>{{GoodId.ProductTitle}}</span></div>
+                <!-- <yd-cell-item arrow type="label" class="GoodIdItem">
                     <span slot="left">退款原因：</span>
                     <select slot="right" v-model="buxih">
                         <option value="0">不喜欢</option>
@@ -51,13 +51,13 @@
                         <option value="2">不喜欢</option>
                         <option value="3">不喜欢</option>
                     </select>
-                </yd-cell-item>
-                <div>退款金额：{{GoodId.BuyPrice}}</div>
+                </yd-cell-item> -->
+                <div>退款金额：￥{{GoodId.BuyPrice}}</div>
                 <div>申请件数：{{GoodId.BuyNumber}}</div>
                 <div>申请时间：{{new Date().toLocaleDateString()}}{{new Date().toLocaleTimeString()}}</div>
                 <yd-cell-group>
                     <yd-cell-item>
-                        <yd-textarea v-model="ExpMsg" slot="right" placeholder="请输入您的银行卡卡号和密码" maxlength="50"></yd-textarea>
+                        <yd-textarea v-model="ExpMsg" slot="right" placeholder="请输入您的退货原因" maxlength="50"></yd-textarea>
                     </yd-cell-item>
                 </yd-cell-group>
             </div>
@@ -68,6 +68,7 @@
 .SalesGroup {
     margin-top: 1rem;
     font-size: 0.26rem;
+    line-height: 0.5rem;
     .DangerGroup {
         text-align: center;
     }
@@ -85,8 +86,19 @@
     }
     .GoodIdItem {
         padding: 0;
-        .yd-cell-item:not(:last-child):after {
-            border: none;
+        line-height: 0.1rem;
+        .yd-cell-item {
+            &:after {
+                border: none;
+            }
+        }
+        .yd-cell-left {
+        }
+        .yd-cell-right {
+            padding: 0;
+            select {
+                height: 0.5rem;
+            }
         }
     }
     .Expressage {
@@ -155,24 +167,42 @@ export default {
         this.GetReturnAddress();
     },
     methods: {
-        buxih() {
-            console.log(this.buxih);
-        },
         ExpressageSelects(e) {
             console.log(e);
             console.log(this.ExpressageSelect);
         },
         ReturnApplication() {
-            if (this.buxih=='') {
-                
+            console.log(this.$route.query.oid);
+            console.log(this.$route.query.bid);
+            console.log(this.ExpressageSelect);
+            console.log(this.Expressage);
+            console.log(this.ExpMsg);
+
+            if (!this.input10) {
+                this.$dialog.toast({
+                    mes: "未输入订单号",
+                    timeout: 1500,
+                    icon: "error"
+                    // callback: () => {
+                    //     this.$dialog.alert({ mes: "给你一次重来的机会！" });
+                    // }
+                });
+                return;
             }
-            if (this.ExpressageSelect=='') {
-                
+
+            if (!this.ExpressageSelect) {
+                this.$dialog.toast({
+                    mes: "未选择快递公司",
+                    timeout: 1500,
+                    icon: "error"
+                });
+                return;
             }
+            return;
             this.$axios({
                 method: "POST",
                 data: {
-                    OrderId:  this.$route.query.oid,
+                    OrderId: this.$route.query.oid,
                     OrderItemId: this.$route.query.bid,
                     ShipmentName: this.ExpressageSelect,
                     ShipmentNumber: this.Expressage,
@@ -205,6 +235,25 @@ export default {
             // this.$refs.input10.setFocus();
         },
         SaveExpressage() {
+            if (!this.input10) {
+                this.$dialog.toast({
+                    mes: "未输入订单号",
+                    timeout: 1500,
+                    icon: "error"
+                    // callback: () => {
+                    //     this.$dialog.alert({ mes: "给你一次重来的机会！" });
+                    // }
+                });
+                return;
+            }
+            if (!this.ExpressageSelect) {
+                this.$dialog.toast({
+                    mes: "未选择快递公司",
+                    timeout: 1500,
+                    icon: "error"
+                });
+                return;
+            }
             this.sBtn2 = false;
             this.sBtn3 = true;
             this.Expressage = this.input10;

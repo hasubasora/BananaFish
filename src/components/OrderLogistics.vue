@@ -5,7 +5,8 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
-        <yd-timeline>
+        <p v-if="OrderLog" style="text-align:center;padding:1rem 0;font-size:.28rem;"> — 暂无物流信息 —</p>
+        <yd-timeline v-if="!OrderLog">
             <yd-timeline-item v-for="(item, index) in OrderLog" :key="index">
                 <p>{{item.content}}</p>
                 <p style="margin-top: 10px;">{{item.createTime}}</p>
@@ -47,7 +48,7 @@ export default {
     },
     methods: {
         GoHistory(sid) {
-            this.$router.push({ name: 'ShopGoodsList', query: { plan: 3 } });
+            this.$router.push({ name: "ShopGoodsList", query: { plan: 3 } });
             // this.$router.go(-1);
         },
         OrderLogistics(id) {

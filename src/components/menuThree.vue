@@ -94,7 +94,8 @@ export default {
                 data: {
                     pageindex: this.page,
                     pagesize: this.pageSize,
-                    categoryid: this.Group_id
+                    categoryid: this.Group_id,
+                    RecommendType: 0
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct"
             }).then(response => {
@@ -144,7 +145,8 @@ export default {
                 data: {
                     pageindex: 1,
                     pagesize: 10,
-                    categoryid: Group_id
+                    categoryid: Group_id,
+                    RecommendType: 0
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct",
                 responseType: "json"
