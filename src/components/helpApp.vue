@@ -7,12 +7,20 @@
                 </div>
             </yd-accordion-item>
         </yd-accordion>
+        <p class="Copyright">Copyright 2018&copy;广州迅凌电子科技有限公司 版权所有</p>
     </div>
 </template>
 <style lang="scss">
 .help {
     img {
         width: 100% !important;
+    }
+    .Copyright {
+        width: 3rem;
+        text-align: center;
+        margin: 2rem auto;
+        border: dashed red 3px;
+        border-radius: 8px;
     }
 }
 </style>

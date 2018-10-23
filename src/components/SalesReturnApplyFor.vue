@@ -9,7 +9,7 @@
             </div>
         </yd-navbar>
         <div class="SalesGroup">
-            <p class="SalesStatus">退款状态</p>
+            <!-- <p class="SalesStatus">退款状态</p> -->
             <div class="SalesGroupText" v-if="address">
                 <div>收货人：{{address.SysReceiver}}</div>
                 <div>联系方式：{{address.SysPhone}}</div>

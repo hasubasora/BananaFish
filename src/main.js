@@ -57,7 +57,7 @@ export const LOGIN_SUCCESS = (success) => {
     case 400:
       console.log('你还没有登陆，请登陆！');
       router.push({
-        name: "SignIn",
+        name: "SignIn",    
         query: {
           Good_name: "2"
         }
@@ -68,7 +68,7 @@ export const LOGIN_SUCCESS = (success) => {
       router.push({
         name: "SignIn",
         query: {
-          Good_name: "1"
+          Good_name: "1" //1是绑定手机 2是登陆
         }
       });
       break;

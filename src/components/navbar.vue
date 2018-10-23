@@ -49,7 +49,7 @@ export default {
                 {
                     src: require("../assets/Img/nav4.png"),
                     name: "积分指数",
-                    href: "MyRedData"
+                    href: "RedData"
                 },
                 {
                     src: require("../assets/Img/nav5.png"),

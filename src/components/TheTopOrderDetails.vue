@@ -25,7 +25,7 @@
 
             </div>
         </yd-preview-header>
-        <yd-cell-group title="支付方式">
+        <yd-cell-group title="支付方式" v-if="OrderIdList.OrderStatus==0">
             <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
                 <span slot="left">{{PayListitem.payName}}</span>
                 <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />

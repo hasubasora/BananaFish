@@ -302,6 +302,7 @@ export default {
     }
     .IntegralProductTitle {
         height: 0.8rem;
+        color: #111;
         text-overflow: ellipsis;
         overflow: hidden;
         text-align: left;
@@ -314,7 +315,7 @@ export default {
     }
     .Integral {
         text-align: left;
-        margin-left: 0.2rem;
+        // margin-left: 0.2rem;
         > span {
             background: #ffe1df;
             color: #ea3f32;

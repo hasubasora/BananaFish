@@ -33,14 +33,15 @@
                 </div>
                 <div class="showtime" v-for="(item, index) in TopObjectList" :key="index">
                     <showtime :TimeSrc="item"></showtime>
-                    <div class="bannerPad" v-if="item.RecommendType==0">
+                    <div class="bannerPad" v-if="item.RecommendType!=2">
                         <img :src=item.productAd[0].Src alt="广告">
                         <GoodsList :post-title="item"></GoodsList>
                     </div>
-                    <div class="bannerPad" v-if="item.RecommendType==1">
+                    <div class="bannerPad" v-if="item.RecommendType==2">
                         <img :src=item.productAd[0].Src alt="广告">
                         <GoodsList2 :post-head="item"></GoodsList2>
                     </div>
+                  
                 </div>
             </div>
         </keep-alive>
@@ -59,7 +60,7 @@ export default {
             banners: [],
             headNews: [],
             InProfit: [],
-            MessageNum:0
+            MessageNum: 0
         };
     },
     methods: {
@@ -71,14 +72,14 @@ export default {
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 200) {
-                    this.MessageNum=response.data.num
+                    this.MessageNum = response.data.num;
                     console.log(response.data.num);
                 }
             });
         }
     },
     created() {
-        this.GetMyMessageNum()
+        this.GetMyMessageNum();
         this.$axios({
             method: "POST",
             data: {},

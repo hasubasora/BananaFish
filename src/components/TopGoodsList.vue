@@ -120,6 +120,7 @@ export default {
         this.$dialog.loading.open("拼命加载中...>_<");
         setTimeout(params => {
             console.log("数据夹菜中");
+            console.log(Qnum);
             this.tab2 = Number(Qnum);
             this.items[Number(Qnum)].content = this.GoodsHtml;
             this.$dialog.loading.close();
@@ -362,6 +363,7 @@ export default {
     }
     .IntegralProductTitle {
         height: 0.8rem;
+        color: #111;
         text-overflow: ellipsis;
         overflow: hidden;
         text-align: none;

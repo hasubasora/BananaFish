@@ -2,7 +2,7 @@
     <div class="myinfo" v-if="UserInfo.currentUser">
         <yd-flexbox direction="vertical">
             <yd-flexbox-item class="GroupSetLink">
-                <router-link to="/Seting"> <img src="../assets/Img/set.png" alt="" class="SetLink"></router-link>
+                <!-- <router-link to="/Seting"> <img src="../assets/Img/set.png" alt="" class="SetLink"></router-link> -->
 
             </yd-flexbox-item>
             <yd-flexbox-item class="GroupSetInfo">
@@ -252,9 +252,6 @@ export default {
         },
         ToLink(url, num, tit) {
             console.log(num);
-            if (num == 4) {
-                num = 7;
-            }
             this.$router.push({
                 name: url,
                 query: { plan: num, Titles: tit }
@@ -264,8 +261,7 @@ export default {
             this.$router.push({ name: "MyAgent" });
         },
         GoMyEarnings() {
-            this.$router.push({ name: "MyEarnings" });
-        },
+            this.$router.push({ name: "MyEarnings" });        },
         GetUserInfo() {
             this.$axios({
                 method: "POST",
