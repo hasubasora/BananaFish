@@ -44,6 +44,11 @@ Vue.use(VCharts)
 
 Vue.config.productionTip = false
 
+/**
+ * 微信SDK
+ */
+import wx from 'weixin-js-sdk'
+Vue.prototype.$wx = wx;
 
 
 export const LOGIN_SUCCESS = (success) => {
@@ -76,7 +81,6 @@ export const LOGIN_SUCCESS = (success) => {
       break;
   }
 }
-
 
 export const GetUnTime = (d, n) => {
   var date3 = d * 1000; //时间差的毫秒数
@@ -215,9 +219,8 @@ new Vue({
   el: '#app',
   store,
   router,
-
   components: {
-    App
+  App,
   },
   template: '<App/>'
 })

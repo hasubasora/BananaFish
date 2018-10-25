@@ -45,7 +45,7 @@ export default new Router({
       component: ItemDescription => require(["@/components/ItemDescription"], ItemDescription),
     },
     { //商品详细
-      path: '/GeneralItemDescription/:Good_id',
+      path: '/GeneralItemDescription',
       name: 'GeneralItemDescription',
       component: GeneralItemDescription => require(["@/components/GeneralItemDescription"], GeneralItemDescription),
     }, { //登陆
@@ -187,6 +187,7 @@ export default new Router({
     }, { //HTML
       path: '/OrderLogisticsApp',
       name: 'OrderLogisticsApp',
+      
       component: OrderLogisticsApp => require(["@/components/OrderLogisticsApp"], OrderLogisticsApp),
     }, { //HTML
       path: '/HtmlApp',
@@ -196,6 +197,10 @@ export default new Router({
       path: '/SalesReturnApplyFor',
       name: 'SalesReturnApplyFor',
       component: SalesReturnApplyFor => require(["@/components/SalesReturnApplyFor"], SalesReturnApplyFor),
+    }, { //落地页
+      path: '/LandingPage',
+      name: 'LandingPage',
+      component: LandingPage => require(["@/components/LandingPage"], LandingPage),
     },
   ]
 })

@@ -33,7 +33,7 @@ export default {
         GoDecs() {
             this.$router.push({
                 name: "GeneralItemDescription",
-                params: { Good_id: this.$route.params.ItemGood_id }
+                query: { Good_id: this.$route.params.ItemGood_id }
             });
         },
         GetProductDetailDesc() {

@@ -1,15 +1,18 @@
 <template>
     <div class="www">
         <yd-navbar slot="navbar" height='.8rem' fixed>
-            <router-link to="" @click.native="GoHistory" slot="left">
+            <div @click="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
-            </router-link>
+            </div>
 
             <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px">
                 <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]">商品</yd-flexbox-item>
                 <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">详情</yd-flexbox-item>
-
             </yd-flexbox>
+
+            <div @click="GoHistory" slot="right">
+                <yd-icon name="share3"></yd-icon>
+            </div>
 
         </yd-navbar>
 
@@ -103,7 +106,7 @@
                     <yd-tabbar-item title="首页" link="/" active>
                         <yd-icon name="home" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
                     </yd-tabbar-item>
-                    <yd-tabbar-item title="客服" link="/" active>
+                    <yd-tabbar-item title="客服" link=" " @click.native="ToKefo" active>
                         <!-- <span slot="icon" class="marginTop02 iconfont icon-icon2" style="font-size:.4rem"></span> -->
                         <span slot="icon" class="marginTop02 iconfont icon-54" style="font-size:.5rem; color:#ccc"></span>
                     </yd-tabbar-item>
@@ -111,7 +114,6 @@
                         <yd-icon name="shopcart" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
                         <yd-badge slot="badge" type="danger">{{storeText?storeText:this.productNum}}</yd-badge>
                     </yd-tabbar-item>
-
                 </div>
 
                 <div class="yd-nav-right-button">
@@ -311,13 +313,6 @@
     }
     .yd-scrollnav {
         .yd-scrollnav-tab {
-            // position: absolute;
-            z-index: 999;
-            width: 2.5rem;
-            top: 0.1rem;
-            left: 2.2rem;
-            // opacity: 0;
-            // top: -0.6rem;
             .yd-scrollnav-toggle {
                 display: none;
             }
@@ -452,6 +447,7 @@ export default {
                 { label: "评价" }
                 // { label: "推荐" }
             ],
+            GetConfig: [],
             GoodsList: [],
             GoodsHtml: "",
             show: false,
@@ -489,15 +485,28 @@ export default {
     },
     created() {
         // console.log(location);
-        sessionStorage.setItem("s", this.$route.params.Good_id);
-        localStorage.setItem("s", this.$route.params.Good_id);
-        console.log(this.$route.params.Good_id);
+
+        sessionStorage.setItem("s", this.$route.query.Good_id);
+        localStorage.setItem("s", this.$route.query.Good_id);
+        console.log(this.$route.query.Good_id);
         // 商品信息
         this.GetProductDetail();
         // 商品详情
         this.GetProductDetailDesc();
         //购物车数量
         this.GetShoppingCartNum();
+        this.$axios({
+            method: "POST",
+            data: {},
+            url: this.$server.serverUrl + "/index/GetConfig",
+            responseType: "json"
+        }).then(response => {
+            LOGIN_SUCCESS(response.data.success);
+            if (response.data.success == 200) {
+                this.GetConfig = response.data.data;
+                // console.log(this.GetConfig.groupRulesUr.split("/"));
+            }
+        });
     },
     computed: {
         storeText() {
@@ -505,6 +514,9 @@ export default {
         }
     },
     methods: {
+        ToKefo() {
+            window.location.href = this.GetConfig.customerServiceUrl;
+        },
         NavCallback() {
             this.flexNav = !this.flexNav;
         },
@@ -529,7 +541,7 @@ export default {
             });
         },
 
-        GoHistory(sid) {
+        GoHistory() {
             this.$router.go(-1);
         },
 
@@ -600,9 +612,9 @@ export default {
                             }
                         }
 
-                        console.log("_index");
-                        console.log(_index);
-                        console.log(this.selectSKUOne);
+                        // console.log("_index");
+                        // console.log(_index);
+                        // console.log(this.selectSKUOne);
 
                         //规格数量
                         switch (this.GotupLen) {
@@ -618,14 +630,14 @@ export default {
                                 break;
                             case 2:
                                 if (buySku) {
-                                    console.log("buySku");
-                                    console.log(buySku);
+                                    // console.log("buySku");
+                                    // console.log(buySku);
                                     this.Stock = buySku.Stock;
                                     this.price = buySku.SalePrice;
                                     this.buyID = buySku.AttIds;
-                                    console.log("点上面的ID");
-                                    console.log(buySku.AttIds);
-                                    console.log(buySku.AttValueName);
+                                    // console.log("点上面的ID");
+                                    // console.log(buySku.AttIds);
+                                    // console.log(buySku.AttValueName);
                                 }
 
                                 //121:641|122:490
@@ -635,12 +647,12 @@ export default {
                                 break;
                         }
 
-                        console.log("库存" + this.Stock);
-                        console.log("价格" + this.price);
-                        console.log(this.buyID);
-                        console.log(
-                            "***************************************************"
-                        );
+                        // console.log("库存" + this.Stock);
+                        // console.log("价格" + this.price);
+                        // console.log(this.buyID);
+                        // console.log(
+                        //     "***************************************************"
+                        // );
                         // }
                     } else if (vid == 110) {
                         this.elementAttrSku = []; //清空xy选择
@@ -679,7 +691,7 @@ export default {
         },
         //用的是这个
         addCart(i, key) {
-            // console.log(i);console.log(key);console.log(this.buyID); console.log(this.spinner);console.log(this.$route.params.Good_id);
+            // console.log(i);console.log(key);console.log(this.buyID); console.log(this.spinner);console.log(this.$route.query.Good_id);
             if (this.Gotup && !this.show) {
                 this.show = true;
                 this.key = key;
@@ -711,7 +723,7 @@ export default {
                     this.$axios({
                         method: "POST",
                         data: {
-                            productid: this.$route.params.Good_id,
+                            productid: this.$route.query.Good_id,
                             attids: this.buyID,
                             buynum: this.spinner
                         },
@@ -746,7 +758,7 @@ export default {
                     this.$axios({
                         method: "POST",
                         data: {
-                            productid: this.$route.params.Good_id,
+                            productid: this.$route.query.Good_id,
                             attids: this.buyID,
                             buynum: this.spinner
                         },
@@ -781,8 +793,8 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    productid: this.$route.params.Good_id
-                        ? this.$route.params.Good_id
+                    productid: this.$route.query.Good_id
+                        ? this.$route.query.Good_id
                         : localStorage.getItem("s")
                 },
                 url: this.$server.serverUrl + "/index/getproductdetail",
@@ -834,7 +846,7 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    productid: this.$route.params.Good_id
+                    productid: this.$route.query.Good_id
                 },
                 url: this.$server.serverUrl + "/index/getproductdetaildesc",
                 responseType: "json"
@@ -846,6 +858,139 @@ export default {
                     this.GoodsHtml = response.data.object;
                     // console.log(this.GoodsHtml);
                 }
+            });
+        },
+        //微信分享
+        getConfig() {
+            let url = location.href.split("#")[0]; //获取锚点之前的链接
+            this.$http
+                .get("/index.php", {
+                    params: {
+                        url: url
+                    }
+                })
+                .then(response => {
+                    let res = response.data;
+                    this.wxInit(res);
+                });
+        },
+        // 微信分享
+        wxInit(res) {
+            let url = location.href.split("#")[0]; //获取锚点之前的链接
+            let links = url + "#/Food/" + this.$route.params.id;
+            let title = this.detail.name + "-嘌呤查";
+            let desc = "了解更多知识，请关注“嘌呤查”公众号";
+            let imgUrl = this.thumb;
+            wx.config({
+                debug: false,
+                appId: res.appId,
+                timestamp: res.timestamp,
+                nonceStr: res.nonceStr,
+                signature: res.signature,
+                jsApiList: [
+                    "onMenuShareTimeline",
+                    "onMenuShareAppMessage",
+                    "onMenuShareQQ",
+                    "onMenuShareWeibo",
+                    "onMenuShareQZone"
+                ]
+            });
+            wx.ready(function() {
+                wx.onMenuShareTimeline({
+                    title: title, // 分享标题
+                    desc: desc, // 分享描述
+                    link: links, // 分享链接
+                    imgUrl: imgUrl, // 分享图标
+                    success: function() {
+                        //               alert("分享到朋友圈成功")
+                        //Toast({
+                        //message: "成功分享到朋友圈"
+                        //});
+                    },
+                    cancel: function() {
+                        //               alert("分享失败,您取消了分享!")
+                        //Toast({
+                        //message: "分享失败,您取消了分享!"
+                        //});
+                    }
+                });
+                //微信分享菜单测试
+                wx.onMenuShareAppMessage({
+                    title: title, // 分享标题
+                    desc: desc, // 分享描述
+                    link: links, // 分享链接
+                    imgUrl: imgUrl, // 分享图标
+                    success: function() {
+                        // alert("成功分享给朋友")
+                        //              Toast({
+                        //                message: "成功分享给朋友"
+                        //              });
+                    },
+                    cancel: function() {
+                        // alert("分享失败,您取消了分享!")
+                        //              Toast({
+                        //                message: "分享失败,您取消了分享!"
+                        //              });
+                    }
+                });
+
+                wx.onMenuShareQQ({
+                    title: title, // 分享标题
+                    desc: desc, // 分享描述
+                    link: links, // 分享链接
+                    imgUrl: imgUrl, // 分享图标
+                    success: function() {
+                        // alert("成功分享给QQ")
+                        //              Toast({
+                        //                message: "成功分享到QQ"
+                        //              });
+                    },
+                    cancel: function() {
+                        // alert("分享失败,您取消了分享!")
+                        //              Toast({
+                        //                message: "分享失败,您取消了分享!"
+                        //              });
+                    }
+                });
+                wx.onMenuShareWeibo({
+                    title: title, // 分享标题
+                    desc: desc, // 分享描述
+                    link: links, // 分享链接
+                    imgUrl: imgUrl, // 分享图标
+                    success: function() {
+                        // alert("成功分享给朋友")
+                        //              Toast({
+                        //                message: "成功分享到腾讯微博"
+                        //              });
+                    },
+                    cancel: function() {
+                        // alert("分享失败,您取消了分享!")
+                        //              Toast({
+                        //                message: "分享失败,您取消了分享!"
+                        //              });
+                    }
+                });
+                wx.onMenuShareQZone({
+                    title: title, // 分享标题
+                    desc: desc, // 分享描述
+                    link: links, // 分享链接
+                    imgUrl: imgUrl, // 分享图标
+                    success: function() {
+                        // alert("成功分享给朋友")
+                        //              Toast({
+                        //                message: "成功分享到QQ空间"
+                        //              });
+                    },
+                    cancel: function() {
+                        // alert("分享失败,您取消了分享!")
+                        //              Toast({
+                        //                message: "分享失败,您取消了分享!"
+                        //              });
+                    }
+                });
+            });
+            wx.error(function(err) {
+                alert(JSON.stringify(err));
             });
         }
     }

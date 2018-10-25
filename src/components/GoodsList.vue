@@ -90,7 +90,7 @@ export default {
         GoToItem(id) {
             this.$router.push({
                 name: "GeneralItemDescription",
-                params: { Good_id: id }
+                query: { Good_id: id }
             });
         }
     },

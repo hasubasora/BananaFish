@@ -103,7 +103,7 @@ export default {
         GetCommentList() {
             this.$router.push({
                 name: "GeneralItemDescription",
-                params: { Good_id: this.Good_id }
+                query: { Good_id: this.Good_id }
             });
         }
     }

@@ -83,7 +83,7 @@ export default {
             console.log(i);
             this.$router.push({
                 name: "GeneralItemDescription",
-                params: { Good_id: i }
+                query: { Good_id: i }
             });
         },
         loadList() {

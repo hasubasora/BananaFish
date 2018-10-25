@@ -17,7 +17,6 @@
                         <div slot="right">{{item.ProductTitle}}</div>
                     </yd-preview-header>
                 </yd-preview>
-
                 <!-- 评价 -->
                 <yd-cell-group title="评价">
                     <yd-cell-item>
@@ -26,6 +25,8 @@
                 </yd-cell-group>
 
                 <!-- 图片提交 -->
+                <vue-dropzone ref="myVueDropzone" id="dropzone" style="height:1rem" :options="dropzoneOptions"></vue-dropzone>
+
                 <div class="divImg">
                     <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
                     <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
@@ -38,7 +39,6 @@
 
         </div>
         <yd-button size="large" type="primary" class="primary" @click.native="primary">发布</yd-button>
-        <yd-button size="large" type="primary" class="primary" @click.native="wxprimary">测试图片发布</yd-button>
     </div>
 
 </template>
@@ -116,9 +116,17 @@
         }
     }
 }
+#dropzone {
+    .dz-preview {
+        //  height: 1rem;
+        //  width: 1rem;
+    }
+}
 </style>
 <script>
 import { LOGIN_SUCCESS } from "../main.js";
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
     data() {
         return {
@@ -128,8 +136,26 @@ export default {
             something: [],
             my_array: [],
             OrderId: 0,
-            isBtn: false
+            isBtn: false,
+            dropzoneOptions: {
+                url: this.$server.serverUrl + "/UpLoad/Img?dir=0",
+                thumbnailWidth: 100,
+                maxFilesize: 2,
+                acceptedFiles: "image/jpeg,image/png,image/gif",
+                // addRemoveLinks: true,
+                headers: { "Cache-Control": null },
+                dictDefaultMessage: "上传评论图片",
+                dictFileTooBig: "图片不能超过2M",
+                dictResponseError: "文件上传错误！",
+                dictInvalidFileType: "图片类型不正确",
+                parallelUploads: 10,
+                thumbnailMethod: "crop",
+                maxThumbnailFilesize: 2
+            }
         };
+    },
+    components: {
+        vueDropzone: vue2Dropzone
     },
     created() {
         console.log(this.$route.query.plan);
@@ -137,7 +163,6 @@ export default {
         this.getCommentgoods();
     },
     methods: {
-      
         primary() {
             this.ComList = [];
             let objectCom = {};
@@ -179,7 +204,7 @@ export default {
         },
         //提交评价
         addComment(ComList) {
-            return;
+            // return;
             this.isBtn = true;
             this.$axios({
                 method: "POST",
@@ -242,22 +267,22 @@ export default {
                 console.log(formData);
                 console.log("上传图片OK");
 
-                // this.$axios({
-                //     method: "POST",
-                //     data: formData,
-                //     params: {
-                //         dir: 0
-                //     },
-                //     url: this.$server.serverUrl + "/UpLoad/Img",
-                //     responseType: "json",
-                //     headers: { "Content-Type": "multipart/form-data" }
-                // }).then(response => {
-                //     console.log(response.data);
-                //     const _list = response.data.paths;
-                //     this.$set(this.my_array, _index, _list);
-                //     console.log(_list);
-                //     console.log(this.my_array);
-                // });
+                this.$axios({
+                    method: "POST",
+                    data: formData,
+                    params: {
+                        dir: 0
+                    },
+                    url: this.$server.serverUrl + "/UpLoad/Img",
+                    responseType: "json",
+                    headers: { "Content-Type": "multipart/form-data" }
+                }).then(response => {
+                    console.log(response.data);
+                    const _list = response.data.paths;
+                    this.$set(this.my_array, _index, _list);
+                    console.log(_list);
+                    console.log(this.my_array);
+                });
             }
         }
     }

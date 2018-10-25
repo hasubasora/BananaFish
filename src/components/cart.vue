@@ -258,7 +258,7 @@ export default {
         GoToGoodsDes(id) {
             this.$router.push({
                 name: "GeneralItemDescription",
-                params: { Good_id: id }
+                query: { Good_id: id }
             });
         },
         change(value, isCheckAll) {

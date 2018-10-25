@@ -1,17 +1,31 @@
 <template>
     <div id="app">
+        <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" style="height:1rem" :options="dropzoneOptions"></vue-dropzone> -->
+
         <router-view />
+
     </div>
 </template>
 
 <script>
+// import vue2Dropzone from "vue2-dropzone";
+// import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
     name: "App",
-    data() {
-        return {};
-    },
+    // components: {
+    //     vueDropzone: vue2Dropzone
+    // },
 
-    methods: {}
+    data() {
+        return {
+            // dropzoneOptions: {
+            //     url: this.$server.serverUrl + "/UpLoad/Img?dir=0",
+            //     thumbnailWidth: 150,
+            //     maxFilesize: 0.5,
+            //     headers: { "Cache-Control": null },
+            // }
+        };
+    }
 };
 </script>
 
