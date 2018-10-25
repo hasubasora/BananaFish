@@ -210,7 +210,8 @@ export default {
                                         color: true,
                                         callback: () => {
                                             this.$router.push({
-                                                name: "MyInfo"
+                                                name: "ShopGoodsList",
+                                                query: { plan: 2 }
                                             });
                                         }
                                     }
@@ -234,7 +235,6 @@ export default {
                         query: { Good_name: "2" }
                     });
                 }
-               
             });
         },
         //提交支付

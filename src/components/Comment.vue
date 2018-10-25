@@ -25,8 +25,12 @@
                 </yd-cell-group>
 
                 <!-- 图片提交 -->
-                <vue-dropzone ref="myVueDropzone" id="dropzone" style="height:1rem" :options="dropzoneOptions"></vue-dropzone>
 
+                <div class="divImg">
+                    <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
+                    <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
+                    <vue-dropzone ref="myVueDropzone" id="dropzone" :disabled=isBtn :options="dropzoneOptions" @click.native="GetIndex(index)" @vdropzone-success="vsuccess"></vue-dropzone>
+                </div>
                 <div class="divImg">
                     <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
                     <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
@@ -141,16 +145,18 @@ export default {
                 url: this.$server.serverUrl + "/UpLoad/Img?dir=0",
                 thumbnailWidth: 100,
                 maxFilesize: 2,
-                acceptedFiles: "image/jpeg,image/png,image/gif",
-                // addRemoveLinks: true,
                 headers: { "Cache-Control": null },
-                dictDefaultMessage: "上传评论图片",
+                uploadMultiple: true,
+                acceptedFiles: "image/jpeg,image/png,image/gif",
+                // // addRemoveLinks: true,
+                // dictDefaultMessage: "上传评论图片",
                 dictFileTooBig: "图片不能超过2M",
-                dictResponseError: "文件上传错误！",
-                dictInvalidFileType: "图片类型不正确",
-                parallelUploads: 10,
-                thumbnailMethod: "crop",
-                maxThumbnailFilesize: 2
+                // dictResponseError: "文件上传错误！",
+                // dictInvalidFileType: "图片类型不正确",
+                // parallelUploads: 10,
+                // thumbnailMethod: "crop",
+                // maxThumbnailFilesize: 2
+                addRemoveLinks: true //
             }
         };
     },
@@ -204,7 +210,7 @@ export default {
         },
         //提交评价
         addComment(ComList) {
-            // return;
+            return;
             this.isBtn = true;
             this.$axios({
                 method: "POST",
@@ -231,17 +237,23 @@ export default {
                     });
                 } else {
                     this.isBtn = false;
+                    this.$dialog.toast({
+                        mes: response.data.msg,
+                        timeout: 1500,
+                        icon: "error"
+                        // callback: () => {
+                        //     this.$dialog.alert({ mes: "给你一次重来的机会！" });
+                        // }
+                    });
                 }
             });
         },
+        //原生上传图
         uploadChange(event, _index) {
             if (event.target.files.length > 0) {
                 var files = event.target.files[0];
                 console.log(event.target.files);
                 this.type = files.type;
-                console.log(files);
-                console.log(files.type);
-                console.log(formData);
                 // 如果没有文件类型，则通过后缀名判断（解决微信及360浏览器无法获取图片类型问题）
                 if (!this.type) {
                     this.type = this.mime[file.name.match(/\.([^\.]+)$/i)[1]];
@@ -261,11 +273,8 @@ export default {
                 }
                 for (const iterator of event.target.files) {
                     console.log(iterator.type);
-
                     formData.append("file", iterator, iterator.name);
                 }
-                console.log(formData);
-                console.log("上传图片OK");
 
                 this.$axios({
                     method: "POST",
@@ -284,6 +293,36 @@ export default {
                     console.log(this.my_array);
                 });
             }
+        },
+        vsuccess(file, response) {
+            console.log(file);
+            console.log(response.success);
+            console.log(this._GetIndex);
+
+            switch (response.success) {
+                case 200:
+                    const _list = response.paths;
+                    this.$set(this.my_array, this._GetIndex, _list);
+                    console.log(_list);
+                    console.log(this.my_array);
+                    break;
+                case 300:
+                    this.$dialog.toast({
+                        mes: "保存失败",
+                        timeout: 1500,
+                        icon: "error",
+                        callback: () => {
+                            this.$dialog.alert({ mes: "给你一次重来的机会！" });
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
+        },
+        GetIndex(i) {
+            console.log(i);
+            this._GetIndex = i;
         }
     }
 };

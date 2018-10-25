@@ -10,7 +10,7 @@
                 <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">详情</yd-flexbox-item>
             </yd-flexbox>
 
-            <div @click="GoHistory" slot="right">
+            <div @click="wxInit" slot="right">
                 <yd-icon name="share3"></yd-icon>
             </div>
 

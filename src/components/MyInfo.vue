@@ -90,6 +90,7 @@
                 <yd-cell-group class="OrderList">
                     <yd-cell-item>
                         <span slot="left">合伙人中心</span>
+                        <span slot="right" @click="SeeBrokerage">分佣说明</span>
                     </yd-cell-item>
                 </yd-cell-group>
             </yd-flexbox-item>
@@ -250,6 +251,16 @@ export default {
             }
             console.log(num);
         },
+        SeeBrokerage() {
+            console.log(11);
+
+            this.$router.push({
+                name: "HtmlApp",
+                query: {
+                    Good_id: "fygz"
+                }
+            });
+        },
         ToLink(url, num, tit) {
             console.log(num);
             this.$router.push({
@@ -261,7 +272,8 @@ export default {
             this.$router.push({ name: "MyAgent" });
         },
         GoMyEarnings() {
-            this.$router.push({ name: "MyEarnings" });        },
+            this.$router.push({ name: "MyEarnings" });
+        },
         GetUserInfo() {
             this.$axios({
                 method: "POST",

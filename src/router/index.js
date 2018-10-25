@@ -56,15 +56,15 @@ export default new Router({
       path: '/cartOrder/:sid',
       name: 'cartOrder',
       component: cartOrder => require(["@/components/cartOrder"], cartOrder),
-    }, { //提交订单
+    }, { //保存地址
       path: '/setAddress',
       name: 'setAddress',
       component: setAddress => require(["@/components/setAddress"], setAddress),
-    }, { //提交订单
+    }, { //地址列表
       path: '/address/:address_id',
       name: 'address',
       component: address => require(["@/components/address"], address),
-    }, { //提交订单
+    }, { //成功页面
       path: '/SuccessOrder',
       name: 'SuccessOrder',
       component: SuccessOrder => require(["@/components/SuccessOrder"], SuccessOrder),
