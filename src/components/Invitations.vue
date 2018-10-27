@@ -9,7 +9,7 @@
             </router-link>
         </yd-navbar>
         <el-carousel :interval="4000" type="card" height="6.7rem" @change="activeIndex">
-            <el-carousel-item v-for="(item,index) in 6" :key="index">
+            <el-carousel-item v-for="(item,index) in datalist" :key="index">
                 <img class="el-Img" :src="item" alt="分享二维码赚大款">
                 <!-- <img class="el-Img" src="../assets/Img/dhb.png" alt=""> -->
             </el-carousel-item>
@@ -35,7 +35,7 @@
     // border: 1px solid red;
     p {
         text-align: center;
-        font-size: 0.2rem;
+        font-size: 0.5rem;
         padding: 0.2rem;
     }
     .BigBom {
