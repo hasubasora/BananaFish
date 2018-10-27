@@ -863,8 +863,6 @@ export default {
         },
         //微信分享
         TgetConfig() {
-console.log('3');
-
             let url = location.href.split("#")[0]; //获取锚点之前的链接
             this.$axios({
                 method: "POST",
@@ -880,34 +878,51 @@ console.log('3');
                 if (response.data.success == 200) {
                     let res = response.data.data;
                     wx.config({
-                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                         appId: res.appId, // 必填，公众号的唯一标识
                         timestamp: res.timestamp, // 必填，生成签名的时间戳
                         nonceStr: res.nonceStr, // 必填，生成签名的随机串
                         signature: res.signature, // 必填，签名
-                        jsApiList: ["updateAppMessageShareData"] // 必填，需要使用的JS接口列表
+                        jsApiList: ["updateAppMessageShareData","onMenuShareAppMessage"] // 必填，需要使用的JS接口列表
                     });
-                    wx.ready(()=> {
-                        wx.updateAppMessageShareData(
-                            {
-                                title: this.GoodsList.Share.Title, // 分享标题
-                                desc: this.GoodsList.Share.Describe, // 分享描述
-                                link: this.GoodsList.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                imgUrl: this.GoodsList.Share.Icon // 分享图标
-                            },
-                            function(res) {
-                                // alert("分享成功！");
-                                //这里是回调函数
+
+                    let Describe = this.GoodsList.Share.Describe,
+                        Title = this.GoodsList.Share.Title,
+                        Link = this.GoodsList.Share.Link,
+                        Icon = this.GoodsList.Share.Icon;
+                    // console.log("------------------------------------");
+                    // console.log(Describe, Title, Link, Icon);
+                    // console.log("------------------------------------");
+                    wx.ready(() => {
+                        // wx.updateAppMessageShareData(
+                        //     {
+                        //         title: Title, // 分享标题
+                        //         desc: Describe, // 分享描述
+                        //         link: Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                        //         imgUrl: Icon // 分享图标
+                        //     },
+                        //     function(res) {
+                        //         // alert("分享成功！");
+                        //         //这里是回调函数
+                        //     }
+                        // );
+                        wx.onMenuShareAppMessage({
+                            title: Title, // 分享标题
+                            desc: Describe, // 分享描述
+                            link: Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            imgUrl: Icon, // 分享图标
+                        
+                            success: function() {
+                                // 用户点击了分享后执行的回调函数
+                                alert('分享成功！')
                             }
-                        );
+                        });
                     });
 
                     // console.log(res.appId);
                     // console.log(res.timestamp);
                     // console.log(res.nonceStr);
                     // console.log(res.signature);
-                    // this.wxInit();
-                    // console.log(this.GoodsHtml);
                 }
             });
         }
