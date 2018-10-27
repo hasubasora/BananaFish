@@ -4,10 +4,13 @@
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
+            <router-link to="" slot="right">
+                邀请规则
+            </router-link>
         </yd-navbar>
         <yd-slider autoplay="3000">
             <yd-slider-item v-for="(bk,index) in datalist" :key="index">
-                    <img :src="bk">
+                <img :src="bk">
             </yd-slider-item>
 
         </yd-slider>

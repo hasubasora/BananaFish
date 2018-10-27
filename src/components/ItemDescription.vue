@@ -138,13 +138,13 @@ export default {
                 this.GoodsList = response.data.object;
                 this.LstOrder = response.data.object.LstOrder;
                 console.log(this.GoodsList);
-                 let eTime = setInterval(e => {
-                        this.$set(
-                            this.GoodsList,
-                            "EndTotalSeconds",
-                            this.GoodsList.EndTotalSeconds - 1
-                        );
-                        // console.log(this.GoodsList.EndTotalSeconds);
+                let eTime = setInterval(e => {
+                    this.$set(
+                        this.GoodsList,
+                        "EndTotalSeconds",
+                        this.GoodsList.EndTotalSeconds - 1
+                    );
+                    // console.log(this.GoodsList.EndTotalSeconds);
                 }, 1000);
             }
         });
@@ -167,10 +167,11 @@ export default {
     },
     methods: {
         OrangeGetUnTime(d) {
-            return GetUnTime(d);
+            if (d > -1) {
+                return GetUnTime(d);
+            }
         },
-        GoHistory(sid) {
-            // console.log(sid);
+        GoHistory() {
             this.$router.go(-1);
         },
         GoToItem(id) {

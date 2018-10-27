@@ -1,56 +1,44 @@
 <template>
-    <yd-layout>
-        <yd-navbar slot="navbar" title="积分积分数据表" height='.8rem'>
+    <div class="MyRedData">
+        <yd-navbar slot="navbar" title="积分指数" height='.8rem'>
             <router-link to="" slot="left" @click.native="GoHistory('Home')">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
+            <router-link to="" slot="right" @click.native="GoHistory('Home')">
+                积分规则
+            </router-link>
         </yd-navbar>
         <div class="RedDataTitle">
-            <p>
-                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`">平台积分数据</router-link>
-                <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`" class="write">我的积分数据</router-link>
+            <p class="TitleFlex">
+                <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`">平台积分数据</router-link>
+                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`"  class="MyWrite">我的积分数据</router-link>
             </p>
         </div>
         <yd-flexbox direction="vertical" class="RedData">
-            <yd-flexbox-item class="font03">
-                <div>我的积分（分）</div>
-                <p class="font20">{{objectData.MyIntegral}}</p>
+            <yd-flexbox-item style="text-align:center">
+                <div style="color:#999;margin:.2rem 0">万份积分收益(元)</div>
+                <p style="color:#ff5f17;margin:.2rem 0;font-size:.5rem">{{objectData.rangeprofit}}</p>
             </yd-flexbox-item>
-
-            <yd-flexbox-item>
-                <yd-flexbox>
-                    <yd-flexbox-item class="font02">
-                        <div> 累计收益（元）</div>
-                        <p>{{objectData.MyProfitAmount}}</p>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item class="font02">
-                        <div> 万份积分收益（元）</div>
-                        <p>{{objectData.TenThousand}}</p>
-                    </yd-flexbox-item>
-                </yd-flexbox>
-            </yd-flexbox-item>
+        </yd-flexbox>
+        <div class="eCharts">
+            <!-- <yd-tab v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
+                <yd-tab-panel v-for="item in items" :label="item.label"> -->
 
             <yd-flexbox-item>
                 <ve-line :data="chartData" height='5rem'></ve-line>
             </yd-flexbox-item>
-        </yd-flexbox>
 
-        <yd-cell-group>
-            <!-- <yd-cell-item>
-                <span slot="left">
-                    <i class="iconfont icon-lirun2-copy iconfonts"></i>
-                </span>
-                <span slot="left">今日平台预计收益： </span>
-            </yd-cell-item> -->
-            <!-- <yd-cell-item arrow>
-                <span slot="left">
-                    <i class="iconfont icon-lirun iconfonts"></i>
-                </span>
-                <span slot="left">平台总积分：{{objectData.IntegralCount}}</span>
-            </yd-cell-item> -->
-        </yd-cell-group>
+            <!--     </yd-tab-panel>
+           </yd-tab> -->
+            <!-- <div class="span">每晚深夜更新数据</div> -->
 
-        <yd-grids-group :rows="3">
+        </div>
+
+        <div class="phb">
+            <img src="../assets/Img/phb.png" alt="">
+        </div>
+
+        <!-- <yd-grids-group :rows="3">
             <yd-grids-item>
                 <span slot="text">时间</span>
             </yd-grids-item>
@@ -60,31 +48,42 @@
             <yd-grids-item>
                 <span slot="text">历史收益</span>
             </yd-grids-item>
-        </yd-grids-group>
+        </yd-grids-group> -->
 
         <yd-cell-group>
-            <yd-cell-item v-for="(item,index) in chartData.rows" :key="index">
-
-                <span slot="left">{{item.ProfitsDate}}</span>
-                <span slot="left" style="margin-left:1rem">{{item.Integral}}</span>
-                <span slot="right">{{item.Profit}}</span>
+            <yd-cell-item v-for="(item,index) in objectData.rankings" :key="index" class="rankings">
+                <span slot="left">
+                    <img style="width:.5rem" v-if="item.Ranking==1" src="../assets/Img/a1.png">
+                    <img style="width:.5rem" v-if="item.Ranking==2" src="../assets/Img/a2.png">
+                    <img style="width:.5rem" v-if="item.Ranking==3" src="../assets/Img/a3.png">
+                </span>
+                <span slot="left" style="margin-left:1rem">
+                    <img :src="item.UserIcon" alt=""  class="redUserIcon" >
+                    <div class="redNickName">
+                        <p> {{item.NickName}}</p>
+                        <p> 获得积分{{item.Profit}}</p>
+                    </div>
+                </span>
+                <span slot="right">收益+ <i class="c-red">{{item.Integral}}</i></span>
             </yd-cell-item>
         </yd-cell-group>
-        <div class="RedDataBtn" v-if="this.$route.query.IsAPP=='undefined'">
-            <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
-            <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
-            <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>
-        </div>
 
-    </yd-layout>
+    </div>
 </template>
 <script>
 export default {
     data() {
         return {
+            tab2: 0,
+            items: [
+                { label: "周", content: "aaaaaaaaaaa" }
+                // { label: "月", content: "bbbbbbbbbbb" },
+                // { label: "年", content: "ccccccccccc" }
+            ],
             objectData: [],
             chartData: {
-                columns: ["ProfitsDate", "Profit"],
+                // columns: ["ProfitsDate", "Profit"],
+                columns: ["IndexNumberDate", "Range"],
                 rows: [
                     // { IndexNumberDate: "2018-05-22", Range: 1 },
                     // { IndexNumberDate: "2018-05-23", Range: 22 },
@@ -103,6 +102,18 @@ export default {
         this.GetRedData();
     },
     methods: {
+        fn(label, key) {
+            console.log(label, key);
+        },
+        itemClick(key) {
+            this.$dialog.loading.open("数据加载中");
+            setTimeout(() => {
+                this.tab2 = key;
+                this.$dialog.loading.close();
+                this.items[key].content =
+                    "新内容【key:" + key + "】新内容_" + new Date().getTime();
+            }, 1000);
+        },
         GoHistory(sid) {
             this.$router.push({ name: sid });
             // this.$router.go(-1);
@@ -114,7 +125,7 @@ export default {
                     pageindex: 1,
                     pagesize: 7
                 },
-                url: this.$server.serverUrl + "/account/getuserindexnumber",
+                url: this.$server.serverUrl + "/account/getindexnumber",
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
@@ -122,8 +133,8 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.chartData.rows = response.data.rows;
-                    this.objectData = response.data.object;
-                    console.log(this.chartData.rows);
+                    this.objectData = response.data;
+                    console.log(this.chartData);
                 }
             });
         }
@@ -131,84 +142,75 @@ export default {
 };
 </script>
 <style lang='scss'>
-.RedData {
-    background: #ff5f17;
-    -webkit-scroll-touch: scroll;
-    .yd-flexbox {
-        justify-content: space-between;
-        color: #fff;
-        padding: 0.1rem 0.3rem;
-    }
-    .font20 {
-        font-size: 0.8rem;
-        @extend .SetType;
-    }
-    .font04 {
-        @extend .SetType;
-        font-size: 0.4rem;
-    }
-    .font02 {
-        @extend .SetType;
-        font-size: 0.2rem;
-    }
-    .font03 {
-        font-size: 0.3rem;
-        @extend .SetType;
-    }
-}
-.SetType {
-    color: #fff;
-}
-.iconfonts {
-    color: #ff5f17;
-    font-size: 0.5rem;
-    margin-right: 0.1rem;
-}
-.RedDataBtn {
-    width: 100%;
-    height: 1rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
+.MyRedData {
     background: #fff;
-    border-top: 1px solid #ccc;
-    z-index: 99;
-    display: flex;
-    > .icon-gouwuche-copy {
-        font-size: 0.8rem;
-        text-align: center;
-        width: 2rem;
+    .rankings {
+        padding: 0.2rem;
     }
-    .redbtntx {
-        flex: 1;
-        border: none;
-        outline: none;
-        font-size: 0.3rem;
+    .redUserIcon {
+        border-radius: 50px;
+        width: 1rem;
+        height: 1rem;
     }
-    .redbtn {
-        @extend .redbtntx;
-        background: #ff5f17;
-        color: #fff;
+    .redNickName {
+        display: inline-block;
+        vertical-align: top;
     }
-}
-.RedDataTitle {
-    background: #ff5f17;
-    margin: 0 auto;
-    p {
-        width: 6rem;
+    .RedDataTitle {
         margin: 0 auto;
-        > a {
-            display: inline-block;
-            text-align: center;
-            padding: 0.2rem;
-            width: 49%;
-            color: #fff;
-            // border: 1px solid;
-            &.write {
-                background: #fff;
-                color: #ff5f17;
+        .TitleFlex {
+            width: 7rem;
+            margin: 0 auto;
+            background: #ff5f17;
+            border: 1px solid #ff5f17;
+            border-radius: 5px;
+            display: flex;
+            a {
+                display: inline-block;
+                text-align: center;
+                padding: 0.1rem;
+                width: 100%;
+                color: #fff;
+                &.MyWrite {
+                    background: #fff;
+                    color: #ff5f17;
+                    border-radius: 5px;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
             }
         }
     }
+    .eCharts {
+        display: flex;
+        position: relative;
+        .span {
+            position: absolute;
+            top: 0;
+            right: 0;
+            flex: 1;
+            text-align: right;
+            line-height: 1rem;
+            font-size: 0.3rem;
+            padding-right: 0.1rem;
+            color: #999;
+        }
+        .yd-tab {
+            flex: 1;
+        }
+        .yd-tab-box {
+            width: 4rem;
+        }
+    }
+    .phb {
+        text-align: center;
+        border-bottom: 1px dashed #ccc;
+        padding: 0.1rem;
+        margin: 0 0.3rem;
+        img {
+            width: 3rem;
+        }
+    }
 }
+//
 </style>

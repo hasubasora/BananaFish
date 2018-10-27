@@ -22,7 +22,7 @@
             <div class="TheAgent">
                 <span class="TheAgentTitle ">代理佣金</span>
                 <span class="TheAgentTitle bold">{{SY.thisWeekDL}}</span>
-                <span class="TheAgentTitle borderccc">直推佣金</span>
+                <span class="TheAgentTitle borderccc">直推业绩</span>
                 <span class="TheAgentTitle bold">{{SY.thisWeekZT}}</span>
             </div>
         </yd-flexbox>
@@ -34,7 +34,7 @@
             <div class="TheAgent">
                 <span class="TheAgentTitle ">代理佣金</span>
                 <span class="TheAgentTitle bold">{{SY.prevWeekDL}}</span>
-                <span class="TheAgentTitle borderccc">直推佣金</span>
+                <span class="TheAgentTitle borderccc">直推业绩</span>
                 <span class="TheAgentTitle bold">{{SY.prevWeekZT}}</span>
             </div>
         </yd-flexbox>

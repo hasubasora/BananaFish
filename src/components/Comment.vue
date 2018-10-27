@@ -27,17 +27,15 @@
                 <!-- 图片提交 -->
 
                 <div class="divImg">
-                    <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
-                    <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
                     <vue-dropzone ref="myVueDropzone" id="dropzone" :disabled=isBtn :options="dropzoneOptions" @click.native="GetIndex(index)" @vdropzone-success="vsuccess"></vue-dropzone>
                 </div>
-                <div class="divImg">
+                <!-- <div class="divImg">
                     <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
                     <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
                         <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
                         <input @change="uploadChange($event,index)" :disabled=isBtn type="file" name="files" id="upInput" accept="image/*" multiple="multiple">
                     </form>
-                </div>
+                </div> -->
 
             </div>
 
@@ -121,9 +119,49 @@
     }
 }
 #dropzone {
+    padding: 0.1rem;
     .dz-preview {
-        //  height: 1rem;
-        //  width: 1rem;
+        height: 1rem;
+        width: 1.2rem;
+        min-height: 1.2rem;
+        border: 1px solid red;
+        margin: 0 0 0.16rem 0.16rem;
+        .dz-image {
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .dz-success-mark {
+            top: 0.1rem;
+        }
+        .dz-preview {
+            top: 0.1rem;
+        }
+        .dz-error-mark {
+            top: 0.1rem;
+        }
+        .dz-remove {
+            position: absolute;
+            z-index: 30;
+            color: white;
+            margin-left: 0;
+            padding: 0;
+            top: -0.2rem;
+            right: -0.2rem;
+            background: #ccc;
+            bottom: 0;
+            border-radius: 50px;
+            width: 0.3rem;
+            height: 0.3rem;
+            border: 2px white solid;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.1rem;
+            font-weight: 800;
+            letter-spacing: 1.1px;
+            opacity: 1;
+        }
     }
 }
 </style>
@@ -132,6 +170,7 @@ import { LOGIN_SUCCESS } from "../main.js";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
+    name:'GeneralItemDescription',
     data() {
         return {
             btns: [],
@@ -143,16 +182,17 @@ export default {
             isBtn: false,
             dropzoneOptions: {
                 url: this.$server.serverUrl + "/UpLoad/Img?dir=0",
-                thumbnailWidth: 100,
+                thumbnailWidth: null,
                 maxFilesize: 2,
                 headers: { "Cache-Control": null },
                 uploadMultiple: true,
                 acceptedFiles: "image/jpeg,image/png,image/gif",
                 // // addRemoveLinks: true,
-                // dictDefaultMessage: "上传评论图片",
+                dictDefaultMessage: "上传评论图片",
                 dictFileTooBig: "图片不能超过2M",
-                // dictResponseError: "文件上传错误！",
-                // dictInvalidFileType: "图片类型不正确",
+                dictResponseError: "文件上传错误！",
+                dictInvalidFileType: "图片类型不正确",
+                dictRemoveFile: "X",
                 // parallelUploads: 10,
                 // thumbnailMethod: "crop",
                 // maxThumbnailFilesize: 2
@@ -210,7 +250,7 @@ export default {
         },
         //提交评价
         addComment(ComList) {
-            return;
+            // return;
             this.isBtn = true;
             this.$axios({
                 method: "POST",
@@ -295,10 +335,6 @@ export default {
             }
         },
         vsuccess(file, response) {
-            console.log(file);
-            console.log(response.success);
-            console.log(this._GetIndex);
-
             switch (response.success) {
                 case 200:
                     const _list = response.paths;
@@ -308,7 +344,7 @@ export default {
                     break;
                 case 300:
                     this.$dialog.toast({
-                        mes: "保存失败",
+                        mes: response.msg,
                         timeout: 1500,
                         icon: "error",
                         callback: () => {
@@ -321,7 +357,6 @@ export default {
             }
         },
         GetIndex(i) {
-            console.log(i);
             this._GetIndex = i;
         }
     }

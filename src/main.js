@@ -50,6 +50,18 @@ Vue.config.productionTip = false
 import wx from 'weixin-js-sdk'
 Vue.prototype.$wx = wx;
 
+/**
+ * 
+ * @param {} m 传入通用的静态ID
+ */
+export const TO_PAGE = (m) => {
+  router.push({
+    name: "HtmlApp",
+    query: {
+      Good_id: m
+    }
+  });
+}
 
 export const LOGIN_SUCCESS = (success) => {
   switch (success) {
@@ -62,7 +74,7 @@ export const LOGIN_SUCCESS = (success) => {
     case 400:
       console.log('你还没有登陆，请登陆！');
       router.push({
-        name: "SignIn",    
+        name: "SignIn",
         query: {
           Good_name: "2"
         }
@@ -122,7 +134,7 @@ export const GetUnTime = (d, n) => {
   }
 
 }
-export const SalesReturnApplyFor=(id)=>{
+export const SalesReturnApplyFor = (id) => {
   router.push({
     name: "SalesReturnApplyFor",
     query: {
@@ -134,7 +146,7 @@ export const SalesReturnApplyFor=(id)=>{
 export const GoBuySometing = (tc, pt, picked) => {
 
   window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
-  
+
 }
 //获取支付方式
 export const GetPay = () => {
@@ -182,7 +194,7 @@ const store = new Vuex.Store({
   state: { //需要储存的数据
     counts: 0,
     phoneSizeId: '',
-    SetGoods:null
+    SetGoods: null
   },
   //getters
   getters: { //获取状态及里面的数据
@@ -220,7 +232,7 @@ new Vue({
   store,
   router,
   components: {
-  App,
+    App,
   },
   template: '<App/>'
 })

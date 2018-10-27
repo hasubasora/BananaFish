@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="p_progress">
-                    <div class="p_prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+                    <div class="p_prog">{{item.TotalNum-item.RemainNum+'/'+item.TotalNum}}</div>
                     <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
                     <p> 已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</p>
                 </div>
@@ -137,7 +137,7 @@
 </style>
 
 <script>
-import {GetUnTime} from '../main.js'
+import { GetUnTime } from "../main.js";
 export default {
     data() {
         return {
@@ -174,7 +174,9 @@ export default {
     computed: {},
     methods: {
         GetUnTime(d) {
-          return GetUnTime(d)
+            if (d > -1) {
+                return GetUnTime(d);
+            }
         },
         GoToItem(id) {
             this.$router.push({

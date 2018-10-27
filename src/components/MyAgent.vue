@@ -30,7 +30,7 @@
         </yd-flexbox>
         <div class="AgentLish">
             <yd-flexbox v-for="(item, index) in AgentLish" :key="index">
-                <yd-flexbox-item><img :src="item.UserIcon" alt=""></yd-flexbox-item>
+                <yd-flexbox-item><img style="border-radius:50px;width:1rem;height:1rem" :src="item.UserIcon" alt=""></yd-flexbox-item>
                 <yd-flexbox-item>{{item.NickName}}</yd-flexbox-item>
                 <yd-flexbox-item class="c-red">￥{{item.Commission}}</yd-flexbox-item>
             </yd-flexbox>

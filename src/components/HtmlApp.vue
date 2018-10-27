@@ -1,12 +1,12 @@
 <template>
     <div class="appHtml">
-            <yd-navbar :title=DescNameTitle v-if="!this.$route.query.IsAPP">
-                <router-link to="/MyInfo" slot="left">
-                    <yd-navbar-back-icon></yd-navbar-back-icon>
-                </router-link>
-            </yd-navbar>
-         
-            <!-- <yd-accordion>
+        <yd-navbar :title=DescNameTitle v-if="!this.$route.query.IsAPP">
+            <router-link to="/MyInfo" slot="left">
+                <yd-navbar-back-icon></yd-navbar-back-icon>
+            </router-link>
+        </yd-navbar>
+
+        <!-- <yd-accordion>
                 <yd-accordion-item :title=item.title v-for="(item, index) in helpList"  :key="index">
                     <div style="padding: .24rem;" v-html="item.html">
 
@@ -31,7 +31,8 @@
 export default {
     data() {
         return {
-            DescName: "",DescNameTitle:''
+            DescName: "",
+            DescNameTitle: ""
         };
     },
     created() {

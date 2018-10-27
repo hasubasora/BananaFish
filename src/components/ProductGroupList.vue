@@ -45,7 +45,7 @@
                                                 <span>本期参考期数：{{item.ModelProduct.ReferencePeriod}} </span>
                                                 <span>本期参考开奖号码：{{item.ModelProduct.ReferenceLotteryNumber}} </span>
                                                 <div class="ModelProductMsgBom">
-                                                    <button class="orderBtn grayBtn">第TCG{{item.GroupId}}期</button>
+                                                    <button class="orderBtn grayBtn">第TCG{{item.CurrentPeriod}}期</button>
                                                     <router-link :to="item.Link" class="linkBom titleColor">去权威网站查看</router-link>
                                                 </div>
                                             </div>

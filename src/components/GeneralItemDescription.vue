@@ -10,9 +10,9 @@
                 <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">详情</yd-flexbox-item>
             </yd-flexbox>
 
-            <div @click="wxInit" slot="right">
+            <!-- <div @click="TgetConfig" slot="right">
                 <yd-icon name="share3"></yd-icon>
-            </div>
+            </div> -->
 
         </yd-navbar>
 
@@ -436,7 +436,7 @@
 
 <script>
 import { getNum, LOGIN_SUCCESS } from "../main.js";
-
+// import wx from "weixin-js-sdk";
 export default {
     data() {
         return {
@@ -804,6 +804,7 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
+                    this.TgetConfig();
                     this.GoodsList = response.data.object; //整个
                     this.GotupLength = this.GoodsList.LstAtt.length;
                     this.Gotup = this.GoodsList.LstAtt[0]; //第一个属性
@@ -861,136 +862,55 @@ export default {
             });
         },
         //微信分享
-        getConfig() {
-            let url = location.href.split("#")[0]; //获取锚点之前的链接
-            this.$http
-                .get("/index.php", {
-                    params: {
-                        url: url
-                    }
-                })
-                .then(response => {
-                    let res = response.data;
-                    this.wxInit(res);
-                });
-        },
-        // 微信分享
-        wxInit(res) {
-            let url = location.href.split("#")[0]; //获取锚点之前的链接
-            let links = url + "#/Food/" + this.$route.params.id;
-            let title = this.detail.name + "-嘌呤查";
-            let desc = "了解更多知识，请关注“嘌呤查”公众号";
-            let imgUrl = this.thumb;
-            wx.config({
-                debug: false,
-                appId: res.appId,
-                timestamp: res.timestamp,
-                nonceStr: res.nonceStr,
-                signature: res.signature,
-                jsApiList: [
-                    "onMenuShareTimeline",
-                    "onMenuShareAppMessage",
-                    "onMenuShareQQ",
-                    "onMenuShareWeibo",
-                    "onMenuShareQZone"
-                ]
-            });
-            wx.ready(function() {
-                wx.onMenuShareTimeline({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: links, // 分享链接
-                    imgUrl: imgUrl, // 分享图标
-                    success: function() {
-                        //               alert("分享到朋友圈成功")
-                        //Toast({
-                        //message: "成功分享到朋友圈"
-                        //});
-                    },
-                    cancel: function() {
-                        //               alert("分享失败,您取消了分享!")
-                        //Toast({
-                        //message: "分享失败,您取消了分享!"
-                        //});
-                    }
-                });
-                //微信分享菜单测试
-                wx.onMenuShareAppMessage({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: links, // 分享链接
-                    imgUrl: imgUrl, // 分享图标
-                    success: function() {
-                        // alert("成功分享给朋友")
-                        //              Toast({
-                        //                message: "成功分享给朋友"
-                        //              });
-                    },
-                    cancel: function() {
-                        // alert("分享失败,您取消了分享!")
-                        //              Toast({
-                        //                message: "分享失败,您取消了分享!"
-                        //              });
-                    }
-                });
+        TgetConfig() {
 
-                wx.onMenuShareQQ({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: links, // 分享链接
-                    imgUrl: imgUrl, // 分享图标
-                    success: function() {
-                        // alert("成功分享给QQ")
-                        //              Toast({
-                        //                message: "成功分享到QQ"
-                        //              });
-                    },
-                    cancel: function() {
-                        // alert("分享失败,您取消了分享!")
-                        //              Toast({
-                        //                message: "分享失败,您取消了分享!"
-                        //              });
-                    }
-                });
-                wx.onMenuShareWeibo({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: links, // 分享链接
-                    imgUrl: imgUrl, // 分享图标
-                    success: function() {
-                        // alert("成功分享给朋友")
-                        //              Toast({
-                        //                message: "成功分享到腾讯微博"
-                        //              });
-                    },
-                    cancel: function() {
-                        // alert("分享失败,您取消了分享!")
-                        //              Toast({
-                        //                message: "分享失败,您取消了分享!"
-                        //              });
-                    }
-                });
-                wx.onMenuShareQZone({
-                    title: title, // 分享标题
-                    desc: desc, // 分享描述
-                    link: links, // 分享链接
-                    imgUrl: imgUrl, // 分享图标
-                    success: function() {
-                        // alert("成功分享给朋友")
-                        //              Toast({
-                        //                message: "成功分享到QQ空间"
-                        //              });
-                    },
-                    cancel: function() {
-                        // alert("分享失败,您取消了分享!")
-                        //              Toast({
-                        //                message: "分享失败,您取消了分享!"
-                        //              });
-                    }
-                });
-            });
-            wx.error(function(err) {
-                alert(JSON.stringify(err));
+            let url = location.href.split("#")[0]; //获取锚点之前的链接
+            this.$axios({
+                method: "POST",
+                data: {
+                    url: url
+                },
+                url: this.$server.serverUrl + "/WeiXin/GetShareConfig",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
+                if (response.data.success == 200) {
+
+                    let res = response.data.data;
+                    let _that = this;
+
+                    wx.config({
+                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        appId: res.appId, // 必填，公众号的唯一标识
+                        timestamp: res.timestamp, // 必填，生成签名的时间戳
+                        nonceStr: res.nonceStr, // 必填，生成签名的随机串
+                        signature: res.signature, // 必填，签名
+                        jsApiList: ["updateAppMessageShareData"] // 必填，需要使用的JS接口列表
+                    });
+                    wx.ready(function() {
+                        wx.updateAppMessageShareData(
+                            {
+                                title: _that.GoodsList.Share.Title, // 分享标题
+                                desc: _that.GoodsList.Share.Describe, // 分享描述
+                                link: _that.GoodsList.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                imgUrl: _that.GoodsList.Share.Icon // 分享图标
+                            },
+                            function(res) {
+                                alert("分享成功！");
+                                //这里是回调函数
+                            }
+                        );
+                    });
+
+                    // console.log(res.appId);
+                    // console.log(res.timestamp);
+                    // console.log(res.nonceStr);
+                    // console.log(res.signature);
+                    // this.wxInit();
+                    // console.log(this.GoodsHtml);
+                }
             });
         }
     }

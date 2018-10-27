@@ -5,7 +5,7 @@
                 <!-- <img class="SalePriceImg" src="../assets/Img/go.png" alt=""> -->
                 <img :src="item.ProductImg" class="ProductImg" alt="">
                 <p style="background:#f3f3f3;font-size:.26rem;height:.4rem;line-height:.4rem">往期已送出{{item.MarketPrice}}件</p>
-                <div class="prog">{{item.RemainNum+'/'+item.TotalNum}}</div>
+                <div class="prog">{{item.TotalNum-item.RemainNum+'/'+item.TotalNum}}</div>
                 <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
                 <div class="RemainNum">已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</div>
                 <div class="goodsName">

@@ -132,7 +132,7 @@
     </div>
 </template>
 <script>
-import { LOGIN_SUCCESS } from "../main.js";
+import { LOGIN_SUCCESS, TO_PAGE } from "../main.js";
 export default {
     data() {
         return {
@@ -252,14 +252,7 @@ export default {
             console.log(num);
         },
         SeeBrokerage() {
-            console.log(11);
-
-            this.$router.push({
-                name: "HtmlApp",
-                query: {
-                    Good_id: "fygz"
-                }
-            });
+            TO_PAGE("fygz");
         },
         ToLink(url, num, tit) {
             console.log(num);
