@@ -124,7 +124,7 @@
         height: 1rem;
         width: 1.2rem;
         min-height: 1.2rem;
-        border: 1px solid red;
+        // border: 1px solid red;
         margin: 0 0 0.16rem 0.16rem;
         .dz-image {
             img {

@@ -45,10 +45,11 @@ Vue.use(VCharts)
 Vue.config.productionTip = false
 
 /**
- * 微信SDK
+ * 引入 Element
  */
-import wx from 'weixin-js-sdk'
-Vue.prototype.$wx = wx;
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 
 /**
  * 
@@ -70,6 +71,9 @@ export const LOGIN_SUCCESS = (success) => {
       break;
     case 300:
       console.log('请求错误，请刷新重试！');
+      break;
+    case 301:
+      console.log('用户已过期，请刷新重试！');
       break;
     case 400:
       console.log('你还没有登陆，请登陆！');
