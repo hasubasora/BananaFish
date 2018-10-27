@@ -863,6 +863,7 @@ export default {
         },
         //微信分享
         TgetConfig() {
+console.log('3');
 
             let url = location.href.split("#")[0]; //获取锚点之前的链接
             this.$axios({
@@ -877,10 +878,7 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-
                     let res = response.data.data;
-                    let _that = this;
-
                     wx.config({
                         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                         appId: res.appId, // 必填，公众号的唯一标识
@@ -889,16 +887,16 @@ export default {
                         signature: res.signature, // 必填，签名
                         jsApiList: ["updateAppMessageShareData"] // 必填，需要使用的JS接口列表
                     });
-                    wx.ready(function() {
+                    wx.ready(()=> {
                         wx.updateAppMessageShareData(
                             {
-                                title: _that.GoodsList.Share.Title, // 分享标题
-                                desc: _that.GoodsList.Share.Describe, // 分享描述
-                                link: _that.GoodsList.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                                imgUrl: _that.GoodsList.Share.Icon // 分享图标
+                                title: this.GoodsList.Share.Title, // 分享标题
+                                desc: this.GoodsList.Share.Describe, // 分享描述
+                                link: this.GoodsList.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                imgUrl: this.GoodsList.Share.Icon // 分享图标
                             },
                             function(res) {
-                                alert("分享成功！");
+                                // alert("分享成功！");
                                 //这里是回调函数
                             }
                         );
