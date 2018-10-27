@@ -101,7 +101,7 @@ export default {
 
     methods: {
         activeIndex(e) {
-            console.log(e);
+            // console.log(e);
         },
         addMyAgent() {
             this.$axios({
@@ -110,9 +110,9 @@ export default {
                 url: this.$server.serverUrl + "/Agent/ApplicationBroker",
                 responseType: "json"
             }).then(response => {
-                // if (response.data.success == 400) {
-                //     this.$router.push({ name: "SignIn" });
-                // }
+                if (response.data.success == 400) {
+                    this.$router.push({ name: "SignIn" });
+                }
                 if (response.data.success == 200) {
                     this.GetQr();
                 }
