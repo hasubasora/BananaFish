@@ -10,11 +10,11 @@
       </router-link>
     </yd-navbar>
     <yd-scrolltab>
-      <yd-scrolltab-panel :label="item.CateName" @click.native="GoThreeList(item.CategoryId)" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
+      <yd-scrolltab-panel :label="item.CateName" @click.native="GoThreeList(item.LstSubCategory[index].CategoryId)" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
         <div style="background-color: gray;">
           <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
-          <yd-grids-group :rows="3" title="" item-height="2rem">
-            <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id">
+          <yd-grids-group :rows="3" title="" item-height="2rem" >
+            <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id"  >
               <span slot="text">
                 <router-link to="" @click.native="GoThreeList(itemt.CategoryId)">
                   <div class="GoThree">

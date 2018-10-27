@@ -22,8 +22,8 @@
                 <input slot="right" type="text" v-model="s_address" placeholder="门牌号">
             </yd-cell-item>
             <yd-cell-item>
-                <span slot="left">用户名：</span>
-                <yd-input slot="right" required v-model="s_name" max="20" placeholder="请输入用户名"></yd-input>
+                <span slot="left">姓名：</span>
+                <yd-input slot="right" required v-model="s_name" max="20" placeholder="请输入收货人姓名"></yd-input>
             </yd-cell-item>
             <yd-cell-item>
                 <span slot="left">手机号：</span>
