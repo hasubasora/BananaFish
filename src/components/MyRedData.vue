@@ -16,14 +16,14 @@
         </div>
         <yd-flexbox direction="vertical" class="RedData">
             <yd-flexbox-item style="text-align:center">
-                <div style="color:#999;margin:.2rem 0">昨日积分收益(元)</div>
+                <div style="color:#999;margin:.2rem 0">昨日万份积分收益(元)</div>
                 <p style="color:#ff5f17;margin:.2rem 0;font-size:.5rem">{{objectData.rangeprofit}}</p>
             </yd-flexbox-item>
         </yd-flexbox>
         <div class="eCharts">
             <!-- <yd-tab v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick">
                 <yd-tab-panel v-for="item in items" :label="item.label"> -->
-
+ 
             <yd-flexbox-item>
                 <ve-line :data="chartData" height='5rem' :settings="chartSettings"></ve-line>
             </yd-flexbox-item>

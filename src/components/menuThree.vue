@@ -146,7 +146,9 @@ export default {
                     pageindex: 1,
                     pagesize: 10,
                     categoryid: Group_id,
-                    RecommendType: this.$route.query.gg?this.$route.query.gg:0
+                    RecommendType: this.$route.query.gg
+                        ? this.$route.query.gg
+                        : 0
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct",
                 responseType: "json"
@@ -164,7 +166,10 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    categoryid: this.$route.params.Group_id
+                    categoryid: this.$route.params.Group_id,
+                    RecommendType: this.$route.query.gg
+                        ? this.$route.query.gg
+                        : 0
                 },
                 url: this.$server.serverUrl + "/index/getcategory",
                 responseType: "json"

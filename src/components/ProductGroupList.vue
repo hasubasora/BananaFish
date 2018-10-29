@@ -17,50 +17,11 @@
                         <InTheTop></InTheTop>
                     </yd-tab-panel>
                     <yd-tab-panel label="拔得头筹">
-                        <yd-flexbox direction="vertical">
-                            <!-- s -->
-                            <yd-flexbox-item>
-                                <div v-if="Grouporder==''" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无拔得头筹商品哦~去逛逛吧~</div>
-
-                                <div v-for="item in Grouporder" :key="item.id" class="Grouporder">
-                                    <!-- 上半截 -->
-                                    <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i class="c-red">{{item.NickName}}</i>拔得头筹</span></div>
-                                    <!-- 下半截 -->
-                                    <div class="ModelProduct" v-if="item.ModelProduct">
-                                        <!-- 左边 -->
-                                        <div class="ModelProductLeft" @click="GoToItem(item.GroupId)">
-                                            <span class="tag titleColor">本期头筹奖品</span>
-                                            <img class="GoodImg" :src="item.ModelProduct.ProductImg" alt="">
-                                            <p class="GoodTitle">{{item.ModelProduct.ProductTitle}}</p>
-                                            <div><span>市场价</span> <span>{{item.ModelProduct.MarketPrice}}</span></div>
-                                            <p>查看本期头筹</p>
-                                        </div>
-                                        <!-- 右边 -->
-                                        <div class="ModelProductLeft">
-                                            <p class="ModelProductWin"><img src="../assets/Img/gj.png" alt=""><span>头筹中奖号码 {{item.ModelProduct.WinnerNumber}}</span></p>
-                                            <div class="ModelProductMsg">
-                                                <h5>本期中奖者消费：<strong>{{item.ModelProduct.WinnerAmount}}</strong></h5>
-                                                <span>头筹人数：{{item.TotalNum}}人/次 </span>
-                                                <span>结束时间：{{item.EndTime}} </span>
-                                                <span>本期参考期数：{{item.ModelProduct.ReferencePeriod}} </span>
-                                                <span>本期参考开奖号码：{{item.ModelProduct.ReferenceLotteryNumber}} </span>
-                                                <div class="ModelProductMsgBom">
-                                                    <button class="orderBtn grayBtn">第TCG{{item.CurrentPeriod}}期</button>
-                                                    <router-link :to="item.Link" class="linkBom titleColor">去权威网站查看</router-link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </yd-flexbox-item>
-                            <!-- e -->
-                        </yd-flexbox>
+                        <OverTheTop></OverTheTop>
                     </yd-tab-panel>
                 </yd-tab>
             </yd-flexbox-item>
-            <yd-flexbox-item>
-
-            </yd-flexbox-item>
+    
         </yd-flexbox>
     </div>
 </template>
@@ -220,6 +181,7 @@
             width: 1rem;
             height: 1rem;
             margin: auto;
+            margin-bottom: 0.1rem;
         }
         .ProductTitlet {
             font-size: 0.2rem;
@@ -296,39 +258,12 @@
 
 <script>
 export default {
-    data() {
-        return {
-            GoodsList: [],
-            Grouporder: []
-        };
-    },
+ 
     components: {
         IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop),
+        OverTheTop: OverTheTop => require(["@/components/OverTheTop"], OverTheTop),
         InTheTop: InTheTop => require(["@/components/InTheTop"], InTheTop)
     },
-    methods: {
-        GoToItem(id) {
-            this.$router.push({
-                name: "ItemDescription",
-                params: { ItemGood_id: id }
-            });
-        }
-    },
-    created() {
-        this.$axios({
-            method: "POST",
-            data: {},
-            url: this.$server.serverUrl + "/index/getwinnergrouporder",
-            responseType: "json"
-        }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
-            if (response.data.success == 200) {
-                this.Grouporder = response.data.rows;
-                console.log(this.Grouporder);
-            }
-        });
-    }
+
 };
 </script>

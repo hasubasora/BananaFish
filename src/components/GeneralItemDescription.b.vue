@@ -655,12 +655,12 @@ export default {
             padding: 0.1rem;
             font-size: 0.3rem;
         }
-        .ImgShow {
+        .ImgShow {padding: 1rem;
             width: 1rem;
             display: flex;
             margin-bottom: 0.5rem;
             > img {
-                margin: 0.05rem;
+                margin: 0.1rem;
                 width: 100%;
                 height: 100%;
             }

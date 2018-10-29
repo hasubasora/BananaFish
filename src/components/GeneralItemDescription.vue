@@ -67,7 +67,7 @@
                     <yd-cell-group v-if="key==2">
                         <yd-cell-item arrow @click.native="GetCommentList(GoodsList.Id)">
                             <span slot="left">
-                                <i>宝贝评价(0)</i>
+                                <i>宝贝评价</i>
                             </span>
                             <span slot="right">
                                 查看全部
@@ -120,7 +120,7 @@
                     <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
                 </div>
                 <div class="yd-nav-right-button">
-                    <button class="handleClick leftbtn leftColor" @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
+                    <button class="handleClick leftbtn leftColor" v-if="this.$route.query.text!='over' " @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
                 </div>
             </yd-tabbar>
         </keep-alive>
@@ -290,7 +290,8 @@
                 font-size: 0.26rem;
             }
             .ImgShow {
-                width: 1rem;
+                padding: 0.2rem;
+                width: 2rem;
                 display: flex;
                 margin-bottom: 0.5rem;
                 img {
@@ -883,7 +884,10 @@ export default {
                         timestamp: res.timestamp, // 必填，生成签名的时间戳
                         nonceStr: res.nonceStr, // 必填，生成签名的随机串
                         signature: res.signature, // 必填，签名
-                        jsApiList: ["updateAppMessageShareData","onMenuShareAppMessage"] // 必填，需要使用的JS接口列表
+                        jsApiList: [
+                            "updateAppMessageShareData",
+                            "onMenuShareAppMessage"
+                        ] // 必填，需要使用的JS接口列表
                     });
 
                     let Describe = this.GoodsList.Share.Describe,
@@ -911,10 +915,10 @@ export default {
                             desc: Describe, // 分享描述
                             link: Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                             imgUrl: Icon, // 分享图标
-                        
+
                             success: function() {
                                 // 用户点击了分享后执行的回调函数
-                                alert('分享成功！')
+                                alert("分享成功！");
                             }
                         });
                     });

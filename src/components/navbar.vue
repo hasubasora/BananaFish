@@ -14,8 +14,8 @@
                 <yd-slider autoplay="3000">
                     <yd-slider-item v-for="(item, index) in headNews" :key="index">
                         <!-- <p class="headNewsText"> -->
-                            <!-- <span style="color:#F00;"> 荐 </span> -->
-                            <span style="">恭喜<i class="c-red">{{item.NickName}}</i> 获得<i class="c-red">{{item.OrderTitle}}</i></span>
+                        <!-- <span style="color:#F00;"> 荐 </span> -->
+                        <span style="">恭喜<i class="c-red">{{item.NickName}}</i> 获得<i class="c-red">{{item.OrderTitle}}</i></span>
                         <!-- </p> -->
                     </yd-slider-item>
                 </yd-slider>
@@ -44,7 +44,7 @@ export default {
                 {
                     src: require("../assets/Img/nav3.png"),
                     name: "积分产品",
-                    href: "ProductGroupList"
+                    href: "menuThree/0?gg=3"
                 },
                 {
                     src: require("../assets/Img/nav4.png"),
@@ -113,8 +113,8 @@ export default {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            .headNewsText{
-                font-size: .26rem;
+            .headNewsText {
+                font-size: 0.26rem;
             }
         }
         .yd-slider {

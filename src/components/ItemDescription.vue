@@ -46,7 +46,7 @@
                                 <yd-flexbox-item>
                                     <p class="ProductTitle"> {{item.ProductTitle}}</p>
                                     <strong>￥{{item.SalePrice}}</strong>
-                                    <yd-button size="large" type="danger">购买夺筹</yd-button>
+                                    <yd-button size="large" v-if="$route.query.text!='over'" type="danger">购买夺筹</yd-button>
                                 </yd-flexbox-item>
                             </yd-flexbox>
                         </span>
@@ -178,7 +178,7 @@ export default {
             console.log(id);
             this.$router.push({
                 name: "GeneralItemDescription",
-                query: { Good_id: id }
+                query: { Good_id: id, text: this.$route.query.text }
             });
             return;
         },
