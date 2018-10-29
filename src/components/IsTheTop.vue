@@ -41,14 +41,17 @@
             <div class="p_Group">
                 <div class="p_button">
                     <button type="button">第TCG{{item.CurrentPeriod}}期</button>
+
                 </div>
 
                 <div class="p_progress">
                     <div class="p_prog">{{item.TotalNum-item.RemainNum+'/'+item.TotalNum}}</div>
                     <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
-                    <p> 已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</p>
+
                 </div>
             </div>
+            <p style="text-align:center;padding:.2rem;"><span class="c-red">往期送出{{item.CurrentPeriod-1}}件</span> 已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</p>
+
         </div>
     </div>
 </template>

@@ -34,14 +34,14 @@
                 <div class="showtime" v-for="(item, index) in TopObjectList" :key="index">
                     <showtime :TimeSrc="item"></showtime>
                     <div class="bannerPad" v-if="item.RecommendType!=2">
-                        <img :src=item.productAd[0].Src alt="广告">
+                        <router-link :to="`${'/menuThree/0?gg='}${item.RecommendType}`"> <img :src=item.productAd[0].Src alt="广告"> </router-link>
                         <GoodsList :post-title="item"></GoodsList>
                     </div>
                     <div class="bannerPad" v-if="item.RecommendType==2">
-                        <img :src=item.productAd[0].Src alt="广告">
+                        <router-link to="/ProductGroupList"> <img :src=item.productAd[0].Src alt="广告"> </router-link>
                         <GoodsList2 :post-head="item"></GoodsList2>
                     </div>
-                  
+
                 </div>
             </div>
         </keep-alive>
@@ -90,7 +90,7 @@ export default {
                 console.log(response.data.data.IndexProductLst);
                 this.TopObjectList = response.data.data.IndexProductLst;
                 this.banners = response.data.data.broadcastAd;
-                this.headNews = response.data.data.headNews;
+                this.headNews = response.data.data.expressNews;
                 this.InProfit = [
                     ...response.data.data.bonusSuperiorAd,
                     ...response.data.data.headDetonatingAd

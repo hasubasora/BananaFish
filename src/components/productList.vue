@@ -10,7 +10,7 @@
       </router-link>
     </yd-navbar>
     <yd-scrolltab>
-      <yd-scrolltab-panel :label="item.CateName" @click.native="GoThreeList(item.LstSubCategory[index].CategoryId)" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
+      <yd-scrolltab-panel :label="item.CateName"  v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
         <div style="background-color: gray;">
           <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
           <yd-grids-group :rows="3" title="" item-height="2rem" >
@@ -85,6 +85,7 @@ export default {
     },
     methods: {
         GoThreeList(i) {
+            console.log('-----------------');
             console.log(i);
             this.$router.push({ name: "menuThree", params: { Group_id: i } });
         }

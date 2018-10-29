@@ -28,7 +28,7 @@
                                     <!-- 下半截 -->
                                     <div class="ModelProduct" v-if="item.ModelProduct">
                                         <!-- 左边 -->
-                                        <div class="ModelProductLeft">
+                                        <div class="ModelProductLeft" @click="GoToItem(item.GroupId)">
                                             <span class="tag titleColor">本期头筹奖品</span>
                                             <img class="GoodImg" :src="item.ModelProduct.ProductImg" alt="">
                                             <p class="GoodTitle">{{item.ModelProduct.ProductTitle}}</p>
@@ -306,7 +306,14 @@ export default {
         IsTheTop: IsTheTop => require(["@/components/IsTheTop"], IsTheTop),
         InTheTop: InTheTop => require(["@/components/InTheTop"], InTheTop)
     },
-
+    methods: {
+        GoToItem(id) {
+            this.$router.push({
+                name: "ItemDescription",
+                params: { ItemGood_id: id }
+            });
+        }
+    },
     created() {
         this.$axios({
             method: "POST",

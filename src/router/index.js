@@ -187,12 +187,17 @@ export default new Router({
     }, { //HTML
       path: '/OrderLogisticsApp',
       name: 'OrderLogisticsApp',
-      
+
       component: OrderLogisticsApp => require(["@/components/OrderLogisticsApp"], OrderLogisticsApp),
     }, { //HTML
       path: '/HtmlApp',
       name: 'HtmlApp',
       component: HtmlApp => require(["@/components/HtmlApp"], HtmlApp),
+    }, //HTML
+    {
+      path: '/helpApp',
+      name: 'helpApp',
+      component: helpApp => require(["@/components/helpApp"], helpApp),
     }, { //退款详情
       path: '/SalesReturnApplyFor',
       name: 'SalesReturnApplyFor',

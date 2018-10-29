@@ -12,7 +12,7 @@
         <div class="RedDataTitle">
             <p>
                 <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`" class="write">平台积分数据</router-link>
-                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`" >我的积分数据</router-link>
+                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`">我的积分数据</router-link>
             </p>
         </div>
         <!-- <router-view></router-view> -->
@@ -62,7 +62,9 @@
 export default {
     data() {
         this.chartSettings = {
-            yAxisType: ["percent"]
+            yAxisType: ["percent"],
+            stack: { 用户: ["访问用户", "下单用户"] },
+            area: true
         };
         return {
             objectData: [],

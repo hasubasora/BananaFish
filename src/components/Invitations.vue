@@ -87,10 +87,7 @@ export default {
                     icon: require("../assets/Img/b2.png"),
                     title: "微信好友"
                 },
-                {
-                    icon: require("../assets/Img/b3.png"),
-                    title: "保存并分享"
-                }
+               
             ],
             fileName: []
         };

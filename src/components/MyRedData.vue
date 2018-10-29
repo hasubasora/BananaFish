@@ -4,19 +4,19 @@
             <router-link to="" slot="left" @click.native="GoHistory('Home')">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" slot="right" @click.native="GoHistory('Home')">
+            <router-link to="" slot="right" @click.native="GO_TO_PAGE()">
                 积分规则
             </router-link>
         </yd-navbar>
         <div class="RedDataTitle">
             <p class="TitleFlex">
                 <router-link :to="`${'/MyRedData?IsAPP='}${this.$route.query.IsAPP}`">平台积分数据</router-link>
-                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`"  class="MyWrite">我的积分数据</router-link>
+                <router-link :to="`${'/RedData?IsAPP='}${this.$route.query.IsAPP}`" class="MyWrite">我的积分数据</router-link>
             </p>
         </div>
         <yd-flexbox direction="vertical" class="RedData">
             <yd-flexbox-item style="text-align:center">
-                <div style="color:#999;margin:.2rem 0">万份积分收益(元)</div>
+                <div style="color:#999;margin:.2rem 0">昨日积分收益(元)</div>
                 <p style="color:#ff5f17;margin:.2rem 0;font-size:.5rem">{{objectData.rangeprofit}}</p>
             </yd-flexbox-item>
         </yd-flexbox>
@@ -25,7 +25,7 @@
                 <yd-tab-panel v-for="item in items" :label="item.label"> -->
 
             <yd-flexbox-item>
-                <ve-line :data="chartData" height='5rem'></ve-line>
+                <ve-line :data="chartData" height='5rem' :settings="chartSettings"></ve-line>
             </yd-flexbox-item>
 
             <!--     </yd-tab-panel>
@@ -58,7 +58,7 @@
                     <img style="width:.5rem" v-if="item.Ranking==3" src="../assets/Img/a3.png">
                 </span>
                 <span slot="left" style="margin-left:1rem">
-                    <img :src="item.UserIcon" alt=""  class="redUserIcon" >
+                    <img :src="item.UserIcon" alt="" class="redUserIcon">
                     <div class="redNickName">
                         <p> {{item.NickName}}</p>
                         <p> 获得积分{{item.Profit}}</p>
@@ -71,8 +71,17 @@
     </div>
 </template>
 <script>
+import { TO_PAGE } from "../main.js";
 export default {
     data() {
+        this.chartSettings = {
+            yAxisType: ["KMB"],
+            // yAxisName: ["222", "333"],
+            // stack: { 用户: ["访问用户", "下单用户"] },
+            labelMap:{ 'Range': ['收益'] },
+            legendName:{ 'Range': ['收益'] },
+            area: true
+        };
         return {
             tab2: 0,
             items: [
@@ -102,6 +111,9 @@ export default {
         this.GetRedData();
     },
     methods: {
+        GO_TO_PAGE() {
+            TO_PAGE("fhgz");
+        },
         fn(label, key) {
             console.log(label, key);
         },

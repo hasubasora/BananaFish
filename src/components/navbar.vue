@@ -15,7 +15,7 @@
                     <yd-slider-item v-for="(item, index) in headNews" :key="index">
                         <!-- <p class="headNewsText"> -->
                             <!-- <span style="color:#F00;"> 荐 </span> -->
-                            <span style="">{{item}}</span>
+                            <span style="">恭喜<i class="c-red">{{item.NickName}}</i> 获得<i class="c-red">{{item.OrderTitle}}</i></span>
                         <!-- </p> -->
                     </yd-slider-item>
                 </yd-slider>
@@ -99,7 +99,7 @@ export default {
     display: flex;
     background: #fff;
     .newsBox {
-        width: 6.8rem;
+        width: 6.9rem;
         // height: 0.7rem;
         display: flex;
         font-size: 0.25rem;
