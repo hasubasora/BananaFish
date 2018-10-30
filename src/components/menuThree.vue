@@ -59,7 +59,8 @@ export default {
                 { CateName: "精选", content: " " }
             ],
             rows: [],
-            Group_id: 0
+            Group_id: 0,
+            RecommendType: this.$route.query.gg
         };
     },
     mounted() {
@@ -95,7 +96,7 @@ export default {
                     pageindex: this.page,
                     pagesize: this.pageSize,
                     categoryid: this.Group_id,
-                    RecommendType: this.Group_id
+                    RecommendType: this.RecommendType
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct"
             }).then(response => {
@@ -129,26 +130,36 @@ export default {
             console.log(this.items[key].CategoryId);
             localStorage.setItem("GoodsKey", this.items[key].CategoryId);
             this.Group_id = this.items[key].CategoryId;
+            console.log("---------------------------------");
             console.log(this.items[key].CategoryId);
-            this.getCategoryProduct(this.items[key].CategoryId);
+            console.log(this.items[key].RecommendType);
+            this.getCategoryProduct(
+                this.items[key].CategoryId,
+                this.items[key].RecommendType
+            );
 
             this.$dialog.loading.open("数据加载中");
             setTimeout(() => {
                 this.tab2 = key;
                 this.$dialog.loading.close();
                 this.items[key].content = this.rows;
-            }, 1000);
+            }, 500);
         },
-        getCategoryProduct(Group_id) {
+        getCategoryProduct(Group_id, gType) {
+            let _RecommendType 
+            if (gType != 0) {
+                _RecommendType = gType;
+            } else {
+                _RecommendType = this.RecommendType;
+            } 
+
             this.$axios({
                 method: "POST",
                 data: {
                     pageindex: 1,
                     pagesize: 10,
                     categoryid: Group_id,
-                    RecommendType: this.$route.query.gg
-                        ? this.$route.query.gg
-                        : 0
+                    RecommendType: _RecommendType
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct",
                 responseType: "json"

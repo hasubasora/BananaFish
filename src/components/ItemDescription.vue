@@ -85,7 +85,7 @@
             </yd-flexbox-item>
 
             <yd-flexbox-item>
-                <p class="d_text">参与用户<span>&nbsp;本期于{{GoodsList.SId}}开始</span></p>
+                <p class="d_text">参与用户</p>
                 <yd-flexbox v-for="(item, index) in LstOrder" :key="index" style="padding:.2rem;background:#fff;border-bottom:1px solid #f2f2f2">
                     <img :src="item.UserIcon" alt="" style="border-radius:500px;width:1rem;height:1rem;margin-right:.2rem">
                     <!-- <yd-flexbox-item>{{item.UserIcon}}</yd-flexbox-item> -->
