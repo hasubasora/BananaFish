@@ -3,7 +3,7 @@
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo" >
 
         <div v-if="GoodsList==''" slot="list"  style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无头筹商品哦~</div>
-        <div class="goodsList" slot="list" v-for="item in GoodsList" :key="item.id">
+        <div class="goodsList" slot="list" v-for="item in GoodsList" :key="item.id"> 
             <yd-flexbox class="backgoods">
                 <yd-flexbox-item>
                     <div class="goodsListOne">

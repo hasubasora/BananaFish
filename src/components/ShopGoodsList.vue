@@ -1,5 +1,6 @@
 <template>
     <div class="ShopGoodslist">
+
         <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" fixed>
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
@@ -9,58 +10,68 @@
                 <yd-flexbox-item @click.native='GoTopGoodsList' style="padding:.1rem .3rem;color:#fff">头筹订单</yd-flexbox-item>
             </yd-flexbox>
         </yd-navbar>
-        <yd-tab v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
-            <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
-                <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
-                    <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId)">
-                        <div slot="left">订单编号:{{itemt.OrderId}}</div>
-                        <div slot="right">{{itemt.OrderStatusStr}}</div>
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <yd-tab slot="list" v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
+                <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
 
-                    </yd-preview-header>
+                    <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
+                        <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId)">
+                            <div slot="left">订单编号:{{itemt.OrderId}}</div>
+                            <div slot="right">{{itemt.OrderStatusStr}}</div>
 
-                    <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id">
-                        <div slot="left">
-                            <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
-                        <div slot="right">
-                            <yd-flexbox>
-                                <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
-                                    <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
-                                    <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
-                                    <p class="Integral">
-                                        <span>积分奖励{{GoodsInfo.Integral}}分</span>
-                                    </p>
-                                </yd-flexbox-item>
-                                <div class="GoodsInfo">
-                                    <span>¥{{GoodsInfo.BuyPrice}}</span>
-                                    <span>x{{GoodsInfo.BuyNumber}}</span>
-                                </div>
-                            </yd-flexbox>
+                        </yd-preview-header>
 
-                        </div>
-                    </yd-preview-item>
+                        <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id">
+                            <div slot="left">
+                                <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
+                            <div slot="right">
+                                <yd-flexbox>
+                                    <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
+                                        <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
+                                        <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
+                                        <p class="Integral">
+                                            <span>积分奖励{{GoodsInfo.Integral}}分</span>
+                                        </p>
+                                    </yd-flexbox-item>
+                                    <div class="GoodsInfo">
+                                        <span>¥{{GoodsInfo.BuyPrice}}</span>
+                                        <span>x{{GoodsInfo.BuyNumber}}</span>
+                                    </div>
+                                </yd-flexbox>
 
-                    <yd-preview-item>
-                        <div slot="left"></div>
-                        <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount+itemt.ExpressAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
-                    </yd-preview-item>
-                    <yd-preview-item>
-                        <div slot="left"></div>
+                            </div>
+                        </yd-preview-item>
 
-                        <div slot="right">
-                            <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button> -->
-                            <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">申请退货</button> -->
-                            <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
-                            <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
-                            <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
-                            <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
-                            <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
-                            <!-- <router-link to='"/SalesReturnApplyFor"+itemt.OrderId'>退货退款</router-link> -->
-                            <!-- <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==7" type="button">申请售后</button> -->
-                        </div>
-                    </yd-preview-item>
-                </yd-preview>
-            </yd-tab-panel>
-        </yd-tab>
+                        <yd-preview-item>
+                            <div slot="left"></div>
+                            <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount+itemt.ExpressAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
+                        </yd-preview-item>
+                        <yd-preview-item>
+                            <div slot="left"></div>
+
+                            <div slot="right">
+                                <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==5" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button> -->
+                                <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">申请退货</button> -->
+                                <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
+                                <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
+                                <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
+                                <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
+                                <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                                <!-- <router-link to='"/SalesReturnApplyFor"+itemt.OrderId'>退货退款</router-link> -->
+                                <!-- <button class="orderBtn orangeBtn" v-if="itemt.OrderStatus==7" type="button">申请售后</button> -->
+                            </div>
+                        </yd-preview-item>
+                    </yd-preview>
+
+                </yd-tab-panel>
+            </yd-tab>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">已经到底啦~♪(^∇^*)~</span>
+
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+
+        </yd-infinitescroll>
         <yd-popup v-model="show1" position="center" width="90%">
             <div style="background-color:#fff;padding:.1rem">
                 <!-- 支付方式 -->
@@ -73,6 +84,7 @@
                 </yd-cell-group>
             </div>
         </yd-popup>
+
     </div>
 
 </template>
@@ -97,15 +109,21 @@ export default {
                 { label: "售后", content: [] }
             ],
             btns: [],
-            GetTypePay: ""
+            GetTypePay: "",
+            page: 1,
+            pageSize: 4,
+            dota: 0,
+            totalcount: 0
         };
     },
     created() {
         let Qnum = this.$route.query.plan;
         if (Qnum == 5) {
             this.GetGoodsList(8);
+            this.dota = 8;
         } else {
             this.GetGoodsList(Qnum);
+            this.dota = Qnum;
         }
         this.$dialog.loading.open("拼命加载中...>_<");
         setTimeout(params => {
@@ -201,12 +219,7 @@ export default {
                 });
                 return;
             }
-            GoBuySometing(
-                '',
-                this.OrderID,
-                this.picked,
-                this.GetTypePay
-            );
+            GoBuySometing("", this.OrderID, this.picked, this.GetTypePay);
 
             // window.location.href =
             //     this.$server.serverUrl +
@@ -235,6 +248,7 @@ export default {
                         icon: "success"
                     });
                     this.GetGoodsList(0);
+                    this.dota = 0;
                     setTimeout(e => {
                         this.items[Number(0)].content = this.GoodsHtml;
                         this.tab2 = Number(0);
@@ -253,8 +267,8 @@ export default {
                 method: "POST",
                 data: {
                     orderstatus: sta - 1, //0等待支付，1已付款，2已发货，3已完成，4已评价
-                    pageindex: 1,
-                    pagesize: 10
+                    pageindex: this.page,
+                    pagesize: this.pageSize
                 },
                 url: this.$server.serverUrl + "/account/getmyintegralorder",
                 responseType: "json"
@@ -264,6 +278,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
+                    this.totalcount = response.data.totalcount;
                     // console.log(sta);
                     // console.log(this.GoodsHtml);
                 } else {
@@ -271,7 +286,47 @@ export default {
                 }
             });
         },
+        loadList() {
+            console.log(this.dota);
+            this.$axios({
+                method: "POST",
+                data: {
+                    pageindex: this.page,
+                    pagesize: this.pageSize,
+                    orderstatus: this.dota - 1
+                },
+                url: this.$server.serverUrl + "/account/getmyintegralorder"
+            }).then(response => {
+                const _list = response.data.rows;
 
+                this.GoodsHtml = [...this.GoodsHtml, ..._list];
+                // this.items[this.dota - 1].content = this.GoodsHtml;
+                // this.tab2 = Number(this.dota);
+                console.log(this.items);
+                this.$set(
+                    this.items[Number(this.dota)],
+                    "content",
+                    this.GoodsHtml
+                );
+      
+                if (this.GoodsHtml.length > this.totalcount) {
+                    // console.log("所有数据加载完毕");
+                    /* 所有数据加载完毕 */
+                    this.$refs.infinitescrollDemo.$emit(
+                        "ydui.infinitescroll.loadedDone"
+                    );
+                    return;
+                }
+                // console.log("单次请求数据完毕");
+
+                /* 单次请求数据完毕 */
+                this.$refs.infinitescrollDemo.$emit(
+                    "ydui.infinitescroll.finishLoad"
+                );
+
+                this.page++;
+            });
+        },
         fn(label, key) {
             console.log(label, key);
         },
@@ -283,7 +338,6 @@ export default {
             setTimeout(() => {
                 this.tab2 = key;
                 this.$dialog.loading.close();
-
                 this.items[key].content = this.GoodsHtml;
 
                 //   "新内容【key:" + key + "】新内容_" + new Date().getTime();

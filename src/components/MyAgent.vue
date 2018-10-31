@@ -28,14 +28,21 @@
             <yd-flexbox-item>用户</yd-flexbox-item>
             <yd-flexbox-item>业绩</yd-flexbox-item>
         </yd-flexbox>
-        <div class="AgentLish">
-            <yd-flexbox v-for="(item, index) in AgentLish" :key="index">
-                <yd-flexbox-item><img style="border-radius:50px;width:1rem;height:1rem" :src="item.UserIcon" alt=""></yd-flexbox-item>
-                <yd-flexbox-item>{{item.NickName}}</yd-flexbox-item>
-                <yd-flexbox-item class="c-red">￥{{item.Commission}}</yd-flexbox-item>
-            </yd-flexbox>
-        </div>
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <div class="AgentLish" slot="list">
+                <yd-flexbox v-for="(item, index) in AgentLish" :key="index">
+                    <yd-flexbox-item><img style="border-radius:50px;width:1rem;height:1rem" :src="item.UserIcon" alt=""></yd-flexbox-item>
+                    <yd-flexbox-item>{{item.NickName}}</yd-flexbox-item>
+                    <yd-flexbox-item class="c-red">￥{{item.Commission}}</yd-flexbox-item>
+                </yd-flexbox>
+            </div>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">已经到底啦~♪(^∇^*)~</span>
 
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+
+        </yd-infinitescroll>
     </div>
 </template>
 <style lang="scss">
@@ -79,7 +86,9 @@ export default {
         return {
             AgentLish: [],
             totals: 0,
-            weekTotal: 0
+            weekTotal: 0,
+            page: 1,
+            pageSize: 6
         };
     },
     created() {
@@ -111,7 +120,9 @@ export default {
                 method: "POST",
                 data: {
                     // token: "052d71f3-6fd7-4323-beda-53cd0479fd53",
-                    Type: 1
+                    Type: 1,
+                    pageindex: this.page,
+                    pagesize: this.pageSize
                 },
                 url: this.$server.serverUrl + "/Agent/GetCommissionsLst",
                 responseType: "json"
@@ -125,6 +136,36 @@ export default {
                     this.weekTotal = response.data.weekTotal;
                     console.log(response.data);
                 }
+            });
+        },
+        loadList() {
+            this.$axios({
+                method: "POST",
+                data: {
+                    pageindex: this.page,
+                    pagesize: this.pageSize,
+                    Type: 1
+                },
+                url: this.$server.serverUrl + "/Agent/GetCommissionsLst"
+            }).then(response => {
+                const _list = response.data.rows;
+                this.AgentLish = [...this.AgentLish, ..._list];
+                if (_list.length < this.pageSize || this.page == 3) {
+                    // console.log("所有数据加载完毕");
+                    /* 所有数据加载完毕 */
+                    this.$refs.infinitescrollDemo.$emit(
+                        "ydui.infinitescroll.loadedDone"
+                    );
+                    return;
+                }
+                // console.log("单次请求数据完毕");
+
+                /* 单次请求数据完毕 */
+                this.$refs.infinitescrollDemo.$emit(
+                    "ydui.infinitescroll.finishLoad"
+                );
+
+                this.page++;
             });
         }
     }
