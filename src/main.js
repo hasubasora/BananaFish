@@ -148,18 +148,18 @@ export const SalesReturnApplyFor = (id) => {
 }
 
 
-export const GetWeixinPay = (...value) => {
-  console.log(value);
+export const GetWeixinPay = (...res) => {
+  console.log(res);
 
-  function onBridgeReady() {
+  function onBridgeReady(res) {
     WeixinJSBridge.invoke(
       'getBrandWCPayRequest', {
-        "appId": "wx2421b1c4370ec43b", //公众号名称，由商户传入     
-        "timeStamp": "1395712654", //时间戳，自1970年以来的秒数     
-        "nonceStr": "e61463f8efa94090b1f366cccfbbb444", //随机串     
-        "package": "prepay_id=u802345jgfjsdfgsdg888",
+        "appId": res.appId, //公众号名称，由商户传入     
+        "timeStamp": res.timeStamp, //时间戳，自1970年以来的秒数     
+        "nonceStr": res.nonceStr, //随机串     
+        "package": res.package,
         "signType": "MD5", //微信签名方式：     
-        "paySign": "70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
+        "paySign": res.paySign //微信签名 
       },
       function (res) {
         if (res.err_msg == "get_brand_wcpay_request:ok") {
@@ -192,14 +192,7 @@ export const GoBuySometing = (tc, pt, picked, GetTypePay) => {
     console.log("跳网页支付");
     this.h5axiox(tc, pt, picked);
   } else {
-    if (picked == 30000) {
-      console.log("调用微信支付");
-      // GetWeixinPay([1, 2, 3, 4]);
-      this.weixinAip(tc, pt, picked);
-    } else {
-      console.log("调用余额支付");
-      this.weixinAip(tc, pt, picked);
-    }
+    this.weixinAip(tc, pt, picked);
   }
 }
 
@@ -215,24 +208,53 @@ export const h5axiox = (tc, pt, picked) => {
 }
 
 export const weixinAip = (tc, pt, picked) => {
-  axios({
-    method: "POST",
-    url: serverUrl.serverUrl + "/Paying/GoPay",
-    params: {
-      Client: 0,
-      GroupOrderIdList: tc,
-      OrderIdList: pt,
-      payType: picked
-    }
-  }).then(response => {
-    this.LOGIN_SUCCESS(response.data.success);
-    if (response.data.success == 200) {
-      alert('ok')
-    }
-    if (response.data.success == 300) {
-      alert(response.data.msg + '请重新选择支付方式！')
-    }
-  });
+
+  if (picked == 30000) {
+    console.log("调用微信支付");
+    axios({
+      method: "POST",
+      url: serverUrl.serverUrl + "/Paying/GoPay",
+      params: {
+        Client: 0,
+        GroupOrderIdList: tc,
+        OrderIdList: pt,
+        payType: picked
+      }
+    }).then(response => {
+      this.LOGIN_SUCCESS(response.data.success);
+      if (response.data.success == 200) {
+        GetWeixinPay(response.data);
+      }
+    });
+  } else {
+    console.log("调用余额支付");
+    axios({
+      method: "POST",
+      url: serverUrl.serverUrl + "/Paying/GoPay",
+      params: {
+        Client: 0,
+        GroupOrderIdList: tc,
+        OrderIdList: pt,
+        payType: picked
+      }
+    }).then(response => {
+      this.LOGIN_SUCCESS(response.data.success);
+      if (response.data.success == 200) {
+        router.push({
+          name: "ShopGoodsList",
+          query: {
+            plan: 2
+          }
+        });
+      }
+      if (response.data.success == 300) {
+        alert(response.data.msg + '，请重新选择支付方式！')
+      }
+    });
+  }
+
+
+
 }
 
 
