@@ -35,7 +35,7 @@
             </yd-cell-group>
             <!-- 支付方式 -->
             <yd-cell-group title="支付方式">
-                <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                     <span slot="left">{{PayListitem.payName}}</span>
                     <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
                 </yd-cell-item>
@@ -79,14 +79,15 @@
     </div>
 </template>
 <script>
-import { GoBuySometing, LOGIN_SUCCESS } from "../main.js";
+import { GoBuySometing, LOGIN_SUCCESS, GetWeixinPay } from "../main.js";
 export default {
     data() {
         return {
             GoodsList: [],
             address: [],
             picked: "",
-            PayList: []
+            PayList: [],
+            GetTypePay: ""
         };
     },
     created() {
@@ -158,6 +159,11 @@ export default {
         GetAddress() {
             this.$router.push({ name: "selectAddress" });
         },
+        GetType(e) {
+            console.log(e);
+            console.log("---");
+            this.GetTypePay = e;
+        },
         GoBuySometing() {
             if (!this.picked) {
                 this.$dialog.toast({
@@ -166,6 +172,17 @@ export default {
                     icon: "error",
                     callback: () => {
                         // this.$router.push({ name: "SuccessOrder" });
+                    }
+                });
+                return;
+            }
+            if (this.GoodsList.rows.length < 1) {
+                this.$dialog.toast({
+                    mes: "订单超时",
+                    timeout: 1500,
+                    icon: "error",
+                    callback: () => {
+                        this.$dialog.alert({ mes: "请重新选择商品！" });
                     }
                 });
                 return;
@@ -186,55 +203,74 @@ export default {
                         timeout: 1500,
                         icon: "success",
                         callback: () => {
-                            GoBuySometing();
-                            this.h5axiox(
-                                response.data.GroupOrderIdList,
-                                response.data.OrderIdList
-                            );
-                            this.$dialog.confirm({
-                                title: "支付信息",
-                                mes: "是否已支付完成？",
-                                opts: [
-                                    {
-                                        txt: "取消",
-                                        color: false,
-                                        callback: () => {
-                                            this.$dialog.toast({
-                                                mes: "取消支付",
-                                                timeout: 1000
-                                            });
-                                        }
-                                    },
-                                    {
-                                        txt: "确定",
-                                        color: true,
-                                        callback: () => {
-                                            this.$router.push({
-                                                name: "ShopGoodsList",
-                                                query: { plan: 2 }
-                                            });
-                                        }
-                                    }
-                                ]
-                            });
+                            GoBuySometing( response.data.GroupOrderIdList,response.data.OrderIdList,this.picked,this.GetTypePay);
+                            // if (this.GetTypePay) {
+                            //     console.log("跳网页支付");
+                            //     this.h5axiox(
+                            //         response.data.GroupOrderIdList,
+                            //         response.data.OrderIdList
+                            //     );
+                            // } else {
+                            //     if (this.picked == 30000) {
+                            //         console.log("调用微信支付");
+                            //         // GetWeixinPay([1, 2, 3, 4]);
+                            //         this.weixinAip(
+                            //             response.data.GroupOrderIdList,
+                            //             response.data.OrderIdList
+                            //         );
+                            //     } else {
+                            //         console.log("调用余额支付");
+                            //         this.weixinAip(
+                            //             response.data.GroupOrderIdList,
+                            //             response.data.OrderIdList
+                            //         );
+                            //     }
+                            // }
+
+                            // this.$dialog.confirm({
+                            //     title: "支付信息",
+                            //     mes: "是否已支付完成？",
+                            //     opts: [
+                            //         {
+                            //             txt: "取消",
+                            //             color: false,
+                            //             callback: () => {
+                            //                 this.$dialog.toast({
+                            //                     mes: "取消支付",
+                            //                     timeout: 1000
+                            //                 });
+                            //             }
+                            //         },
+                            //         {
+                            //             txt: "确定",
+                            //             color: true,
+                            //             callback: () => {
+                            //                 this.$router.push({
+                            //                     name: "ShopGoodsList",
+                            //                     query: { plan: 2 }
+                            //                 });
+                            //             }
+                            //         }
+                            //     ]
+                            // });
 
                             // this.$router.push({ name: "SuccessOrder" });
                         }
                     });
                 }
-                if (response.data.success == 300) {
-                    this.$dialog.toast({
-                        mes: "请选择地址",
-                        timeout: 1500,
-                        icon: "error"
-                    });
-                }
-                if (response.data.success == 400) {
-                    this.$router.push({
-                        name: "SignIn",
-                        query: { Good_name: "2" }
-                    });
-                }
+                // if (response.data.success == 300) {
+                //     this.$dialog.toast({
+                //         mes: "请选择地址",
+                //         timeout: 1500,
+                //         icon: "error"
+                //     });
+                // }
+                // if (response.data.success == 400) {
+                //     this.$router.push({
+                //         name: "SignIn",
+                //         query: { Good_name: "2" }
+                //     });
+                // }
             });
         },
         //提交支付
@@ -247,6 +283,22 @@ export default {
                 pt +
                 "&payType=" +
                 this.picked;
+        },
+        weixinAip(tc, pt) {
+            this.$axios({
+                method: "POST",
+                url: this.$server.serverUrl + "/Paying/GoPay",
+                params: {
+                    Client: 0,
+                    GroupOrderIdList: tc,
+                    OrderIdList: pt,
+                    payType: this.picked
+                }
+            }).then(response => {
+                LOGIN_SUCCESS(response.data.success);
+                if (response.data.success == 200) {
+                }
+            });
         }
     }
 };

@@ -65,7 +65,7 @@
             <div style="background-color:#fff;padding:.1rem">
                 <!-- 支付方式 -->
                 <yd-cell-group title="支付方式">
-                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                         <span slot="left">{{PayListitem.payName}}</span>
                         <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
                     </yd-cell-item>
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { SalesReturnApplyFor } from "../main.js";
+import { GoBuySometing, SalesReturnApplyFor } from "../main.js";
 export default {
     data() {
         return {
@@ -96,7 +96,8 @@ export default {
                 { label: "待评价", content: [] },
                 { label: "售后", content: [] }
             ],
-            btns: []
+            btns: [],
+            GetTypePay: ""
         };
     },
     created() {
@@ -132,6 +133,9 @@ export default {
         });
     },
     methods: {
+        GetType(e) {
+            this.GetTypePay = e;
+        },
         OrderLogistics(oid) {
             this.$router.push({
                 name: "OrderLogistics",
@@ -184,6 +188,7 @@ export default {
             });
         },
         //订单支付
+
         OrderPaying(id) {
             if (!this.picked) {
                 this.$dialog.toast({
@@ -196,12 +201,19 @@ export default {
                 });
                 return;
             }
-            window.location.href =
-                this.$server.serverUrl +
-                "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
-                this.OrderID +
-                "&payType=" +
-                this.picked;
+            GoBuySometing(
+                '',
+                this.OrderID,
+                this.picked,
+                this.GetTypePay
+            );
+
+            // window.location.href =
+            //     this.$server.serverUrl +
+            //     "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
+            //     this.OrderID +
+            //     "&payType=" +
+            //     this.picked;
         },
         //确认收货
         receivedmyorder(id) {

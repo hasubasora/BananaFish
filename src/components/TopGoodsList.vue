@@ -80,7 +80,7 @@
             <div style="background-color:#fff;padding:.1rem">
                 <!-- 支付方式 -->
                 <yd-cell-group title="支付方式">
-                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+                    <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                         <span slot="left">{{PayListitem.payName}}</span>
                         <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
                     </yd-cell-item>
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { GetUnTime } from "../main.js";
+import { GoBuySometing, GetUnTime } from "../main.js";
 
 export default {
     data() {
@@ -111,7 +111,8 @@ export default {
                 { label: "已开奖", content: [] }
                 // { label: "待评价", content: [] }
             ],
-            btns: []
+            btns: [],
+            GetTypePay: ""
         };
     },
     created() {
@@ -144,6 +145,9 @@ export default {
         });
     },
     methods: {
+        GetType(e) {
+            this.GetTypePay = e;
+        },
         GetUnTime(d) {
             if (d > 0) {
                 return GetUnTime(d, 1);
@@ -252,32 +256,14 @@ export default {
                 });
                 return;
             }
-            window.location.href =
-                this.$server.serverUrl +
-                "/Paying/GoPay?Client=0&GroupOrderIdList=" +
-                this.OrderID +
-                "&OrderIdList=&payType=" +
-                this.picked;
-            // this.$axios({
-            //     method: "POST",
-            //     data: {
-            //         orderId: id,
-            //         type: 1
-            //     },
-            //     url: this.$server.serverUrl + "/UserCenter/OrderPaying",
-            //     responseType: "json"
-            // }).then(response => {
-            //     if (response.data.success == 400) {
-            //         this.$router.push({ name: "SignIn" });
-            //     }
-            //     if (response.data.success == 200) {
-            //         this.GetGoodsList(0);
-            //         setTimeout(e => {
-            //             this.items[Number(0)].content = this.GoodsHtml;
-            //             this.tab2 = Number(0);
-            //         }, 1000);
-            //     }
-            // });
+            GoBuySometing(this.OrderID, "", this.picked, this.GetTypePay);
+
+            // window.location.href =
+            //     this.$server.serverUrl +
+            //     "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+            //     this.OrderID +
+            //     "&OrderIdList=&payType=" +
+            //     this.picked;
         },
         //确认收货
         receivedmyorder(id) {

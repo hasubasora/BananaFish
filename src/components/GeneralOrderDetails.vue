@@ -16,7 +16,7 @@
             </div>
         </div>
         <yd-cell-group title="支付方式" v-if="OrderIdList.OrderStatus==0">
-            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                 <span slot="left">{{PayListitem.payName}}</span>
                 <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
             </yd-cell-item>
@@ -203,7 +203,8 @@ export default {
             PayList: [],
             allIntegral: 0,
             picked: "",
-            allPrice: 0
+            allPrice: 0,
+            GetTypePay: ""
         };
     },
 
@@ -246,8 +247,11 @@ export default {
         });
     },
     methods: {
-        SalesReturnApplyFor(id,obj) {
-            this.$store.commit('increment', obj) //触发
+        GetType(e) {
+            this.GetTypePay = e;
+        },
+        SalesReturnApplyFor(id, obj) {
+            this.$store.commit("increment", obj); //触发
             this.$router.push({
                 name: "SalesReturnApplyFor",
                 query: {
@@ -303,12 +307,13 @@ export default {
                 });
                 return;
             }
-            window.location.href =
-                this.$server.serverUrl +
-                "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
-                OrderID +
-                "&payType=" +
-                this.picked;
+            GoBuySometing("", OrderID, this.picked, this.GetTypePay);
+            // window.location.href =
+            //     this.$server.serverUrl +
+            //     "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
+            //     OrderID +
+            //     "&payType=" +
+            //     this.picked;
         },
         GoShopGoodsList() {
             this.$router.push({ name: "ShopGoodsList", query: { plan: 0 } });

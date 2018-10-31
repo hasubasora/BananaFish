@@ -26,7 +26,7 @@
             </div>
         </yd-preview-header>
         <yd-cell-group title="支付方式" v-if="OrderIdList.OrderStatus==0">
-            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index">
+            <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                 <span slot="left">{{PayListitem.payName}}</span>
                 <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
             </yd-cell-item>
@@ -261,7 +261,7 @@
 }
 </style>
 <script>
-import { GetUnTime } from "../main.js";
+import { GoBuySometing, GetUnTime } from "../main.js";
 export default {
     data() {
         return {
@@ -271,7 +271,8 @@ export default {
             allIntegral: 0,
             picked: "",
             allPrice: 0,
-            progress4: 0.01
+            progress4: 0.01,
+            GetTypePay: ""
         };
     },
 
@@ -375,12 +376,14 @@ export default {
                 });
                 return;
             }
-            window.location.href =
-                this.$server.serverUrl +
-                "/Paying/GoPay?Client=0&GroupOrderIdList=" +
-                OrderID +
-                "&OrderIdList=&payType=" +
-                this.picked;
+            GoBuySometing(OrderID, "", this.picked, this.GetTypePay);
+
+            // window.location.href =
+            //     this.$server.serverUrl +
+            //     "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+            //     OrderID +
+            //     "&OrderIdList=&payType=" +
+            //     this.picked;
         },
         GoShopGoodsList() {
             this.$router.push({ name: "ShopGoodsList", query: { plan: 0 } });

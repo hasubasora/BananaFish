@@ -481,7 +481,7 @@ export default {
 .GoodsHtml {
     > p {
         > img {
-            width: 100%;
+            width: 100%; display: block;
         }
     }
 }

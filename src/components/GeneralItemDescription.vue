@@ -329,7 +329,7 @@
     }
     .GoodsHtml {
         > img {
-            width: 100%;
+            width: 100%; display: block;
         }
     }
     .yd-nav-button {

@@ -147,11 +147,97 @@ export const SalesReturnApplyFor = (id) => {
   });
 }
 
-export const GoBuySometing = (tc, pt, picked) => {
 
-  window.location.href = serverUrl.serverUrl + "/Paying/GoPay?Client=0&GroupOrderIdList=" + tc + "&OrderIdList=" + pt + "&payType=" + picked;
+export const GetWeixinPay = (...value) => {
+  console.log(value);
 
+  function onBridgeReady() {
+    WeixinJSBridge.invoke(
+      'getBrandWCPayRequest', {
+        "appId": "wx2421b1c4370ec43b", //公众号名称，由商户传入     
+        "timeStamp": "1395712654", //时间戳，自1970年以来的秒数     
+        "nonceStr": "e61463f8efa94090b1f366cccfbbb444", //随机串     
+        "package": "prepay_id=u802345jgfjsdfgsdg888",
+        "signType": "MD5", //微信签名方式：     
+        "paySign": "70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
+      },
+      function (res) {
+        if (res.err_msg == "get_brand_wcpay_request:ok") {
+          // 使用以上方式判断前端返回,微信团队郑重提示：
+          //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+        }
+      });
+  }
+  if (typeof WeixinJSBridge == "undefined") {
+    if (document.addEventListener) {
+      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+    } else if (document.attachEvent) {
+      document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+      document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+    }
+  } else {
+    onBridgeReady();
+  }
 }
+/**
+ * 
+ * @param {*} tc 头筹id
+ * @param {*} pt 普通id
+ * @param {*} picked 支付类型
+ * @param {*} GetTypePay 支付跳转类型
+ */
+export const GoBuySometing = (tc, pt, picked, GetTypePay) => {
+  alert(1)
+  if (GetTypePay) {
+    console.log("跳网页支付");
+    this.h5axiox(tc, pt, picked);
+  } else {
+    if (picked == 30000) {
+      console.log("调用微信支付");
+      // GetWeixinPay([1, 2, 3, 4]);
+      this.weixinAip(tc, pt, picked);
+    } else {
+      console.log("调用余额支付");
+      this.weixinAip(tc, pt, picked);
+    }
+  }
+}
+
+export const h5axiox = (tc, pt, picked) => {
+  window.location.href =
+    serverUrl.serverUrl +
+    "/Paying/GoPay?Client=0&GroupOrderIdList=" +
+    tc +
+    "&OrderIdList=" +
+    pt +
+    "&payType=" +
+    picked;
+}
+
+export const weixinAip = (tc, pt, picked) => {
+  axios({
+    method: "POST",
+    url: serverUrl.serverUrl + "/Paying/GoPay",
+    params: {
+      Client: 0,
+      GroupOrderIdList: tc,
+      OrderIdList: pt,
+      payType: picked
+    }
+  }).then(response => {
+    this.LOGIN_SUCCESS(response.data.success);
+    if (response.data.success == 200) {
+      alert('ok')
+    }
+    if (response.data.success == 300) {
+      alert(response.data.msg + '请重新选择支付方式！')
+    }
+  });
+}
+
+
+
+
 //获取支付方式
 export const GetPay = () => {
   //获取支付地址
