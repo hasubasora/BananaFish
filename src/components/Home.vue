@@ -79,6 +79,8 @@ export default {
         }
     },
     created() {
+    
+
         this.GetMyMessageNum();
         this.$axios({
             method: "POST",
