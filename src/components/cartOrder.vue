@@ -207,7 +207,7 @@ export default {
                     url: this.$server.serverUrl + "/order/addorder",
                     responseType: "json"
                 }).then(response => {
-                    LOGIN_SUCCESS(response.data.success);
+                    LOGIN_SUCCESS(response.data);
                     if (response.data.success == 200) {
                        console.log(this.GroupOrderIdList = response.data.GroupOrderIdList);
                        console.log(this.OrderIdList = response.data.OrderIdList);

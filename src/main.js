@@ -64,18 +64,20 @@ export const TO_PAGE = (m) => {
   });
 }
 
-export const LOGIN_SUCCESS = (success) => {
-  switch (success) {
+export const LOGIN_SUCCESS = (res) => {
+  switch (res.success) {
     case 200:
       console.log('获取成功！');
       break;
     case 300:
+      alert(res.msg)
       console.log('请求错误，请刷新重试！');
       break;
     case 301:
       console.log('用户已过期，请刷新重试！');
       break;
     case 400:
+      alert(res.msg)
       console.log('你还没有登陆，请登陆！');
       router.push({
         name: "SignIn",
