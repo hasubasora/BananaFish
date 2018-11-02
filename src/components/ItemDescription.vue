@@ -31,7 +31,7 @@
                         <span class="spansPrice">市场价:{{GoodsList.MarketPrice}} </span>
                     </yd-flexbox-item>
                     <yd-flexbox-item>
-                        <span class="spanstitle"> {{OrangeGetUnTime(GoodsList.EndTotalSeconds)}}</span>
+                        <span class="spanstitle spansTime"> {{OrangeGetUnTime(GoodsList.EndTotalSeconds)}}</span>
                     </yd-flexbox-item>
                 </yd-flexbox>
             </div>
@@ -258,8 +258,12 @@ export default {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            width: 3.5rem;
+            width: 5.8rem;
             display: inline-block;
+        }
+        .spansTime {
+            width: 100%;
+            text-align: right;
         }
         .spansPrice {
             display: inline-block;

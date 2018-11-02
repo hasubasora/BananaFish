@@ -87,7 +87,9 @@ export default {
             address: [],
             picked: "",
             PayList: [],
-            GetTypePay: ""
+            GetTypePay: "",
+            GroupOrderIdList: "",
+            OrderIdList: ""
         };
     },
     created() {
@@ -187,91 +189,108 @@ export default {
                 });
                 return;
             }
-            this.$axios({
-                method: "POST",
-                data: {
-                    addressid: this.address.AddressId,
-                    orderType: this.$route.params.sid
-                },
-                url: this.$server.serverUrl + "/order/addorder",
-                responseType: "json"
-            }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
-                if (response.data.success == 200) {
-                    this.$dialog.toast({
-                        mes: "提交成功",
-                        timeout: 1500,
-                        icon: "success",
-                        callback: () => {
-                            GoBuySometing( response.data.GroupOrderIdList,response.data.OrderIdList,this.picked,this.GetTypePay);
-                            // if (this.GetTypePay) {
-                            //     console.log("跳网页支付");
-                            //     this.h5axiox(
-                            //         response.data.GroupOrderIdList,
-                            //         response.data.OrderIdList
-                            //     );
-                            // } else {
-                            //     if (this.picked == 30000) {
-                            //         console.log("调用微信支付");
-                            //         // GetWeixinPay([1, 2, 3, 4]);
-                            //         this.weixinAip(
-                            //             response.data.GroupOrderIdList,
-                            //             response.data.OrderIdList
-                            //         );
-                            //     } else {
-                            //         console.log("调用余额支付");
-                            //         this.weixinAip(
-                            //             response.data.GroupOrderIdList,
-                            //             response.data.OrderIdList
-                            //         );
-                            //     }
-                            // }
+       
+            if (this.GroupOrderIdList != 0 || this.OrderIdList != 0) {
+                GoBuySometing(
+                    this.GroupOrderIdList,
+                    this.OrderIdList,
+                    this.picked,
+                    this.GetTypePay
+                );
+            } else {
+                this.$axios({
+                    method: "POST",
+                    data: {
+                        addressid: this.address.AddressId,
+                        orderType: this.$route.params.sid
+                    },
+                    url: this.$server.serverUrl + "/order/addorder",
+                    responseType: "json"
+                }).then(response => {
+                    LOGIN_SUCCESS(response.data.success);
+                    if (response.data.success == 200) {
+                       console.log(this.GroupOrderIdList = response.data.GroupOrderIdList);
+                       console.log(this.OrderIdList = response.data.OrderIdList);
+                        this.$dialog.toast({
+                            mes: "提交成功",
+                            timeout: 1500,
+                            icon: "success",
+                            callback: () => {
+                                GoBuySometing(
+                                    response.data.GroupOrderIdList,
+                                    response.data.OrderIdList,
+                                    this.picked,
+                                    this.GetTypePay
+                                );
+                                // if (this.GetTypePay) {
+                                //     console.log("跳网页支付");
+                                //     this.h5axiox(
+                                //         response.data.GroupOrderIdList,
+                                //         response.data.OrderIdList
+                                //     );
+                                // } else {
+                                //     if (this.picked == 30000) {
+                                //         console.log("调用微信支付");
+                                //         // GetWeixinPay([1, 2, 3, 4]);
+                                //         this.weixinAip(
+                                //             response.data.GroupOrderIdList,
+                                //             response.data.OrderIdList
+                                //         );
+                                //     } else {
+                                //         console.log("调用余额支付");
+                                //         this.weixinAip(
+                                //             response.data.GroupOrderIdList,
+                                //             response.data.OrderIdList
+                                //         );
+                                //     }
+                                // }
 
-                            // this.$dialog.confirm({
-                            //     title: "支付信息",
-                            //     mes: "是否已支付完成？",
-                            //     opts: [
-                            //         {
-                            //             txt: "取消",
-                            //             color: false,
-                            //             callback: () => {
-                            //                 this.$dialog.toast({
-                            //                     mes: "取消支付",
-                            //                     timeout: 1000
-                            //                 });
-                            //             }
-                            //         },
-                            //         {
-                            //             txt: "确定",
-                            //             color: true,
-                            //             callback: () => {
-                            //                 this.$router.push({
-                            //                     name: "ShopGoodsList",
-                            //                     query: { plan: 2 }
-                            //                 });
-                            //             }
-                            //         }
-                            //     ]
-                            // });
+                                // this.$dialog.confirm({
+                                //     title: "支付信息",
+                                //     mes: "是否已支付完成？",
+                                //     opts: [
+                                //         {
+                                //             txt: "取消",
+                                //             color: false,
+                                //             callback: () => {
+                                //                 this.$dialog.toast({
+                                //                     mes: "取消支付",
+                                //                     timeout: 1000
+                                //                 });
+                                //             }
+                                //         },
+                                //         {
+                                //             txt: "确定",
+                                //             color: true,
+                                //             callback: () => {
+                                //                 this.$router.push({
+                                //                     name: "ShopGoodsList",
+                                //                     query: { plan: 2 }
+                                //                 });
+                                //             }
+                                //         }
+                                //     ]
+                                // });
 
-                            // this.$router.push({ name: "SuccessOrder" });
-                        }
-                    });
-                }
-                // if (response.data.success == 300) {
-                //     this.$dialog.toast({
-                //         mes: "请选择地址",
-                //         timeout: 1500,
-                //         icon: "error"
-                //     });
-                // }
-                // if (response.data.success == 400) {
-                //     this.$router.push({
-                //         name: "SignIn",
-                //         query: { Good_name: "2" }
-                //     });
-                // }
-            });
+                                // this.$router.push({ name: "SuccessOrder" });
+                            }
+                        });
+                    }
+                    // if (response.data.success == 300) {
+                    //     this.$dialog.toast({
+                    //         mes: "请选择地址",
+                    //         timeout: 1500,
+                    //         icon: "error"
+                    //     });
+                    // }
+                    // if (response.data.success == 400) {
+                    //     this.$router.push({
+                    //         name: "SignIn",
+                    //         query: { Good_name: "2" }
+                    //     });
+                    // }
+                });
+            }
         },
         //提交支付
         h5axiox(tc, pt) {

@@ -162,10 +162,11 @@ export const GetConfig = () => {
     }
   });
 }
-console.log(this.GetConfig());
-console.log('GetConfig()');
-
-
+GetConfig()
+/**
+ * 
+ * @param {*} res 调起微信支付
+ */
 export const GetWeixinPay = (res) => {
   console.log(res);
   let _res = res.retData
@@ -182,14 +183,22 @@ export const GetWeixinPay = (res) => {
         "paySign": _res.paySign //微信签名 
       },
       function (_res) {
-        console.log(_res);
-        console.log(_res.err_msg);
-
         if (_res.err_msg == "get_brand_wcpay_request:ok") {
-          console.log(_res.err_msg);
-
-          // 使用以上方式判断前端返回,微信团队郑重提示：
+          this.$router.push({
+            name: SuccessOrder,
+            query: {
+              Isok: 1
+            }
+          });
+          // 使用以上方式判断前端返回,微信团队郑重提示：SuccessOrder
           //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+        }else{
+          this.$router.push({
+            name: SuccessOrder,
+            query: {
+              Isok: 2
+            }
+          });
         }
       });
   }
@@ -232,10 +241,11 @@ export const h5axiox = (tc, pt, picked) => {
 }
 
 
+console.log(Url);
 
 export const weixinAip = (tc, pt, picked) => {
   if (picked == 30000) {
-    console.log("调用微信支付");
+    // console.log("调用微信支付");
     axios({
       method: "POST",
       url: Url,
@@ -252,7 +262,7 @@ export const weixinAip = (tc, pt, picked) => {
       }
     });
   } else {
-    console.log("调用余额支付");
+    // console.log("调用余额支付");
     axios({
       method: "POST",
       url: Url,

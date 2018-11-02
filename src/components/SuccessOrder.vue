@@ -17,10 +17,10 @@
         </div>
 
         <p class="ppp">支付完成后自行返回商城查看！</p>
-        <!-- <div class="btmPrimary">
+        <div class="btmPrimary">
             <yd-button size="large" type="primary" @click.native="GoHome('Home')">首页</yd-button>
             <yd-button size="large" type="warning" @click.native="GoHome('MyInfo')">我的中心</yd-button>
-        </div> -->
+        </div>
 
     </yd-layout>
 </template>

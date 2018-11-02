@@ -918,7 +918,7 @@ export default {
 
                             success: function() {
                                 // 用户点击了分享后执行的回调函数
-                                alert("分享成功！");
+                                // alert("分享成功！");
                             }
                         });
                     });

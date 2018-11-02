@@ -41,7 +41,7 @@
                 <p>{{OrderIdList.ShipAddress}}</p>
             </div>
         </div>
-        <div class="OrderList" v-for="(item, itemIndex) in OrderIdList.LstProduct" :key="itemIndex">
+        <div class="OrderList" v-for="(item, itemIndex) in OrderIdList.LstProduct" :key="itemIndex" @click="GoToGoodsDes(item.ProductId)">
             <yd-flexbox>
                 <img class="OrderImg" :src="item.ProductImg" alt="" width="60">
                 <yd-flexbox-item>
@@ -59,7 +59,6 @@
         </div>
         <yd-flexbox-item>
             <yd-preview :buttons="btns">
-
                 <yd-preview-item>
                     <div slot="left">商品总金额</div>
                     <div slot="right">¥{{allPrice}}</div>
@@ -296,6 +295,12 @@ export default {
         this.porderDetail();
     },
     methods: {
+        GoToGoodsDes(id) {
+            this.$router.push({
+                name: "GeneralItemDescription",
+                query: { Good_id: id }
+            });
+        },
         porderDetail() {
             this.$axios({
                 method: "POST",

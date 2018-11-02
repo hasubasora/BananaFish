@@ -110,7 +110,9 @@ export default {
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {
-                    alert("成功加入团队！");
+                    this.$dialog.alert({
+                        mes: "成功加入团队！"
+                    });
                 }
             });
         },

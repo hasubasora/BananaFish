@@ -8,13 +8,16 @@
         </yd-navbar>
         <yd-cell-group>
             <yd-cell-item>
-                <span slot="left">账户名：</span>
-                <yd-input slot="right" required v-model="uName" max="20" placeholder="请输入账户名"></yd-input>
+                <span slot="left">姓名：</span>
+                <yd-input slot="right" required v-model="uName" max="20" placeholder="请输入姓名"></yd-input>
             </yd-cell-item>
-
+            <yd-cell-item>
+                <span slot="left">身份证：</span>
+                <yd-input slot="right" required v-model="DrawIdCardNo" max="18" placeholder="请输入身份证"></yd-input>
+            </yd-cell-item>
             <yd-cell-item>
                 <span slot="left">手机号：</span>
-                <yd-input slot="right" v-model="telNum" regex="mobile" placeholder="请输入手机号码"></yd-input>
+                <yd-input slot="right" v-model="telNum" regex="mobile" placeholder="请输入银行预留手机号码"></yd-input>
             </yd-cell-item>
 
             <yd-cell-item>
@@ -56,6 +59,7 @@ export default {
             telNum: "",
             cardNum: "",
             cardName: "",
+            DrawIdCardNo: "",
             show2: false,
             CardList: [],
             picked: 0
@@ -77,6 +81,14 @@ export default {
                 });
                 return;
             }
+            if (!this.DrawIdCardNo) {
+                this.$dialog.toast({
+                    mes: "输入身份证",
+                    timeout: 1000
+                });
+                return;
+            }
+
             if (!this.cardNum) {
                 this.$dialog.toast({ mes: "输入银行卡号", timeout: 1000 });
                 return;
@@ -92,6 +104,7 @@ export default {
                     DrawType: 1, //	支付宝0，银行卡1
                     DrawRealName: this.uName, //	真是姓名
                     DrawAccount: this.cardNum, //账号
+                    DrawIdCardNo: this.DrawIdCardNo, //身份证
                     DrawAttribute: this.picked //银行ID
                 },
                 url:
@@ -102,7 +115,7 @@ export default {
                 // if (response.data.success == 400) {
                 //     this.$router.push({ name: "SignIn" });
                 // }
-                LOGIN_SUCCESS(response.data.success)
+                LOGIN_SUCCESS(response.data.success);
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.$dialog.toast({
