@@ -146,23 +146,48 @@ export const SalesReturnApplyFor = (id) => {
     }
   });
 }
+let Url
+export const GetConfig = () => {
+  axios({
+    method: "POST",
+    data: {},
+    url: serverUrl.serverUrl + "/index/GetConfig",
+    responseType: "json"
+  }).then(response => {
+    if (response.data.success == 200) {
+      // console.log(response.data.data.goPayUrl);
+      Url = response.data.data.goPayUrl
+      console.log(Url);
+      return Url
+    }
+  });
+}
+console.log(this.GetConfig());
+console.log('GetConfig()');
 
 
-export const GetWeixinPay = (...res) => {
+export const GetWeixinPay = (res) => {
   console.log(res);
+  let _res = res.retData
+  console.log(_res.appId);
 
-  function onBridgeReady(res) {
+  function onBridgeReady(_res) {
     WeixinJSBridge.invoke(
       'getBrandWCPayRequest', {
-        "appId": res.appId, //公众号名称，由商户传入     
-        "timeStamp": res.timeStamp, //时间戳，自1970年以来的秒数     
-        "nonceStr": res.nonceStr, //随机串     
-        "package": res.package,
+        "appId": _res.appId, //公众号名称，由商户传入     
+        "timeStamp": _res.timeStamp, //时间戳，自1970年以来的秒数     
+        "nonceStr": _res.nonceStr, //随机串     
+        "package": _res.packageStr,
         "signType": "MD5", //微信签名方式：     
-        "paySign": res.paySign //微信签名 
+        "paySign": _res.paySign //微信签名 
       },
-      function (res) {
-        if (res.err_msg == "get_brand_wcpay_request:ok") {
+      function (_res) {
+        console.log(_res);
+        console.log(_res.err_msg);
+
+        if (_res.err_msg == "get_brand_wcpay_request:ok") {
+          console.log(_res.err_msg);
+
           // 使用以上方式判断前端返回,微信团队郑重提示：
           //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
         }
@@ -176,7 +201,7 @@ export const GetWeixinPay = (...res) => {
       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
     }
   } else {
-    onBridgeReady();
+    onBridgeReady(_res);
   }
 }
 /**
@@ -187,7 +212,6 @@ export const GetWeixinPay = (...res) => {
  * @param {*} GetTypePay 支付跳转类型
  */
 export const GoBuySometing = (tc, pt, picked, GetTypePay) => {
-  alert(1)
   if (GetTypePay) {
     console.log("跳网页支付");
     this.h5axiox(tc, pt, picked);
@@ -207,13 +231,14 @@ export const h5axiox = (tc, pt, picked) => {
     picked;
 }
 
-export const weixinAip = (tc, pt, picked) => {
 
+
+export const weixinAip = (tc, pt, picked) => {
   if (picked == 30000) {
     console.log("调用微信支付");
     axios({
       method: "POST",
-      url: serverUrl.serverUrl + "/Paying/GoPay",
+      url: Url,
       params: {
         Client: 0,
         GroupOrderIdList: tc,
@@ -230,7 +255,7 @@ export const weixinAip = (tc, pt, picked) => {
     console.log("调用余额支付");
     axios({
       method: "POST",
-      url: serverUrl.serverUrl + "/Paying/GoPay",
+      url: Url,
       params: {
         Client: 0,
         GroupOrderIdList: tc,

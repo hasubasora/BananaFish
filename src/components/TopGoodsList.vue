@@ -9,73 +9,80 @@
                 <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">头筹订单</yd-flexbox-item>
             </yd-flexbox>
         </yd-navbar>
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <yd-tab slot="list" v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
+                <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
+                    <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
+                        <yd-preview-header @click.native="ToTheTopOrderDetails(itemt.OrderId)">
+                            <div slot="left">订单编号:{{itemt.OrderId}}</div>
+                            <div slot="right">{{GetUnTime(itemt.EndTotalSeconds)}}{{itemt.OrderStatusStr}}</div>
+                        </yd-preview-header>
+                        <yd-preview-header class="GroupProduct">
+                            <div slot="left" class="GroupProduct_text">
+                                <div class="Product_text">头筹奖品</div>
+                                <span>期号:{{itemt.GroupProduct?itemt.GroupProduct.CurrentPeriod:""}}</span>
+                            </div>
+                            <div slot="left" style="text-align: center;">
+                                <img :src="itemt.GroupProduct?itemt.GroupProduct.ProductImg:''" class="GoodsPic" alt="" width="100">
+                                <p class="ProductTitle">
+                                    {{itemt.GroupProduct?itemt.GroupProduct.ProductTitle:""}}
+                                </p>
+                                <span class="red">价值￥{{itemt.GroupProduct?itemt.GroupProduct.SalePrice:""}} </span>
+                            </div>
+                        </yd-preview-header>
+                        <yd-preview-item>
+                            <div slot="left" class="shoppingGoods">选购产品</div>
+                            <div slot="right"></div>
+                        </yd-preview-item>
+                        <!-- 商品列表 -->
+                        <yd-preview-item v-for="(GoodsInfo,itemIndex) in itemt.LstProduct" :key="itemIndex">
+                            <div slot="left">
+                                <img class="ProductImgs" :src="GoodsInfo.ProductImg" alt=""></div>
+                            <div slot="right">
+                                <yd-flexbox>
+                                    <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
+                                        <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
+                                        <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
+                                        <p class="Integral">
+                                            <!-- <span>抽奖号码 {{itemt.LuckerNumber.split(",")[itemIndex+1]}}</span> -->
+                                        </p>
 
-        <yd-tab v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
-            <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
-                <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
-                    <yd-preview-header @click.native="ToTheTopOrderDetails(itemt.OrderId)">
-                        <div slot="left">订单编号:{{itemt.OrderId}}</div>
-                        <div slot="right">{{GetUnTime(itemt.EndTotalSeconds)}}{{itemt.OrderStatusStr}}</div>
-                    </yd-preview-header>
-                    <yd-preview-header class="GroupProduct">
-                        <div slot="left" class="GroupProduct_text">
-                            <div class="Product_text">头筹奖品</div>
-                            <span>期号:{{itemt.GroupProduct?itemt.GroupProduct.CurrentPeriod:""}}</span>
-                        </div>
-                        <div slot="left" style="text-align: center;">
-                            <img :src="itemt.GroupProduct?itemt.GroupProduct.ProductImg:''" class="GoodsPic" alt="" width="100">
-                            <p class="ProductTitle">
-                                {{itemt.GroupProduct?itemt.GroupProduct.ProductTitle:""}}
-                            </p>
-                            <span class="red">价值￥{{itemt.GroupProduct?itemt.GroupProduct.SalePrice:""}} </span>
-                        </div>
-                    </yd-preview-header>
-                    <yd-preview-item>
-                        <div slot="left" class="shoppingGoods">选购产品</div>
-                        <div slot="right"></div>
-                    </yd-preview-item>
-                    <!-- 商品列表 -->
-                    <yd-preview-item v-for="(GoodsInfo,itemIndex) in itemt.LstProduct" :key="itemIndex">
-                        <div slot="left">
-                            <img class="ProductImgs" :src="GoodsInfo.ProductImg" alt=""></div>
-                        <div slot="right">
-                            <yd-flexbox>
-                                <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
-                                    <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
-                                    <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
-                                    <p class="Integral">
-                                        <!-- <span>抽奖号码 {{itemt.LuckerNumber.split(",")[itemIndex+1]}}</span> -->
-                                    </p>
+                                    </yd-flexbox-item>
+                                    <div class="GoodsInfo">
+                                        <span>¥{{GoodsInfo.BuyPrice}}</span>
+                                        <span>x{{GoodsInfo.BuyNumber}}</span>
+                                    </div>
+                                </yd-flexbox>
 
-                                </yd-flexbox-item>
-                                <div class="GoodsInfo">
-                                    <span>¥{{GoodsInfo.BuyPrice}}</span>
-                                    <span>x{{GoodsInfo.BuyNumber}}</span>
-                                </div>
-                            </yd-flexbox>
+                            </div>
+                        </yd-preview-item>
 
-                        </div>
-                    </yd-preview-item>
+                        <yd-preview-item>
+                            <div slot="left"></div>
+                            <div slot="right">共{{itemt.LstProduct.length}}件商品 合计
+                                <span class="c-red">¥{{itemt.OrderAmount+itemt.ExpressAmount}}</span> (含运费￥{{itemt.ExpressAmount}})</div>
+                        </yd-preview-item>
+                        <yd-preview-item>
+                            <div slot="left"></div>
 
-                    <yd-preview-item>
-                        <div slot="left"></div>
-                        <div slot="right">共{{itemt.LstProduct.length}}件商品 合计
-                            <span class="c-red">¥{{itemt.OrderAmount+itemt.ExpressAmount}}</span> (含运费￥{{itemt.ExpressAmount}})</div>
-                    </yd-preview-item>
-                    <yd-preview-item>
-                        <div slot="left"></div>
+                            <div slot="right">
+                                <button class="orderBtn grayBtn" @click="OrderLogistics(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
+                                <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
+                                <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
+                                <button class="orderBtn orangeBtn" @click="GoToComment(itemt.OrderId)" v-if="itemt.OrderStatus==3" type="button">评价</button>
+                                <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
+                            </div>
+                        </yd-preview-item>
+                    </yd-preview>
+                </yd-tab-panel>
+            </yd-tab>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">已经到底啦~♪(^∇^*)~</span>
 
-                        <div slot="right">
-                            <button class="orderBtn grayBtn" @click="OrderLogistics(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">物流信息</button>
-                            <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
-                            <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
-                            <button class="orderBtn orangeBtn" @click="GoToComment(itemt.OrderId)" v-if="itemt.OrderStatus==3" type="button">评价</button>
-                            <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
-                        </div>
-                    </yd-preview-item>
-                </yd-preview>
-            </yd-tab-panel>
-        </yd-tab>
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+
+        </yd-infinitescroll>
         <yd-popup v-model="show1" position="center" width="90%">
             <div style="background-color:#fff;padding:.1rem">
                 <!-- 支付方式 -->
@@ -112,7 +119,11 @@ export default {
                 // { label: "待评价", content: [] }
             ],
             btns: [],
-            GetTypePay: ""
+            GetTypePay: "",
+            dota: 0,
+            totalcount: 0,
+            page: 1,
+            pageSize: 4
         };
     },
     created() {
@@ -120,8 +131,7 @@ export default {
         this.GetGoodsList(Qnum);
         this.$dialog.loading.open("拼命加载中...>_<");
         setTimeout(params => {
-            console.log("数据夹菜中");
-            console.log(Qnum);
+            this.dota = Number(Qnum);
             this.tab2 = Number(Qnum);
             this.items[Number(Qnum)].content = this.GoodsHtml;
             this.$dialog.loading.close();
@@ -140,7 +150,6 @@ export default {
             }
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
-                console.log(response.data);
             }
         });
     },
@@ -180,14 +189,13 @@ export default {
             });
         },
         GetGoodsList(sta) {
-            console.log(sta != null);
             sta != null ? sta : (sta = 0);
             this.$axios({
                 method: "POST",
                 data: {
-                    orderstatus: sta,
-                    pageindex: 1,
-                    pagesize: 10
+                    orderstatus : sta,
+                    pageindex: this.page,
+                    pagesize: this.pageSize
                 },
                 url: this.$server.serverUrl + "/account/getmygrouporder",
                 responseType: "json"
@@ -197,7 +205,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
-                    console.log("请求数据成功");
+                    // console.log("请求数据成功");
                     let eTime = setInterval(e => {
                         for (const iterator of this.GoodsHtml) {
                             // console.log(iterator.EndTotalSeconds);
@@ -212,6 +220,48 @@ export default {
 
                     // console.log(this.GoodsHtml);
                 }
+            });
+        },
+        loadList() {
+            console.log(this.dota);
+            console.log("----------");
+            this.$axios({
+                method: "POST",
+                data: {
+                    pageindex: this.page,
+                    pagesize: this.pageSize,
+                    orderstatus: this.dota - 1
+                },
+                url: this.$server.serverUrl + "/account/getmygrouporder"
+            }).then(response => {
+                const _list = response.data.rows;
+
+                this.GoodsHtml = [...this.GoodsHtml, ..._list];
+                // this.items[this.dota - 1].content = this.GoodsHtml;
+                // this.tab2 = Number(this.dota);
+                // console.log(this.items);
+                this.$set(
+                    this.items[Number(this.dota)],
+                    "content",
+                    this.GoodsHtml
+                );
+
+                if (this.GoodsHtml.length > this.totalcount) {
+                    // console.log("所有数据加载完毕");
+                    /* 所有数据加载完毕 */
+                    this.$refs.infinitescrollDemo.$emit(
+                        "ydui.infinitescroll.loadedDone"
+                    );
+                    return;
+                }
+                // console.log("单次请求数据完毕");
+
+                /* 单次请求数据完毕 */
+                this.$refs.infinitescrollDemo.$emit(
+                    "ydui.infinitescroll.finishLoad"
+                );
+
+                this.page++;
             });
         },
         //关闭订单
@@ -234,6 +284,7 @@ export default {
                         icon: "success",
                         callback: () => {
                             this.GetGoodsList(0);
+                            this.dota = 0;
                             setTimeout(e => {
                                 this.items[Number(0)].content = this.GoodsHtml;
                                 this.tab2 = Number(0);
@@ -280,6 +331,7 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GetGoodsList(0);
+                    this.dota = 0;
                     setTimeout(e => {
                         this.items[Number(0)].content = this.GoodsHtml;
                         this.tab2 = Number(0);
@@ -311,11 +363,13 @@ export default {
         },
 
         fn(label, key) {
-            console.log(label, key);
+            // console.log(label, key);
         },
         itemClick(key) {
             // console.log(key);
             // console.log("数据加载中");
+            this.page = 1;
+            this.dota = key;
             this.GetGoodsList(key);
             this.$dialog.loading.open("数据加载中");
             setTimeout(() => {

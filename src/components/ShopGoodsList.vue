@@ -127,7 +127,6 @@ export default {
         }
         this.$dialog.loading.open("拼命加载中...>_<");
         setTimeout(params => {
-            console.log(Qnum);
             this.tab2 = Number(Qnum);
             this.items[Number(Qnum)].content = this.GoodsHtml;
             this.$dialog.loading.close();
@@ -146,7 +145,7 @@ export default {
             }
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
-                console.log(response.data);
+                // console.log(response.data);
             }
         });
     },
@@ -257,7 +256,6 @@ export default {
             });
         },
         GetGoodsList(sta) {
-            console.log(sta);
             sta != null ? sta : (sta = 0);
             //判断售后数据
             if (sta == 5) {
@@ -279,15 +277,12 @@ export default {
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
                     this.totalcount = response.data.totalcount;
-                    // console.log(sta);
-                    // console.log(this.GoodsHtml);
                 } else {
                     this.$dialog.loading.close();
                 }
             });
         },
         loadList() {
-            console.log(this.dota);
             this.$axios({
                 method: "POST",
                 data: {
@@ -302,13 +297,12 @@ export default {
                 this.GoodsHtml = [...this.GoodsHtml, ..._list];
                 // this.items[this.dota - 1].content = this.GoodsHtml;
                 // this.tab2 = Number(this.dota);
-                console.log(this.items);
                 this.$set(
                     this.items[Number(this.dota)],
                     "content",
                     this.GoodsHtml
                 );
-      
+
                 if (this.GoodsHtml.length > this.totalcount) {
                     // console.log("所有数据加载完毕");
                     /* 所有数据加载完毕 */
@@ -328,11 +322,13 @@ export default {
             });
         },
         fn(label, key) {
-            console.log(label, key);
+            // console.log(label, key);
         },
         itemClick(key) {
             // console.log(key);
-            // console.log("数据加载中");
+            console.log("数据加载中");
+            this.page = 1;
+            this.dota = key;
             this.GetGoodsList(key);
             this.$dialog.loading.open("数据加载中");
             setTimeout(() => {
