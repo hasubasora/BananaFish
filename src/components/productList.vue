@@ -1,34 +1,34 @@
 <template>
-  <div>
-    <yd-navbar title="分类列表" fixed height='.8rem' color="#f2f2f2" class="titleColor">
-      <router-link to="/" slot="left">
-        <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
-      </router-link>
+    <div>
+        <yd-navbar title="分类列表" fixed height='.8rem' color="#f2f2f2" class="titleColor">
+            <router-link to="/" slot="left">
+                <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
+            </router-link>
 
-      <router-link to="#" slot="right">
-        <!-- <yd-navbar-next-icon></yd-navbar-next-icon> -->
-      </router-link>
-    </yd-navbar>
-    <yd-scrolltab>
-      <yd-scrolltab-panel :label="item.CateName"  v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
-        <div style="background-color: gray;">
-          <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
-          <yd-grids-group :rows="3" title="" item-height="2rem" >
-            <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id"  >
-              <span slot="text">
-                <router-link to="" @click.native="GoThreeList(itemt.CategoryId)">
-                  <div class="GoThree">
-                    <img :src="itemt.CateIcon" alt="">
-                    <p>{{ itemt.CateName }}</p>
-                  </div>
-                </router-link>
-              </span>
-            </yd-grids-item>
-          </yd-grids-group>
-        </div>
-      </yd-scrolltab-panel>
+            <router-link to="#" slot="right">
+                <!-- <yd-navbar-next-icon></yd-navbar-next-icon> -->
+            </router-link>
+        </yd-navbar>
+        <yd-scrolltab>
+            <yd-scrolltab-panel :label="item.CateName" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
+                <div style="background-color: gray;">
+                    <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
+                    <yd-grids-group :rows="3" title="" item-height="2rem">
+                        <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id">
+                            <span slot="text">
+                                <router-link to="" @click.native="GoThreeList(itemt.CategoryId)">
+                                    <div class="GoThree">
+                                        <img :src="itemt.CateIcon" alt="">
+                                        <p>{{ itemt.CateName }}</p>
+                                    </div>
+                                </router-link>
+                            </span>
+                        </yd-grids-item>
+                    </yd-grids-group>
+                </div>
+            </yd-scrolltab-panel>
 
-      <!-- <yd-scrolltab-panel label="冰箱" icon="demo-icons-category2" >
+            <!-- <yd-scrolltab-panel label="冰箱" icon="demo-icons-category2" >
             <div style="height: 350px;background-color: blue;"></div>
         </yd-scrolltab-panel>
 
@@ -36,9 +36,9 @@
             <div style="height: 350px;background-color: yellow;"></div>
         </yd-scrolltab-panel> -->
 
-      <!-- ... -->
-    </yd-scrolltab>
-  </div>
+            <!-- ... -->
+        </yd-scrolltab>
+    </div>
 
 </template>
 <style lang="scss">
@@ -79,13 +79,15 @@ export default {
             }
             if (response.data.success == 200) {
                 this.GoodsList = response.data.rows;
+                // this.GoodsList = response.data.rows;
                 console.log(this.GoodsList);
+                // console.log(this.GoodsList);
             }
         });
     },
     methods: {
         GoThreeList(i) {
-            console.log('-----------------');
+            console.log("-----------------");
             console.log(i);
             this.$router.push({ name: "menuThree", params: { Group_id: i } });
         }

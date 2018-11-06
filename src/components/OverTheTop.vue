@@ -3,7 +3,8 @@
         <div v-if="Grouporder==''" slot="list" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无拔得头筹商品哦~去逛逛吧~</div>
         <div v-for="item in Grouporder" slot="list" :key="item.id" class="Grouporder">
             <!-- 上半截 -->
-            <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i class="c-red">{{item.NickName}}</i>拔得头筹</span></div>
+            <!-- class="c-red" -->
+            <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i>{{item.NickName}}</i>拔得头筹</span></div>
             <!-- 下半截 -->
             <div class="ModelProduct" v-if="item.ModelProduct">
                 <!-- 左边 -->
@@ -11,14 +12,18 @@
                     <span class="tag titleColor">本期头筹奖品</span>
                     <img class="GoodImg" :src="item.ModelProduct.ProductImg" alt="">
                     <p class="GoodTitle">{{item.ModelProduct.ProductTitle}}</p>
-                    <div><span>市场价</span> <span>{{item.ModelProduct.MarketPrice}}</span></div>
-                    <p>查看本期头筹</p>
+                    <div><span>市场价</span> <span style="color:red">￥{{item.ModelProduct.MarketPrice}}</span></div>
+                    <div class="bottmContent">
+                        <span class="check">查看本期头筹</span>
+                        <img class="goiconImg" src="../assets/img/goicon.png" alt="">
+                    </div>
+
                 </div>
                 <!-- 右边 -->
                 <div class="ModelProductLeft">
-                    <p class="ModelProductWin"><img src="../assets/Img/gj.png" alt=""><span>头筹中奖号码 {{item.ModelProduct.WinnerNumber}}</span></p>
-                    <div class="ModelProductMsg">
-                        <h5>本期中奖者消费：<strong>{{item.ModelProduct.WinnerAmount}}</strong></h5>
+                    <p class="ModelProductWin"><img src="../assets/Img/gj.png" alt=""><span>头筹中奖号码 <i style="color:red;font-size:16px;font-weight:650">{{item.ModelProduct.WinnerNumber}}</i></span></p>
+                    <div class="ModelProductMsg" style="color:#999">
+                        <h2>本期中奖者消费：<strong style="color:red">{{item.ModelProduct.WinnerAmount}}</strong></h2>
                         <span>头筹人数：{{item.TotalNum}}人/次 </span>
                         <span>结束时间：{{item.EndTime}} </span>
                         <span>本期参考期数：{{item.ModelProduct.ReferencePeriod}} </span>
@@ -108,3 +113,32 @@ export default {
     }
 };
 </script>
+
+<style>
+.ModelProductMsg{
+    margin-top: 0.1rem;
+}
+.grayBtn {
+    margin-right: 0.1rem;
+}
+.orderBtn {
+    height: 0.5rem;
+    width: 1.5rem;
+}
+.bottmContent{
+    overflow: hidden;
+}
+.check{
+    float: left;
+    color: #666;
+}
+.goiconImg {
+    margin-top: 0.05rem;
+    float:right;
+    width: 0.3rem;
+    height: 0.3rem;
+}
+h2{
+    color:#000;
+}
+</style>

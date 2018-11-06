@@ -235,7 +235,7 @@ export default {
                 url: this.$server.serverUrl + "/account/getmyorderDetail",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.rows = response.data.rows.LstProduct;
                     this.OrderId = response.data.rows.OrderId;
@@ -262,7 +262,7 @@ export default {
                 url: this.$server.serverUrl + "/Order/ProductComment",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "评价成功",

@@ -502,7 +502,7 @@ export default {
             url: this.$server.serverUrl + "/index/GetConfig",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.GetConfig = response.data.data;
                 // console.log(this.GetConfig.groupRulesUr.split("/"));
@@ -528,7 +528,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
                     console.log(this.productNum);
@@ -732,7 +732,7 @@ export default {
                         responseType: "json"
                     }).then(response => {
                         // this.GetMyId(response.data.success)
-                        LOGIN_SUCCESS(response.data.success);
+                        LOGIN_SUCCESS(response.data);
                         switch (response.data.success) {
                             case 200:
                                 this.show = false;
@@ -767,7 +767,7 @@ export default {
                         responseType: "json"
                     }).then(response => {
                         // this.GetMyId(response.data.success)
-                        LOGIN_SUCCESS(response.data.success);
+                        LOGIN_SUCCESS(response.data);
                         switch (response.data.success) {
                             case 200:
                                 this.$router.push({

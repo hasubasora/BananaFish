@@ -145,6 +145,7 @@ export default {
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
+                    console.log(res.data);
                     // this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {

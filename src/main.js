@@ -63,7 +63,7 @@ export const TO_PAGE = (m) => {
     }
   });
 }
-
+// 状态码
 export const LOGIN_SUCCESS = (res) => {
   switch (res.success) {
     case 200:
@@ -99,7 +99,7 @@ export const LOGIN_SUCCESS = (res) => {
       break;
   }
 }
-
+// 封装的倒计时组件
 export const GetUnTime = (d, n) => {
   var date3 = d * 1000; //时间差的毫秒数
   //------------------------------
@@ -260,7 +260,7 @@ export const weixinAip = (tc, pt, picked) => {
         payType: picked
       }
     }).then(response => {
-      this.LOGIN_SUCCESS(response.data.success);
+      this.LOGIN_SUCCESS(response.data);
       if (response.data.success == 200) {
         GetWeixinPay(response.data);
       }
@@ -277,7 +277,7 @@ export const weixinAip = (tc, pt, picked) => {
         payType: picked
       }
     }).then(response => {
-      this.LOGIN_SUCCESS(response.data.success);
+      this.LOGIN_SUCCESS(response.data);
       if (response.data.success == 200) {
         router.push({
           name: "ShopGoodsList",
@@ -342,6 +342,7 @@ export let CartNum
 
 // 实例化
 const store = new Vuex.Store({
+  
   state: { //需要储存的数据
     counts: 0,
     phoneSizeId: '',

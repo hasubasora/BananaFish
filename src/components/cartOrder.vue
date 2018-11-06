@@ -99,7 +99,7 @@ export default {
             url: this.$server.serverUrl + "/order/getorderconfirm",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.GoodsList = response.data;
                 this.orderType;
@@ -115,7 +115,7 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
                 console.log(response.data);
@@ -129,7 +129,7 @@ export default {
             url: this.$server.serverUrl + "/order/getaddress",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 for (const iterator of response.data.rows) {
                     if (this.$route.params.address_GetId) {
@@ -314,7 +314,7 @@ export default {
                     payType: this.picked
                 }
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                 }
             });

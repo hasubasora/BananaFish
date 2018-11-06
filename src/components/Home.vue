@@ -3,11 +3,15 @@
         <div class="bannerTop">
             <div class="bannerCenter">
                 <div class="classify">
-                    <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
+                    <router-link to="productList">
+                        <img src="../assets/Img/classify.png" alt="">
+                    </router-link>
                 </div>
                 <div class="search">
                     <router-link to="/SearchList">
-                        <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" disabled id="search" placeholder="头筹商品...."></label>
+                        <label for="search" class="searchlabel">
+                            <img src="../assets/Img/search.png" alt="">
+                            <input type="search" disabled id="search" placeholder="请输入商品名称" style="padding:0 .1rem"></label>
                     </router-link>
                 </div>
                 <div class="massage">
@@ -22,7 +26,6 @@
 
         </div>
         <keep-alive>
-
             <div class="GroupList">
                 <div class="navbarcompont">
                     <navbar :headNews='headNews'></navbar>
@@ -64,6 +67,19 @@ export default {
         };
     },
     methods: {
+        // GetMyMessageNum() {
+        //     this.$axios({
+        //         methods: "POST",
+        //         data: {},
+        //         url: this.$server.serverUrl + "/Account/GetMyMessageNum",
+        //         responseType: "json"
+        //     }).then(response => {
+        //         if (response.data.success == 200) {
+        //             this.MessageNum = response.data.num;
+        //             console.log(response.data.num);
+        //         }
+        //     });
+        // }
         GetMyMessageNum() {
             this.$axios({
                 method: "POST",
@@ -79,9 +95,9 @@ export default {
         }
     },
     created() {
-    
-
+        // 直接调用这个方法
         this.GetMyMessageNum();
+
         this.$axios({
             method: "POST",
             data: {},
@@ -102,6 +118,7 @@ export default {
         });
     },
     components: {
+        //路径变量问题
         swipe: swipe => require(["@/components/swipe"], swipe),
         navbar: navbar => require(["@/components/navbar"], navbar),
         participationInProfit: participationInProfit =>
@@ -141,7 +158,7 @@ export default {
                     img {
                         position: absolute;
                         left: 0.3rem;
-                        top: -0.07rem;
+                        top: -0.03rem;
                         height: 0.4rem;
                         width: 0.4rem;
                     }

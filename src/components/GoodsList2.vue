@@ -18,7 +18,7 @@
                 </div>
             </router-link>
         </yd-grids-item>
-
+        
     </yd-grids-group>
 </template>
 <style lang="scss">

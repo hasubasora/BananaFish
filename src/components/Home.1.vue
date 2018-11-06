@@ -11,11 +11,13 @@
                     </div>
                     <div class="search">
                         <router-link to="/SearchList">
-                            <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" disabled id="search" placeholder="头筹商品...."></label>
+                            <label for="search" class="searchlabel"><img src="../assets/Img/search.png" alt=""><input type="search" disabled id="search" placeholder="请输入商品名称"></label>
                         </router-link>
                     </div>
                     <div class="massage">
-                        <router-link to="/MessageQueue"><img src="../assets/Img/massage.png" alt=""></router-link>
+                        <router-link to="/MessageQueue">
+                        <img src="../assets/Img/massage.png" alt="">
+                        </router-link>
                     </div>
 
                 </div>
@@ -36,28 +38,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
+             
                 <showtime TimeSrc='1'></showtime>
                 <!-- 广告 -->
                 <div class="bannerPad">
@@ -216,7 +197,8 @@ export default {
             padding: 0.1rem;
             img {
                 width: 0.8rem;
-                height: auto;
+                // height: auto;
+                height: 0.6rem;
             }
         }
         .search {
@@ -236,8 +218,9 @@ export default {
         .massage {
             padding: 0.1rem;
             img {
-                width: 0.8rem;
-                height: auto;
+                width: 0.6rem;
+                // height: auto;
+                height: 0.6rem;
             }
         }
     }

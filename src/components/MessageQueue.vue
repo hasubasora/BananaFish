@@ -50,7 +50,7 @@ export default {
             url: this.$server.serverUrl + "/Account/GetMyMessageLst",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.arrow = response.data.list;
             }

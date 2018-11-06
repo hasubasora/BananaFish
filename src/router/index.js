@@ -206,6 +206,6 @@ export default new Router({
       path: '/LandingPage',
       name: 'LandingPage',
       component: LandingPage => require(["@/components/LandingPage"], LandingPage),
-    },
+    }
   ]
 })

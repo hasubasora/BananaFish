@@ -210,7 +210,7 @@ export default {
             url: this.$server.serverUrl + "/index/GetConfig",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data.success);
+            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.GetConfig = response.data.data;
                 // console.log(this.GetConfig.groupRulesUr.split("/"));
@@ -274,7 +274,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/index",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     // console.log(response.data);
                     this.UserInfo = response.data;
@@ -293,7 +293,7 @@ export default {
                 url: this.$server.serverUrl + "/Order/GetOrderNum",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     console.log(response.data.orderNum.AfterSale);
                     let badge = response.data.orderNum;

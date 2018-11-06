@@ -115,7 +115,7 @@ export default {
                 // if (response.data.success == 400) {
                 //     this.$router.push({ name: "SignIn" });
                 // }
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.$dialog.toast({

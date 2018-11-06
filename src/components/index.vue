@@ -53,6 +53,7 @@ export default {
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 400) {
+                    // 获取参数
                     this.$router.push({ name: "SignIn" });
                 }
                 if (response.data.success == 200) {

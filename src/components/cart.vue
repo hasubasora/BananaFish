@@ -288,7 +288,7 @@ export default {
                     console.log(response.data);
                     this.GetShoppingCart();
                 }
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
             });
         },
         increase(_index, num) {
@@ -318,9 +318,10 @@ export default {
                     getNum();
                     this.GetShoppingCart();
                 }
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
             });
         },
+
         //获取购物车商品
         GetShoppingCart() {
             this.$axios({
@@ -329,7 +330,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcart",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
                     // console.log(this.CartList.length == []);
@@ -361,7 +362,7 @@ export default {
                 }
             });
         },
-
+// 删除商品
         DelGood(_id) {
             this.$axios({
                 method: "POST",
@@ -371,7 +372,7 @@ export default {
                 url: this.$server.serverUrl + "/order/delshoppingcart",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data.success);
+                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     console.log(response.data);
                     getNum();
