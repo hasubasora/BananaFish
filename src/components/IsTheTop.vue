@@ -1,60 +1,59 @@
 <template>
     <div>
-        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo" >
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
 
-        <div v-if="GoodsList==''" slot="list"  style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无头筹商品哦~</div>
-        <div class="goodsList" slot="list" v-for="item in GoodsList" :key="item.id"> 
-            <yd-flexbox class="backgoods">
-                <yd-flexbox-item>
-                    <div class="goodsListOne">
-                        <!-- <span class="GroupId">第TCG{{item.CurrentPeriod}}期</span> -->
-                        <div class="goodsa" @click="GoToItem(item.GroupId)">
-                            <span class="goodsatop">本期头筹奖品</span>
-                            <!-- <time class="c-red" style="text-align:center">距结束 {{new Date(item.EndTime*1000).getDate()}}:{{new Date(item.EndTime*1000).getHours()}}:{{new Date(item.EndTime*1000).getMinutes()}}</time> -->
-                            <time class="c-red" style="text-align:center"> {{GetUnTime(item.EndTotalSeconds)}}</time>
-                            <img class="goodsatopImg" :src="item.ProductImg" alt="">
-                            <p class="ProductTitle">{{item.ProductTitle}}</p>
-                            <div class="SubTitle">{{item.SubTitle}}</div>
-                            <div class="points">
-                                市场价
-                                <strong>￥{{item.MarketPrice}}</strong>
+            <div v-if="GoodsList==''" slot="list" style="text-align:center;padding:1rem;height:5rem;font-size:.3rem;">暂无头筹商品哦~</div>
+            <div class="goodsList" slot="list" v-for="item in GoodsList" :key="item.id">
+                <yd-flexbox class="backgoods">
+                    <yd-flexbox-item>
+                        <div class="goodsListOne">
+                            <!-- <span class="GroupId">第TCG{{item.CurrentPeriod}}期</span> -->
+                            <div class="goodsa" @click="GoToItem(item.GroupId)">
+                                <span class="goodsatop">本期头筹奖品</span>
+                                <!-- <time class="c-red" style="text-align:center">距结束 {{new Date(item.EndTime*1000).getDate()}}:{{new Date(item.EndTime*1000).getHours()}}:{{new Date(item.EndTime*1000).getMinutes()}}</time> -->
+                                <time class="c-red" style="text-align:center"> {{GetUnTime(item.EndTotalSeconds)}}</time>
+                                <img class="goodsatopImg" :src="item.ProductImg" alt="">
+                                <p class="ProductTitle">{{item.ProductTitle}}</p>
+                                <div class="SubTitle">{{item.SubTitle}}</div>
+                                <div class="points">
+                                    市场价
+                                    <strong>￥{{item.MarketPrice}}</strong>
+                                </div>
                             </div>
                         </div>
+                    </yd-flexbox-item>
+                    <yd-flexbox-item class="goodsListTwo">
+                        <yd-grids-group :rows="2" item-height="2.5rem">
+                            <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id" @click.native="GoToItemGeneral(itemt.ProductId)">
+                                <span slot="text">
+                                    <div class="goodsLittle">
+                                        <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
+                                        <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
+                                        <!-- <span>月销{{itemt.SaleCount}}件</span> -->
+                                        <strong>￥{{itemt.SalePrice.toFixed(2)}}</strong>
+                                        <!-- <img class="gwc" src="../assets/Img/gwc.png" alt=""> -->
+                                    </div>
+                                </span>
+                            </yd-grids-item>
+                        </yd-grids-group>
+                    </yd-flexbox-item>
+                </yd-flexbox>
+
+                <div class="p_Group">
+                    <div class="p_button">
+                        <button type="button">第TCG{{item.CurrentPeriod}}期</button>
+
                     </div>
-                </yd-flexbox-item>
-                <yd-flexbox-item class="goodsListTwo">
-                    <yd-grids-group :rows="2" item-height="2.5rem">
-                        <yd-grids-item v-for="itemt in item.LstProduct" :key="itemt.id" @click.native="GoToItemGeneral(itemt.ProductId)">
-                            <span slot="text">
-                                <div class="goodsLittle">
-                                    <img class="ProductImgt" :src="itemt.ProductImg" alt="" width="100">
-                                    <p class="ProductTitlet">{{itemt.ProductTitle}}</p>
-                                    <!-- <span>月销{{itemt.SaleCount}}件</span> -->
-                                    <strong>￥{{itemt.SalePrice.toFixed(2)}}</strong>
-                                    <!-- <img class="gwc" src="../assets/Img/gwc.png" alt=""> -->
-                                </div>
-                            </span>
-                        </yd-grids-item>
-                    </yd-grids-group>
-                </yd-flexbox-item>
-            </yd-flexbox>
 
-            <div class="p_Group">
-                <div class="p_button">
-                    <button type="button">第TCG{{item.CurrentPeriod}}期</button>
+                    <div class="p_progress">
+                        <div class="p_prog">{{item.TotalNum-item.RemainNum+'/'+item.TotalNum}}</div>
+                        <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
 
+                    </div>
                 </div>
-
-                <div class="p_progress">
-                    <div class="p_prog">{{item.TotalNum-item.RemainNum+'/'+item.TotalNum}}</div>
-                    <yd-progressbar class="progress" type="line" :progress="1-item.RemainNum/item.TotalNum" trail-width="10" trail-color="#FE5D51"></yd-progressbar>
- 
-                </div>
+                <p style="text-align:center;padding:.1rem;"><span class="c-red">往期送出{{item.CurrentPeriod-1}}件</span> 已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</p>
             </div>
-            <p style="text-align:center;padding:.1rem;"><span class="c-red">往期送出{{item.CurrentPeriod-1}}件</span> 已购{{item.TotalNum-item.RemainNum}}人次(满{{item.TotalNum}}人次揭晓答案)</p>
-        </div>
 
-        
             <!-- 数据全部加载完毕显示 -->
             <span slot="doneTip">已经到底啦~♪(^∇^*)~</span>
 
@@ -73,7 +72,7 @@ export default {
         return {
             page: 1,
             pageSize: 2,
-            GoodsList: [],
+            GoodsList: []
         };
     },
     created() {
@@ -159,6 +158,11 @@ export default {
 </script>
 
 <style lang="scss">
+.ProductTitlet {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .p_Group {
     display: flex;
 }

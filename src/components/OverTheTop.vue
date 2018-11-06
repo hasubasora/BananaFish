@@ -4,7 +4,7 @@
         <div v-for="item in Grouporder" slot="list" :key="item.id" class="Grouporder">
             <!-- 上半截 -->
             <!-- class="c-red" -->
-            <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i>{{item.NickName}}</i>拔得头筹</span></div>
+            <div class="UserIcon"><img :src="item.UserIcon" alt=""><span>恭喜<i style="color:red ;font-weight:650">{{item.NickName}}</i>拔得头筹</span></div>
             <!-- 下半截 -->
             <div class="ModelProduct" v-if="item.ModelProduct">
                 <!-- 左边 -->
@@ -12,7 +12,7 @@
                     <span class="tag titleColor">本期头筹奖品</span>
                     <img class="GoodImg" :src="item.ModelProduct.ProductImg" alt="">
                     <p class="GoodTitle">{{item.ModelProduct.ProductTitle}}</p>
-                    <div><span>市场价</span> <span style="color:red">￥{{item.ModelProduct.MarketPrice}}</span></div>
+                    <div><span>市场价</span> <span style="color:red;font-weight:650">￥{{item.ModelProduct.MarketPrice}}</span></div>
                     <div class="bottmContent">
                         <span class="check">查看本期头筹</span>
                         <img class="goiconImg" src="../assets/img/goicon.png" alt="">
@@ -127,14 +127,16 @@ export default {
 }
 .bottmContent{
     overflow: hidden;
+    /* padding: 0 .2rem; */
+
 }
 .check{
     float: left;
-    color: #666;
+    color: #999;
 }
 .goiconImg {
     margin-top: 0.05rem;
-    float:right;
+    float: right;;
     width: 0.3rem;
     height: 0.3rem;
 }

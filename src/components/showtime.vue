@@ -8,6 +8,7 @@
 <style lang="scss">
 .fh_title {
     position: relative;
+    margin-top: 0.2rem;
     padding: 0.2rem;
     > img {
         width: auto;
@@ -21,8 +22,9 @@
         text-decoration: none;
         color: #444;
         > img {
+            margin-top: -0.05rem;
             height: 0.25rem;
-            vertical-align: sub;
+            vertical-align: middle;
             width: auto;
             padding-left: 0.2rem;
         }

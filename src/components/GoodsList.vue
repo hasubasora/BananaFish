@@ -32,9 +32,11 @@
         color: #ff5f17;
         .goodsBack {
             text-align: center;
-            width: 0.8rem;
+            line-height: 0.4rem;
+            width: 1rem;
             display: inline-block;
-            height: 0.31rem;margin-right: .1rem;
+            height: 0.4rem;
+            margin-right: .1rem;
             border-radius: 5px;
             background: #ff5f17;
             color: #fff;

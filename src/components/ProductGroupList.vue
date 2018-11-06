@@ -16,7 +16,7 @@
                     <yd-tab-panel label="正在揭晓">
                         <InTheTop></InTheTop>
                     </yd-tab-panel>
-                    <yd-tab-panel label="拔得头筹">
+                    <yd-tab-panel label="拔得头筹" >
                         <OverTheTop></OverTheTop>
                     </yd-tab-panel>
                 </yd-tab>
@@ -202,7 +202,7 @@
             font-size: 0.2rem;
         }
         > strong {
-            color: #ff5f17;
+            // color: #ff5f17;
         }
         .gwc {
             width: 0.6rem;

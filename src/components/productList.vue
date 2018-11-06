@@ -11,7 +11,7 @@
         </yd-navbar>
         <yd-scrolltab>
             <yd-scrolltab-panel :label="item.CateName" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
-                <div style="background-color: gray;">
+                <div style="background-color: gray; color:aa">
                     <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
                     <yd-grids-group :rows="3" title="" item-height="2rem">
                         <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id">

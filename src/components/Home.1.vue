@@ -5,9 +5,9 @@
         <!-- 轮播图 -->
         <div class="home">
             <div class="bannerTop">
-                <div class="bannerCenter">
+                <div class="">
                     <div class="classify">
-                        <router-link to="productList"><img src="../assets/Img/classify.png" alt=""></router-link>
+                        <router-link to="productList"><img class="classlei" src="../assets/Img/classify.png" alt=""></router-link>
                     </div>
                     <div class="search">
                         <router-link to="/SearchList">
@@ -148,6 +148,7 @@ export default {
 </script>
  
 <style lang='scss'>
+
 ._badge {
     position: relative;
     .badge {
@@ -196,9 +197,9 @@ export default {
         .classify {
             padding: 0.1rem;
             img {
-                width: 0.8rem;
+                width: 0.7rem;
                 // height: auto;
-                height: 0.6rem;
+                height: 0.7rem;
             }
         }
         .search {
@@ -218,9 +219,9 @@ export default {
         .massage {
             padding: 0.1rem;
             img {
-                width: 0.6rem;
+                width: 0.7rem;
                 // height: auto;
-                height: 0.6rem;
+                height: 0.7rem;
             }
         }
     }
@@ -258,5 +259,9 @@ export default {
     > img {
         width: 100%;
     }
+}
+
+.yd-badge{
+  padding: 2px 4px;
 }
 </style>

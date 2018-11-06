@@ -858,7 +858,8 @@ export default {
                 }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.object;
-                    // console.log(this.GoodsHtml);
+                    console.log(11111);
+                    console.log(this.GoodsHtml);
                 }
             });
         },

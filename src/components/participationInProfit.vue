@@ -60,6 +60,7 @@
                 margin: 0 0 0.5rem 0;
             }
             .linkClass {
+                margin-top: 0.8rem;
                 display: inline-block;
                 color: #fff;
                 background: #ff5f17;

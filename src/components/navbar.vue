@@ -11,6 +11,7 @@
         <div class="news">
             <div class="newsBox">
                 <img src="../assets/Img/news.png" alt="">
+                <span style="color:red;margin-top:0.05rem">最新</span>
                 <yd-slider autoplay="3000">
                     <yd-slider-item v-for="(item, index) in headNews" :key="index">
                         <!-- <p class="headNewsText"> -->
@@ -80,7 +81,7 @@ export default {
             padding-top: 0.3rem;
         }
         > span {
-            color: #888;
+            color: #999;
             font-size: 0.2rem;
             margin: 0.1rem 0;
             display: block;
@@ -99,6 +100,8 @@ export default {
     display: flex;
     background: #fff;
     .newsBox {
+        
+        position: relative;
         width: 6.9rem;
         // height: 0.7rem;
         display: flex;

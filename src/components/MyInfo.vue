@@ -17,7 +17,7 @@
                     </yd-flexbox-item>
                     <yd-flexbox-item>
                         <router-link to="/RemainingSum">
-                            <strong class="UserMoney">{{UserInfo.balance}}</strong>
+                            <strong class="UserMoney">{{UserInfo.balance.toFixed(2)}}</strong>
                             <span class="MoneyTitle">我的余额（元）</span>
                         </router-link>
                     </yd-flexbox-item>
@@ -38,7 +38,7 @@
                         <span class="IntegralTitle">我的积分</span>
                     </yd-flexbox-item>
                     <yd-flexbox-item @click.native="GoMyEarnings">
-                        <span class="IntegralMsg borderccc">{{UserInfo.profit}}</span>
+                        <span class="IntegralMsg borderccc">{{UserInfo.profit.toFixed(2)}}</span>
                         <span class="IntegralTitle borderccc">我的收益</span>
                     </yd-flexbox-item>
                 </yd-flexbox>
