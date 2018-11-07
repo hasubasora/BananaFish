@@ -1,11 +1,12 @@
 <template>
 
     <div class="page-tabbar">
+        <swipe></swipe>
         <!-- tabcontainer -->
         <!-- 轮播图 -->
         <div class="home">
             <div class="bannerTop">
-                <div class="">
+                <div class="bannerCenter">
                     <div class="classify">
                         <router-link to="productList"><img class="classlei" src="../assets/Img/classify.png" alt=""></router-link>
                     </div>
@@ -21,7 +22,8 @@
                     </div>
 
                 </div>
-                <swipe></swipe>
+                //  轮播图
+                
             </div>
             <!-- 连接新闻 -->
             <div class="navbarcompont">
@@ -38,7 +40,7 @@
 
 
 
-             
+        
                 <showtime TimeSrc='1'></showtime>
                 <!-- 广告 -->
                 <div class="bannerPad">
@@ -187,19 +189,19 @@ export default {
     padding-bottom: 100px;
 }
 .bannerTop {
-    position: relative;
+    // position: relative;
     .bannerCenter {
-        z-index: 2;
+        // z-index: 2;
         display: flex;
-        position: absolute;
+        // position: absolute;
         width: 100%;
         padding-top: 0.2rem;
         .classify {
             padding: 0.1rem;
             img {
-                width: 0.7rem;
+                width: 0.6rem;
                 // height: auto;
-                height: 0.7rem;
+                height: 0.6rem;
             }
         }
         .search {

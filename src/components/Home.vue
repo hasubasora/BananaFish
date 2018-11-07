@@ -11,7 +11,7 @@
                     <router-link to="/SearchList">
                         <label for="search" class="searchlabel">
                             <!-- <img src="../assets/Img/search.png" alt=""> -->
-                            <input type="search" disabled id="search" placeholder="请输入商品名称" ></label>
+                            <input type="search" disabled id="search" placeholder="请输入商品名称"></label>
                     </router-link>
                 </div>
                 <div class="massage">
@@ -171,7 +171,7 @@ export default {
                         height: 0.6rem;
                         text-indent: 1rem;
                         // background-color: #fff;
-                         background-color: #E5E5E5
+                        background-color: #e5e5e5;
                     }
                 }
             }

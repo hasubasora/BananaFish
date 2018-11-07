@@ -12,6 +12,8 @@
             <button type="button" class="wd_back_btn" @click="GoBankCard('RedData')">积分指数</button>
         </div>
         <yd-preview :buttons="btns">
+            
+
             <yd-preview-header v-if="priceList.length>0" v-for="(item, index) in priceList" :key="index">
                 <div slot="left">
                     <p style="font-size:.26rem">{{item.Title}}</p>

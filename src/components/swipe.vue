@@ -16,6 +16,7 @@ export default {
 </script>
 <style lang="scss" >
 #swipe {
+    // margin-top: 0.5rem;
     height: 3rem;
 }
 img {
