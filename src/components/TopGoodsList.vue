@@ -1,9 +1,9 @@
 <template>
     <div class="TopGoodsList">
         <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" fixed>
-            <router-link to="/" slot="left">
+            <div @click="goBack" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
-            </router-link>
+            </div>
             <yd-flexbox slot="center" style="border:1px solid #fff;">
                 <yd-flexbox-item @click.native='GoShopGoodslist' style="padding:.1rem .3rem;color:#fff">普通订单</yd-flexbox-item>
                 <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">头筹订单</yd-flexbox-item>
@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { GoBuySometing, GetUnTime } from "../main.js";
+import { GoBuySometing, GetUnTime, LOGIN_SUCCESS } from "../main.js";
 
 export default {
     data() {
@@ -145,15 +145,16 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
             }
         });
     },
     methods: {
+        goBack() {
+            window.history.length <= 1 ? this.$router.push({path: "/MyInfo"}) : this.$router.go(-1);
+        },
         GetType(e) {
             this.GetTypePay = e;
         },
@@ -200,9 +201,7 @@ export default {
                 url: this.$server.serverUrl + "/account/getmygrouporder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
                     // console.log("请求数据成功");
@@ -274,9 +273,7 @@ export default {
                 url: this.$server.serverUrl + "/account/closemygrouporder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "取消成功",
@@ -326,9 +323,7 @@ export default {
                 url: this.$server.serverUrl + "/account/receivedmygrouporder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GetGoodsList(0);
                     this.dota = 0;
@@ -344,22 +339,6 @@ export default {
                 name: "OrderLogistics",
                 query: { Good_id: oid }
             });
-            // this.$axios({
-            //     method: "POST",
-            //     data: {
-            //         orderId: id,
-            //         type: 1
-            //     },
-            //     url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
-            //     responseType: "json"
-            // }).then(response => {
-            //     if (response.data.success == 400) {
-            //         this.$router.push({ name: "SignIn" });
-            //     }
-            //     if (response.data.success == 200) {
-            //         console.log(response.data);
-            //     }
-            // });
         },
 
         fn(label, key) {

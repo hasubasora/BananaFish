@@ -3,7 +3,7 @@
         <yd-flexbox direction="vertical">
             <yd-flexbox-item class="ProTop">
                 <img class="haibao" src="../assets/Img/haibao.png" alt="">
-                <router-link to="/HtmlApp?Good_id=touchouguize">
+                <router-link to="/TCRuler">
                     <img src="../assets/Img/ttgj.png" alt="" class="tttiele">
                 </router-link>
 
@@ -154,14 +154,6 @@
     }
 }
 
-.goodsList {
-    background: #ffffff;
-    margin: 0.2rem 0.1rem;
-    padding: 0.1rem 0.1rem 0.1rem 0;
-    .yd-grids-2 {
-        width: 4.6rem;
-    }
-}
 
 .yd-grids-txt {
     position: relative;
@@ -202,7 +194,7 @@
             font-size: 0.2rem;
         }
         > strong {
-            // color: #ff5f17;
+            color: #ff5f17;
         }
         .gwc {
             width: 0.6rem;

@@ -146,7 +146,7 @@
     </yd-layout>
 </template>
 <script>
-import { getNum } from "../main.js";
+import { getNum, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -175,7 +175,6 @@ export default {
         // console.log(location);
         sessionStorage.setItem("s", this.$route.params.Good_id);
         localStorage.setItem("s", this.$route.params.Good_id);
-        // console.log(this.$route.params.Good_id);
         // 商品信息
         this.GetProductDetail();
         // 商品详情
@@ -196,9 +195,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
                     // console.log(this.productNum);
@@ -340,7 +337,7 @@ export default {
                         url: this.$server.serverUrl + "/order/addshoppingcart",
                         responseType: "json"
                     }).then(response => {
-                        // this.GetMyId(response.data.success)
+                        
                         switch (response.data.success) {
                             case 200:
                                 this.show = false;
@@ -352,10 +349,7 @@ export default {
                                 getNum();
                                 break;
                             case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
+                                
                                 break;
                             case 500:
                                 this.$dialog.toast({
@@ -385,10 +379,7 @@ export default {
                                 this.$router.push({ name: "cartOrder" });
                                 break;
                             case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
+                                
                                 break;
                             case 500:
                                 this.$dialog.toast({
@@ -509,7 +500,6 @@ export default {
     }
     .iconfont {
         display: inline;
-        font-size: 0.6rem;
         color: #666;
     }
     .yd-scrollview {

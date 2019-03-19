@@ -1,12 +1,12 @@
 <template>
     <div class="MyAgent">
         <yd-navbar height='.8rem' color="#f2f2f2" bgcolor="#ff5f17" fixed>
-            <router-link to="/" slot="left">
+            <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
             </router-link>
             <yd-flexbox slot="center" style="border:1px solid #fff;">
-                <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">我的代理</yd-flexbox-item>
                 <yd-flexbox-item @click.native='GoDirectMember' style="padding:.1rem .3rem;color:#fff">直属会员</yd-flexbox-item>
+                <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">我的代理</yd-flexbox-item>
             </yd-flexbox>
         </yd-navbar>
         <yd-flexbox class="MyAgentVertical">
@@ -81,6 +81,7 @@
 </style>
 
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -88,7 +89,7 @@ export default {
             totals: 0,
             weekTotal: 0,
             page: 1,
-            pageSize: 6
+            pageSize: 20
         };
     },
     created() {
@@ -106,9 +107,7 @@ export default {
                 url: this.$server.serverUrl + "/Agent/ApplicationBroker",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.$dialog.alert({
                         mes: "成功加入团队！"
@@ -129,9 +128,6 @@ export default {
                 url: this.$server.serverUrl + "/Agent/GetCommissionsLst",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.AgentLish = response.data.rows;
                     this.totals = response.data.totals;
@@ -144,9 +140,9 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
+                    Type: 1,
                     pageindex: this.page,
-                    pagesize: this.pageSize,
-                    Type: 1
+                    pagesize: this.pageSize
                 },
                 url: this.$server.serverUrl + "/Agent/GetCommissionsLst"
             }).then(response => {

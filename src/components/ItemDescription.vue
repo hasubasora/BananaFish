@@ -105,7 +105,7 @@
     </yd-layout>
 </template>
 <script>
-import { GetUnTime } from "../main.js";
+import { GetUnTime, LOGIN_SUCCESS } from "../main.js";
 
 export default {
     data() {
@@ -131,9 +131,7 @@ export default {
             url: this.$server.serverUrl + "/index/getproductgroupdetail",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.GoodsList = response.data.object;
                 this.LstOrder = response.data.object.LstOrder;
@@ -156,9 +154,6 @@ export default {
             url: this.$server.serverUrl + "/index/getproductgroupdetaildesc",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
             if (response.data.success == 200) {
                 this.GoodsHtml = response.data.object;
                 console.log(this.GoodsHtml);
@@ -192,6 +187,7 @@ export default {
                 url: this.$server.serverUrl + "/order/addshoppingcart",
                 responseType: "json"
             }).then(response => {
+                LOGIN_SUCCESS(response.data)
                 switch (response.data.success) {
                     case 200:
                         this.$dialog.toast({
@@ -199,9 +195,6 @@ export default {
                             timeout: 1500,
                             icon: "success"
                         });
-                        break;
-                    case 400:
-                        this.$router.push({ name: "SignIn", ReturnUrl: "" });
                         break;
                     default:
                         break;

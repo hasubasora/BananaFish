@@ -1,8 +1,6 @@
 <template>
     <div id="app">
-        <!-- <vue-dropzone ref="myVueDropzone" id="dropzone" style="height:1rem" :options="dropzoneOptions"></vue-dropzone> -->
-
-        <router-view />
+        <router-view v-if="isRouterAlive"/>
 
     </div>
 </template>
@@ -12,24 +10,31 @@
 // import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
     name: "App",
-    // components: {
-    //     vueDropzone: vue2Dropzone
-    // },
-
+    provide() {
+        return {
+            reload: this.reload
+        }
+    },
     data() {
         return {
-            // dropzoneOptions: {
-            //     url: this.$server.serverUrl + "/UpLoad/Img?dir=0",
-            //     thumbnailWidth: 150,
-            //     maxFilesize: 0.5,
-            //     headers: { "Cache-Control": null },
-            // }
+            isRouterAlive:true
         };
+    },
+    methods: {
+        reload() {
+            this.isRouterAlive = false
+            this.$nextTick(function() {
+                this.isRouterAlive = true
+            })
+        }
     }
 };
 </script>
 
 <style lang='scss'>
+html,body,#app{
+  height: 100%;
+}
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

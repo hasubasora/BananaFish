@@ -1,10 +1,10 @@
 <template>
     <div class="MyRedData">
         <yd-navbar slot="navbar" title="积分指数" height='.8rem'>
-            <router-link to="" slot="left" @click.native="GoHistory('Home')">
+            <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" slot="right" @click.native="GO_TO_PAGE()">
+            <router-link to="" slot="right" @click.native="GO_TO_PAGE">
                 积分规则
             </router-link>
         </yd-navbar>
@@ -25,7 +25,7 @@
                 <yd-tab-panel v-for="item in items" :label="item.label"> -->
  
             <yd-flexbox-item>
-                <ve-line :data="chartData" height='5rem' :settings="chartSettings"></ve-line>
+                <ve-line :data="chartData" height='5rem' :colors='colors' :settings="chartSettings"></ve-line>
             </yd-flexbox-item>
 
             <!--     </yd-tab-panel>
@@ -52,28 +52,29 @@
 
         <yd-cell-group>
             <yd-cell-item v-for="(item,index) in objectData.rankings" :key="index" class="rankings">
-                <span slot="left">
+                <span slot="left" class="interspace">
                     <img style="width:.5rem" v-if="item.Ranking==1" src="../assets/Img/a1.png">
                     <img style="width:.5rem" v-if="item.Ranking==2" src="../assets/Img/a2.png">
                     <img style="width:.5rem" v-if="item.Ranking==3" src="../assets/Img/a3.png">
                 </span>
-                <span slot="left" style="margin-left:1rem">
+                <span slot="left" class="rangings-left">
                     <img :src="item.UserIcon" alt="" class="redUserIcon">
                     <div class="redNickName">
                         <p> {{item.NickName}}</p>
-                        <p> 获得积分{{item.Profit}}</p>
+                        <p> 获得积分{{item.Integral}}</p>
                     </div>
                 </span>
-                <span slot="right">收益+ <i class="c-red">{{item.Integral}}</i></span>
+                <span slot="right">收益+ <i class="c-red">{{item.Profit}}</i></span>
             </yd-cell-item>
         </yd-cell-group>
 
     </div>
 </template>
 <script>
-import { TO_PAGE } from "../main.js";
+import { TO_PAGE, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
+        this.colors = ['#FFC8C8'],
         this.chartSettings = {
             yAxisType: ["KMB"],
             // yAxisName: ["222", "333"],
@@ -93,6 +94,7 @@ export default {
             chartData: {
                 // columns: ["ProfitsDate", "Profit"],
                 columns: ["IndexNumberDate", "Range"],
+                colors: ['#ccc','#ccc','#ccc','#ccc','#ccc','#ccc','#ccc'],
                 rows: [
                     // { IndexNumberDate: "2018-05-22", Range: 1 },
                     // { IndexNumberDate: "2018-05-23", Range: 22 },
@@ -112,7 +114,7 @@ export default {
     },
     methods: {
         GO_TO_PAGE() {
-            TO_PAGE("fhgz");
+            this.$router.push({path: "/integralRuler"})
         },
         fn(label, key) {
             console.log(label, key);
@@ -126,10 +128,6 @@ export default {
                     "新内容【key:" + key + "】新内容_" + new Date().getTime();
             }, 1000);
         },
-        GoHistory(sid) {
-            this.$router.push({ name: sid });
-            // this.$router.go(-1);
-        },
         GetRedData() {
             this.$axios({
                 method: "POST",
@@ -140,9 +138,7 @@ export default {
                 url: this.$server.serverUrl + "/account/getindexnumber",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.chartData.rows = response.data.rows;
                     this.objectData = response.data;
@@ -156,8 +152,14 @@ export default {
 <style lang='scss'>
 .MyRedData {
     background: #fff;
+    .interspace {
+        width: 0.5rem;
+    }
     .rankings {
         padding: 0.2rem;
+        .rangings-left {
+            margin-left: 1rem;
+        }
     }
     .redUserIcon {
         border-radius: 50px;

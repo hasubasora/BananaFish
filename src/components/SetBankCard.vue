@@ -33,6 +33,7 @@
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -64,9 +65,7 @@ export default {
                     this.$server.serverUrl + "/UserCenter/GetMemberDrawAccount",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.CardList = response.data.list;

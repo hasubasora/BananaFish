@@ -260,7 +260,7 @@
 }
 </style>
 <script>
-import { GoBuySometing, GetUnTime } from "../main.js";
+import { GoBuySometing, GetUnTime, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -284,9 +284,7 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
                 console.log(response.data);
@@ -310,9 +308,7 @@ export default {
                 url: this.$server.serverUrl + "/account/getmygrouporderDetail",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.OrderIdList = response.data.rows;
                     console.log(response.data);
@@ -349,9 +345,6 @@ export default {
                 url: this.$server.serverUrl + "/account/closemygrouporder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "取消成功",

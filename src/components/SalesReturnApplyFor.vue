@@ -27,7 +27,7 @@
                     <span slot="left">快递公司：</span>
                     <select slot="right" v-model="ExpressageSelect" @change="ExpressageSelects">
                         <option value=""></option>
-                        <option :value=index v-if="lsLogisticsCompany" v-for="(item, index) in lsLogisticsCompany" :key="index">{{item.LogisticsCompanyName}}</option>
+                        <option :value="index" v-if="lsLogisticsCompany" v-for="(item, index) in lsLogisticsCompany" :key="index">{{item.LogisticsCompanyName}}</option>
                     </select>
                 </yd-cell-item>
                 <yd-cell-group>
@@ -120,6 +120,7 @@
 }
 </style>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -146,9 +147,7 @@ export default {
             url: this.$server.serverUrl + "/account/getmyorderDetail",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.OrderIdList = response.data.rows;
                 console.log(response.data);
@@ -190,7 +189,7 @@ export default {
                 return;
             }
 
-            if (!this.ExpressageSelect) {
+            if (!this.ExpressageSelect && this.ExpressageSelect != 0) {
                 this.$dialog.toast({
                     mes: "未选择快递公司",
                     timeout: 1500,
@@ -198,7 +197,6 @@ export default {
                 });
                 return;
             }
-            return;
             this.$axios({
                 method: "POST",
                 data: {
@@ -210,7 +208,21 @@ export default {
                 },
                 url: this.$server.serverUrl + "/order/ReturnApplication",
                 responseType: "json"
-            }).then(response => {});
+            }).then(response => {
+                console.log(response.data)
+                if(response.data.success == 200) {
+                    this.$router.push({
+                        path: "/GeneralOrderDetails",
+                        query: { OrderId: this.$route.query.oid }
+                    })
+                }else {
+                    this.$dialog.toast({
+                        mes: response.data.msg,
+                        timeout: 1500,
+                        icon: "error"
+                    })
+                }
+            });
         },
         GetReturnAddress() {
             this.$axios({
@@ -219,9 +231,7 @@ export default {
                 url: this.$server.serverUrl + "/order/GetReturnAddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.address = response.data.address;
@@ -246,7 +256,7 @@ export default {
                 });
                 return;
             }
-            if (!this.ExpressageSelect) {
+            if (!this.ExpressageSelect && this.ExpressageSelect != 0) {
                 this.$dialog.toast({
                     mes: "未选择快递公司",
                     timeout: 1500,

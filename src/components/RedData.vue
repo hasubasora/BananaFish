@@ -1,11 +1,11 @@
 <template>
     <div class="RedDataBox">
-        <yd-navbar slot="navbar" title="分红指数" height='.8rem'>
-            <router-link to="" slot="left" @click.native="GoHistory('Home')">
+        <yd-navbar slot="navbar" title="积分指数" height='.8rem'>
+            <router-link to="" slot="left" @click.native="GoHistory">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" slot="right" @click.native="GoHistory('Home')">
-                分红规则
+            <router-link to="" slot="right" @click.native="GO_TO_PAGE">
+                积分规则
             </router-link>
         </yd-navbar>
 
@@ -38,27 +38,44 @@
                 <span slot="text">历史收益</span>
             </yd-grids-item>
         </yd-grids-group>
-        <yd-cell-group>
-            <yd-cell-item v-for="(item,index) in chartData.LstProfit" :key="index">
+            <!-- <yd-cell-item v-for="(item,index) in chartData.LstProfit" :key="index">
                 <span slot="left">{{item.ProfitsDate}}</span>
                 <span slot="left" style="margin-left:1rem">{{item.Integral}}</span>
                 <span slot="right">{{item.Profit}}</span>
-            </yd-cell-item>
-        </yd-cell-group>
+            </yd-cell-item> -->
 
-        <!-- <div class="chartData">
-            <div class="bgred"></div>
-            <ve-line :data="chartData" height='5rem'></ve-line>
-        </div> -->
-        <!-- <div class="RedDataBtn" v-if="this.$route.query.IsAPP=='undefined'">
-            <span class="iconfont icon-gouwuche-copy" @click="GoHistory('cart')"></span>
-            <button class="redbtntx" @click="GoHistory('WithdrawDeposit')">去提现</button>
-            <button class="redbtn" @click="GoHistory('Home')">购物得积分</button>
-        </div> -->
+        <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <div class="AgentLish" slot="list">
+                <yd-flexbox v-for="(item, index) in chartData.LstProfit" :key="index">
+                    <yd-flexbox-item class="flexItem">
+                        <span>{{item.ProfitsDate}}</span>
+                    </yd-flexbox-item>
+                    <yd-flexbox-item class="flexItem">{{item.Integral}}</yd-flexbox-item>
+                    <yd-flexbox-item class="flexItem">￥{{item.Profit}}</yd-flexbox-item>
+                </yd-flexbox>
+            </div>
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">已经到底啦~♪(^∇^*)~</span>
+
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
+        </yd-infinitescroll>
+        <!-- <yd-grids-group :rows="3" class="grids-item" v-for="(item, index) in chartData.LstProfit" :key="index">
+            <yd-grids-item>
+                <span slot="text">{{item.ProfitsDate}}</span>
+            </yd-grids-item>
+            <yd-grids-item>
+                <span slot="text">{{item.Integral}}</span>
+            </yd-grids-item>
+            <yd-grids-item>
+                <span slot="text">{{item.Profit}}</span>
+            </yd-grids-item>
+        </yd-grids-group> -->
 
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         this.chartSettings = {
@@ -68,21 +85,23 @@ export default {
         };
         return {
             objectData: [],
-
-            chartData: {
+            chart: {
                 columns: ["IndexNumberDate", "Range"],
                 rows: [
-                    // { IndexNumberDate: "2018-05-22", Range: 1 },
-                    // { IndexNumberDate: "2018-05-23", Range: 22 },
-                    // { IndexNumberDate: "2018-05-24", Range: 333 },
-                    // { IndexNumberDate: "2018-05-25", Range: 444 },
-                    // { IndexNumberDate: "2018-05-26", Range: 555 },
-                    // { IndexNumberDate: "2018-05-27", Range: 666 },
-                    // { IndexNumberDate: "2018-05-28", Range: 77 },
-                    // { IndexNumberDate: "2018-05-29", Range: 888 },
-                    // { IndexNumberDate: "2018-05-30", Range: 3 }
+                    { IndexNumberDate: "2018-05-22", Range: 1, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-23", Range: 22, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-24", Range: 333, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-25", Range: 444, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-26", Range: 555, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-27", Range: 666, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-28", Range: 77, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-29", Range: 888, earnings: 0.05 },
+                    { IndexNumberDate: "2018-05-30", Range: 3, earnings: 0.05 }
                 ]
-            }
+            },
+            chartData: {},
+            pageindex: 1,
+            pagesize: 20
         };
     },
     // components: {
@@ -93,28 +112,58 @@ export default {
         this.GetRedData();
     },
     methods: {
-        GoHistory(sid) {
-            this.$router.push({ name: sid });
-            // this.$router.go(-1);
+        GO_TO_PAGE() {
+            this.$router.push({path: "/integralRuler"})
+        },
+        GoHistory() {
+            this.$router.push({path: "/MyInfo"});
         },
         GetRedData() {
             this.$axios({
                 method: "POST",
                 data: {
-                    // pageindex: 1,
-                    // pagesize: 7
+                    pageindex: this.pageindex,
+                    pagesize: this.pagesize
                 },
                 url: this.$server.serverUrl + "/account/getuserindexnumber",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.chartData = response.data.object;
                     // this.objectData = response.data.rankings;
-                    console.log(this.chartData);
+                    console.log(response.data);
                 }
+            });
+        },
+        loadList() {
+            this.pageindex++;
+            this.$axios({
+                method: "POST",
+                data: {
+                    pageindex: this.pageindex,
+                    pagesize: this.pagesize,
+                    
+                },
+                url: this.$server.serverUrl + "/account/getuserindexnumber",
+                responseType: "json"
+            }).then(response => {
+                const _list = response.data.object.LstProfit;
+                this.chartData.LstProfit = [...this.chartData.LstProfit, ..._list];
+                if (_list.length < this.pagesize) {
+                    // console.log("所有数据加载完毕");
+                    /* 所有数据加载完毕 */
+                    this.$refs.infinitescrollDemo.$emit(
+                        "ydui.infinitescroll.loadedDone"
+                    );
+                    return;
+                }
+                // console.log("单次请求数据完毕");
+
+                /* 单次请求数据完毕 */
+                this.$refs.infinitescrollDemo.$emit(
+                    "ydui.infinitescroll.finishLoad"
+                );
             });
         }
     }
@@ -152,6 +201,15 @@ export default {
         padding: 0.2rem;
         .yd-grids-3 .yd-grids-item:not(:nth-child(3n)):before {
             border: 0;
+        }
+    }
+    .grids-item {
+        padding: 0 0.2rem;
+        a {
+            padding: 0.3rem 0;
+        }
+        .yd-grids-3 .yd-grids-item:not(:nth-child(3n)):before {
+            border: none;
         }
     }
     .Redflex {
@@ -206,6 +264,13 @@ export default {
             padding: 0.2rem;
             @extend .SetType;
             font-size: 0.3rem;
+        }
+    }
+    .AgentLish {
+        font-size: 0.28rem;
+        .flexItem {
+            text-align: center;
+            margin-bottom: 0.3rem;
         }
     }
     .SetType {

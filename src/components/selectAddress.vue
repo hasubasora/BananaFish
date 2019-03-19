@@ -1,9 +1,9 @@
 <template>
     <div class="addressLists">
         <yd-navbar slot="navbar" fixed title="地址选择" height='.8rem' class="titleColor" color='#fff'>
-            <router-link to="" slot="left" @click.native="GoHistory">
+            <div @click="goBack" slot="left">
                 <yd-navbar-back-icon color='#fff'></yd-navbar-back-icon>
-            </router-link>
+            </div>
 
             <router-link to="" @click.native="CompileAddress('new')" slot="right" >
                 <span style="color:#fff"> 新增地址</span>
@@ -20,19 +20,21 @@
                 <div @click.native="SelectToDef(item.AddressId)" style="padding:0 .3rem;">
                     <p>{{item.Province}}{{item.CityName}}{{item.AreaName}}{{item.Address}}</p>
                 </div>
-                <yd-preview-header>
+                <yd-preview-header @click.native="goAddress">
                     <div slot="left">
-                        <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" v-if="item.IsDefault==1">
-                            <i> 设为默认地址</i>
-                        </span>
-                        <span @click="SetdefultAddress(item.AddressId)" class="iconfont icon-selected gray" v-if="item.IsDefault!=1">
+                        <span @click.stop="SetdefultAddress(item.AddressId)" class="iconfont icon-selected" :class="{gray: item.IsDefault != 1}">
                             <i> 设为默认地址</i>
                         </span>
                     </div>
-
+                    <!-- <div slot="center">
+                        <router-link :to="'/cartOrder/0'">
+                            <span class="jump"></span>
+                        </router-link> 
+                    </div> -->
+                         
                     <div slot="right">
-                        <div class="SetGet" @click="CompileAddress(item.AddressId)">删除</div>
-                        <div class="SetGet" @click="CompileAddress(item.AddressId)">编辑</div>
+                        <div class="SetGet" @click.stop="CompileAddress(item.AddressId)">删除</div>
+                        <div class="SetGet" @click.stop="CompileAddress(item.AddressId)">编辑</div>
                     </div>
                 </yd-preview-header>
             </yd-preview>
@@ -42,6 +44,7 @@
 </template>
 
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -69,10 +72,6 @@ export default {
                 params: { address_GetId: num }
             });
         },
-        GoHistory() {
-            // console.log(sid);
-            this.$router.go(-1);
-        },
         GetAddressList() {
             this.$axios({
                 method: "POST",
@@ -80,9 +79,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getaddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.addressList = response.data.rows;
                     console.log(response.data);
@@ -100,13 +97,22 @@ export default {
                 url: this.$server.serverUrl + "/order/saveaddressdefault",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GetAddressList();
                 }
             });
+        },
+        goBack() {
+            this.$router.go(-1);
+        },
+        goAddress() {
+            if(sessionStorage.getItem('AddressJumpPath') === 'FreeOfCharge') {
+                this.$router.push({path: '/FreeCartOrder'})
+                sessionStorage.removeItem('AddressJumpPath')
+            }else {
+                this.$router.push({path: "/cartOrder"})
+            }
         }
     }
 };
@@ -116,7 +122,11 @@ export default {
 .addressListsGroup {
     // border: 1px solid;
     margin: 1rem 0;
-   
+    .jump{
+        display: inline-block;
+        width: 3rem;
+        height: 0.4rem;
+    }
     .addressGroup {
         padding: 0.3rem;
         border-top: 1px solid #f2f2f2;

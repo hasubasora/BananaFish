@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -72,9 +73,7 @@ export default {
             url: this.$server.serverUrl + "/index/getwaitlottergrouplist",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.GoodsList = response.data.rows;
                 console.log(this.GoodsList);

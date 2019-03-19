@@ -8,9 +8,10 @@ import router from './router'
 /**
  * mint-ui组件
  */
-import Mint from 'mint-ui';
+import { Swipe, SwipeItem } from 'mint-ui';
 import 'mint-ui/lib/style.css'
-Vue.use(Mint);
+Vue.component(Swipe.name, Swipe);
+Vue.component(SwipeItem.name, SwipeItem);
 
 /**
  * YDUI
@@ -20,6 +21,10 @@ import 'vue-ydui/dist/ydui.rem.css';
 /* 使用px：import 'vue-ydui/dist/ydui.px.css'; */
 
 Vue.use(YDUI);
+
+//iconfont图标
+import './assets/iconfont/iconfont.css'
+
 
 /**
  * 请求组件
@@ -51,6 +56,9 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+import animated from 'animate.css';
+Vue.use(animated)
+
 /**
  * 
  * @param {} m 传入通用的静态ID
@@ -66,6 +74,10 @@ export const TO_PAGE = (m) => {
 // 状态码
 export const LOGIN_SUCCESS = (res) => {
   switch (res.success) {
+    case 100:
+      var retUrl = window.location.href
+      window.location.href = serverUrl.serverUrl  + "/weixin/payOAuth?retUrl=" +  escape(retUrl)
+      break;
     case 200:
       console.log('获取成功！');
       break;
@@ -77,14 +89,11 @@ export const LOGIN_SUCCESS = (res) => {
       console.log('用户已过期，请刷新重试！');
       break;
     case 400:
-      alert(res.msg)
-      console.log('你还没有登陆，请登陆！');
-      router.push({
-        name: "SignIn",
-        query: {
-          Good_name: "2"
-        }
-      });
+      // var ua = navigator.userAgent.toLowerCase();
+      // if (ua.match(/MicroMessenger/i) == "micromessenger") {
+          //在微信中打开
+      var retUrl = window.location.href
+      window.location.href = serverUrl.serverUrl + "/Index/Index?retUrl=" +  decodeURI(retUrl)
       break;
     case 401:
       console.log('请绑定手机号！');
@@ -118,7 +127,7 @@ export const GetUnTime = (d, n) => {
   var leave3 = leave2 % (60 * 1000); //计算分钟数后剩余的毫秒数
   var seconds = Math.round(leave3 / 1000);
   let _seconds = seconds.toString().length < 2 ? +'0' + seconds.toString() : seconds
-  if (n == 1) {
+  if ( n == 1) {
     return (
       _hours +
       ":" +
@@ -157,9 +166,7 @@ export const GetConfig = () => {
     responseType: "json"
   }).then(response => {
     if (response.data.success == 200) {
-      // console.log(response.data.data.goPayUrl);
       Url = response.data.data.goPayUrl
-      console.log(Url);
       return Url
     }
   });
@@ -223,13 +230,14 @@ export const GetWeixinPay = (res) => {
  * @param {*} pt 普通id
  * @param {*} picked 支付类型
  * @param {*} GetTypePay 支付跳转类型
+ * @param {*} JumpPath 跳转我的订单路径
  */
-export const GoBuySometing = (tc, pt, picked, GetTypePay) => {
+export const GoBuySometing = (tc, pt, picked, GetTypePay, JumpPath) => {
   if (GetTypePay) {
     console.log("跳网页支付");
     this.h5axiox(tc, pt, picked);
   } else {
-    this.weixinAip(tc, pt, picked);
+    this.weixinAip(tc, pt, picked, JumpPath);
   }
 }
 
@@ -245,11 +253,9 @@ export const h5axiox = (tc, pt, picked) => {
 }
 
 
-console.log(Url);
 
-export const weixinAip = (tc, pt, picked) => {
+export const weixinAip = (tc, pt, picked, JumpPath) => {
   if (picked == 30000) {
-    // console.log("调用微信支付");
     axios({
       method: "POST",
       url: Url,
@@ -260,13 +266,33 @@ export const weixinAip = (tc, pt, picked) => {
         payType: picked
       }
     }).then(response => {
-      this.LOGIN_SUCCESS(response.data);
-      if (response.data.success == 200) {
+      if(response.data.success == 100) {
+        window.location.href = serverUrl.serverUrl  + "/weixin/payOAuth?retUrl=" + escape(window.location.href)
+      }else if (response.data.success == 200) {
         GetWeixinPay(response.data);
       }
     });
-  } else {
-    // console.log("调用余额支付");
+  }else if(picked == 8000) {
+    axios({
+      method: "POST",
+      url: serverUrl.serverUrl + "/Paying/GoGoldCoinPay",
+      params: {
+        orderId: pt,
+      }
+    }).then(response => {
+      if (response.data.success == 200) {
+        alert(response.data.msg)
+        router.push({
+          name: "Confirmation",
+          params: {getCoins: JumpPath}
+        });
+      }
+      if (response.data.success == 300) {
+        alert(response.data.msg)
+      }
+    });
+  }else {
+    // alert("调用余额支付")
     axios({
       method: "POST",
       url: Url,
@@ -277,26 +303,147 @@ export const weixinAip = (tc, pt, picked) => {
         payType: picked
       }
     }).then(response => {
-      this.LOGIN_SUCCESS(response.data);
       if (response.data.success == 200) {
-        router.push({
-          name: "ShopGoodsList",
-          query: {
-            plan: 2
+        if(JumpPath == 'reload') {
+          return
+        }else if(JumpPath === 'LuckyDouble') {
+          if(sessionStorage.getItem('GoPath') === 'ShopGoodsList') {
+            router.push({
+              name: "ShopGoodsList",
+              query: {
+                plan: 2
+              }
+            })
+          }else if(sessionStorage.getItem('GoPath') !== '') {
+            route.push({
+              name: "LuckyShareConfirm",
+              params: {TwoPersonChipNo: sessionStorage.getItem('GoPath')}
+            })
           }
-        });
+          
+        }else if(JumpPath) {
+          router.push({
+            name: "Confirmation",
+            params: {getCoins: JumpPath}
+          })
+        }else {
+          alert(response.data.msg)
+          router.push({
+            name: "ShopGoodsList",
+            query: {
+              plan: 2
+            }
+          });
+        }
       }
       if (response.data.success == 300) {
         alert(response.data.msg + '，请重新选择支付方式！')
       }
-    });
+    })
   }
-
-
-
 }
 
 
+
+
+// 微信分享
+let shareurl = location.href.split('#')[0]; //获取锚点之前的链接
+axios({
+    method: "POST",
+    data: {
+        url: shareurl
+    },
+    url: serverUrl.serverUrl + "/WeiXin/GetShareConfig",
+    responseType: "json"
+}).then( response => {
+    console.log(response.data)
+    if (response.data.success == 200) {
+        let res = response.data.data;
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: res.appId, // 必填，公众号的唯一标识
+            timestamp: res.timestamp, // 必填，生成签名的时间戳
+            nonceStr: res.nonceStr, // 必填，生成签名的随机串
+            signature: res.signature, // 必填，签名
+            jsApiList: [
+                "onMenuShareAppMessage",
+                "onMenuShareTimeline"
+            ] // 必填，需要使用的JS接口列表
+        });
+        wx.ready(() => {
+            wx.onMenuShareAppMessage({ 
+                title: res.shareTitle, // 分享标题
+                desc: res.shareDesc, // 分享描述
+                link: res.shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: res.shareLogo, // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                // 设置成功
+                  console.log("分享成功")
+                }
+            })
+            wx.onMenuShareTimeline({
+                title: res.shareTitle, // 分享标题
+                link: res.shareUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: res.shareLogo, // 分享图标
+                success: function () {
+                // 设置成功
+                },    
+            })
+        })
+    }
+})
+//分享免单接龙
+export const sharePage = () => {
+  let shareJLurl = serverUrl.serverUrl + "/index.html#/FreeOfCharge"; //获取锚点之前的链接
+  axios({
+      method: "POST",
+      data: {
+          url: shareJLurl
+      },
+      url: serverUrl.serverUrl + "/WeiXin/GetShareConfig",
+      responseType: "json"
+  }).then(response => {
+      console.log(response.data)
+      if (response.data.success == 200) {
+          let res = response.data.data;
+          wx.config({
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: res.appId, // 必填，公众号的唯一标识
+              timestamp: res.timestamp, // 必填，生成签名的时间戳
+              nonceStr: res.nonceStr, // 必填，生成签名的随机串
+              signature: res.signature, // 必填，签名
+              jsApiList: [
+                  "onMenuShareAppMessage",
+                  "onMenuShareTimeline"
+              ] // 必填，需要使用的JS接口列表
+          });
+          wx.ready(() => {
+              wx.onMenuShareAppMessage({ 
+                  title: "【邀请免单】" + res.shareTitle_solitaire, // 分享标题
+                  desc: res.shareDesc_solitaire, // 分享描述
+                  link: res.shareJLUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: res.shareLogo_solitaire, // 分享图标
+                  type: '', // 分享类型,music、video或link，不填默认为link
+                  dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                  success: function () {
+                  // 设置成功
+                    console.log("分享成功")
+                  }
+              });
+              wx.onMenuShareTimeline({
+                  title: "【邀请免单】" + res.shareTitle_solitaire, // 分享标题
+                  link: res.shareJlUrl, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                  imgUrl: res.shareLogo_solitaire, // 分享图标
+                  success: function () {
+                  // 设置成功
+                  },    
+              })
+          })
+      }
+  })
+}
 
 
 //获取支付方式
@@ -318,7 +465,6 @@ export const GetPay = () => {
     }
     if (response.data.success == 200) {
       PayList = response.data.list;
-      console.log(PayList);
 
       return PayList
     }

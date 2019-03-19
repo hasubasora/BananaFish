@@ -1,6 +1,6 @@
 <template>
     <div class="fh_title">
-        <img :src=TimeSrc.TitleSrc>
+        <img :src="TimeSrc.TitleSrc">
         <router-link v-if="TimeSrc.RecommendType!=2" class="fh_title_all" :to="`${'/menuThree/0?gg='}${TimeSrc.RecommendType}`">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
         <router-link v-if="TimeSrc.RecommendType==2" class="fh_title_all" to="/ProductGroupList">{{TimeSrc.Title}}<img src="../assets/Img/r.png" alt=""></router-link>
     </div>

@@ -5,25 +5,21 @@
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
-        <p v-if="OrderLog" style="text-align:center;padding:1rem 0;font-size:.28rem;"> — 暂无物流信息 —</p>
-        <yd-timeline v-if="!OrderLog">
-            <yd-timeline-item v-for="(item, index) in OrderLog" :key="index">
-                <p>{{item.content}}</p>
-                <p style="margin-top: 10px;">{{item.createTime}}</p>
-            </yd-timeline-item>
-            <!-- <yd-timeline-item>
-            <p>【南宁市】您的订单已到达【南宁安吉站】</p>
-            <p style="margin-top: 10px;">2017-08-18 07:25:08</p>
-        </yd-timeline-item>
-        <yd-timeline-item>
-            <p>【南宁市】您的订单在京东【南宁分拨中心】发货完成，准备送往京东【南宁安吉站】</p>
-            <p style="margin-top: 10px;">2017-08-17 21:44:08</p>
-        </yd-timeline-item> -->
-            <!-- ...... -->
-        </yd-timeline>
+        <p v-if="OrderLog.length == 0" style="text-align:center;padding:1rem 0;font-size:.28rem;"> — 暂无物流信息 —</p>
+        <yd-slider v-if="OrderLog.length > 0">
+            <yd-slider-item v-for="(item, index) in OrderLog" :key="index" :dot="true">
+                <yd-timeline>
+                    <yd-timeline-item v-for="(oitem, oindex) in item.data" :key="oindex">
+                        <p>{{oitem.context}}</p>
+                        <p style="margin-top: 10px;">{{oitem.ftime}}</p>
+                    </yd-timeline-item>
+                </yd-timeline>
+            </yd-slider-item>    
+        </yd-slider>
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -34,15 +30,15 @@ export default {
         this.$axios({
             method: "POST",
             data: {
-                orderId: this.$route.query.Good_id,
-                type: 1
+                ordertype: 0,
+                orderid: this.$route.query.Good_id
             },
-            url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
+            url: this.$server.serverUrl + "/order/GetExpressDelivery",
             responseType: "json"
         }).then(response => {
             if (response.data.success == 200) {
-                this.OrderLog = response.data.actions;
-                console.log(response.data);
+                console.log(response.data)
+                this.OrderLog = response.data.rows;
             }
         });
     },
@@ -61,9 +57,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/OrderLogistics",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     console.log(response.data);
                 }

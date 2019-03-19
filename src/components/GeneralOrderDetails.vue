@@ -1,7 +1,7 @@
 <template>
     <div class="GeneralOrderDetails">
         <yd-navbar title="订单详情" fixed>
-            <router-link to="" @click.native="GoShopGoodsList" slot="left">
+            <router-link to="/MyFreeList" @click.native="GoShopGoodsList" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
         </yd-navbar>
@@ -18,7 +18,7 @@
         <yd-cell-group title="支付方式" v-if="OrderIdList.OrderStatus==0">
             <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                 <span slot="left">{{PayListitem.payName}}</span>
-                <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+                <input slot="right" type="radio" :value="PayListitem.payType" v-model="picked" />
             </yd-cell-item>
         </yd-cell-group>
         <div class="OrderList" v-for="(item, index) in OrderIdList.LstProduct" :key="index">
@@ -35,7 +35,9 @@
                 <div class="OrderPrice">
                     <span>￥{{item.BuyPrice}}</span>
                     <span>x{{item.BuyNumber}}</span>
-                    <button class="orderBtn grayBtn" v-if="OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor(item.OrderItemId,item)" type="button">申请退货</button>
+                    <button class="orderBtn grayBtn" v-if="item.OrderItemStatus==0 && OrderIdList.OrderStatus==2" @click="SalesReturnApplyFor(item.OrderItemId,item)" type="button">申请退货</button>
+                    <button class="orderBtn grayBtn" v-if="item.OrderItemStatus==1" type="button">{{item.OrderItemStatusStr}}</button>
+                    <button class="orderBtn grayBtn" v-if="item.OrderItemStatus==2" type="button">{{item.OrderItemStatusStr}}</button>
                 </div>
             </yd-flexbox>
         </div>
@@ -194,7 +196,7 @@
 }
 </style>
 <script>
-import { GoBuySometing, GetPay } from "../main.js";
+import { GoBuySometing, GetPay, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -217,9 +219,7 @@ export default {
             url: this.$server.serverUrl + "/account/getmyorderDetail",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.OrderIdList = response.data.rows;
                 console.log(response.data);
@@ -237,9 +237,6 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
                 console.log(response.data);
@@ -276,9 +273,6 @@ export default {
                 url: this.$server.serverUrl + "/account/closemygrouporder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "取消成功",

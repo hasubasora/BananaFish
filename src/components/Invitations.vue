@@ -4,7 +4,7 @@
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <router-link to="" slot="right">
+            <router-link :to="{path: '/Invite', query: {Good_id: 'yqgz'}}" slot="right" @click="SeeBrokerage">
                 邀请规则
             </router-link>
         </yd-navbar>
@@ -16,13 +16,7 @@
             </el-carousel-item>
         </el-carousel>
         <div class="ShareBigBom">
-            <p>分享推广海报</p>
-            <div class="BigBom">
-                <div class="Bom" v-for="(item, index) in Bom" :key="index">
-                    <img :src="item.icon" alt="">
-                    <span>{{item.title}}</span>
-                </div>
-            </div>
+            <p>长按图片保存到手机</p>
         </div>
     </div>
 </template>
@@ -30,13 +24,13 @@
 <style  lang="scss">
 .ShareBigBom {
     position: absolute;
-    bottom: 0;
+    bottom: 5%;
     width: 100%;
     padding: 0.2rem;
     // border: 1px solid red;
     p {
         text-align: center;
-        font-size: 0.5rem;
+        font-size: 0.3rem;
         padding: 0.2rem;
     }
     .BigBom {
@@ -75,6 +69,7 @@
 </style>
 
 <script>
+import { LOGIN_SUCCESS, TO_PAGE } from "../main.js";
 export default {
     data() {
         return {
@@ -87,6 +82,10 @@ export default {
                 {
                     icon: require("../assets/Img/b2.png"),
                     title: "微信好友"
+                },
+                {
+                    icon: require("../assets/Img/b3.png"),
+                    title: "保存到本地"
                 }
             ],
             fileName: []
@@ -97,6 +96,9 @@ export default {
     },
 
     methods: {
+        SeeBrokerage() {
+            TO_PAGE("yqgz");
+        },
         activeIndex(e) {
             // console.log(e);
         },
@@ -107,9 +109,7 @@ export default {
                 url: this.$server.serverUrl + "/Agent/ApplicationBroker",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GetQr();
                 }
@@ -122,18 +122,16 @@ export default {
                 url: this.$server.serverUrl + "/Agent/GetQr",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.datalist = response.data.data.urls;
                     this.fileName = response.data.data.fileName;
-                } else {
-                    this.$dialog.alert({
-                        mes: response.data.msg
-                    });
                 }
+                //  else {
+                //     this.$dialog.alert({
+                //         mes: response.data.msg
+                //     });
+                // }
             });
         }
     }

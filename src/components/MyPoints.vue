@@ -9,7 +9,7 @@
         <div class="wd_back">
             <span class="wd_back_txt">我的积分</span>
             <p class="wd_back_price">￥{{price}}</p>
-            <button type="button" class="wd_back_btn" @click="GoBankCard('RedData')">积分指数</button>
+            <button type="button" class="wd_back_btn" @click="GoBankCard('MyRedData')">积分指数</button>
         </div>
         <yd-preview :buttons="btns">
             
@@ -66,6 +66,7 @@
 </style>
  
  <script>
+ import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -100,9 +101,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/GetIntegralLog",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     console.log(response.data.list);
                     this.price = response.data.integral;

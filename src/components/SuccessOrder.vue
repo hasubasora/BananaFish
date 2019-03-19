@@ -13,7 +13,7 @@
 
         <div class="SuccessOrder" v-if="this.$route.query.Isok==2">
             <yd-icon name="error ipicon" size="3rem"></yd-icon>
-            <div class="text">支付失败!</div>
+            <div class="text">支付取消!</div>
         </div>
 
         <p class="ppp">支付完成后自行返回商城查看！</p>

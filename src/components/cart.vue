@@ -7,10 +7,10 @@
 
             <!-- <img slot="center" src="http://static.ydcss.com/www/img/logo.png"/> -->
 
-            <router-link to="#" slot="right" @click.native='isDelFn' color="#f2f2f2">
+            <div slot="right" @click='isDelFn' color="#f2f2f2">
                 <yd-icon name="feedback" size=".4rem" color="#f2f2f2" v-show="isDel"></yd-icon>
                 <yd-icon name="checkoff" size=".4rem" color="#f2f2f2" v-show="!isDel"></yd-icon>
-            </router-link>
+            </div>
         </yd-navbar>
         <!-- 购物车 val 设置商品ID {{isCheckAll}}-->
         <div class="GroupBox">
@@ -38,7 +38,7 @@
                                 </label>
                             </div>
 
-                            <div class="GoodList_center"><img :src="items.ProductImg" class="demo-checklist-img"></div>
+                            <div class="GoodList_center" @click="GoToGoodsDes(items.ProductId)"><img :src="items.ProductImg" class="demo-checklist-img"></div>
 
                             <yd-flexbox-item class="GoodList_bom" v-show="isDel">
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
@@ -60,7 +60,6 @@
                                         <yd-icon name="delete" size=".5rem" class="DelGood"></yd-icon>
                                     </span>
                                 </p>
-
                             </yd-flexbox-item>
                         </yd-flexbox>
                     </div>
@@ -238,7 +237,6 @@
 <script>
 import { getNum, LOGIN_SUCCESS } from "../main.js";
 export default {
-    porps: ["todo"],
     data() {
         return {
             checklist: [],
@@ -288,7 +286,6 @@ export default {
                     console.log(response.data);
                     this.GetShoppingCart();
                 }
-                LOGIN_SUCCESS(response.data);
             });
         },
         increase(_index, num) {
@@ -317,8 +314,8 @@ export default {
                     console.log(response.data);
                     getNum();
                     this.GetShoppingCart();
+                    this.$emit('changeCartNum')
                 }
-                LOGIN_SUCCESS(response.data);
             });
         },
 
@@ -330,9 +327,10 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcart",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.CartList = response.data.rows;
+                    console.log(response.data);
                     // console.log(this.CartList.length == []);
                     if (this.CartList.length == []) {
                         this.hasGoods = false;
@@ -342,7 +340,7 @@ export default {
                     for (const iterator of this.CartList) {
                         for (const iterators of iterator.LstProduct) {
                             if (iterators.IsCheck) {
-                                this.AllSalePrice += iterators.SalePrice;
+                                this.AllSalePrice += iterators.SalePrice*iterators.BuyNum;
                             }
                         }
                     }
@@ -364,6 +362,7 @@ export default {
         },
 // 删除商品
         DelGood(_id) {
+            // this.$emit("changeNum")
             this.$axios({
                 method: "POST",
                 data: {
@@ -372,13 +371,13 @@ export default {
                 url: this.$server.serverUrl + "/order/delshoppingcart",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
+                console.log(response.data);
                 if (response.data.success == 200) {
-                    console.log(response.data);
-                    getNum();
                     this.GetShoppingCart();
+                    this.$emit('changeCartNum')                   
                 }
             });
+
         },
         isDelFn() {
             //切换删除

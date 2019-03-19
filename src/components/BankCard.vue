@@ -112,9 +112,6 @@ export default {
                     "/UserCenter/SaveMemberDrawAccount",
                 responseType: "json"
             }).then(response => {
-                // if (response.data.success == 400) {
-                //     this.$router.push({ name: "SignIn" });
-                // }
                 LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     console.log(response.data);
@@ -143,12 +140,6 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/GetBank",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({
-                        name: "SignIn",
-                        query: { Good_name: "2" }
-                    });
-                }
                 if (response.data.success == 200) {
                     console.log(response.data);
                     this.CardList = response.data.list;

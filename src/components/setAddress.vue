@@ -80,7 +80,7 @@
 <script>
 /* 前提是已经安装了 ydui-district */
 import District from "ydui-district/dist/jd_province_city_area_id";
-
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -129,9 +129,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getaddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     for (const iterator of response.data.rows) {
                         if (
@@ -163,9 +161,7 @@ export default {
                 url: this.$server.serverUrl + "/order/deleteaddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.$router.push({ name: "selectAddress" });
                 }
@@ -237,9 +233,7 @@ export default {
                 url: this.$server.serverUrl + "/order/saveaddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
                     this.$router.go(-1);
@@ -259,9 +253,7 @@ export default {
                 url: this.$server.serverUrl + "/order/addaddress",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
                     this.$router.go(-1);

@@ -1,224 +1,246 @@
 <template>
-    <div class="myinfo" v-if="UserInfo.currentUser">
-        <yd-flexbox direction="vertical">
-            <yd-flexbox-item class="GroupSetLink">
-                <!-- <router-link to="/Seting"> <img src="../assets/Img/set.png" alt="" class="SetLink"></router-link> -->
-
+    <div class="MyInfo">
+        <yd-flexbox direction="vertical" class="MaInfoTop">
+            <yd-flexbox-item>
+                <yd-flexbox class="setting" style="justify-content:flex-end">
+                    <img @click="downApp" src="../assets/Img/downApp.png" alt="">
+                </yd-flexbox>
             </yd-flexbox-item>
             <yd-flexbox-item class="GroupSetInfo">
                 <yd-flexbox>
                     <div class="InfoPic">
-                        <!-- <img v-if="!UserInfo.currentUser" src="../assets/Img/bkc.jpg" alt=""> -->
-                        <img v-if="UserInfo.currentUser" :src="UserInfo.currentUser.UserIcon" alt="">
+                        <img :src="UserInfo.UserIcon" alt="">
                     </div>
-                    <yd-flexbox-item @click.native="GoRedData">
-                        <span class="UserName">{{UserInfo.currentUser.NickName}}</span>
-                        <div class="UserInfo">积分指数</div>
+                    <yd-flexbox-item class="User">
+                        <span class="UserName">{{UserInfo.NickName}}</span>
+                        <div class="UserInfo">ID: {{UserInfo.MemberId}}</div>
                     </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <router-link to="/RemainingSum">
-                            <strong class="UserMoney">{{UserInfo.balance.toFixed(2)}}</strong>
-                            <span class="MoneyTitle">我的余额（元）</span>
-                        </router-link>
-                    </yd-flexbox-item>
-                    <div class="withdrawal" @click="ToLink('WithdrawDeposit',new Date())">
-                        提现
+                    <div @click="GoGeneralize" class="attendance">
+                        <img src="../assets/Img/generalize.png" alt="">
                     </div>
-                </yd-flexbox>
+                </yd-flexbox>  
             </yd-flexbox-item>
-            <yd-flexbox-item>
-                <p class="VipTime">
-                    <img src="../assets/Img/VIP3x.png" alt="">本期积分收益已开放领取，立即领取
-                </p>
-            </yd-flexbox-item>
-            <yd-flexbox-item>
-                <yd-flexbox class="MyIntegral">
-                    <yd-flexbox-item @click.native="ToLink('MyPoints',new Date())">
-                        <span class="IntegralMsg">{{UserInfo.integral}}</span>
-                        <span class="IntegralTitle">我的积分</span>
-                    </yd-flexbox-item>
-                    <yd-flexbox-item @click.native="GoMyEarnings">
-                        <span class="IntegralMsg borderccc">{{UserInfo.profit.toFixed(2)}}</span>
-                        <span class="IntegralTitle borderccc">我的收益</span>
-                    </yd-flexbox-item>
-                </yd-flexbox>
-            </yd-flexbox-item>
-            <yd-flexbox-item>
-                <yd-cell-group class="OrderList" @click.native="ToLink('ShopGoodsList',0)">
-                    <yd-cell-item arrow>
-                        <span slot="left">订单管理</span>
-                        <span slot="right">查看全部</span>
-                    </yd-cell-item>
-                </yd-cell-group>
-            </yd-flexbox-item>
-            <!-- 订单栏目 -->
-            <yd-flexbox-item class="navList">
+            <yd-flexbox-item class="isAngel">
                 <yd-flexbox>
-                    <yd-flexbox-item v-for="(item, index) in ListOne" :key="index" @click.native="ToLink(item.Link,index+1)" class="badge">
-                        <yd-badge type="danger" v-if="index==0&&PendingPayment!=0" class="danger">{{PendingPayment}}</yd-badge>
-                        <yd-badge type="danger" v-if="index==1&&PendingDelivery!=0" class="danger">{{PendingDelivery}}</yd-badge>
-                        <yd-badge type="danger" v-if="index==2&&PendingReceived!=0" class="danger">{{PendingReceived}}</yd-badge>
-                        <yd-badge type="danger" v-if="index==3&&PendingEvaluated!=0" class="danger">{{PendingEvaluated}}</yd-badge>
-                        <yd-badge type="danger" v-if="index==4&&AfterSale!=0" class="danger">{{AfterSale}}</yd-badge>
-                        <img :src="item.imgUrl" alt="" class="IconImg">
-                        <span class="IconName"> {{item.iconName}}</span>
-
-                    </yd-flexbox-item>
-                </yd-flexbox>
-                <yd-cell-group class="TopGroup">
-                    <yd-cell-item arrow class="arrow" @click.native="ToLink('TopGoodsList',0)">
-                        <span slot="left" class="TopGroupBack">我的头筹订单</span>
-                        <span slot="right">查看全部</span>
-                    </yd-cell-item>
-                    <div class="TopGroupClass" v-if="TopGoodList.length>0">
-                        <yd-flexbox>
-                            <yd-flexbox-item v-for="(item, index) in TopGoodList" :key="index">
-                                <div class="TopGoodsList">
-                                    <img :src=item.ImgUrl alt="" class="TopGoodsImg">
-                                    <span class="TopGoodsPug">{{item.WinnerStr}}</span>
-                                </div>
-                                <p class="TopGoodsTitle">{{item.OrderTitle}}</p>
-                                <div class="TopGoodsTitle">标号{{item.LuckerNumber}}</div>
-                            </yd-flexbox-item>
-
-                        </yd-flexbox>
-
-                    </div>
-                </yd-cell-group>
-            </yd-flexbox-item>
-            <yd-flexbox-item>
-                <yd-cell-group class="OrderList">
-                    <yd-cell-item>
-                        <span slot="left">合伙人中心</span>
-                        <span slot="right" @click="SeeBrokerage">分佣说明</span>
-                    </yd-cell-item>
-                </yd-cell-group>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="navList_two">
-                <yd-flexbox class=" invite">
                     <yd-flexbox-item>
-                        <router-link to="/Invitations">
-                            <div class="inviteImg">
-                                <img src="../assets/Img/yq.png" alt="">
-                                <span>邀请有奖</span>
-                            </div>
-                        </router-link>
+                        <img v-if="balance.isAngel" src="../assets/Img/light.png" alt="">
+                        <img v-else src="../assets/Img/Notlight.png" alt="">
                     </yd-flexbox-item>
-                    <yd-flexbox-item>
-                        <div class="inviteImg borderccc" @click="GoMyAgent">
-                            <img src="../assets/Img/td.png" alt="">
-                            <span>我的团队</span>
-                        </div>
-                    </yd-flexbox-item>
-                </yd-flexbox>
-            </yd-flexbox-item>
-            <yd-flexbox-item>
-                <yd-cell-group class="OrderList">
-                    <yd-cell-item>
-                        <span slot="left">实用工具</span>
-                    </yd-cell-item>
-                </yd-cell-group>
-            </yd-flexbox-item>
-            <!-- 工具栏 -->
-            <yd-flexbox-item class="navList " style="margin-bottom:1rem;">
-                <yd-flexbox>
-                    <yd-flexbox-item v-for="(itemt, index) in ListTwo" :key="index" @click.native="ToLink_bom(itemt.Link,index)">
-                        <img :src="itemt.imgUrl" alt="" class="IconImg">
-                        <span class="IconName">{{itemt.iconName}}</span>
-                    </yd-flexbox-item>
+                    <router-link tag="div" to="/AngelActivity" class="angelText">查看天使会员权益</router-link>
                 </yd-flexbox>
             </yd-flexbox-item>
         </yd-flexbox>
+        <yd-flexbox class="balance" direction="vertical">
+            <yd-flexbox-item>
+                <yd-flexbox class="balance-top">
+                    <div>账户余额  <span @click="RemainingSum">￥{{balance.balance}}</span></div>
+                    <div>我的积分 <span>50</span></div>
+                    <div class="withdrawBtn" @click="drawMoney(balance.isAngel)">提现</div>
+                </yd-flexbox>       
+            </yd-flexbox-item>
+        </yd-flexbox>
+        <yd-flexbox class="myinfo-order">
+            <yd-flexbox-item class="order-item" @click.native="handleOrder(1)">
+                <yd-badge type="danger" class="badge" v-if="dot.PendingPayment>0">{{dot.PendingPayment}}</yd-badge>
+                <img src="../assets/Img/PendingPayment.png" alt="">
+                <p>待付款</p>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="order-item" @click.native="handleOrder(2)">
+                <yd-badge type="danger" class="badge" v-if="dot.PendingDelivery>0">{{dot.PendingDelivery}}</yd-badge>
+                <img src="../assets/Img/PendingDelivery.png" alt="">
+                <p>待发货</p>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="order-item" @click.native="handleOrder(3)">
+                <yd-badge type="danger" class="badge" v-if="dot.PendingReceived>0">{{dot.PendingReceived}}</yd-badge>
+                <img src="../assets/Img/PendingReceived.png" alt="">
+                <p>待收货</p>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="order-item" @click.native="handleOrder(4)">
+                <yd-badge type="danger" class="badge" v-if="dot.PendingEvaluated>0">{{dot.PendingEvaluated}}</yd-badge>
+                <img src="../assets/Img/PendingEvaluated.png" alt="">
+                <p>待评价</p>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="order-item" @click.native="handleOrder(5)">
+                <yd-badge type="danger" class="badge" v-if="dot.AfterSale>0">{{dot.AfterSale}}</yd-badge>
+                <img src="../assets/Img/AfterSale.png" alt="">
+                <p>售后</p>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="order-item last-order" @click.native="handleOrder(0)">
+            </yd-flexbox-item>
+        </yd-flexbox>
+        <div class="ad-area">
+            <swiper :options="swiperOption">
+                <swiper-slide v-for="(item, index) in UserCenterAd" :key="index" @click.native="GoClassify(item)">
+                    <img :src="item.Src">
+                    <!-- <img src="../assets/Img/1.png" alt=""> -->
+                </swiper-slide>
+            </swiper>
+        </div>
+        <yd-flexbox class="partner" direction="vertical">
+            <yd-flexbox-item class="partner-title">
+                <span class="title-left">实用工具</span>
+            </yd-flexbox-item>
+            <yd-flexbox-item class="partner-content">
+                <div class="partner-list">
+                    <div class="partner-item" v-for="(item, index) in tool" :key="index" @click="ToLink_bom(item.Link,index)">
+                        <img :src="item.imgUrl" alt="">
+                        <p>{{item.textName}}</p>
+                    </div>
+                </div>
+            </yd-flexbox-item>
+        </yd-flexbox>
+        <!-- 解决ios不兼容margin-bottom -->
+        <div class="marginBot"></div>
     </div>
 </template>
 <script>
-import { LOGIN_SUCCESS, TO_PAGE } from "../main.js";
+import { TO_PAGE } from "../main.js";
+import "swiper/dist/css/swiper.css";
+import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
     data() {
         return {
-            PendingPayment: 0, // 呆付款 是
-            PendingDelivery: 0, //  待发货 是
-            PendingReceived: 0, //  待收货 是
-            PendingEvaluated: 0, //  待评价 是
-            AfterSale: 0, // 收货 是
-            ListOne: [
-                {
-                    iconName: "待付款",
-                    imgUrl: require("../assets/Img/dfk.png"),
-                    Link: "ShopGoodsList"
+            productNum: 0,
+            UserInfo: {},
+            GetConfig: [],
+            status: false,
+            balance: {},
+            dot: {},
+            UserCenterAd: [],
+            swiperOption: {
+                slidesPerView: 1,
+                spaceBetween: 10,
+            },
+            tool: [{
+                imgUrl: require('../assets/Img/practical1.png'),
+                textName: '收货地址',
+                Link: 'selectAddress'
+                }, {
+                imgUrl: require('../assets/Img/coupon.png'),
+                textName: '优惠券',
+                Link: ''
+                }, {
+                imgUrl: require('../assets/Img/jinli.png'),
+                textName: '锦鲤冒险',
+                Link: 'HtmlApp'
+                }, {
+                imgUrl: require('../assets/Img/practical4.png'),
+                textName: '商务合作',
+                Link: 'HtmlApp'
+                }, {
+                imgUrl: require('../assets/Img/practical5.png'),
+                textName: '服务协议',
+                Link: 'HtmlApp'
+                }, {
+                imgUrl: require('../assets/Img/practical2.png'),
+                textName: '客服',
+                Link: ''
+                }, {
+                imgUrl: require('../assets/Img/practical3.png'),
+                textName: '帮助',
+                Link: 'help'
                 },
-                {
-                    iconName: "待发货",
-                    imgUrl: require("../assets/Img/dfh.png"),
-                    Link: "ShopGoodsList"
-                },
-                {
-                    iconName: "待收货",
-                    imgUrl: require("../assets/Img/dsh.png"),
-                    Link: "ShopGoodsList"
-                },
-                {
-                    iconName: "待评价",
-                    imgUrl: require("../assets/Img/dpj.png"),
-                    Link: "ShopGoodsList"
-                },
-                {
-                    iconName: "售后",
-                    imgUrl: require("../assets/Img/sh.png"),
-                    Link: "ShopGoodsList"
-                }
-            ],
-            ListTwo: [
-                {
-                    iconName: "收货地址",
-                    imgUrl: require("../assets/Img/shdz.png"),
-                    Link: "selectAddress"
-                },
-                {
-                    iconName: "客服",
-                    imgUrl: require("../assets/Img/kf.png"),
-                    Link: ""
-                },
-                {
-                    iconName: "帮助",
-                    imgUrl: require("../assets/Img/bz.png"),
-                    Link: "help"
-                },
-                {
-                    iconName: "商务合作",
-                    imgUrl: require("../assets/Img/swhz.png"),
-                    Link: "HtmlApp"
-                },
-                {
-                    iconName: "服务协议",
-                    imgUrl: require("../assets/Img/jrwm.png"),
-                    Link: "HtmlApp"
-                }
-            ],
-            UserInfo: [],
-            TopGoodList: [],
-            GetConfig: []
+            ]
         };
+    },
+    components: {
+        swiper,
+        swiperSlide
     },
     created() {
         this.GetUserInfo();
-        this.Getbadge();
-
+        this.GetOrderNum();
+        this.GetShoppingCartNum()
         this.$axios({
             method: "POST",
             data: {},
             url: this.$server.serverUrl + "/index/GetConfig",
             responseType: "json"
         }).then(response => {
-            LOGIN_SUCCESS(response.data);
             if (response.data.success == 200) {
                 this.GetConfig = response.data.data;
-                // console.log(this.GetConfig.groupRulesUr.split("/"));
+                console.log(this.GetConfig);
+            }
+        });
+        this.$axios({
+            method: "POST",
+            data: {},
+            url: this.$server.serverUrl + "/UserCenter/GetTaskLst",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 200) {
+                this.status = response.data.status;
             }
         });
     },
     methods: {
-        ToLink_bom(url, num, tit) {
+        downApp() {
+            var u = navigator.userAgent;
+            if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                window.location.href = "http://a.app.qq.com/o/simple.jsp?pkgname=com.hz.mall";
+            }else if (u.indexOf('iPhone') > -1) {
+                window.open("https://itunes.apple.com/cn/app/%E5%A4%B4%E7%AD%B9%E8%B4%AD/id1440461607?mt=8");
+            }
+        },
+        GetUserInfo() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/UserCenter/index_V2",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    this.balance = response.data;
+                    this.UserInfo = response.data.currentUser;
+                    this.UserCenterAd = response.data.UserCenterAd
+                }
+            });
+        },
+        GoClassify(obj) {
+            if(obj.Link.indexOf("http") > -1) {
+                window.location.href = obj.Link
+            }else if(obj.CategoryID) {
+                this.$router.push({path: "menuThree/" + obj.CategoryID})
+            }else if(obj.Type) {
+                    this.$router.push({path: "menuThree/0", query: {gg: obj.Type}})
+            }else if(obj.ProductID > 0) {
+                this.$router.push({
+                    path: "/GeneralItemDescription",
+                    query: {Good_id: obj.ProductID}
+                })
+            }else if(obj.SpecialAreaType === 1) {
+                this.$router.push({path: "/FreeOfCharge"})
+            }else if(obj.SpecialAreaType === 2) {
+                this.$router.push({path: "/LuckyDouble"})
+            }
+        },
+        RemainingSum() {
+            this.$router.push({path: "/RemainingSum"})
+        },
+        GetOrderNum() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/Order/GetOrderNum",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    console.log(response.data)
+                    this.dot = response.data.orderNum
+                }
+            })
+        },
+        drawMoney() {
+            this.$router.push({path: "WithdrawDeposit"})           
+        },
+        ToLink(url, num) {
+            console.log(num);
+            this.$router.push({
+                name: url,
+                query: { plan: num }
+            });
+        },
+        ToLink_bom(url, num) {
             switch (num) {
                 case 0:
                     this.$router.push({
@@ -226,13 +248,17 @@ export default {
                     });
                     break;
                 case 1:
-                    window.location.href = this.GetConfig.customerServiceUrl;
+                    this.$dialog.toast({
+                        mes: '敬请期待',
+                        timeout: 1500
+                    })
                     break;
                 case 2:
-                    this.$router.push({
-                        name: url,
-                        query: { plan: num, Titles: tit }
-                    });
+                    //锦鲤冒险
+                    this.$dialog.toast({
+                        mes: '敬请期待',
+                        timeout: 1500
+                    })
                     break;
                 case 3:
                     this.$router.push({
@@ -246,296 +272,330 @@ export default {
                         query: { plan: num, Good_id: "fuwuxieyi" }
                     });
                     break;
+                case 5:
+                    window.location.href = this.GetConfig.customerServiceUrl;
+                    break;
+                case 6:
+                    this.$router.push({
+                        name: url
+                    });
+                    break;
                 default:
                     break;
             }
-            console.log(num);
         },
-        SeeBrokerage() {
-            TO_PAGE("fygz");
+        partnerDetail(i) {
+            console.log(i)
+            switch(i) {
+                case 0:
+                    this.$router.push({path: "/Invitations"})
+                    break;
+                case 1:
+                    this.$router.push({path: "/DirectMember"})
+                    break;
+                case 2:
+                    this.$router.push({path: "/MyEarnings"})
+                    break;
+                default:
+                    break;
+            }
         },
-        ToLink(url, num, tit) {
-            console.log(num);
-            this.$router.push({
-                name: url,
-                query: { plan: num, Titles: tit }
-            });
+        handleOrder(index) {
+            this.$router.push({path: "ShopGoodsList", query: {plan: index}})
         },
-        GoMyAgent() {
-            this.$router.push({ name: "MyAgent" });
-        },
-        GoMyEarnings() {
-            this.$router.push({ name: "MyEarnings" });
-        },
-        GetUserInfo() {
+        GetShoppingCartNum() {
             this.$axios({
                 method: "POST",
                 data: {},
-                url: this.$server.serverUrl + "/UserCenter/index",
+                url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
-                    // console.log(response.data);
-                    this.UserInfo = response.data;
-                    this.TopGoodList = response.data.orderList;
+                    this.productNum = response.data.object.productNum;
                 }
             });
         },
-        GoRedData() {
-            this.$router.push({ name: "MyRedData" });
-        },
-        Getbadge() {
-            //小红点
-            this.$axios({
-                method: "POST",
-                data: {},
-                url: this.$server.serverUrl + "/Order/GetOrderNum",
-                responseType: "json"
-            }).then(response => {
-                LOGIN_SUCCESS(response.data);
-                if (response.data.success == 200) {
-                    console.log(response.data.orderNum.AfterSale);
-                    let badge = response.data.orderNum;
-                    this.PendingPayment = badge.PendingPayment; // 呆付款 是
-                    this.PendingDelivery = badge.PendingDelivery; //  待发货 是
-                    this.PendingReceived = badge.PendingReceived; //  待收货 是
-                    this.PendingEvaluated = badge.PendingEvaluated; //  待评价 是
-                    this.AfterSale = badge.AfterSale; // 收货 是
-                }
-            });
+        GoGeneralize() {
+            switch(this.balance.AgentReviewStatus) {
+                case 0:
+                    this.$router.push({
+                        name: 'ApplicationForAgency'
+                    })
+                    break;
+                case 1:
+                    this.$dialog.toast({
+                        mes: '待审核',
+                        timeout: 1500
+                    })
+                    break;
+                case 2:
+                    this.$router.push({
+                        name: 'PromotionCenter'
+                    })
+                    break;
+                case 3:
+                    this.$dialog.toast({
+                        mes: '审核失败',
+                        timeout: 1500
+                    })
+                default:
+                    this.$router.push({
+                        name: 'ApplicationForAgency'
+                    })
+                    break;
+            }
         }
     }
 };
 </script>
 <style lang="scss">
-.myinfo {
-    margin-bottom: 1rem;
-    height: 100%;
-    width: 100%;
-    background: url(../assets/Img/bg.png) no-repeat;
-    position: relative;
-    background-size: 100%;
-    padding: 0.2rem;
-    .yd-cell-box {
-        margin-bottom: 0;
-        border-top-right-radius: 10px;
-        border-top-left-radius: 10px;
-    }
-    .GroupSetLink {
-        height: 0.5rem;
-        .SetLink {
-            height: 0.4rem;
-            width: 0.4rem;
-            position: absolute;
-            top: 0.2rem;
-            right: 0.2rem;
-        }
-    }
-    .OrderList {
-        .yd-cell {
-            border-top-right-radius: 10px;
-            border-top-left-radius: 10px;
-        }
-    }
-    .GroupSetInfo {
-        height: 1rem;
-
-        .InfoPic {
-            width: 1.2rem;
-            margin-right: 0.2rem;
-            border-radius: 50px;
-            overflow: hidden;
-            height: 1.2rem;
-            > img {
-                width: 100%;
-            }
-        }
-        .UserName {
-            font-size: 0.26rem;
-            color: aliceblue;
-            height: 0.45rem;
-            display: block;
-        }
-        .UserInfo {
-            background: rgba(1, 1, 1, 0.4);
-            color: #ffffff;
-            text-align: center;
-            padding: 0.05rem;
-            border-radius: 15px;
-            border: 1px solid #913131;
-            width: 1.6rem;
-            &::after {
-                content: "\27A7";
-                margin-left: 0.1rem;
-            }
-        }
-        .UserMoney {
-            font-size: 0.5rem;
-            color: #ffffff;
-            display: block;
-            text-align: right;
-        }
-        .MoneyTitle {
-            @extend .UserMoney;
-            font-size: 0.26rem;
-        }
-        .withdrawal {
-            text-align: center;
-            line-height: 0.7rem;
-            font-size: 0.26rem;
-            width: 1.3rem;
-            height: 0.7rem;
-            background: url(../assets/Img/qianbg.png) no-repeat;
-            background-size: 100%;
-        }
-    }
-    .VipTime {
-        margin: 0.4rem 0;
-        padding: 0.05rem;
-        background: rgba(251, 251, 251, 0.4);
-        color: #fff;
-        > img {
-            width: 1.42rem;
-            vertical-align: middle;
-            margin-right: 0.1rem;
-        }
-    }
-    .MyIntegral {
-        background: #fff;
-        height: 1.5rem;
-        border-radius: 5px;
-        margin-bottom: 0.2rem;
-        .IntegralMsg {
-            display: block;
-            font-size: 0.5rem;
-            text-align: center;
-            font-weight: 600;
-            color: #ea4735;
-        }
-        .IntegralTitle {
-            display: block;
-            text-align: center;
-            &::after {
-                content: ">";
-                margin-left: 0.1rem;
-            }
-        }
-    }
-    .navList {
-        //小点
-        .badge {
-            position: relative;
-            top: 0;
-            left: 0;
-            .danger {
-                position: absolute;
-                right: 0.2rem;
-            }
-        }
-        background: #fff;
-        font-size: 0.1rem;
-        margin-bottom: 10px;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-        padding-top: 0.2rem;
-        .IconImg {
-            width: 0.5rem;
-            margin: auto;
-            display: block;
-        }
-        .IconName {
-            display: block;
-            text-align: center;
-            line-height: 0.6rem;
-            font-size: 0.26rem;
-        }
-        .TopGroup {
-            margin: 0.1rem;
-            .yd-cell {
-                background: #f6f6f6;
-                border-radius: 8px;
-                &::after {
-                    border: none;
-                }
-                .yd-cell-item {
-                    padding: 0;
-                }
-                .yd-cell-right {
-                    min-height: 0.8rem;
-                }
-            }
-            .arrow {
-                &::after {
-                    border: none;
-                }
-            }
-            .TopGroupBack {
-                background: url(../assets/Img/tcddbg.png) no-repeat;
-                background-size: 100%;
-                color: #fff;
-                font-size: 0.2rem;
+.MyInfo {
+    .MaInfoTop {
+        width: 100%;
+        box-sizing: border-box;
+        background: url(../assets/Img/bg1.png) no-repeat;
+        background-size: 100%;
+        padding: 0.4rem 0.2rem 0;
+        .setting {
+            margin-right: -0.2rem;
+            img {
                 width: 2rem;
-                height: 0.37rem;
-                line-height: 0.4rem;
-                text-indent: 0.1rem;
             }
-            .TopGroupClass {
-                height: 2rem;
-                width: 6.8rem;
-                .TopGoodsList {
-                    width: 2.3rem;
-                    position: relative;
-                    text-align: center;
-                    margin-top: 0.2rem;
-                    .TopGoodsImg {
-                        width: 1rem;
-                        height: 1rem;
-                        background: #fff;
-                    }
-                    .TopGoodsPug {
-                        position: absolute;
-                        top: 0;
-                        right: 0;
-                        display: block;
-                        border-radius: 50px;
-                        color: red;
-                        padding: 0 0.01rem;
-                        font-size: 0.12rem;
-                        border: 1px solid red;
-                        text-align: center;
-                    }
+        }
+        .GroupSetInfo {
+            .InfoPic {
+                width: 1.4rem;
+                height: 1.4rem;
+                border-radius: 50%;
+                overflow: hidden;
+                img {
+                    width: 1.4rem;
+                    height: 1.4rem;
                 }
-                .TopGoodsTitle {
+            }
+            .User {
+                margin-left: 0.2rem;
+                margin-top: -0.1rem;
+                color: #fff;
+                .UserName {
+                    font-size: 0.3rem;
+                    font-weight: bold;
+                }
+                .UserInfo {
+                    width: 1.6rem;
                     text-align: center;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+                    border: 1px solid #fff;
+                    border-radius: 0.2rem;
+                    margin-top: 0.1rem;
+                    padding: 0.02rem 0;
+                }
+            }
+            .attendance {
+                margin-right: -0.2rem;
+                img {
                     width: 2rem;
                 }
             }
         }
+        .isAngel {
+            background: url(../assets/Img/angleBg.png) no-repeat;
+            background-size: 100% 100%;
+            padding: 0.2rem;
+            margin-top: 0.1rem;
+            img {
+                width: 2.6rem;
+            }
+            .angelText {
+                color: #DFAF79;
+            }
+        }
     }
-    .navList_two {
+    .balance {
         background: #fff;
-        font-size: 0.1rem;
-        padding-bottom: 0.2rem;
-        margin-bottom: 10px;
-        border-bottom-left-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-    .inviteImg {
-        text-align: center;
-        > img {
-            width: 0.7rem;
-            vertical-align: middle;
+        margin: 0 0.2rem;
+        font-size: 0.3rem;
+        border-bottom-left-radius: 0.2rem;
+        border-bottom-right-radius: 0.2rem;
+        .balance-top {
+            justify-content: space-between;
+            padding: 0.3rem 0.4rem 0.3rem;
+            border-bottom: 1px solid #f5f5f5;
+            span {
+                font-weight: bold;
+            }
+            .withdrawBtn {
+                background: red;
+                color: #fff;
+                padding: 0.14rem 0.4rem;
+                border-radius: 0.4rem;
+                font-size: 0.28rem;
+            }
         }
-        > span {
-            font-size: 0.26rem;
+        .balance-center {
+            padding: 0.2rem 0.4rem;
+            justify-content: space-between;
+            border-bottom: 1px solid #f5f5f5;
+            p {
+                text-align: center;
+            }
+            .center-item {
+                border-right: 2px solid #ddd;
+                &:last-child {
+                    border-right: none;
+                }
+                .item-num {
+                    font-size: 0.36rem;
+                    font-weight: bold;
+                    color: #333333
+                }
+                .item-text {
+                    font-size: 0.28rem;
+                    color: #888888;
+                }
+                .colorRed {
+                    color: red;
+                    img {
+                        width: 0.3rem;
+                    }
+                }
+                .colorGreen {
+                    color: green;
+                    img {
+                        width: 0.3rem;
+                    }
+                }
+            }
+            .center-item p:first-child {
+                margin-bottom: 0.1rem;
+            }
+        }
+        .balance-bottom {
+            display: flex;
+            padding: 0.2rem 0.8rem;
+            justify-content: space-between;
+            font-size: 0.28rem;
+            color: #888888;
+            span {
+                color: #DFAF79;
+            }
         }
     }
-    .borderccc {
-        border-left: 1px solid #ccc;
+    .myinfo-order {
+        background: #fff;
+        margin: 0.3rem 0.24rem 0.2rem;
+        border-radius: 0.1rem;
+        box-shadow: 1px 1px 1px #ddd;
+        .order-item {
+            position: relative;
+            padding: 0.12rem 0;
+            text-align: center;
+            color: #888888;
+            justify-content: space-between;
+            box-sizing: border-box;
+            .badge {
+                position: absolute;
+                right: 50%;
+                margin-right: -0.46rem;
+                top: 0.04rem;
+            }
+            img {
+                width: 0.5rem;
+            }
+            p {
+                margin-top: 0.1rem;
+                font-size: 0.26rem;
+            }  
+        }
+        .last-order {
+            padding-top: 0;
+            padding-bottom: 20%;
+            background: url(../assets/Img/allOrder.png) no-repeat;
+            background-size: 100% 100%;
+        }
+    }
+    .tc-order {
+        background: #fff;
+        margin: 0.2rem 0.24rem 0.3rem;
+        border-radius: 0.1rem;
+        box-shadow: 1px 1px 1px #ddd;
+        .tc-item {
+            position: relative;
+            width: 83.33%;
+            color: #888888;
+            text-align: center;
+            justify-content: space-between;
+            box-sizing: border-box;
+            .item {
+                position: relative;
+                padding: 0.12rem 0;
+                img {
+                    width: 0.5rem;
+                }
+                p {
+                    margin-top: 0.1rem;
+                    font-size: 0.26rem;
+                }
+                .badge {
+                    position: absolute;
+                    right: 50%;
+                    margin-right: -0.46rem;
+                    top: 0.04rem;
+                }
+            }  
+        }
+        .last-item {
+            width: 16.67%;
+            padding-bottom: 20%;
+            background: url(../assets/Img/alltc.png) no-repeat;
+            background-size: 100% 100%;
+        }
+    }
+    .ad-area {
+        padding: 0 0.2rem; 
+        margin-bottom: 0.2rem;
+        img {
+            width: 100%;
+        }
+    }
+    .partner {
+        background: #fff;
+        margin: 0 0.24rem 0.2rem;
+        border-radius: 0.1rem;
+        box-shadow: 1px 1px 1px #ddd;
+        color: #888888;
+        .partner-title {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.16rem 0.4rem 0.16rem 0.2rem;
+            border-bottom: 1px solid #f5f5f5;
+            line-height: 0.4rem;
+            .title-left {
+                font-weight: bold;
+                font-size: 0.3rem;
+                color: #333333;
+            }
+            .title-right {
+                font-size: 0.28rem;
+            }
+        }
+        .partner-content {
+            padding: 0.2rem;
+            .partner-list {
+                display: flex;
+                flex-wrap: wrap;
+                text-align: center;
+                .partner-item {
+                    width: 25%;
+                    margin-bottom: 0.3rem;
+                }
+                img {
+                    width: 0.6rem;
+                }
+            }
+        }
+    }
+    .marginBot {
+        height: 1.6rem;
     }
 }
 </style>

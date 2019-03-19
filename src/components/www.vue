@@ -31,20 +31,6 @@
                             <div class="Integral">可获得积分：{{GoodsList.Integral}}
                             </div>
                         </div>
-                        <!-- <yd-cell-group style="border-top:.2rem solid #f2f2f2">
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">规格&nbsp;</i>
-                                </span>
-                                <span slot="left">选择 颜色分类</span>
-                            </yd-cell-item>
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">参数&nbsp;</i>
-                                </span>
-                                <span slot="left">品牌 颜色分类...</span>
-                            </yd-cell-item>
-                        </yd-cell-group> -->
                     </div>
                     <p v-if="key>0" class="gray" style="text-align:center;padding:.2rem 0">———— {{item.label}} ————</p>
 
@@ -91,7 +77,7 @@
             </yd-scrollnav>
         </div>
 
-        <keep-alive>
+
             <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem">
                 <div class='iconfont_s'>
                     <yd-tabbar-item title="首页" link="/" active>
@@ -115,7 +101,7 @@
                     <button class="handleClick leftbtn leftColor" @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
                 </div>
             </yd-tabbar>
-        </keep-alive>
+ 
         <yd-popup v-model="show" position="bottom" height="60%">
             <yd-flexbox>
                 <div>
@@ -416,7 +402,7 @@
 </style>
 
 <script>
-import { getNum } from "../main.js";
+import { getNum, LOGIN_SUCCESS } from "../main.js";
 
 export default {
     data() {
@@ -489,9 +475,7 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
                     console.log(this.productNum);
@@ -628,7 +612,7 @@ export default {
                         url: this.$server.serverUrl + "/order/addshoppingcart",
                         responseType: "json"
                     }).then(response => {
-                        // this.GetMyId(response.data.success)
+                        LOGIN_SUCCESS(response.data)
                         switch (response.data.success) {
                             case 200:
                                 this.show = false;
@@ -638,12 +622,6 @@ export default {
                                     icon: "success"
                                 });
                                 getNum();
-                                break;
-                            case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
                                 break;
                             case 500:
                                 this.$dialog.toast({
@@ -667,16 +645,10 @@ export default {
                         url: this.$server.serverUrl + "/order/buyitnow",
                         responseType: "json"
                     }).then(response => {
-                        // this.GetMyId(response.data.success)
+                        LOGIN_SUCCESS(response.data)
                         switch (response.data.success) {
                             case 200:
                                 this.$router.push({ name: "cartOrder" });
-                                break;
-                            case 400:
-                                this.$router.push({
-                                    name: "SignIn",
-                                    ReturnUrl: ""
-                                });
                                 break;
                             case 500:
                                 this.$dialog.toast({
@@ -703,9 +675,7 @@ export default {
                 url: this.$server.serverUrl + "/index/getproductdetail",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GoodsList = response.data.object; //整个
                     this.Gotup = this.GoodsList.LstAtt[0];
@@ -750,9 +720,7 @@ export default {
                 url: this.$server.serverUrl + "/index/getproductdetaildesc",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.object;
                     // console.log(this.GoodsHtml);

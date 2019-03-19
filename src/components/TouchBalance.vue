@@ -19,6 +19,7 @@
     </div>
 </template>
 <script>
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -39,9 +40,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/GetBalanceLog",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.Tblist = response.data.list;
                 }

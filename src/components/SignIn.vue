@@ -18,7 +18,7 @@
             <yd-cell-item>
                 <span slot="left">验证码：</span>
                 <yd-input slot="right" type="number" required v-model="ImgCode" max="6" placeholder="图片验证码"> </yd-input>
-                <img slot="right" @click="GetImgCode" :src=codeImg alt="">
+                <img slot="right" @click="GetImgCode" :src="codeImg" alt="">
             </yd-cell-item>
             <yd-cell-item>
                 <yd-icon slot="icon" name="phone3" size=".45rem"></yd-icon>

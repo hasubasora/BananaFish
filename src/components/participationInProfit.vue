@@ -1,12 +1,11 @@
 <template>
     <div class="participation">
-        <div class="participationBox" v-for="(item,index) in InProfit" :key='index' :style="{'background':'url('+item.Src+')','background-size':'100%'}">
+        <div class="participationBox" v-for="(item,index) in InProfit" :key='index'>
             <router-link class="Link" :to="index>0?'/ProductGroupList':'/menuThree/0'">
-                <!-- <img class="participationImg" :src="item.Src" alt=""> -->
-                <div class="title">{{item.Title}}</div>
-                <h4>{{item.Title}}</h4>
-                <!-- <h5>{{item.Title}}</h5> -->
-                <router-link class="linkClass" :to="item.Link">立即抢购</router-link>
+                <img class="participationImg" :src="item.Src" alt="">
+                <!-- <div class="title">{{item.Title}}</div>
+                <p>{{item.Desc}}</p>
+                <div class="linkClass">立即抢购</div> -->
                 <!-- <div class="timeout">
               <span class="timeoutL">正在夺筹</span>
               <span class="timeoutR">00:00:00</span>
@@ -26,19 +25,18 @@
         width: 3.5rem;
         height: 2.5rem;
         border-radius: 5px;
+        &:nth-child(1) {
+            margin-right: 0.1rem;
+        }
         .Link {
-            // &:nth-child(1) {
-            //     margin-right: 0.1rem;
-            // }
             .participationImg {
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                width: 1.8rem;
+                width: 100%;
+                height: 100%;
             }
             .title {
                 text-align: center;
                 margin-left: 0.2rem;
+                margin-bottom: 0.6rem;
                 height: 0.4rem;
                 width: 1rem;
                 border-bottom-left-radius: 5px;
@@ -53,14 +51,13 @@
                 font-size: 0.3rem;
                 margin: 0.1rem 0;
             }
-            > h5 {
+            > p {
                 text-indent: 0.2rem;
-                font-size: 0.2rem;
-                color: #999;
-                margin: 0 0 0.5rem 0;
+                font-size: 0.16rem;
+                color: #666;
+                margin: 0 0 0.4rem 0;
             }
             .linkClass {
-                margin-top: 0.8rem;
                 display: inline-block;
                 color: #fff;
                 background: #ff5f17;

@@ -13,6 +13,7 @@
   <script src="static/vconsole.min.js"></script>
   <link rel="stylesheet" href="//at.alicdn.com/t/font_784766_36tm3i4fup4.css">
   <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
   <title>头筹购</title>
 </head>
 
@@ -23,7 +24,29 @@
 <script>
   // 初始化vConsole
   // window.vConsole = new window.VConsole();
+  if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
 
+    var _focusElem = null; //输入框焦点
+
+
+
+    document.addEventListener("focusin", 
+    function (e) {
+          //软键盘弹出的事件处理
+          _focusElem = e.target || e.srcElement;
+      }
+    , true);
+
+    document.addEventListener("focusout", 
+    function (e) {
+          //软键盘收起的事件处理  
+          if (_focusElem) {
+            //焦点元素滚动到可视范围的底部(false为底部，true为顶部)
+            _focusElem.scrollIntoView(false);
+        }
+      }, true);
+
+  }
 </script>
 
 </html>

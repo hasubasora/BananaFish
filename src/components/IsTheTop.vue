@@ -66,7 +66,7 @@
 </template>
 
 <script >
-import { GetUnTime } from "../main.js";
+import { GetUnTime, LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -85,11 +85,10 @@ export default {
             url: this.$server.serverUrl + "/index/getproductgrouplist",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.GoodsList = response.data.rows;
+                console.log(response.data.rows)
                 let eTime = setInterval(e => {
                     for (const iterator of this.GoodsList) {
                         // console.log(iterator.EndTotalSeconds);
@@ -128,7 +127,7 @@ export default {
             this.$axios({
                 method: "POST",
                 data: {
-                    pageindex: this.page,
+                    pageindex: this.page + 1,
                     pagesize: this.pageSize
                 },
                 url: this.$server.serverUrl + "/index/getproductgrouplist"
@@ -139,7 +138,7 @@ export default {
                     // console.log("所有数据加载完毕");
                     /* 所有数据加载完毕 */
                     this.$refs.infinitescrollDemo.$emit(
-                        "ydui.infinitescroll.loadedDone"
+                        "ydui.infinitescroll.loadedDone" 
                     );
                     return;
                 }

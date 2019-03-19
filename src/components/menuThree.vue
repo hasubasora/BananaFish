@@ -1,9 +1,9 @@
 <template>
     <div>
         <yd-navbar title="购物精选" fixed style="z-index:2" height='.8rem' color="#f2f2f2" class="titleColor">
-            <router-link to="/productList" slot="left">
+            <div @click="goBack" slot="left">
                 <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
-            </router-link>
+            </div>
             <router-link to="#" slot="right">
             </router-link>
         </yd-navbar>
@@ -26,20 +26,15 @@
                                     <em>¥</em>{{item.SalePrice}}</span>
                                 <span class="demo-list-del-price">{{item.Integral}}积分</span>
                             </div>
-                            <div>月销量{{item.SaleCount}}件</div>
+                            <div>销量{{item.SaleCount}}件</div>
                         </yd-list-other>
                     </yd-list-item>
                 </yd-list>
-                <!-- 商品列表 end-->
-                <!-- 数据全部加载完毕显示 -->
                 <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
-
-                <!-- 加载中提示，不指定，将显示默认加载中图标 -->
                 <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
 
             </yd-infinitescroll>
         </div>
-
     </div>
 </template>
 <script>
@@ -49,10 +44,11 @@ import { InfiniteScroll } from "vue-ydui/dist/lib.rem/infinitescroll";
 
 Vue.component(InfiniteScroll.name, InfiniteScroll);
 export default {
+    inject: ['reload'],
     data() {
         return {
             tab2: 1,
-            page: 2,
+            page: 1,
             pageSize: 10,
             items: [
                 { CateName: "促销", content: " " },
@@ -60,7 +56,10 @@ export default {
             ],
             rows: [],
             Group_id: 0,
-            RecommendType: this.$route.query.gg
+            RecommendType: this.$route.query.gg,
+            isModal: false,
+            modalText: {},
+            totalcount: Number
         };
     },
     mounted() {
@@ -73,23 +72,29 @@ export default {
         );
     },
     created() {
-        console.log(this.$route.params.Group_id);
+        console.log(this.$route.params.Group_id, this.$route.query);
         this.Group_id = this.$route.params.Group_id;
         localStorage.setItem("GoodsKey", this.$route.params.Group_id);
         this.getCategory();
-        this.getCategoryProduct(this.$route.params.Group_id);
+        this.getCategoryProduct(this.$route.params.Group_id, this.$route.query.gg);
+        console.log(this.$route.query, this.$route.params);
     },
     methods: {
+        goBack() {
+            if (window.history.length <= 1) {
+                this.$router.push({path:'/'})
+            } else {
+                this.$router.go(-1)
+            }
+        },
         GoItemDes(i) {
-            console.log(i);
             this.$router.push({
                 name: "GeneralItemDescription",
                 query: { Good_id: i }
             });
         },
         loadList() {
-            console.log("id" + this.Group_id);
-
+            this.page++;
             this.$axios({
                 method: "POST",
                 data: {
@@ -103,77 +108,74 @@ export default {
                 console.log(response.data.rows);
                 const _list = response.data.rows;
                 this.rows = [...this.rows, ..._list];
-                if (_list.length < this.pageSize || this.page == 3) {
-                    console.log("所有数据加载完毕");
+                if (_list.length < this.pageSize) {
+                    // console.log("所有数据加载完毕");
                     /* 所有数据加载完毕 */
                     this.$refs.infinitescrollDemo.$emit(
                         "ydui.infinitescroll.loadedDone"
                     );
-                    return;
                 }
-                console.log("单次请求数据完毕");
+                // console.log("单次请求数据完毕", this.tab2);
                 
                 /* 单次请求数据完毕 */
                 this.$refs.infinitescrollDemo.$emit(
                     "ydui.infinitescroll.finishLoad"
                 );
 
-                this.page++;
             });
         },
         fn(label, key) {
             console.log(label, key);
         },
         itemClick(key) {
-            console.log(key);
-            console.log(this.items[key]);
-            console.log(this.items[key].CategoryId);
+            // 切换选项卡时初始化滚动加载
+            this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.reInit');
+            // console.log(key);
+            // console.log(this.items[key]);
+            // console.log(this.items[key].CategoryId);
             localStorage.setItem("GoodsKey", this.items[key].CategoryId);
             this.Group_id = this.items[key].CategoryId;
-            console.log("---------------------------------");
-            console.log(this.items[key].CategoryId);
-            console.log(this.items[key].RecommendType);
+            this.RecommendType = this.items[key].RecommendType
+            // console.log("---------------------------------");
+            // console.log(this.items[key].CategoryId);
+            // console.log(this.items[key].RecommendType);
+            this.page = 1
             this.getCategoryProduct(
                 this.items[key].CategoryId,
                 this.items[key].RecommendType
             );
-
-            this.$dialog.loading.open("数据加载中");
-            setTimeout(() => {
-                this.tab2 = key;
-                this.$dialog.loading.close();
-                this.items[key].content = this.rows;
-            }, 500);
+            this.tab2 = key;
+            this.items[key].content = this.rows;
         },
         getCategoryProduct(Group_id, gType) {
-            let _RecommendType 
+            let _RecommendType = 0;
             if (gType != 0) {
                 _RecommendType = gType;
             } else {
-                _RecommendType = this.RecommendType;
+                _RecommendType = this.$route.query.gg;
             } 
-
             this.$axios({
                 method: "POST",
                 data: {
-                    pageindex: 1,
-                    pagesize: 10,
+                    pageindex: this.page,
+                    pagesize: this.pageSize,
                     categoryid: Group_id,
-                    RecommendType: _RecommendType
+                    RecommendType: _RecommendType,
+                    SupplierId: this.$route.params.SupplierId
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
+                    console.log(response.data)
                     this.rows = response.data.rows;
+                    this.totalcount = response.data.totalcount
                 }
             });
         },
 
         getCategory() {
+            console.log(this.$route.query.gg)
             this.$axios({
                 method: "POST",
                 data: {
@@ -185,16 +187,13 @@ export default {
                 url: this.$server.serverUrl + "/index/getcategory",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.items = response.data.rows;
-                    // console.log(this.items);
+                    console.log(this.items)
                     this.tab2 = 0;
                 }
             });
-        }
+        },
     }
 };
 </script>
@@ -203,9 +202,7 @@ export default {
     display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
     text-overflow: ellipsis;
     overflow: hidden;
-    // text-align: none;
-    // height: 0.8rem;
-    // line-height: 0.3rem;
+    height: auto;
     white-space: normal;
     word-wrap: normal;
     /*! autoprefixer: off */
@@ -221,8 +218,12 @@ export default {
 }
 .menu {
     margin-top: 0.8rem;
-    .yd-list-title {
-        height: unset !important;
-    }
+    // .yd-list-title {
+    //     height: unset !important;
+    // }
+}
+.yd-list-theme3 .yd-list-item .yd-list-title {
+    overflow: visible;
+    margin-bottom: 0.1rem;
 }
 </style>

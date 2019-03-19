@@ -2,10 +2,9 @@
     <div class="CommentAll">
         <div class="Comment">
             <yd-navbar title="评价" fixed>
-                <router-link to="/ShopGoodsList/?plan=0" slot="left">
+                <div @click="goBack" slot="left">
                     <yd-navbar-back-icon></yd-navbar-back-icon>
-                </router-link>
-
+                </div>
             </yd-navbar>
             <div class="CommentText" v-for="(item, index) in rows" :key="index">
                 <!-- 商品信息 -->
@@ -18,29 +17,25 @@
                     </yd-preview-header>
                 </yd-preview>
                 <!-- 评价 -->
-                <yd-cell-group title="评价">
+                <yd-cell-group title="评价" class="com-title">
                     <yd-cell-item>
                         <yd-textarea slot="right" v-model="something[index]" placeholder="亲，不写点什么东西吗？" maxlength="200"></yd-textarea>
                     </yd-cell-item>
+                    <div class="divImg">
+                        <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
+                        <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
+                            <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
+                            <input @change="uploadChange($event,index)" :disabled="isBtn" type="file" name="files" id="upInput" accept="image/*" multiple="multiple">
+                        </form>
+                    </div>
                 </yd-cell-group>
 
                 <!-- 图片提交 -->
-
-                <div class="divImg">
-                    <vue-dropzone ref="myVueDropzone" id="dropzone" :disabled=isBtn :options="dropzoneOptions" @click.native="GetIndex(index)" @vdropzone-success="vsuccess"></vue-dropzone>
-                </div>
-                <!-- <div class="divImg">
-                    <img :src="itemImg" alt="" v-for="(itemImg, _index) in my_array[index]" :key="_index">
-                    <form id="uploadForm2" name="imgForm" enctype="multipart/form-data" method='post'>
-                        <img class="upImg" src="../assets/Img/upload.png" alt="" width="100">
-                        <input @change="uploadChange($event,index)" :disabled=isBtn type="file" name="files" id="upInput" accept="image/*" multiple="multiple">
-                    </form>
-                </div> -->
+                
 
             </div>
-
         </div>
-        <yd-button size="large" type="primary" class="primary" @click.native="primary">发布</yd-button>
+        <yd-button size="large" type="primary" v-show="hidshow" class="primary" @click.native="primary">发布</yd-button>
     </div>
 
 </template>
@@ -51,6 +46,45 @@
     left: 0;
     height: 100%;
     width: 100%;
+    .com-title {
+        position: relative;
+        .divImg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            img {
+                display: inline-block;
+                width: 0.8rem;
+                height: 0.8rem;
+                margin: 0.2rem;
+            }
+            #uploadForm2 {
+                background: #fff;
+                position: relative;
+                margin: 0.2rem;
+                width: 0.8rem;
+                display: inline-block;
+                height: 0.8rem;
+                .upImg {
+                    width: 0.8rem;
+                    height: 0.8rem;
+                    display: block;
+                    // border: 1px solid;
+                    position: absolute;
+                    top: -0.2rem;
+                    left: -0.2rem;
+                }
+                #upInput {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 0.8rem;
+                    height: 0.8rem;
+                    opacity: 0;
+                }
+            }
+        }
+    }
     .primary {
         position: absolute;
         bottom: 0;
@@ -67,41 +101,6 @@
         -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
         overflow-y: scroll;
         padding-top: 1rem;
-        #uploadForm2 {
-            background: #fff;
-            position: relative;
-            margin: 0.2rem;
-            width: 1rem;
-            display: inline-block;
-            height: 1rem;
-            .upImg {
-                width: 1rem;
-                height: 1rem;
-                display: block;
-                // border: 1px solid;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            #upInput {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 1rem;
-                height: 1rem;
-                opacity: 0;
-            }
-        }
-        .divImg {
-            background: #fff;
-            // height: 2rem;
-            padding: 0.2rem;
-            > img {
-                width: 1rem;
-                height: 1rem;
-                margin: 0.2rem;
-            }
-        }
         .CommentText {
             margin-bottom: 1rem;
             .preview-header {
@@ -166,7 +165,6 @@
 }
 </style>
 <script>
-import { LOGIN_SUCCESS } from "../main.js";
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 export default {
@@ -196,8 +194,11 @@ export default {
                 // parallelUploads: 10,
                 // thumbnailMethod: "crop",
                 // maxThumbnailFilesize: 2
-                addRemoveLinks: true //
-            }
+                addRemoveLinks: true, //
+            },
+            docmHeight: '',  //默认屏幕高度
+            showHeight: '',   //实时屏幕高度
+            hidshow:true  //显示或者隐藏footer
         };
     },
     components: {
@@ -205,10 +206,30 @@ export default {
     },
     created() {
         console.log(this.$route.query.plan);
-
+        this.docmHeight = document.documentElement.clientHeight
+        this.showHeight = document.documentElement.clientHeight
         this.getCommentgoods();
     },
+    mounted() {
+        window.onresize = ()=>{
+            return(()=>{
+                this.showHeight = document.body.clientHeight;
+            })()
+        }
+    },
+    watch: {
+        showHeight() {
+            if(this.docmHeight > this.showHeight){
+                this.hidshow=false
+            }else{
+                this.hidshow=true
+            }
+        }
+    },
     methods: {
+        goBack() {
+            this.$router.go(-1)
+        },
         primary() {
             this.ComList = [];
             let objectCom = {};
@@ -235,7 +256,6 @@ export default {
                 url: this.$server.serverUrl + "/account/getmyorderDetail",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.rows = response.data.rows.LstProduct;
                     this.OrderId = response.data.rows.OrderId;
@@ -262,17 +282,22 @@ export default {
                 url: this.$server.serverUrl + "/Order/ProductComment",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "评价成功",
                         timeout: 1500,
                         icon: "success",
                         callback: () => {
-                            this.$router.push({
-                                name: "ShopGoodsList",
-                                query: { plan: 0 }
-                            });
+                            if(this.$route.query.source == 'free') {
+                                this.$router.push({
+                                    name: "MyFreeList"
+                                });
+                            }else {
+                                this.$router.push({
+                                    name: "ShopGoodsList",
+                                    query: { plan: 0 }
+                                });
+                            }
                         }
                     });
                 } else {
@@ -281,9 +306,6 @@ export default {
                         mes: response.data.msg,
                         timeout: 1500,
                         icon: "error"
-                        // callback: () => {
-                        //     this.$dialog.alert({ mes: "给你一次重来的机会！" });
-                        // }
                     });
                 }
             });
@@ -298,12 +320,9 @@ export default {
                 if (!this.type) {
                     this.type = this.mime[file.name.match(/\.([^\.]+)$/i)[1]];
                 }
-                var formData = new FormData(
-                    document.getElementById("uploadForm2")[0]
-                );
-
-                console.log(formData);
-
+                let formData = new FormData();
+                formData.append("file",document.getElementById('uploadForm2').files[0])        
+                console.log(formData)
                 if (event.target.files.length > 10) {
                     this.$dialog.toast({
                         mes: "上传图片最多十张！",
@@ -312,10 +331,10 @@ export default {
                     return;
                 }
                 for (const iterator of event.target.files) {
-                    console.log(iterator.type);
+                    console.log(iterator);
                     formData.append("file", iterator, iterator.name);
                 }
-
+                console.log(formData)
                 this.$axios({
                     method: "POST",
                     data: formData,
@@ -326,12 +345,11 @@ export default {
                     responseType: "json",
                     headers: { "Content-Type": "multipart/form-data" }
                 }).then(response => {
-                    console.log(response.data);
-                    const _list = response.data.paths;
-                    this.$set(this.my_array, _index, _list);
-                    console.log(_list);
-                    console.log(this.my_array);
-                });
+                    console.log(response.data)
+                    let _list = response.data.paths;
+                    console.log(this.my_array, _index, _list)
+                    this.$set(this.my_array, _index, _list)
+                })
             }
         },
         vsuccess(file, response) {

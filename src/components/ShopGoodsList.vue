@@ -1,23 +1,22 @@
 <template>
-    <div class="ShopGoodslist">
-
-        <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" fixed>
+    <div class="ShopGoodslist" :class="{noScroll: orderSwipe}">
+        <yd-navbar height='.8rem' color="#f2f2f2" class="titleColor" title="订单列表" fixed>
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
             </router-link>
-            <yd-flexbox slot="center" style="border:1px solid #fff;">
+            <!-- <yd-flexbox slot="center" style="border:1px solid #fff;">
                 <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">普通订单</yd-flexbox-item>
                 <yd-flexbox-item @click.native='GoTopGoodsList' style="padding:.1rem .3rem;color:#fff">头筹订单</yd-flexbox-item>
-            </yd-flexbox>
+            </yd-flexbox> -->
         </yd-navbar>
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
             <yd-tab slot="list" v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
                 <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
 
                     <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
-                        <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId)">
+                        <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
                             <div slot="left">订单编号:{{itemt.OrderId}}</div>
-                            <div slot="right">{{itemt.OrderStatusStr}}</div>
+                            <div slot="right" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
 
                         </yd-preview-header>
 
@@ -44,7 +43,7 @@
 
                         <yd-preview-item>
                             <div slot="left"></div>
-                            <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount+itemt.ExpressAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
+                            <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
                         </yd-preview-item>
                         <yd-preview-item>
                             <div slot="left"></div>
@@ -78,20 +77,57 @@
                 <yd-cell-group title="支付方式">
                     <yd-cell-item type="radio" v-for="(PayListitem, index) in PayList" :key="index" @click.native="GetType(PayListitem.isBrowser)">
                         <span slot="left">{{PayListitem.payName}}</span>
-                        <input slot="right" type="radio" :value=PayListitem.payType v-model="picked" />
+                        <input slot="right" type="radio" :value="PayListitem.payType" v-model="picked" />
                     </yd-cell-item>
                     <yd-button size="large" @click.native="OrderPaying">确定</yd-button>
                 </yd-cell-group>
             </div>
         </yd-popup>
 
+        <div class="orderSwipe" v-show="orderSwipe">
+            <div class="orderContent">
+                <yd-slider class="ydSlider">
+                    <yd-slider-item v-for="(item, index) in OrderList" :key="index">
+                        <div class="ItemDetails">
+                            <div class="ItemTop">
+                                <div class="ItemImg">
+                                    <img :src="item.lsOrderItem[0].ProductImg" alt="">
+                                </div>
+                                <p>{{item.lsOrderItem[0].ProductTitle}}</p>
+                            </div>
+                            <p class="ItemBot">
+                                快递公司：{{item.FShipmentName}}
+                            </p>
+                            <p class="ItemBot">
+                                快递单号：{{item.FShipmentNumber}}
+                            </p>
+                        </div>
+                        <div class="LogisticsDetails">
+                            <yd-timeline v-if="item.data.length > 0">
+                                <yd-timeline-item v-for="(oitem, oindex) in item.data" :key="oindex">
+                                    <p>{{oitem.context}}</p>
+                                    <p style="margin-top: 10px;">{{oitem.ftime}}</p>
+                                </yd-timeline-item>
+                            </yd-timeline>
+                            <div v-else class="prompt">
+                                暂时还没有物流信息
+                            </div>
+                        </div>
+                    </yd-slider-item>
+                </yd-slider>
+            </div>
+            <div class="closeBtn" @click="closeSwipe">
+                <img src="../assets/Img/close.png" alt="">
+            </div>
+        </div>
     </div>
 
 </template>
 
 <script>
-import { GoBuySometing, SalesReturnApplyFor } from "../main.js";
+import { GoBuySometing, SalesReturnApplyFor, LOGIN_SUCCESS } from "../main.js";
 export default {
+    inject: ['reload'],
     data() {
         return {
             tab2: 0,
@@ -113,7 +149,10 @@ export default {
             page: 1,
             pageSize: 4,
             dota: 0,
-            totalcount: 0
+            totalcount: 0,
+            OrderList: [],
+            orderSwipe: false,
+            tabKey: ""
         };
     },
     created() {
@@ -140,24 +179,46 @@ export default {
             url: this.$server.serverUrl + "/Paying/GetPayType",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
-                // console.log(response.data);
             }
         });
+        
     },
     methods: {
+        // goBack() {
+        //     window.history.length <= 1 ? this.$router.push({path: "/MyInfo"}) : this.$router.go(-1);
+        // },
         GetType(e) {
             this.GetTypePay = e;
         },
         OrderLogistics(oid) {
-            this.$router.push({
-                name: "OrderLogistics",
-                query: { Good_id: oid }
+            this.$axios({
+                method: "POST",
+                data: {
+                    ordertype: 0,
+                    orderid: oid
+                },
+                url: this.$server.serverUrl + "/order/GetExpressDelivery",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    console.log(response.data)
+                    this.OrderList = response.data.rows;
+                }
             });
+            var mo = function(e) {
+                e.preventDefault()
+            }
+            document.body.style.overflow = 'hidden'
+            document.body.style.height = '100%'
+            this.orderSwipe = true
+        },
+        closeSwipe() {
+            var mo=function(e){e.preventDefault()};
+            document.body.style.overflow='';//出现滚动条
+            this.orderSwipe = false
         },
         GoToGoodsDes(id) {
             this.$router.push({
@@ -176,33 +237,47 @@ export default {
         GoTopGoodsList() {
             this.$router.push({ name: "TopGoodsList", query: { plan: 0 } });
         },
-        ToGeneralOrderDetails(id) {
-            this.$router.push({
-                name: "GeneralOrderDetails",
-                query: { OrderId: id }
-            });
+        ToGeneralOrderDetails(id, OrderType) {
+            if(OrderType === 3) {
+                this.$router.push({
+                    name: "LuckyOrderDetail",
+                    query: { 
+                        OrderId: id,
+                        OrderType: OrderType
+                    }
+                });
+            }else {
+                this.$router.push({
+                    name: "GeneralOrderDetails",
+                    query: { 
+                        OrderId: id 
+                    }
+                });
+            }
         },
         //关闭订单
         closeOrder(id) {
-            this.$axios({
-                method: "POST",
-                data: {
-                    orderId: id
-                },
-                url: this.$server.serverUrl + "/account/closemyorder",
-                responseType: "json"
-            }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
+            this.$dialog.confirm({
+                mes: "你确定取消该订单吗？",
+                opts: () => {
+                    this.$axios({
+                        method: "POST",
+                        data: {
+                            orderId: id
+                        },
+                        url: this.$server.serverUrl + "/account/closemyorder",
+                        responseType: "json"
+                    }).then(response => {
+                        if (response.data.success == 200) {
+                            this.GetGoodsList(0);
+                            setTimeout(e => {
+                                this.items[Number(0)].content = this.GoodsHtml;
+                                this.tab2 = Number(0);
+                            }, 1000);
+                        }
+                    });
                 }
-                if (response.data.success == 200) {
-                    this.GetGoodsList(0);
-                    setTimeout(e => {
-                        this.items[Number(0)].content = this.GoodsHtml;
-                        this.tab2 = Number(0);
-                    }, 1000);
-                }
-            });
+            })
         },
         //订单支付
 
@@ -219,7 +294,7 @@ export default {
                 return;
             }
             GoBuySometing("", this.OrderID, this.picked, this.GetTypePay);
-
+            this.reload()
             // window.location.href =
             //     this.$server.serverUrl +
             //     "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
@@ -237,9 +312,7 @@ export default {
                 url: this.$server.serverUrl + "/account/receivedmyorder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.$dialog.toast({
                         mes: "确认成功",
@@ -271,9 +344,6 @@ export default {
                 url: this.$server.serverUrl + "/account/getmyintegralorder",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.rows;
                     this.totalcount = response.data.totalcount;
@@ -283,6 +353,7 @@ export default {
             });
         },
         loadList() {
+            this.page++;
             this.$axios({
                 method: "POST",
                 data: {
@@ -318,14 +389,14 @@ export default {
                     "ydui.infinitescroll.finishLoad"
                 );
 
-                this.page++;
+                
             });
         },
         fn(label, key) {
             // console.log(label, key);
         },
         itemClick(key) {
-            // console.log(key);
+            this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.reInit');
             console.log("数据加载中");
             this.page = 1;
             this.dota = key;
@@ -397,6 +468,9 @@ export default {
                 border: none;
             }
         }
+        .red {
+            color: red;
+        }
     }
     .orderBtn {
         height: 0.5rem;
@@ -417,6 +491,65 @@ export default {
         background: #fff;
         border: 1px solid;
         color: #555;
+    }
+    .orderSwipe {
+        position: fixed;
+        top: -0.8rem;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        background: rgba($color: #000000, $alpha: 0.5);
+        .orderContent {
+            margin: 20% 5% 10%;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            .ydSlider {
+                border-radius: 10px;
+                .ItemDetails {
+                    background: #f05145;
+                    padding: 0.2rem;
+                    color: #fff;
+                    .ItemTop {
+                        display: flex;
+                        align-items: center;
+                        .ItemImg {
+                            border-radius: 0.5rem;
+                            width: 1rem;
+                            height: 1rem;
+                            overflow: hidden;
+                            margin-right: 0.2rem;
+                            img {
+                                width: 1rem;
+                                height: 1rem;
+                            }
+                        }
+                        p {
+                            flex: 1
+                        }
+                    }
+                    .ItemBot {
+                        margin-top: 0.1rem;
+                    }   
+                }
+                .LogisticsDetails {
+                    height: 6rem;
+                    overflow-y: auto;
+                    -webkit-overflow-scrolling: touch;
+                    .prompt {
+                        text-align: center;
+                        margin-top: 1rem;
+                    }
+                }
+            }
+        }
+        .closeBtn {
+            text-align: center;
+            img {
+                width: 0.8rem;
+            }
+        }
     }
 }
 </style>

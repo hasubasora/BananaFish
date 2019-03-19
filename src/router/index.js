@@ -7,7 +7,7 @@ Vue.prototype.$Router = Router;
 export default new Router({
   routes: [{
       path: '/',
-      name: 'index',
+      // name: 'index',
       component: index => require(["@/components/index"], index),
       children: [{ //购物车
           path: '/',
@@ -53,7 +53,7 @@ export default new Router({
       name: 'SignIn',
       component: SignIn => require(["@/components/SignIn"], SignIn),
     }, { //提交订单
-      path: '/cartOrder/:sid',
+      path: '/cartOrder/',
       name: 'cartOrder',
       component: cartOrder => require(["@/components/cartOrder"], cartOrder),
     }, { //保存地址
@@ -100,6 +100,10 @@ export default new Router({
       path: '/MyEarnings',
       name: 'MyEarnings',
       component: MyEarnings => require(["@/components/MyEarnings"], MyEarnings),
+    }, { //我的收益
+      path: '/MyIncome',
+      name: 'MyIncome',
+      component: MyIncome => require(["@/components/MyIncome"], MyIncome),
     }, { //普通订单详情
       path: '/GeneralOrderDetails',
       name: 'GeneralOrderDetails',
@@ -112,7 +116,7 @@ export default new Router({
       path: '/MyAgent',
       name: 'MyAgent',
       component: MyAgent => require(["@/components/MyAgent"], MyAgent),
-    }, { //我的代理
+    }, { //我的团队
       path: '/DirectMember',
       name: 'DirectMember',
       component: DirectMember => require(["@/components/DirectMember"], DirectMember),
@@ -206,10 +210,107 @@ export default new Router({
       path: '/LandingPage',
       name: 'LandingPage',
       component: LandingPage => require(["@/components/LandingPage"], LandingPage),
-    },{
-      path:'/goodsDetilsAlone',
-      name:'goodsDetilsAlone',
-      component:goodsDetilsAlone=>require(["@/components/goodsDetilsAlone"])
+    }, {
+      path: '/shareProfit',
+      name: 'shareProfit',
+      component: shareProfit => require(["@/components/shareProfit"], shareProfit),
+    }, {
+      path: '/Invite',
+      name: 'Invite',
+      component: Invite => require(["@/components/Invite"], Invite),
+    }, {
+      path: '/Activities',
+      name: 'Activities',
+      component: Activities => require(["@/components/Activities"], Activities),
+    }, {//天使会员规则
+      path: '/ActivityRules',
+      name: 'ActivityRules',
+      component: ActivityRules => require(["@/components/ActivityRules"], ActivityRules),
+    }, {//天使会员介绍
+      path: '/AngelActivity',
+      name: 'AngelActivity',
+      component: AngelActivity => require(["@/components/AngelActivity"], AngelActivity),
+    }, {//分享页面
+      path: '/SharePage',
+      name: 'SharePage',
+      component: SharePage => require(["@/components/SharePage"], SharePage),
+    }, {//头筹规则
+      path: '/TCRuler',
+      name: 'TCRuler',
+      component: TCRuler => require(["@/components/TCRuler"], TCRuler),
+    }, {//积分规则
+      path: '/integralRuler',
+      name: 'integralRuler',
+      component: integralRuler => require(["@/components/integralRuler"], integralRuler),
+    }, {//分佣规则
+      path: '/Commission',
+      name: 'Commission',
+      component: Commission => require(["@/components/Commission"], Commission),
+    }, {//筛选
+      path: '/sock',
+      name: 'sock',
+      component: sock => require(["@/components/sock"], sock),
+    }, {//提现记录
+      path: '/WithdrawalRecord',
+      name: 'WithdrawalRecord',
+      component: WithdrawalRecord => require(["@/components/WithdrawalRecord"], WithdrawalRecord),
+    }, {//新人绑定手机号码
+      path: '/Binding',
+      name: 'Binding',
+      component: Binding => require(["@/components/Binding"], Binding),
+    }, {//新人绑定手机号提现
+      path: '/TheCoupleWithdrawal',
+      name: 'TheCoupleWithdrawal',
+      component: TheCoupleWithdrawal => require(["@/components/TheCoupleWithdrawal"], TheCoupleWithdrawal),
+    }, {//免单接龙
+      path: '/FreeOfCharge',
+      name: 'FreeOfCharge',
+      component: FreeOfCharge => require(["@/components/FreeOfCharge/FreeOfCharge"], FreeOfCharge),
+    }, {//我的免单
+      path: '/MyFreeList',
+      name: 'MyFreeList',
+      component: MyFreeList => require(["@/components/FreeOfCharge/MyFreeList"], MyFreeList),
+    }, {//我的免单
+      path: '/FreeDetail',
+      name: 'FreeDetail',
+      component: FreeDetail => require(["@/components/FreeOfCharge/FreeDetail"], FreeDetail),
+    }, {//免单的订单详情页
+      path: '/FreeOrderDetail',
+      name: 'FreeOrderDetail',
+      component: FreeOrderDetail => require(["@/components/FreeOfCharge/FreeOrderDetail"], FreeOrderDetail),
+    }, {//免单的购物车支付页
+      path: '/FreeCartOrder',
+      name: 'FreeCartOrder',
+      component: FreeCartOrder => require(["@/components/FreeOfCharge/FreeCartOrder"], FreeCartOrder),
+    }, {//免单-成功下单
+      path: '/Confirmation',
+      name: 'Confirmation',
+      component: Confirmation => require(["@/components/FreeOfCharge/Confirmation"], Confirmation),
+    }, {//幸运双拼
+      path: '/LuckyDouble',
+      name: 'LuckyDouble',
+      component: LuckyDouble => require(["@/components/LuckyDouble/LuckyDouble"], LuckyDouble),
+    }, {//推广中心
+      path: '/PromotionCenter',
+      name: 'PromotionCenter',
+      component: PromotionCenter => require(["@/components/PromotionCenter/PromotionCenter"], PromotionCenter),
+    }, {//幸运双拼订单详情
+      path: '/LuckyOrderDetail',
+      name: 'LuckyOrderDetail',
+      component: LuckyOrderDetail => require(["@/components/LuckyOrderDetail/LuckyOrderDetail"], LuckyOrderDetail),
+    }, {//幸运双拼分享页面
+      path: '/LuckyDoubleShare',
+      name: 'LuckyDoubleShare',
+      component: LuckyDoubleShare => require(["@/components/LuckyDoubleShare/LuckyDoubleShare"], LuckyDoubleShare),
+    }, {//幸运双拼下单成功页面
+      path: '/LuckyShareConfirm',
+      name: 'LuckyShareConfirm',
+      component: LuckyShareConfirm => require(["@/components/LuckyShareConfirm/LuckyShareConfirm"], LuckyShareConfirm),
+    }, {//申请代理
+      path: '/ApplicationForAgency',
+      name: 'ApplicationForAgency',
+      component: ApplicationForAgency => require(["@/components/ApplicationForAgency/ApplicationForAgency"], ApplicationForAgency),
     }
-  ]
+  ],
+  saveScrollPosition: true
 })

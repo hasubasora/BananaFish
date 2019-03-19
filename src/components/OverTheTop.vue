@@ -30,7 +30,7 @@
                         <span>本期参考开奖号码：{{item.ModelProduct.ReferenceLotteryNumber}} </span>
                         <div class="ModelProductMsgBom">
                             <button class="orderBtn grayBtn">第TCG{{item.CurrentPeriod}}期</button>
-                            <router-link :to="item.Link" class="linkBom titleColor">去权威网站查看</router-link>
+                            <a :href="item.Link" class="linkBom titleColor">去权威网站查看</a>
                         </div>
                     </div>
                 </div>
@@ -47,6 +47,7 @@
 </template>
 
 <script type="text/babel">
+import { LOGIN_SUCCESS } from "../main.js";
 export default {
     data() {
         return {
@@ -65,9 +66,7 @@ export default {
             url: this.$server.serverUrl + "/index/getwinnergrouporder",
             responseType: "json"
         }).then(response => {
-            if (response.data.success == 400) {
-                this.$router.push({ name: "SignIn" });
-            }
+            LOGIN_SUCCESS(response.data)
             if (response.data.success == 200) {
                 this.Grouporder = response.data.rows;
                 console.log(this.Grouporder);
@@ -92,7 +91,7 @@ export default {
             }).then(response => {
                 const _list = response.data.rows;
                 this.Grouporder = [...this.Grouporder, ..._list];
-                if (_list.length < this.pageSize || this.page == 3) {
+                if (_list.length < this.pageSize || this.page == 2) {
                     console.log("所有数据加载完毕");
                     /* 所有数据加载完毕 */
                     this.$refs.infinitescrollDemo.$emit(

@@ -31,6 +31,7 @@ export default {
         /**
          * HtmlApp?Good_id=rhkssjiVIPtd
          */
+        
         this.$axios({
             method: "POST",
             data: {

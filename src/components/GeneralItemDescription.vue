@@ -6,19 +6,14 @@
             </div>
 
             <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px">
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]">商品</yd-flexbox-item>
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">详情</yd-flexbox-item>
+                <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">商品</yd-flexbox-item>
+                <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]">详情</yd-flexbox-item>
             </yd-flexbox>
-
-            <!-- <div @click="TgetConfig" slot="right">
-                <yd-icon name="share3"></yd-icon>
-            </div> -->
-
         </yd-navbar>
 
         <div class="swipe" ref="GroupGood">
-            <yd-scrollnav height='.6rem' :callback='NavCallback'>
-                <yd-scrollnav-panel :label="item.label" v-for="(item, key) in list" :key="key">
+            <yd-scrollnav :callback='NavCallback'>
+                <yd-scrollnav-panel v-for="(item, key) in list" :key="key">
                     <!-- 内容 -->
                     <div class="GroupSwipe" v-if="key==0">
                         <mt-swipe :auto="4000">
@@ -28,43 +23,45 @@
                                 </yd-lightbox>
                             </mt-swipe-item>
                         </mt-swipe>
+                        <div class="lucky_price">
+                            <div class="price">
+                                <span>￥{{GoodsList.SalePrice}}</span>
+                                <div class="market_price"><del>市场价 ￥ {{GoodsList.MarketPrice}}</del></div>
+                            </div>
+                            <div class="sales">
+                                <div class="sale_num">月销 {{GoodsList.SaleCount}}</div>
+                                <div class="integral">可获得积分：{{GoodsList.Integral}}</div>
+                            </div>
+                        </div>
                         <p class="goodtitle">
                             {{GoodsList.ProductTitle}}
                         </p>
-                        <div class="theTopGood">
-                            <p class="c-red t_Price">￥{{GoodsList.SalePrice}}
-                                <span class="t_MarketPrice">市场价￥{{GoodsList.MarketPrice}}</span>
-                            </p>
-                            <div class="Integral">可获得积分：{{GoodsList.Integral}}
-                                <div>已销售：{{GoodsList.SaleCount}}</div>
-                                <!-- <div>存库：{{GoodsList.ProductStock}}</div> -->
+                        <div class="AngelMembers">
+                            <div class="AngelLeft">
+                                <img src="../assets/Img/angelIcon.png" alt="">
+                                <div class="save">
+                                    开通天使会员预计可省 <span> ￥ {{savePrice}}元</span>
+                                </div>
                             </div>
+                            <router-link to="/AngelActivity" class="AngelRight" v-if="!IsAngel">
+                                <div>成为</div>
+                                <div>天使会员</div>
+                            </router-link>
                         </div>
-                        <!-- <yd-cell-group style="border-top:.2rem solid #f2f2f2">
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">规格&nbsp;</i>
-                                </span>
-                                <span slot="left">选择 颜色分类</span>
-                            </yd-cell-item>
-                            <yd-cell-item arrow>
-                                <span slot="left">
-                                    <i class="gray">参数&nbsp;</i>
-                                </span>
-                                <span slot="left">品牌 颜色分类...</span>
-                            </yd-cell-item>
-                        </yd-cell-group> -->
+                        <div @click="showSelect(2)">
+                            <yd-cell-group>
+                                <yd-cell-item arrow>
+                                    <span slot="left">
+                                        <i class="gray">规格&nbsp;</i>
+                                    </span>
+                                    <span slot="left">选择 颜色分类</span>
+                                </yd-cell-item>
+                            </yd-cell-group>
+                        </div>
                     </div>
-                    <p v-if="key>0" class="gray" style="text-align:center;padding:.2rem 0">———— {{item.label}} ————</p>
-
-                    <!-- 详细 -->
-
-                    <div v-if="key==1" class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
-                    <yd-backtop></yd-backtop>
-                    <!-- 详细 -->
 
                     <!-- 评价 -->
-                    <yd-cell-group v-if="key==2">
+                    <yd-cell-group v-if="key==1">
                         <yd-cell-item arrow @click.native="GetCommentList(GoodsList.Id)">
                             <span slot="left">
                                 <i>宝贝评价</i>
@@ -73,41 +70,61 @@
                                 查看全部
                             </span>
                         </yd-cell-item>
-                        <div v-for="items in GoodsList.LstComment" :key="items.id">
+                        <div class="CommentWrap" v-for="items in LstComment" :key="items.id" v-if="LstComment.length">
                             <div class="CommentList">
-                                <div class="UserInfo">
-                                    <img class="UserIcon" :src="items.UserIcon" alt="">
-                                    <!-- <img class="UserIcon" src="../assets/Img/bkc.jpg" alt=""> -->
-                                    <div class="UserInfoText">
+                                <div class="Comment-left">
+                                    <div class="UserInfo">
+                                        <img class="UserIcon" :src="items.UserIcon" alt="">
                                         <span class="NickName">{{ items.NickName }}</span>
-                                        <span class="NickName">规格</span>
+                                    </div>
+                                    <div class="Comment">
+                                        {{items.Comment}}
                                     </div>
                                 </div>
-                                <div class="CreateTime">{{ items.CreateTime }}</div>
-                                <div class="Comment">
-                                    {{ items.Comment }}
+                                <div class="Comment-right" v-if="items.ImgShow == [] && items.ImgShow !== null">
+                                    <img :src="items.ImgShow[0].AttachPath" alt="">
                                 </div>
-                                <yd-lightbox class="ImgShow">
-                                    <yd-lightbox-img v-for="itemst in items.ImgShow" :key="itemst.id" :src="itemst.AttachPath"></yd-lightbox-img>
-                                </yd-lightbox>
-
                             </div>
+                        </div>
+                        <div class="blank" v-if="!LstComment.length">
+                            该商品暂未评价
                         </div>
                     </yd-cell-group>
                     <!-- 评价 -->
+
+                    <!-- 详细 -->
+
+                    <div v-if="key==2">
+                        <div class="details">
+                            <div class="GoodsDirectly">
+                                <div class="DirectlyLeft">
+                                    <img src="../assets/images/goodsPic.png" alt="">
+                                    <div class="ShopInfo">
+                                        <div class="Shopname">{{Supplier.SupplierName}}</div>
+                                        <div class="ProductNum">商品数量 {{Supplier.ProductCount}}</div>
+                                    </div>
+                                </div>
+                                <div class="Directlyright" @click="GoPath(Supplier.SupplierId)">
+                                    <span>进店逛逛</span>
+                                </div>
+                            </div>
+                            <div class="spxq">商品详情</div>
+                        </div>
+                        <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
+                    </div>
+                    <yd-backtop></yd-backtop>
+                    <!-- 详细 -->
 
                 </yd-scrollnav-panel>
             </yd-scrollnav>
         </div>
         <!-- 底部导航 -->
-        <keep-alive>
             <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem">
                 <div class='iconfont_s'>
                     <yd-tabbar-item title="首页" link="/" active>
                         <yd-icon name="home" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
                     </yd-tabbar-item>
                     <yd-tabbar-item title="客服" link=" " @click.native="ToKefo" active>
-                        <!-- <span slot="icon" class="marginTop02 iconfont icon-icon2" style="font-size:.4rem"></span> -->
                         <span slot="icon" class="marginTop02 iconfont icon-54" style="font-size:.5rem; color:#ccc"></span>
                     </yd-tabbar-item>
                     <yd-tabbar-item title="购物车" link="/cart" active>
@@ -117,19 +134,18 @@
                 </div>
 
                 <div class="yd-nav-right-button">
-                    <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="addCart(GoodsList.Id,1)" type="button">加入购物车</button>
+                    <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="showSelect(1)" type="button">加入购物车</button>
                 </div>
                 <div class="yd-nav-right-button">
-                    <button class="handleClick leftbtn leftColor" v-if="this.$route.query.text!='over' " @click="addCart(GoodsList.Id,2)" type="button">立即购买</button>
+                    <button class="handleClick leftbtn leftColor" v-if="this.$route.query.text!='over' " @click="showSelect(2)" type="button">立即购买</button>
                 </div>
             </yd-tabbar>
-        </keep-alive>
         <!-- 底部导航 -->
 
-        <yd-popup v-model="show" position="bottom" height="60%" class="Popup">
+        <yd-popup v-model="show" position="bottom" class="Popup">
             <yd-flexbox>
                 <div>
-                    <img class="GoodsImg" width="100" :src="GoodsImg" alt="">
+                    <img class="ImgUrl" width="100" :src="ImgUrl" alt="">
                 </div>
                 <yd-flexbox-item>
                     <p class="oranges">￥
@@ -138,38 +154,49 @@
                     <div>
                         <span>库存{{Stock}}件</span>
                     </div>
-                    <p>已选："{{GoodAttrs}}"</p>
+                    <p v-if="Gotup">已选：{{GoodAttrs}}</p>
                 </yd-flexbox-item>
-                <yd-flexbox-item>
+                <!-- <yd-flexbox-item>
                     <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
-                </yd-flexbox-item>
+                </yd-flexbox-item> -->
 
             </yd-flexbox>
             <div class="GoodSuk">
-                <div class="gotup" v-if="Gotup">
+                <div class="gotup border" v-if="Gotup">
                     <h3>{{Gotup.AttName}}</h3>
                     <div class="gotupTab">
-                        <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110,itemt.AttValue,selectSKUTwo[index],index)" :class="{isOrange:itemt.isTrue,'pointerEvents':elementSkuAttr[index]}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
+                        <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110,itemt.AttValue,selectSKUTwo[index],index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementSkuAttr[index]}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
                             {{itemt.AttValue}}
                         </span>
-
                     </div>
                 </div>
-                <div class="gotup" v-if="GotupAttr">
+                <div class="gotup border" v-if="GotupAttr">
                     <h3>{{GotupAttr.AttName}}</h3>
                     <div class="gotupTab">
-                        <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,itemt.AttValue,selectSKUOne[index],index)" :class="{isOrange:itemt.isTrue,'pointerEvents':elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
+                        <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,itemt.AttValue,selectSKUOne[index],index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
                             {{itemt.AttValue}}
                         </span>
                     </div>
                 </div>
-                <!-- <div class="gotup">
-                   
-                </div> -->
+                <div class="spinner">
+                    <span>购买数量</span>
+                    <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
+                </div>
             </div>
-            <yd-button type="warning" class="SetButton" size="large" @click.native="addCart(GoodsList.Id)">确定</yd-button>
+            <!-- <yd-button type="warning" class="SetButton" size="large" @click.native="addCart(GoodsList.Id, type)">确定</yd-button> -->
+            <div class="SetButton" @click="addCart(GoodsList.Id, type)">确定</div>
         </yd-popup>
 
+        <!-- 新人活动弹出框 -->
+        <div class="modal" v-if="isModal" @touchmove.prevent>
+            <div class="modalContent">
+                <div class="modalTitle">{{modalText.msg}}</div>
+                <div class="modalText">
+                    <p>{{modalText.desc}}</p>
+                    <img @click="conceal" src="../assets/Img/confirm.png" alt="">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <style lang="scss">
@@ -179,7 +206,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    // border: 1px solid red;
     .flexboxNav {
         padding: 0.1rem 0.2rem;
     }
@@ -196,120 +222,231 @@
         height: 90%;
         -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
         overflow-y: scroll;
-        // border: 1px solid blue;
         background: #f2f2f2;
         padding: 0.7rem 0 1rem;
+        .yd-cell:after {
+            border-bottom: none;
+        }
+        .yd-cell-box {
+            margin-bottom: 0.2rem;
+        }
         .GroupSwipe {
             width: 100%;
-            // height: 5rem;
             background: #ffffff;
-            // margin-bottom: 6rem;
             .mint-swipe {
                 height: 7.5rem;
                 background: #ffffff;
                 text-align: center;
                 .mint-swipe-item {
-                    border: 1xp solid;
+                    border: 1px solid;
                     img {
                         height: 100%;
                         width: auto;
                     }
                 }
             }
+            .lucky_price {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                height: 1rem;
+                padding: 0.1rem 0.4rem 0.1rem 0.2rem;
+                background: linear-gradient(to right, #F02B22, #FC2D59);
+                color: #fff;
+                .price {
+                    span {
+                        font-size: 0.3rem;
+                    }
+                    .market_price {
+                        background: rgba($color: #000000, $alpha: 0.3);
+                        padding: 0.02rem 0.08rem;
+                        border-radius: 0.2rem;
+                    }
+                }
+                .sales {
+                    .sale_num {
+                        text-align: right;
+                    }
+                    .have_group {
+                        font-size: 0.26rem;
+                    }
+                }
+            }
             .goodtitle {
-                padding: 0.2rem;
+                padding: 0.2rem 0.3rem;
                 font-size: 0.3rem;
                 font-weight: 600;
             }
-            .theTopGood {
+            .AngelMembers {
                 display: flex;
-                &:nth-child(1) {
-                    padding-bottom: 0;
-                }
-                &:nth-child(2) {
-                    border-bottom: 1px solid #f2f2f2;
-                }
-                background: #ffffff;
-                // margin: 0.1rem 0;
-                padding: 0.26rem;
-                font-size: 0.2rem;
-                .ProductTitle {
-                    padding-right: 0.2rem;
-                    font-size: 0.3rem;
-                }
-                .Integral {
-                    align-self: right;
-                    font-size: 0.2rem;
-                    color: #ccc;
-                    align-self: flex-end;
-                    flex: 1;
-                    text-align: right;
-                }
-                .t_Price {
-                    font-size: 0.3rem;
-                    font-weight: 600;
-                    flex: 1;
-                    align-self: flex-start;
-                }
-                .t_MarketPrice {
+                justify-content: space-between;
+                height: 1.2rem;
+                padding-left: 0.3rem;
+                background: #F3F3F3;
+                .AngelLeft {
                     display: flex;
+                    flex-direction: column;
                     justify-content: space-between;
-                    color: #ccc;
-                    font-size: 0.2rem;
-                    font-weight: 500;
-                    text-decoration: line-through;
+                    padding: 0.15rem 0;
+                    img {
+                        width: 1.6rem;
+                        height: 0.42rem;
+                    }
+                    span {
+                        color: #F02B24;
+                        font-weight: bold;
+                    }
+                }
+                .AngelRight {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 1.6rem;
+                    height: 1.2rem;
+                    padding-top: 0.22rem;
+                    font-size: 0.28rem;
+                    background: url('../assets/Img/AC.png') no-repeat;
+                    background-size: 100% 100%;
                 }
             }
         }
-        .CommentList {
-            width: 100%;
-            height: auto;
-            .UserInfo {
+        .CommentWrap {
+            padding-bottom: 0.2rem;
+            .CommentList {
                 display: flex;
-                padding: 0.2rem 0.5rem;
-                .UserInfoText {
-                    display: flex;
-                    flex-direction: column;
-                    padding: 0.1rem 0.3rem;
-                    font-size: 0.26rem;
-                }
-                img {
-                    width: 1.2rem;
-                    height: 1.2rem;
-                    border-radius: 50px;
-                }
-            }
-            .CreateTime {
-                padding: 0 0.5rem;
-                color: #888;
-                font-size: 0.2rem;
-            }
-            .Comment {
-                padding: 0.1rem 0.5rem 0.3rem;
-                color: #555;
-                font-size: 0.26rem;
-            }
-            .ImgShow {
+                height: 2.4rem;
+                margin: 0 0.24rem;
                 padding: 0.2rem;
-                width: 2rem;
-                display: flex;
-                margin-bottom: 0.5rem;
-                img {
-                    margin: 0.05rem;
-                    width: 100%;
-                    height: 100%;
+                border: 1px solid #F3F3F3;
+                border-radius: 0.1rem;
+                .Comment-left {
+                    width: 80%;
+                    .UserInfo {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 0.1rem;
+                        .UserIcon {
+                            width: 0.6rem;
+                            height: 0.6rem;
+                            border-radius: 50%;
+                            margin-right: 0.2rem;
+                        }
+                    }
+                    .Comment {
+                        padding-right: 0.2rem;
+                        line-height: 0.4rem;
+                        display: -webkit-box;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 3;
+                        overflow: hidden;
+                    }
                 }
+                .Comment-right {
+                    width: 2rem;
+                    height: 1.8rem;
+                    display: flex;
+                    flex-direction: column-reverse;
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        .blank {
+            height: 3rem;
+            line-height: 3rem;
+            width: 100%;
+            text-align: center;
+            font-size: 0.3rem;
+            color: #888888;
+        }
+        .yd-cell-item:not(:last-child):after {
+            border-bottom: none;
+        }
+        .details {
+            background: #fff;
+            .GoodsDirectly {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.3rem;
+                .DirectlyLeft {
+                    display: flex;
+                    img {
+                        width: 1rem;
+                        height: 1rem;
+                        margin-right: 0.2rem;
+                    }
+                    .ShopInfo {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        .Shopname {
+                            width: 3rem;
+                            font-size: 0.3rem;
+                            font-weight: bold;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                        .ProductNum {
+                            color: #888888;
+                        }
+                    }
+                }
+                .Directlyright {
+                    display: flex;
+                    align-items: center;
+                    span {
+                        font-size: 0.3rem;
+                        font-weight: bold;
+                        color: #F02B24;
+                    }
+                    &:after {
+                        margin-left: .05rem;
+                        margin-right: -.08rem;
+                        font-family: YDUI-INLAY;
+                        font-size: .3rem;
+                        color: #c9c9c9;
+                        content: "\E608";
+                    }
+                }
+            }
+            .spxq {
+                padding: 0.2rem 0.3rem;
+                font-size: 0.3rem;
+                font-weight: bold;
+                border-top: 0.2rem solid #eee; 
             }
         }
     }
     .Popup {
-        .yd-popup-content {
-        }
         .SetButton {
             position: absolute;
             bottom: 0;
             left: 0;
-            z-index: 19980321;
+            right: 0;
+            height: 1rem;
+            line-height: 1rem;
+            background: #ffb400;
+            color: #fff;
+            font-size: .36rem;
+            z-index: 1998;
+            text-align: center;
+            border-radius: 3px;
+        }
+    }
+    .share {
+        padding: 0.2rem 0;
+        float: left;
+        width: 50%;
+        text-align: center;
+        img {
+            width: 0.8rem;
+        }
+        p {
+            font-size: 0.3rem;
         }
     }
     .yd-scrollnav {
@@ -318,17 +455,13 @@
                 display: none;
             }
             .yd-scrollnav-tab-item {
-                display: flex;
-                margin-left: 0.5rem;
-                overflow: hidden;
-                li {
-                    flex: 1;
-                }
+                height: 0 !important;
             }
         }
     }
     .GoodsHtml {
-        > img {
+        margin-bottom: 0.6rem;
+        img {
             width: 100%; display: block;
         }
     }
@@ -346,15 +479,12 @@
             width: 100%;
         }
         .handleClick {
-            // border-radius: 3rem;
             background-color: #ff5f17;
             font-size: 0.3rem;
             border: none;
-            // margin: 0.1rem;
             outline: none;
             height: 0.8rem;
             width: 100%;
-            // width: 2.3rem;
             color: #ffffff;
         }
 
@@ -369,25 +499,21 @@
         }
         .iconfont_s {
             display: flex;
-            // width: 2.8rem;
             > a {
                 width: 1rem;
                 text-align: center;
                 height: 0.8rem;
-                // line-height: 0.7rem;
                 flex: 1;
-                // padding: 0.1rem;
             }
         }
     }
 
     .GoodSuk {
-        padding: 0.2rem 0.2rem;
-        height: 4rem;
-        // border: 1px solid;
+        padding: 0.2rem 0.2rem 1rem 0.2rem;
+        max-height: 6rem;
         overflow-y: auto;
         .gotup {
-            border-bottom: 1px solid #dedcdc;
+            border-bottom: 1px solid #eee;
             padding: 0.2rem 0;
             font-size: 0.36rem;
             .gotupTab {
@@ -415,8 +541,14 @@
                 }
             }
         }
+        .spinner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.2rem;
+        }
     }
-    .GoodsImg {
+    .ImgUrl {
         border: 1px solid #ccc;
         margin: 0.36rem;
         width: 2rem;
@@ -432,13 +564,53 @@
             color: #888;
         }
     }
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 1000;
+        background: rgba(0,0,0,0.1);
+        .modalTitle {
+            position: absolute;
+            top: 1.6rem;
+            width: 100%;
+            font-size: 0.46rem;
+            text-align: center;
+        }
+        .modalContent {
+            position: absolute;
+            background: url(../assets/Img/modal.png) no-repeat ;
+            background-size:cover;
+            top: 50%;
+            margin-top: -3rem;
+            width: 90%;
+            height: 6rem;
+            margin-left: 5%;
+            .modalText {
+                position: absolute;
+                bottom: 0.4rem;
+                width: 60%;
+                margin-left: 20%;
+            }
+            p {
+                font-size: 0.34rem;
+                text-align: center;
+            }
+            img {
+                margin-top: 0.4rem;
+                width: 100%;
+            }
+        }
+    }
 }
 </style>
 
 <script>
-import { getNum, LOGIN_SUCCESS } from "../main.js";
-// import wx from "weixin-js-sdk";
+import { getNum } from "../main.js";
 export default {
+    inject: ['reload'],
     data() {
         return {
             productNum: 0,
@@ -448,11 +620,24 @@ export default {
                 { label: "评价" }
                 // { label: "推荐" }
             ],
-            GetConfig: [],
-            GoodsList: [],
+            Bom: [
+                {
+                    icon: require("../assets/Img/b1.png"),
+                    title: "微信朋友圈"
+                },
+                {
+                    icon: require("../assets/Img/b2.png"),
+                    title: "微信好友"
+                }
+            ],
+            GetConfig: "",
+            GoodsList: {},
+            LstComment: [],
             GoodsHtml: "",
             show: false,
-            flexNav: false,
+            type: 1,
+            show1: false,
+            flexNav: true,
             Gotup: [],
             GotupAttr: [],
             GotupLen: 0,
@@ -463,13 +648,18 @@ export default {
             elementSkuAttr: [],
             GoodAttrs: [],
             GotupLength: 0,
-            GoodsImg: "",
+            ImgUrl: "",
             buyName: "",
             buyID: "", //商品ID
             ProductType: 0,
             spinner: 0, //购买数量
             price: 0,
-            Stock: 0 //存库
+            Stock: 0, //存库
+            isModal: false,
+            modalText: "",
+            Share: "",
+            IsAngel: false,
+            Supplier: {}
         };
     },
     mounted() {
@@ -485,10 +675,8 @@ export default {
         );
     },
     created() {
-        // console.log(location);
-
-        sessionStorage.setItem("s", this.$route.query.Good_id);
-        localStorage.setItem("s", this.$route.query.Good_id);
+        // sessionStorage.setItem("s", this.$route.query.Good_id);
+        // localStorage.setItem("s", this.$route.query.Good_id);
         console.log(this.$route.query.Good_id);
         // 商品信息
         this.GetProductDetail();
@@ -496,30 +684,41 @@ export default {
         this.GetProductDetailDesc();
         //购物车数量
         this.GetShoppingCartNum();
-        this.$axios({
-            method: "POST",
-            data: {},
-            url: this.$server.serverUrl + "/index/GetConfig",
-            responseType: "json"
-        }).then(response => {
-            LOGIN_SUCCESS(response.data);
-            if (response.data.success == 200) {
-                this.GetConfig = response.data.data;
-                // console.log(this.GetConfig.groupRulesUr.split("/"));
-            }
-        });
     },
     computed: {
         storeText() {
             return this.$store.state.counts;
+        },
+        savePrice() {
+            return (this.GoodsList.SalePrice - this.GoodsList.MemberPrice).toFixed(2)
         }
     },
     methods: {
-        ToKefo() {
-            window.location.href = this.GetConfig.customerServiceUrl;
+        showSelect(index) {
+            this.show = true;
+            this.type = index;
         },
-        NavCallback() {
-            this.flexNav = !this.flexNav;
+        showSelect1() {
+            this.show1 = true;
+        },
+        conceal() {
+            this.isModal = false;
+        },
+        ToKefo() {
+            window.location.href = this.GetConfig
+        },
+        NavCallback(index) {
+            if(index) {
+                this.flexNav = false
+            }else {
+                this.flexNav = true
+            }
+        },
+        GoPath(SupplierId) {
+            this.$router.push({
+                name: 'menuThree',
+                params: {Group_id: 0, SupplierId: SupplierId}
+            })
         },
         GetShoppingCartNum() {
             this.$axios({
@@ -528,7 +727,6 @@ export default {
                 url: this.$server.serverUrl + "/order/getshoppingcartnum",
                 responseType: "json"
             }).then(response => {
-                LOGIN_SUCCESS(response.data);
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
                     console.log(this.productNum);
@@ -536,14 +734,14 @@ export default {
             });
         },
         GetCommentList(oid) {
-            this.$router.push({
+            this.$router.replace({
                 name: "TheEvaluationList",
                 params: { Good_id: oid }
             });
         },
 
         GoHistory() {
-            this.$router.go(-1);
+            window.history.length <= 1 ? this.$router.push('/') : this.$router.go(-1)
         },
 
         TouchSku(ValueId, element, vid, buyName, buySku, _index) {
@@ -595,6 +793,7 @@ export default {
                 if (ValueId == elementSkus.AttValueId) {
                     //点击的ID 和 JSON里面一样的 改变属性
                     this.$set(elementSkus, "isTrue", !elementSkus.isTrue);
+                    console.log(elementSkus, elementSkus.isTrue)
                     //*************************判断第一个属性 有没有 第二属性*******************
                     if (vid == 110 && elementSkus.isTrue) {
                         //存库存有没有的判断
@@ -620,20 +819,17 @@ export default {
                         //规格数量
                         switch (this.GotupLen) {
                             case 1:
-                                this.Stock =
-                                    elementSkus.SKU[this.GotupLen - 1].Stock;
-                                this.price =
-                                    elementSkus.SKU[
-                                        this.GotupLen - 1
-                                    ].SalePrice;
-                                this.buyID =
-                                    elementSkus.SKU[this.GotupLen - 1].AttIds;
+                                this.Stock = elementSkus.SKU[this.GotupLen - 1].Stock;
+                                this.ImgUrl = elementSkus.SKU[this.GotupLen - 1].ImgUrl;
+                                this.price = elementSkus.SKU[this.GotupLen - 1].SalePrice;
+                                this.buyID = elementSkus.SKU[this.GotupLen - 1].AttIds;
+                                console.log(this.Stock, this.ImgUrl)
                                 break;
                             case 2:
                                 if (buySku) {
-                                    // console.log("buySku");
-                                    // console.log(buySku);
+                                    console.log(buySku);
                                     this.Stock = buySku.Stock;
+                                    this.ImgUrl = buySku.ImgUrl
                                     this.price = buySku.SalePrice;
                                     this.buyID = buySku.AttIds;
                                     // console.log("点上面的ID");
@@ -672,14 +868,15 @@ export default {
                                 this.elementSkuAttr.push(true);
                             }
                         }
-
+                        console.log(this.selectSKUOne[_index].Stock)
                         if (this.selectSKUOne[_index].Stock > 0) {
+                            console.log(this.Stock)
                             this.Stock = this.selectSKUOne[_index].Stock;
+                            this.ImgUrl = this.selectSKUOne[_index].ImgUrl;
                             this.price = this.selectSKUOne[_index].SalePrice;
                         }
                         this.buyID = this.selectSKUOne[_index].AttIds;
-                        console.log("点下面的ID");
-                        console.log(this.buyID);
+                        console.log("点下面的ID",this.buyID);
 
                         // console.log(this.selectSKU[_index].AttIds);
                     } else if (vid == 100) {
@@ -692,12 +889,14 @@ export default {
         },
         //用的是这个
         addCart(i, key) {
-            // console.log(i);console.log(key);console.log(this.buyID); console.log(this.spinner);console.log(this.$route.query.Good_id);
+            console.log(i, key)
+            // console.log(key);console.log(this.buyID); console.log(this.spinner);console.log(this.$route.query.Good_id);
             if (this.Gotup && !this.show) {
-                this.show = true;
+                this.show = false;
                 this.key = key;
                 return;
             }
+            console.log(key);
             //判断是不是取消了选择
             if (this.GoodAttrs.length == this.GotupLength) {
                 for (const iterator of this.GoodAttrs) {
@@ -732,7 +931,6 @@ export default {
                         responseType: "json"
                     }).then(response => {
                         // this.GetMyId(response.data.success)
-                        LOGIN_SUCCESS(response.data);
                         switch (response.data.success) {
                             case 200:
                                 this.show = false;
@@ -741,7 +939,8 @@ export default {
                                     timeout: 1500,
                                     icon: "success"
                                 });
-                                getNum();
+                                // getNum();
+                                this.reload()
                                 break;
 
                             case 500:
@@ -756,6 +955,7 @@ export default {
                     break;
                 case 2:
                     //立即购买
+                    console.log(this.$route.query.Good_id,this.buyID,this.spinner)
                     this.$axios({
                         method: "POST",
                         data: {
@@ -766,23 +966,16 @@ export default {
                         url: this.$server.serverUrl + "/order/buyitnow",
                         responseType: "json"
                     }).then(response => {
-                        // this.GetMyId(response.data.success)
-                        LOGIN_SUCCESS(response.data);
-                        switch (response.data.success) {
-                            case 200:
-                                this.$router.push({
-                                    name: "cartOrder",
-                                    params: { sid: this.ProductType }
-                                });
-                                break;
-
-                            case 500:
-                                this.$dialog.toast({
-                                    mes: response.data.msg,
-                                    timeout: 1500
-                                });
-                            default:
-                                break;
+                        if(response.data.success == 200) {
+                            this.$router.push({
+                                name: "cartOrder",
+                                params: { sid: this.ProductType }
+                            });
+                        }else {
+                            this.$dialog.toast({
+                                mes: response.data.msg,
+                                timeout: 1500
+                            });
                         }
                     });
                     break;
@@ -801,26 +994,102 @@ export default {
                 url: this.$server.serverUrl + "/index/getproductdetail",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
-                    this.TgetConfig();
+                    console.log(response.data)
                     this.GoodsList = response.data.object; //整个
+                    this.LstComment = response.data.object.LstComment
+                    console.log(this.LstComment)
                     this.GotupLength = this.GoodsList.LstAtt.length;
                     this.Gotup = this.GoodsList.LstAtt[0]; //第一个属性
                     this.GotupAttr = this.GoodsList.LstAtt[1]; //第二个属性
                     this.GotupLen = this.GoodsList.LstAtt.length;
+                    this.Stock = this.GoodsList.ProductStock;
                     this.price = this.GoodsList.SalePrice;
                     this.ProductType = this.GoodsList.ProductType;
-                    // this.Stock = this.GoodsList.ProductStock;
-                    // console.info(this.Gotup);
-                    // console.info(this.GotupAttr);
+                    this.Supplier = response.data.object.Supplier
+                    this.GetConfig = response.data.object.CustomerServiceUrl
+                    this.IsAngel = response.data.object.IsAngel
+                    this.Share = response.data.object.Share
+
+                            // 微信分享
+                    let shareurl = location.href; //获取锚点之前的链接
+                    this.$axios({
+                        method: "POST",
+                        data: {
+                            url: shareurl
+                        },
+                        url: this.$server.serverUrl + "/WeiXin/GetShareConfig",
+                        responseType: "json"
+                    }).then(response => {
+                            console.log(response.data)
+                        if (response.data.success == 200) {
+                            let res = response.data.data;
+                            console.log(res)
+                            var that = this;
+                            wx.config({
+                                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                                appId: res.appId, // 必填，公众号的唯一标识
+                                timestamp: res.timestamp, // 必填，生成签名的时间戳
+                                nonceStr: res.nonceStr, // 必填，生成签名的随机串
+                                signature: res.signature, // 必填，签名
+                                jsApiList: [
+                                    "onMenuShareAppMessage",
+                                    "onMenuShareTimeline"
+                                ] // 必填，需要使用的JS接口列表
+                            });
+                            wx.ready(() => {
+                                wx.onMenuShareAppMessage({
+                                    title: that.Share.Title, // 分享标题
+                                    desc: that.Share.Describe, // 分享描述
+                                    link: that.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                    imgUrl: that.Share.Icon, // 分享图标
+                                    type: '', // 分享类型,music、video或link，不填默认为link
+                                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                                    success: function () {
+                                    // 用户点击了分享后执行的回调函数
+                                        console.log("分享给朋友成功")
+                                        that.$axios({
+                                            method: "POST",
+                                            data: {
+                                                taskCode: "ShareGoods"
+                                            },
+                                            url: that.$server.serverUrl + "/UserCenter/DoTask",
+                                            responseType: "json"
+                                        }).then(response => {
+                                            if(response.data.success == 200) {
+                                                that.modalText = response.data
+                                                that.isModal = true
+                                            }
+                                        });
+                                    }
+                                });
+                                wx.onMenuShareTimeline({
+                                    title: that.Share.Title, // 分享标题
+                                    link: that.Share.Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                                    imgUrl: that.Share.Icon, // 分享图标
+                                    success: function () {
+                                    // 用户点击了分享后执行的回调函数
+                                        console.log("分享朋友圈成功")
+                                        that.$axios({
+                                            method: "POST",
+                                            data: {
+                                                taskCode: "ShareGoods"
+                                            },
+                                            url: that.$server.serverUrl + "/UserCenter/DoTask",
+                                            responseType: "json"
+                                        }).then(response => {
+                                            if(response.data.success == 200) {
+                                                that.modalText = response.data
+                                                that.isModal = true
+                                            }
+                                        });
+                                    },    
+                                })
+                            })
+                        }
+                    })
                     if (this.Gotup) {
-                        for (const [
-                            keys,
-                            elementSkus
-                        ] of this.Gotup.LstAttValue.entries()) {
+                        for (const [keys,elementSkus] of this.Gotup.LstAttValue.entries()) {
                             // console.log(keys);
                             // console.log(elementSkus);
                             this.$set(elementSkus, "isTrue", false);
@@ -840,7 +1109,7 @@ export default {
                     this.GoodsList.LstSKU.forEach((element, index) => {
                         this.Stock += element.Stock;
                     });
-                    this.GoodsImg = this.GoodsList.ProductImg[0].ImgUrl;
+                    this.ImgUrl = this.GoodsList.ProductImg[0].ImgUrl;
                 }
             });
         },
@@ -853,84 +1122,12 @@ export default {
                 url: this.$server.serverUrl + "/index/getproductdetaildesc",
                 responseType: "json"
             }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
                 if (response.data.success == 200) {
                     this.GoodsHtml = response.data.object;
-                    console.log(11111);
-                    console.log(this.GoodsHtml);
+                    console.log(response.data);
                 }
             });
         },
-        //微信分享
-        TgetConfig() {
-            let url = location.href.split("#")[0]; //获取锚点之前的链接
-            this.$axios({
-                method: "POST",
-                data: {
-                    url: url
-                },
-                url: this.$server.serverUrl + "/WeiXin/GetShareConfig",
-                responseType: "json"
-            }).then(response => {
-                if (response.data.success == 400) {
-                    this.$router.push({ name: "SignIn" });
-                }
-                if (response.data.success == 200) {
-                    let res = response.data.data;
-                    wx.config({
-                        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                        appId: res.appId, // 必填，公众号的唯一标识
-                        timestamp: res.timestamp, // 必填，生成签名的时间戳
-                        nonceStr: res.nonceStr, // 必填，生成签名的随机串
-                        signature: res.signature, // 必填，签名
-                        jsApiList: [
-                            "updateAppMessageShareData",
-                            "onMenuShareAppMessage"
-                        ] // 必填，需要使用的JS接口列表
-                    });
-
-                    let Describe = this.GoodsList.Share.Describe,
-                        Title = this.GoodsList.Share.Title,
-                        Link = this.GoodsList.Share.Link,
-                        Icon = this.GoodsList.Share.Icon;
-                    // console.log("------------------------------------");
-                    // console.log(Describe, Title, Link, Icon);
-                    // console.log("------------------------------------");
-                    wx.ready(() => {
-                        // wx.updateAppMessageShareData(
-                        //     {
-                        //         title: Title, // 分享标题
-                        //         desc: Describe, // 分享描述
-                        //         link: Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                        //         imgUrl: Icon // 分享图标
-                        //     },
-                        //     function(res) {
-                        //         // alert("分享成功！");
-                        //         //这里是回调函数
-                        //     }
-                        // );
-                        wx.onMenuShareAppMessage({
-                            title: Title, // 分享标题
-                            desc: Describe, // 分享描述
-                            link: Link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: Icon, // 分享图标
-
-                            success: function() {
-                                // 用户点击了分享后执行的回调函数
-                                // alert("分享成功！");
-                            }
-                        });
-                    });
-
-                    // console.log(res.appId);
-                    // console.log(res.timestamp);
-                    // console.log(res.nonceStr);
-                    // console.log(res.signature);
-                }
-            });
-        }
     }
 };
 </script>

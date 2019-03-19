@@ -10,33 +10,22 @@
             </router-link>
         </yd-navbar>
         <yd-scrolltab>
-            <yd-scrolltab-panel :label="item.CateName" v-for="(item,index) in GoodsList" :key="index" icon="demo-icons-category1">
-                <div style="background-color: gray; color:aa">
-                    <!-- <img class="NewsImg" src="../assets/Img/bbb.png"  alt="" > -->
+            <yd-scrolltab-panel :label="item.CateName"  v-for="(item,index) in GoodsList" :key="index" icon="home-outline" @click.native="GoThreeList(item.CategoryId)">
+                <div>
                     <yd-grids-group :rows="3" title="" item-height="2rem">
                         <yd-grids-item v-for="itemt in item.LstSubCategory" :key="itemt.id">
                             <span slot="text">
-                                <router-link to="" @click.native="GoThreeList(itemt.CategoryId)">
+                                <div @click.native="GoThreeList(itemt.CategoryId)">
                                     <div class="GoThree">
                                         <img :src="itemt.CateIcon" alt="">
                                         <p>{{ itemt.CateName }}</p>
                                     </div>
-                                </router-link>
+                                </div>
                             </span>
                         </yd-grids-item>
                     </yd-grids-group>
                 </div>
             </yd-scrolltab-panel>
-
-            <!-- <yd-scrolltab-panel label="冰箱" icon="demo-icons-category2" >
-            <div style="height: 350px;background-color: blue;"></div>
-        </yd-scrolltab-panel>
-
-        <yd-scrolltab-panel label="洗衣机" icon="demo-icons-category3">
-            <div style="height: 350px;background-color: yellow;"></div>
-        </yd-scrolltab-panel> -->
-
-            <!-- ... -->
         </yd-scrolltab>
     </div>
 
@@ -79,16 +68,11 @@ export default {
             }
             if (response.data.success == 200) {
                 this.GoodsList = response.data.rows;
-                // this.GoodsList = response.data.rows;
-                console.log(this.GoodsList);
-                // console.log(this.GoodsList);
             }
         });
     },
     methods: {
         GoThreeList(i) {
-            console.log("-----------------");
-            console.log(i);
             this.$router.push({ name: "menuThree", params: { Group_id: i } });
         }
     }
