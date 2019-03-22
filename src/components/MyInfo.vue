@@ -34,7 +34,7 @@
             <yd-flexbox-item>
                 <yd-flexbox class="balance-top">
                     <div>账户余额  <span @click="RemainingSum">￥{{balance.balance}}</span></div>
-                    <div>我的积分 <span>50</span></div>
+                    <div>我的积分 <span>{{balance.integral}}</span></div>
                     <div class="withdrawBtn" @click="drawMoney(balance.isAngel)">提现</div>
                 </yd-flexbox>       
             </yd-flexbox-item>
@@ -418,7 +418,7 @@ export default {
         border-bottom-right-radius: 0.2rem;
         .balance-top {
             justify-content: space-between;
-            padding: 0.3rem 0.4rem 0.3rem;
+            padding: 0.3rem;
             border-bottom: 1px solid #f5f5f5;
             span {
                 font-weight: bold;

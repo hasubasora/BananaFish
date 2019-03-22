@@ -290,7 +290,7 @@ export const weixinAip = (tc, pt, picked, JumpPath) => {
       if (response.data.success == 300) {
         alert(response.data.msg)
       }
-    });
+    })
   }else {
     // alert("调用余额支付")
     axios({
@@ -320,7 +320,6 @@ export const weixinAip = (tc, pt, picked, JumpPath) => {
               params: {TwoPersonChipNo: sessionStorage.getItem('GoPath')}
             })
           }
-          
         }else if(JumpPath) {
           router.push({
             name: "Confirmation",

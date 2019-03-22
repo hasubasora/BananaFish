@@ -136,7 +136,7 @@
                     this.expressNews = response.data.data.expressNews
                     this.navigationIcoAd = response.data.data.navigationIcoAd
                     this.products = response.data.data.IndexProductLst[0].products
-                    this.IndexProductLst = response.data.data.IndexProductLst[0]
+                    this.IndexProductLst = response.data.data.IndexProductLst[0].productAd[0]
                     this.productAd = response.data.data.IndexProductLst[0].productAd[0].Src
                     this.productAdBg = response.data.data.IndexProductLst[0].productAd[1].Src
                 }
@@ -187,8 +187,26 @@
             goSearch() {
                 this.$router.push({path: "/SearchList"})
             },
-            goToNewbie(IndexProductLst) {
-                this.$router.push({path: "menuThree/0", query: {gg: IndexProductLst.RecommendType}})
+            goToNewbie(obj) {
+                console.log(obj)
+               if(obj.Link && obj.Link.indexOf("http")> -1) {
+                    window.location.href = obj.Link
+                }else if(obj.CategoryID) {
+                    this.$router.push({path: "menuThree/" + obj.CategoryID})
+                }else if(obj.Type) {
+                        this.$router.push({path: "menuThree/0", query: {gg: obj.Type}})
+                }else if(obj.ProductID > 0) {
+                    this.$router.push({
+                        path: "/GeneralItemDescription",
+                        query: {Good_id: obj.ProductID}
+                    })
+                }else if(obj.SpecialAreaType === 1) {
+                    this.$router.push({path: "/FreeOfCharge"})
+                }else if(obj.SpecialAreaType === 2) {
+                    this.$router.push({path: "/LuckyDouble"})
+                }else if(obj.SpecialAreaType === 4) {
+                    this.$router.push({path: "/Invitations"})
+                }
             },
             GoItemDes(i) {
                 this.$router.push({
@@ -254,7 +272,8 @@
                         data: {
                             pageindex: this.pageindex,
                             pagesize: this.pagesize,
-                            categoryid: this.CategoryId
+                            categoryid: this.CategoryId,
+                            RecommendType: this.RecommendType
                         },
                         url: this.$server.serverUrl + "/index/getcategoryproduct",
                         responseType: "json"
@@ -282,6 +301,16 @@
         .yd-tab-nav-scoll .yd-tab-nav .yd-tab-nav-item {
             font-size: 0.27rem;
             padding: 0 10px;
+        }
+        .hideTwo {
+            display: -webkit-box;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            height: auto;
+            white-space: normal;
+            word-wrap: normal;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
         }
         .home-header {
             position: relative;

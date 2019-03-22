@@ -289,6 +289,16 @@ export default new Router({
     }, {//幸运双拼
       path: '/LuckyDouble',
       name: 'LuckyDouble',
+      data: function () {
+        var _this = this;
+        // 返回同一个位置
+        var scrollTop = sessionStorage.getItem("scrollTop");
+        if (scrollTop) {
+            _this.$nextTick(function () {
+            document.querySelector('.LuckyDouble')[0].scrollTop(scrollTop);
+          });
+        }
+      },
       component: LuckyDouble => require(["@/components/LuckyDouble/LuckyDouble"], LuckyDouble),
     }, {//推广中心
       path: '/PromotionCenter',
@@ -310,6 +320,14 @@ export default new Router({
       path: '/ApplicationForAgency',
       name: 'ApplicationForAgency',
       component: ApplicationForAgency => require(["@/components/ApplicationForAgency/ApplicationForAgency"], ApplicationForAgency),
+    }, {//申请代理
+      path: '/MaterialCircle',
+      name: 'MaterialCircle',
+      component: MaterialCircle => require(["@/components/MaterialCircle/MaterialCircle"], MaterialCircle),
+    }, {//申请代理
+      path: '/MaterialCircleArticle',
+      name: 'MaterialCircleArticle',
+      component: MaterialCircleArticle => require(["@/components/MaterialCircleArticle/MaterialCircleArticle"], MaterialCircleArticle),
     }
   ],
   saveScrollPosition: true

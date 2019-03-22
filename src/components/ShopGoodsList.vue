@@ -4,10 +4,6 @@
             <router-link to="/MyInfo" slot="left">
                 <yd-navbar-back-icon color="#fff"></yd-navbar-back-icon>
             </router-link>
-            <!-- <yd-flexbox slot="center" style="border:1px solid #fff;">
-                <yd-flexbox-item style="padding:.1rem .3rem;background:#fff;color:#555">普通订单</yd-flexbox-item>
-                <yd-flexbox-item @click.native='GoTopGoodsList' style="padding:.1rem .3rem;color:#fff">头筹订单</yd-flexbox-item>
-            </yd-flexbox> -->
         </yd-navbar>
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
             <yd-tab slot="list" v-model="tab2" :callback="fn" :prevent-default="false" :item-click="itemClick" class="back">
@@ -17,7 +13,6 @@
                         <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
                             <div slot="left">订单编号:{{itemt.OrderId}}</div>
                             <div slot="right" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
-
                         </yd-preview-header>
 
                         <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id">
@@ -25,7 +20,7 @@
                                 <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
                             <div slot="right">
                                 <yd-flexbox>
-                                    <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId)">
+                                    <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId, itemt.OrderType)">
                                         <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
                                         <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
                                         <p class="Integral">
@@ -37,7 +32,6 @@
                                         <span>x{{GoodsInfo.BuyNumber}}</span>
                                     </div>
                                 </yd-flexbox>
-
                             </div>
                         </yd-preview-item>
 
@@ -220,11 +214,18 @@ export default {
             document.body.style.overflow='';//出现滚动条
             this.orderSwipe = false
         },
-        GoToGoodsDes(id) {
-            this.$router.push({
-                name: "GeneralItemDescription",
-                query: { Good_id: id }
-            });
+        GoToGoodsDes(id, OrderType) {
+            if(OrderType == 0) {
+                this.$router.push({
+                    name: "GeneralItemDescription",
+                    query: { Good_id: id }
+                });
+            }else if(OrderType == 3) {
+                this.$router.push({
+                    name: "FreeDetail",
+                    query: { Good_id: id }
+                });
+            }
         },
         //显示选择框
         ShowWindow(oid) {

@@ -379,7 +379,7 @@ export default {
                             if(this.$route.params.LuckyProductType === 3 && !this.$route.params.GroupNo) {
                                 this.$router.push({
                                     name: "LuckyShareConfirm",
-                                    params: {TwoPersonChipNo: this.$route.params.GroupNo}
+                                    query: {OrderIdList: this.OrderIdList}
                                 })
                             }else {
                                 this.$router.push({
@@ -403,21 +403,6 @@ export default {
                                 this.GetTypePay,
                                 'LuckyDouble'
                             );
-                            
-                            // this.$axios({
-                            //     method: "POST",
-                            //     data: {
-                            //         taskCode: "BuyGoods"
-                            //     },
-                            //     url: this.$server.serverUrl + "/UserCenter/DoTask",
-                            //     responseType: "json"
-                            // }).then(response => {
-                            //     console.log(response.data);
-                            //     if(response.data.success == 200) {
-                            //         this.modalText = response.data
-                            //         this.isModal = true
-                            //     }
-                            // })
                         }
                         return
                     }

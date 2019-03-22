@@ -16,7 +16,7 @@
 
             <!-- 商品列表 -->
             <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-                <yd-list theme="3" slot="list">
+                <!-- <yd-list theme="3" slot="list">
                     <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
                         <img slot="img" :src="item.ProductImg">
                         <p slot="title" class="hideTwo">{{item.ProductTitle}}</p>
@@ -29,7 +29,24 @@
                             <div>销量{{item.SaleCount}}件</div>
                         </yd-list-other>
                     </yd-list-item>
-                </yd-list>
+                </yd-list> -->
+                <div theme="3" slot="list" class="list">
+                    <div class="list-item" v-for="(item, key) in rows" :key="key" @click="GoItemDes(item.Id)">
+                        <div class="list-img">
+                            <img :src="item.ProductImg">
+                        </div>
+                        <p class="hideTwo title">{{item.ProductTitle}}</p>
+                        <div class="price">￥{{item.SalePrice}}</div>
+                        <div class="Integral">
+                            <span>{{item.Integral}}积分</span>
+                            <span>销量{{item.SaleCount}}件</span>
+                        </div>
+                        <div class="badge">
+                            <img v-if="item.ProductType == 2" src="../assets/Img/JLbadge.png" alt="">
+                            <img v-if="item.ProductType == 3" src="../assets/Img/SPbadge.png" alt="">
+                        </div>
+                    </div>
+                </div>
                 <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
                 <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
 
@@ -101,7 +118,8 @@ export default {
                     pageindex: this.page,
                     pagesize: this.pageSize,
                     categoryid: this.Group_id,
-                    RecommendType: this.RecommendType
+                    RecommendType: this.RecommendType,
+                    SupplierId: this.$route.params.SupplierId
                 },
                 url: this.$server.serverUrl + "/index/getcategoryproduct"
             }).then(response => {
@@ -180,16 +198,14 @@ export default {
                 method: "POST",
                 data: {
                     categoryid: this.$route.params.Group_id,
-                    RecommendType: this.$route.query.gg
-                        ? this.$route.query.gg
-                        : 0
+                    RecommendType: this.$route.query.gg ? this.$route.query.gg : 0,
+                    SupplierId: this.$route.params.SupplierId
                 },
                 url: this.$server.serverUrl + "/index/getcategory",
                 responseType: "json"
             }).then(response => {
                 if (response.data.success == 200) {
                     this.items = response.data.rows;
-                    console.log(this.items)
                     this.tab2 = 0;
                 }
             });
@@ -218,9 +234,67 @@ export default {
 }
 .menu {
     margin-top: 0.8rem;
-    // .yd-list-title {
-    //     height: unset !important;
-    // }
+    .yd-tab {
+        padding-bottom: 1px;
+    }
+    .yd-tab-nav:after {
+        border-bottom: none;
+    }
+    .list {
+            overflow: hidden;
+            // position: relative;
+        .list-item {
+            width: 50%;
+            float: left;
+            padding: .2rem;
+            position: relative;
+            z-index: 0;
+            background-color: #fff;
+            border-right: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            &:nth-child(even) {
+                border-right: none;
+            }
+            .list-img {
+                height: 0;
+                width: 100%;
+                padding: 50% 0;
+                overflow: hidden;
+                img {
+                    width: 100%;
+                    margin-top: -50%;
+                    border: none;
+                    display: block;
+                }
+            }
+            .title {
+                font-size: 0.28rem;
+                font-weight: bold;
+                margin-bottom: 0.1rem;
+            }
+            .price {
+                color: #ee6120;
+                font-weight: 600;
+                font-size: 0.28rem;
+                // margin-bottom: 0.1rem;
+            }
+            .Integral {
+                display: flex;
+                justify-content: space-between;
+                color: #888;
+            }
+            .badge {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0.8rem;
+                height: 0.8rem;
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
 }
 .yd-list-theme3 .yd-list-item .yd-list-title {
     overflow: visible;

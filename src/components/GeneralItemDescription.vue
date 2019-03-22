@@ -40,7 +40,7 @@
                             <div class="AngelLeft">
                                 <img src="../assets/Img/angelIcon.png" alt="">
                                 <div class="save">
-                                    开通天使会员预计可省 <span> ￥ {{savePrice}}元</span>
+                                    天使会员预计可省 <span> ￥ {{savePrice}}元</span>
                                 </div>
                             </div>
                             <router-link to="/AngelActivity" class="AngelRight" v-if="!IsAngel">
@@ -98,7 +98,7 @@
                         <div class="details">
                             <div class="GoodsDirectly">
                                 <div class="DirectlyLeft">
-                                    <img src="../assets/images/goodsPic.png" alt="">
+                                    <img :src="Supplier.SupplierIcoImg" alt="">
                                     <div class="ShopInfo">
                                         <div class="Shopname">{{Supplier.SupplierName}}</div>
                                         <div class="ProductNum">商品数量 {{Supplier.ProductCount}}</div>
@@ -1010,6 +1010,14 @@ export default {
                     this.GetConfig = response.data.object.CustomerServiceUrl
                     this.IsAngel = response.data.object.IsAngel
                     this.Share = response.data.object.Share
+                    if(this.ProductType == 2 || this.ProductType == 3) {
+                        this.$router.replace({
+                            name: 'FreeDetail',
+                            query: {
+                                Good_id: this.$route.query.Good_id
+                            }
+                        })
+                    }
 
                             // 微信分享
                     let shareurl = location.href; //获取锚点之前的链接
