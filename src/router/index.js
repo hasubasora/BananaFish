@@ -14,10 +14,20 @@ export default new Router({
           name: 'Home',
           component: Home => require(["@/components/Home"], Home),
         },
-        {
-          path: '/ProductGroupList',
-          name: 'ProductGroupList',
-          component: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList),
+        // {
+        //   path: '/ProductGroupList',
+        //   name: 'ProductGroupList',
+        //   component: ProductGroupList => require(["@/components/ProductGroupList"], ProductGroupList),
+        // },
+        { //一级目录
+          path: '/productList',
+          name: 'productList',
+          component: productList => require(["@/components/productList"], productList),
+        },
+        { //一级目录
+          path: '/productList1',
+          name: 'productList1',
+          component: productList1 => require(["@/components/productList1"], productList1),
         },
         { //购物车
           path: '/cart',
@@ -29,10 +39,6 @@ export default new Router({
           component: MyInfo => require(["@/components/MyInfo"], MyInfo),
         },
       ]
-    }, { //一级目录
-      path: '/productList',
-      name: 'productList',
-      component: productList => require(["@/components/productList"], productList),
     },
     { //三级目录
       path: '/menuThree/:Group_id',
@@ -289,16 +295,6 @@ export default new Router({
     }, {//幸运双拼
       path: '/LuckyDouble',
       name: 'LuckyDouble',
-      data: function () {
-        var _this = this;
-        // 返回同一个位置
-        var scrollTop = sessionStorage.getItem("scrollTop");
-        if (scrollTop) {
-            _this.$nextTick(function () {
-            document.querySelector('.LuckyDouble')[0].scrollTop(scrollTop);
-          });
-        }
-      },
       component: LuckyDouble => require(["@/components/LuckyDouble/LuckyDouble"], LuckyDouble),
     }, {//推广中心
       path: '/PromotionCenter',

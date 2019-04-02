@@ -10,8 +10,13 @@
         </yd-navbar>
         <div class="wd_back">
             <span class="wd_back_txt">账户余额</span>
-            <p class="wd_back_price">￥{{price}}</p>
-            <!-- <button type="button" class="wd_back_btn" @click="GoBankCard('SetBankCard')">银行卡</button> -->
+            <p class="wd_back_price">
+                <yd-countup
+                    :endnum="price"
+                    decimals="2"
+                    prefix="￥"
+                ></yd-countup>
+            </p>
         </div>
         <div class="wd_button">
             <router-link type="button" to="/WithdrawDeposit">提现</router-link>

@@ -176,7 +176,7 @@ GetConfig()
  * 
  * @param {*} res 调起微信支付
  */
-export const GetWeixinPay = (res) => {
+export const GetWeixinPay = (res, JumpPath, OrderIdList) => {
   console.log(res);
   let _res = res.retData
   console.log(_res.appId);
@@ -195,12 +195,36 @@ export const GetWeixinPay = (res) => {
         console.log(_res);
         console.log('_res==================');
         if (_res.err_msg == "get_brand_wcpay_request:ok") {
-          router.push({
-            name: "SuccessOrder",
-            query: {
-              Isok: 1
+          if(JumpPath == 'reload') {
+            return
+          }else if(JumpPath === 'LuckyDouble') {
+            if(OrderIdList) {
+              router.push({
+                name: "LuckyShareConfirm",
+                query: {OrderIdList: OrderIdList}
+            })
+            }else{
+              router.push({
+                name: "ShopGoodsList",
+                query: {
+                  plan: 2
+                }
+              })
             }
-          });
+          }else if(JumpPath) {
+            router.push({
+              name: "Confirmation",
+              params: {getCoins: JumpPath}
+            })
+          }else {
+            router.push({
+              name: "SuccessOrder",
+              query: {
+                Isok: 1
+              }
+            })
+          }
+          
           // 使用以上方式判断前端返回,微信团队郑重提示：SuccessOrder
           //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
         } else {
@@ -209,19 +233,19 @@ export const GetWeixinPay = (res) => {
             query: {
               Isok: 2
             }
-          });
+          })
         }
       });
   }
   if (typeof WeixinJSBridge == "undefined") {
     if (document.addEventListener) {
-      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false)
     } else if (document.attachEvent) {
-      document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-      document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+      document.attachEvent('WeixinJSBridgeReady', onBridgeReady)
+      document.attachEvent('onWeixinJSBridgeReady', onBridgeReady)
     }
   } else {
-    onBridgeReady(_res);
+    onBridgeReady(_res)
   }
 }
 /**
@@ -232,12 +256,12 @@ export const GetWeixinPay = (res) => {
  * @param {*} GetTypePay 支付跳转类型
  * @param {*} JumpPath 跳转我的订单路径
  */
-export const GoBuySometing = (tc, pt, picked, GetTypePay, JumpPath) => {
+export const GoBuySometing = (tc, pt, picked, GetTypePay, JumpPath, OrderIdList) => {
   if (GetTypePay) {
     console.log("跳网页支付");
     this.h5axiox(tc, pt, picked);
   } else {
-    this.weixinAip(tc, pt, picked, JumpPath);
+    this.weixinAip(tc, pt, picked, JumpPath, OrderIdList);
   }
 }
 
@@ -254,7 +278,7 @@ export const h5axiox = (tc, pt, picked) => {
 
 
 
-export const weixinAip = (tc, pt, picked, JumpPath) => {
+export const weixinAip = (tc, pt, picked, JumpPath, OrderIdList) => {
   if (picked == 30000) {
     axios({
       method: "POST",
@@ -269,9 +293,9 @@ export const weixinAip = (tc, pt, picked, JumpPath) => {
       if(response.data.success == 100) {
         window.location.href = serverUrl.serverUrl  + "/weixin/payOAuth?retUrl=" + escape(window.location.href)
       }else if (response.data.success == 200) {
-        GetWeixinPay(response.data);
+        GetWeixinPay(response.data, JumpPath, OrderIdList)
       }
-    });
+    })
   }else if(picked == 8000) {
     axios({
       method: "POST",
@@ -317,7 +341,7 @@ export const weixinAip = (tc, pt, picked, JumpPath) => {
           }else if(sessionStorage.getItem('GoPath') !== '') {
             route.push({
               name: "LuckyShareConfirm",
-              params: {TwoPersonChipNo: sessionStorage.getItem('GoPath')}
+              query: {OrderIdList: sessionStorage.getItem('GoPath')}
             })
           }
         }else if(JumpPath) {
@@ -334,13 +358,14 @@ export const weixinAip = (tc, pt, picked, JumpPath) => {
             }
           });
         }
-      }
-      if (response.data.success == 300) {
-        alert(response.data.msg + '，请重新选择支付方式！')
+      }else {
+        alert(response.data.msg)
       }
     })
   }
 }
+
+
 
 
 

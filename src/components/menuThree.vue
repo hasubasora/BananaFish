@@ -16,20 +16,6 @@
 
             <!-- 商品列表 -->
             <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-                <!-- <yd-list theme="3" slot="list">
-                    <yd-list-item v-for="(item, key) in rows" :key="key" @click.native="GoItemDes(item.Id)">
-                        <img slot="img" :src="item.ProductImg">
-                        <p slot="title" class="hideTwo">{{item.ProductTitle}}</p>
-                        <yd-list-other slot="other">
-                            <div>
-                                <span class="demo-list-price">
-                                    <em>¥</em>{{item.SalePrice}}</span>
-                                <span class="demo-list-del-price">{{item.Integral}}积分</span>
-                            </div>
-                            <div>销量{{item.SaleCount}}件</div>
-                        </yd-list-other>
-                    </yd-list-item>
-                </yd-list> -->
                 <div theme="3" slot="list" class="list">
                     <div class="list-item" v-for="(item, key) in rows" :key="key" @click="GoItemDes(item.Id)">
                         <div class="list-img">
@@ -242,7 +228,6 @@ export default {
     }
     .list {
             overflow: hidden;
-            // position: relative;
         .list-item {
             width: 50%;
             float: left;

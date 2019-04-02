@@ -43,7 +43,7 @@
                             <yd-flexbox-item class="GoodList_bom" v-show="isDel">
                                 <p @click="GoToGoodsDes(items.ProductId)">{{items.ProductTitle}}</p>
                                 <p class="AttValueName">{{items.AttValueName}}&nbsp;</p>
-                                <p class="c-red GoodList_Number">
+                                <p class="GoodList_Number">
                                     <span class="SalePrice">￥{{items.SalePrice.toFixed(2)}}&nbsp;&nbsp;{{item.GroupTitle?'赠'+items.Integral+'积分':''}}</span>
                                     <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;" v-if="items.Stock!=0&&items.ProductStatus!=0">
                                         <a href="javascript:;" @click="reduce(items.Id,items.BuyNum-1)"></a>
@@ -54,7 +54,7 @@
                             </yd-flexbox-item>
                             <yd-flexbox-item class="GoodList_bom" v-show="!isDel">
                                 <p>{{items.ProductTitle}}</p>
-                                <p class="c-red GoodList_Number">
+                                <p class="GoodList_Number">
                                     <span class="SalePrice">￥{{items.SalePrice.toFixed(2)}}</span>
                                     <span class="yd-spinner" style="height: 0.5rem; width: 1.5rem;border:0;text-align:right" @click='DelGood(items.Id)'>
                                         <yd-icon name="delete" size=".5rem" class="DelGood"></yd-icon>
@@ -71,8 +71,10 @@
 
         <!-- 底部栏 -->
         <div class="bomBtn">
-            <div class="BuyCart c-red AllSalePrice">合计：￥{{AllSalePrice.toFixed(2)}}</div>
-
+            <div class="AllSalePrice">
+                <div class="text1">合计:<span>￥{{MemberPrice.toFixed(2)}}</span></div>
+                <div class="text2" v-if="Discount > 0">总额:<span>￥{{AllSalePrice.toFixed(2)}}</span>  折扣:<span>￥{{Discount.toFixed(2)}}</span></div>
+            </div>
             <button :class="[{'BuyCartt':!isDel},hasGoods?'BuyCart':'BuyCartt']" type="button" :disabled='!isDel||!hasGoods' @click="GoCartOrder">结算</button>
         </div>
         <!-- <yd-cell-item class="bomBtn">
@@ -187,16 +189,26 @@
     height: 1rem;
     width: 100%;
     align-self: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0.1rem;
     .AllSalePrice {
-        line-height: 0.8rem;
-        border: none !important;
-        background: #fff !important;
+        // border: none !important;
+        // background: #fff !important;
         font-size: 0.3rem;
-        width: 5rem !important;
-        text-align: right !important;
-        margin-right: 0.2rem;
+        margin-left: 0.4rem;
+        .text1 {
+            font-size: 0.3rem;
+            color: #333;
+            span {
+                font-weight: bold;
+            }
+        }
+        .text2 {
+            font-size: 0.24rem;
+            span {
+                font-weight: bold;
+            }
+        }
     }
     .BuyCart {
         background: #ff5f17;
@@ -249,7 +261,9 @@ export default {
             AllSalePrice: 0, //quanbujine
             isDel: true,
             isDef: false,
-            hasGoods: true
+            hasGoods: true,
+            Discount: 0,
+            MemberPrice: 0
         };
     },
     methods: {
@@ -336,11 +350,15 @@ export default {
                         this.hasGoods = false;
                     }
                     this.AllSalePrice = 0;
+                    this.Discount = 0
+                    this.MemberPrice = 0
                     //计算价格
                     for (const iterator of this.CartList) {
                         for (const iterators of iterator.LstProduct) {
                             if (iterators.IsCheck) {
                                 this.AllSalePrice += iterators.SalePrice*iterators.BuyNum;
+                                this.Discount += (iterators.SalePrice - iterators.MemberPrice)*iterators.BuyNum
+                                this.MemberPrice += iterators.MemberPrice*iterators.BuyNum
                             }
                         }
                     }
@@ -355,7 +373,6 @@ export default {
                             }
                         }
                     }
-
                     return;
                 }
             });

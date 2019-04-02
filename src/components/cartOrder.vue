@@ -9,7 +9,7 @@
         <yd-flexbox class="address" @click.native="GetAddress" v-if="address!=''">
             <div class="address_left">
                 <h3 class="font25">{{address.ShipTo}}</h3>
-                <i class="moren">默认</i>
+                <i class="moren" v-if="this.$route.query.IsDefault == undefined || this.$route.query.IsDefault === 1">默认</i>
             </div>
             <yd-flexbox-item>
                 <div class="address_right">
@@ -18,7 +18,7 @@
                 </div>
             </yd-flexbox-item>
         </yd-flexbox>
-        <yd-flexbox class="address" style="font-size:.3rem" @click.native="GetAddress" v-if="address==''">
+        <yd-flexbox class="address" :class="{empty: empty}" style="font-size:.3rem" @click.native="GetAddress" v-if="address==''">
             请添加地址
         </yd-flexbox>
 
@@ -26,7 +26,11 @@
             <yd-cell-group>
                 <yd-cell-item>
                     <span slot="left">商品金额</span>
-                    <span slot="right">￥{{Amount}}</span>
+                    <span slot="right">￥{{TotalsAmount}}</span>
+                </yd-cell-item>
+                <yd-cell-item v-if="IsAgent">
+                    <span slot="left">会员折扣</span>
+                    <span slot="right">{{DiscountAmount}}</span>
                 </yd-cell-item>
                 <yd-cell-item>
                     <span slot="left">运费</span>
@@ -40,7 +44,6 @@
                     <input slot="right" type="radio" :value="PayListitem.payType" v-model="picked" />
                 </yd-cell-item>
             </yd-cell-group>
-
         </div>
 
         <div class="balancePayment">
@@ -131,6 +134,7 @@ export default {
             PayList: [],
             totalPrice: 0,
             Amount: 0,
+            TotalsAmount: 0,
             GetTypePay: false,
             GroupOrderIdList: "",
             OrderIdList: "",
@@ -147,11 +151,15 @@ export default {
             checkbox1: true,
             EnoughBalance: '',
             useBalance: 0,
+            IsNewTwoPersonChipNo: 0,
+            DiscountAmount: 0,
+            IsAgent: false,
+            empty: false
         };
     },
     created() {
+        console.log(this.$route.query.IsDefault)
         this.codeImg = this.$server.serverUrl + "/index/GetImgCode/" + Math.random()
-        console.log(this.$route.params.sid)
         if(this.$route.params.sid !== undefined) {
             sessionStorage.setItem('sid', this.$route.params.sid)
         }
@@ -163,15 +171,16 @@ export default {
             url: this.$server.serverUrl + "/order/getorderconfirm",
             responseType: "json"
         }).then(response => {
-            console.log(response.data)
             if(response.data.success == 100) {
                 window.location.href = this.$server.serverUrl  + "/weixin/payOAuth?retUrl=" + escape(this.$server.serverUrl + "/index.html#/cartOrder")
                 return
             }
             if (response.data.success == 200) {
-                console.log(response.data)
                 this.GoodsList = response.data
+                this.DiscountAmount = response.data.DiscountAmount
+                this.IsAgent = response.data.IsAgent
                 this.Amount = Number(response.data.Amount.toFixed(2))
+                this.TotalsAmount = response.data.TotalsAmount
                 this.totalPrice = Number((this.GoodsList.Amount + this.GoodsList.ExpressAmount).toFixed(2))
                 this.balance = Number(response.data.balance.toFixed(2))
                 if(this.balance >= this.totalPrice) {
@@ -191,7 +200,6 @@ export default {
             responseType: "json"
         }).then(response => {
             if (response.data.success == 200) {
-                console.log(response.data)
                 this.PayList = response.data.list
                 this.picked = response.data.list[0].payType
                 this.GetTypePay = response.data.list[0].isBrowser
@@ -206,26 +214,27 @@ export default {
             responseType: "json"
         }).then(response => {
             if (response.data.success == 200) {
-                for (const iterator of response.data.rows) {
-                    if (this.$route.params.address_GetId) {
-                        console.log(this.$route.params.address_GetId);
-                        if (
-                            iterator.AddressId == this.$route.params.address_GetId
-                        ) {
-                            this.address = iterator;
-                            return;
+                if(this.$route.query.IsDefault === 0 || this.$route.query.IsDefault === 1) {
+                    this.address = response.data.rows[this.$route.query.index]
+                }else {
+                    for (const iterator of response.data.rows) {
+                        if (this.$route.params.address_GetId) {
+                            if (
+                                iterator.AddressId == this.$route.params.address_GetId
+                            ) {
+                                this.address = iterator;
+                                return;
+                            }
                         }
+                        iterator.IsDefault == 1 ? (this.address = iterator) : "";
+                        iterator.IsDefault == 1
+                            ? (this.AddressId = iterator.AddressId)
+                            : "";
                     }
-                    console.log(iterator.IsDefault == 1);
 
-                    iterator.IsDefault == 1 ? (this.address = iterator) : "";
-                    iterator.IsDefault == 1
-                        ? (this.AddressId = iterator.AddressId)
-                        : "";
                 }
-                console.log(response.data);
             }
-        });
+        })
     },
     watch: {
         checkbox1() {
@@ -245,13 +254,12 @@ export default {
             this.isSendable = true
         },
         goBack() {
-            window.history.length <= 1 ? this.$router.push({path: "/cart"}) : this.$router.go(-1);
+            this.$router.go(-1);
         },
         GetAddress() {
             this.$router.push({ name: "selectAddress" });
         },
         GetType(e) {
-            console.log(e);
             this.GetTypePay = e;
         },
         GetImgCode() {
@@ -261,7 +269,6 @@ export default {
             
         },
         sendCode1() {
-            console.log("sss")
             if (!(/^1[345789]\d{9}$/.test(this.phone))) {
                 this.$dialog.toast({ mes: "手机号有误！" });
                 return;
@@ -338,7 +345,7 @@ export default {
                     timeout: 1500,
                     icon: "error",
                     callback: () => {
-                        this.$dialog.alert({ mes: "请重新选择商品！" });
+                        this.$dialog.alert({ mes: "请重新选择商品！" })
                     }
                 });
                 return;
@@ -375,6 +382,13 @@ export default {
                         this.EnoughBalance = response.data.pay
                         this.GroupOrderIdList = response.data.GroupOrderIdList
                         this.OrderIdList = response.data.OrderIdList
+                        this.IsNewTwoPersonChipNo = response.data.IsNewTwoPersonChipNo
+                        if(this.IsNewTwoPersonChipNo === 1) {
+                            this.$dialog.toast({
+                                mes: response.data.msg,
+                                timeout: 1500
+                            })
+                        }
                         if(this.EnoughBalance) {
                             if(this.$route.params.LuckyProductType === 3 && !this.$route.params.GroupNo) {
                                 this.$router.push({
@@ -388,24 +402,23 @@ export default {
                                         plan: 2
                                     }
                                 })
-                            }
-                            
+                            } 
                         }else {    
-                            if(this.$route.params.LuckyProductType === 3 && !this.$route.params.GroupNo) {
-                                sessionStorage.setItem('GoPath', this.$route.params.GroupNo)
-                            }else {
-                                sessionStorage.setItem('GoPath', 'ShopGoodsList')
-                            }             
                             GoBuySometing(
                                 this.GroupOrderIdList,
                                 this.OrderIdList,
                                 this.picked,
                                 this.GetTypePay,
-                                'LuckyDouble'
+                                'LuckyDouble',
+                                this.OrderIdList
                             );
                         }
                         return
                     }
+                    this.empty = true
+                    setTimeout(()=>{
+                        this.empty = false
+                    }, 2000)
                     this.$dialog.toast({
                         mes: response.data.msg,
                         timeout: "1500",
@@ -488,7 +501,6 @@ export default {
     background: #fffced;
     padding: 0.3rem;
     margin-bottom: 0.2rem;
-
     .address_left {
         width: 1rem;
         text-align: center;
@@ -504,14 +516,15 @@ export default {
         padding: 0.02rem 0.04rem;
     }
 }
-
+.empty {
+    background: #ff5f17;
+}
 .font25 {
     font-size: 0.3rem;
 }
 
 .goodsListOrder {
     display: flex;
-    border-bottom: 1px solid #cccc;
     padding: 0.3rem;
     background: #fff;
     > img {

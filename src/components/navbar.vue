@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="news">
+        <!-- <div class="news">
             <div class="newsBox">
                 <div class="mdkx">免单快讯</div>
                 <span style="color:red;margin-top:0.1rem">最新</span>
@@ -10,7 +10,7 @@
                     </yd-slider-item>
                 </yd-slider>
             </div>
-        </div>
+        </div> -->
         <div class="navbar">
             <div class="center" v-for="(item, index) in navigationIcoAd" :key="index" @click="GoPath(item)">
                 <div class="center border">

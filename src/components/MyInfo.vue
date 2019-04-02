@@ -39,40 +39,64 @@
                 </yd-flexbox>       
             </yd-flexbox-item>
         </yd-flexbox>
-        <yd-flexbox class="myinfo-order">
-            <yd-flexbox-item class="order-item" @click.native="handleOrder(1)">
-                <yd-badge type="danger" class="badge" v-if="dot.PendingPayment>0">{{dot.PendingPayment}}</yd-badge>
-                <img src="../assets/Img/PendingPayment.png" alt="">
-                <p>待付款</p>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="order-item" @click.native="handleOrder(2)">
-                <yd-badge type="danger" class="badge" v-if="dot.PendingDelivery>0">{{dot.PendingDelivery}}</yd-badge>
-                <img src="../assets/Img/PendingDelivery.png" alt="">
-                <p>待发货</p>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="order-item" @click.native="handleOrder(3)">
-                <yd-badge type="danger" class="badge" v-if="dot.PendingReceived>0">{{dot.PendingReceived}}</yd-badge>
-                <img src="../assets/Img/PendingReceived.png" alt="">
-                <p>待收货</p>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="order-item" @click.native="handleOrder(4)">
-                <yd-badge type="danger" class="badge" v-if="dot.PendingEvaluated>0">{{dot.PendingEvaluated}}</yd-badge>
-                <img src="../assets/Img/PendingEvaluated.png" alt="">
-                <p>待评价</p>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="order-item" @click.native="handleOrder(5)">
-                <yd-badge type="danger" class="badge" v-if="dot.AfterSale>0">{{dot.AfterSale}}</yd-badge>
-                <img src="../assets/Img/AfterSale.png" alt="">
-                <p>售后</p>
-            </yd-flexbox-item>
-            <yd-flexbox-item class="order-item last-order" @click.native="handleOrder(0)">
-            </yd-flexbox-item>
-        </yd-flexbox>
+        <div class="info-wrap">
+            <yd-flexbox class="myinfo-order">
+                <yd-flexbox-item class="order-item" @click.native="handleOrder(1)">
+                    <yd-badge type="danger" class="badge" v-if="dot.PendingPayment>0">{{dot.PendingPayment}}</yd-badge>
+                    <img src="../assets/Img/PendingPayment.png" alt="">
+                    <p>待付款</p>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="order-item" @click.native="handleOrder(2)">
+                    <yd-badge type="danger" class="badge" v-if="dot.PendingDelivery>0">{{dot.PendingDelivery}}</yd-badge>
+                    <img src="../assets/Img/PendingDelivery.png" alt="">
+                    <p>待发货</p>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="order-item" @click.native="handleOrder(3)">
+                    <yd-badge type="danger" class="badge" v-if="dot.PendingReceived>0">{{dot.PendingReceived}}</yd-badge>
+                    <img src="../assets/Img/PendingReceived.png" alt="">
+                    <p>待收货</p>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="order-item" @click.native="handleOrder(4)">
+                    <yd-badge type="danger" class="badge" v-if="dot.PendingEvaluated>0">{{dot.PendingEvaluated}}</yd-badge>
+                    <img src="../assets/Img/PendingEvaluated.png" alt="">
+                    <p>待评价</p>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="order-item" @click.native="handleOrder(5)">
+                    <yd-badge type="danger" class="badge" v-if="dot.AfterSale>0">{{dot.AfterSale}}</yd-badge>
+                    <img src="../assets/Img/AfterSale.png" alt="">
+                    <p>售后</p>
+                </yd-flexbox-item>
+                <yd-flexbox-item class="order-item last-order" @click.native="handleOrder(0)">
+                </yd-flexbox-item>
+            </yd-flexbox>
+            <div class="sp-scroll" v-if="TheGroupOrder.length">
+                <div class="title">最新双拼</div>
+                <div class="scroll-wrap">
+                    <swiper :options="swiperOptionSp">
+                        <swiper-slide v-for="(OrderItem, index) in TheGroupOrder" :key="index" @click.native="ToGeneralOrderDetails(OrderItem.OrderId)">
+                            <div class="content">
+                                <div class="goods-img">
+                                    <img :src="OrderItem.ProductImg">
+                                </div>
+                                <div class="text">
+                                    <div class="invite">
+                                        <img src="../assets/Img/gou.png">
+                                        <span>邀请好友拼团</span>
+                                    </div>
+                                    <div class="description">
+                                        {{OrderItem.OrderTitle}}
+                                    </div>
+                                </div>
+                            </div>
+                        </swiper-slide>
+                    </swiper>
+                </div>
+            </div>
+        </div>
         <div class="ad-area">
             <swiper :options="swiperOption">
                 <swiper-slide v-for="(item, index) in UserCenterAd" :key="index" @click.native="GoClassify(item)">
                     <img :src="item.Src">
-                    <!-- <img src="../assets/Img/1.png" alt=""> -->
                 </swiper-slide>
             </swiper>
         </div>
@@ -95,6 +119,7 @@
 </template>
 <script>
 import { TO_PAGE } from "../main.js";
+import { LOGIN_SUCCESS } from "../main.js";
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
@@ -107,6 +132,13 @@ export default {
             balance: {},
             dot: {},
             UserCenterAd: [],
+            swiperOptionSp: {
+                autoplay: {
+                    delay: 2000
+                },
+                direction: 'vertical',
+                autoHeight: true
+            },
             swiperOption: {
                 slidesPerView: 1,
                 spaceBetween: 10,
@@ -140,7 +172,8 @@ export default {
                 textName: '帮助',
                 Link: 'help'
                 },
-            ]
+            ],
+            TheGroupOrder: []
         };
     },
     components: {
@@ -171,7 +204,19 @@ export default {
             if (response.data.success == 200) {
                 this.status = response.data.status;
             }
-        });
+        })
+        this.$axios({
+            method: "POST",
+            data: {},
+            url: this.$server.serverUrl + "/Order/GetInTheGroupOrder",
+            responseType: "json"
+        }).then(response => {
+            if (response.data.success == 200) {
+                console.log(response.data)
+                this.TheGroupOrder = response.data.list
+            }
+        })
+        
     },
     methods: {
         downApp() {
@@ -189,6 +234,7 @@ export default {
                 url: this.$server.serverUrl + "/UserCenter/index_V2",
                 responseType: "json"
             }).then(response => {
+                LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.balance = response.data;
                     this.UserInfo = response.data.currentUser;
@@ -244,7 +290,10 @@ export default {
             switch (num) {
                 case 0:
                     this.$router.push({
-                        name: url
+                        name: url,
+                        query: {
+                            compile: "compile"
+                        }
                     });
                     break;
                 case 1:
@@ -344,6 +393,15 @@ export default {
                     })
                     break;
             }
+        },
+        ToGeneralOrderDetails(OrderId) {
+            this.$router.push({
+                name: "LuckyOrderDetail",
+                query: { 
+                    OrderId: OrderId,
+                    OrderType: 3
+                }
+            })
         }
     }
 };
@@ -480,38 +538,93 @@ export default {
             }
         }
     }
-    .myinfo-order {
+    .info-wrap {
         background: #fff;
         margin: 0.3rem 0.24rem 0.2rem;
+        padding-bottom: 0.1rem;
         border-radius: 0.1rem;
         box-shadow: 1px 1px 1px #ddd;
-        .order-item {
-            position: relative;
-            padding: 0.12rem 0;
-            text-align: center;
-            color: #888888;
-            justify-content: space-between;
-            box-sizing: border-box;
-            .badge {
-                position: absolute;
-                right: 50%;
-                margin-right: -0.46rem;
-                top: 0.04rem;
+        .myinfo-order {
+            margin-bottom: 0.2rem;
+            .order-item {
+                position: relative;
+                padding: 0.12rem 0;
+                text-align: center;
+                color: #888888;
+                justify-content: space-between;
+                box-sizing: border-box;
+                .badge {
+                    position: absolute;
+                    right: 50%;
+                    margin-right: -0.46rem;
+                    top: 0.04rem;
+                }
+                img {
+                    width: 0.5rem;
+                }
+                p {
+                    margin-top: 0.1rem;
+                    font-size: 0.26rem;
+                }  
             }
-            img {
-                width: 0.5rem;
+            .last-order {
+                padding-top: 0;
+                padding-bottom: 20%;
+                background: url(../assets/Img/allOrder.png) no-repeat;
+                background-size: 100% 100%;
             }
-            p {
-                margin-top: 0.1rem;
+        }
+        .sp-scroll {
+            margin: 0 0.1rem;
+            padding: 0.2rem;
+            background: #F3F3F3;
+            border-radius: 0.1rem;
+            .swiper-slide {
+                height: 1rem !important;
+            }
+            .title {
                 font-size: 0.26rem;
-            }  
+                color: #888888;
+                margin-bottom: 0.1rem;
+            }
+            .scroll-wrap {
+                width: 100%;
+                height: 0.8rem;
+                .content {
+                    display: flex;
+                    align-items: center;
+                    height: 0.8rem;
+                    margin: 0.1rem 0;
+                    .goods-img{
+                        width: 0.8rem;
+                        height: 0.8rem;
+                        border-radius: 0.1rem;
+                        overflow: hidden;
+                        margin-right: 0.2rem;
+                        img {
+                            width: 100%;
+                        }
+                    }
+                    .text{
+                        .invite {
+                            margin-bottom: 0.06rem;
+                            color: #3F8FF3;
+                            img {
+                                width: 0.2rem;
+                            }
+                        }
+                        .description {
+                            width: 5rem;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            color: #888888;
+                        }
+                    }
+                }
+            }
         }
-        .last-order {
-            padding-top: 0;
-            padding-bottom: 20%;
-            background: url(../assets/Img/allOrder.png) no-repeat;
-            background-size: 100% 100%;
-        }
+
     }
     .tc-order {
         background: #fff;

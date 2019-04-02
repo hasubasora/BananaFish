@@ -1,10 +1,10 @@
 <template>
     <div class="MessageQueue">
         <yd-navbar slot="navbar" title="消息" height='.8rem' fixed>
-            <router-link to="/" slot="left">
+            <router-link to="/productList" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-
+            <div slot="right" @click="ReadMyMessage">全部已读</div>
         </yd-navbar>
 
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
@@ -32,6 +32,7 @@
 </template>
 <script>
 export default {
+    inject: ['reload'],
     data() {
         return {
             arrow: [],
@@ -87,6 +88,18 @@ export default {
 
                 this.page++;
             });
+        },
+        ReadMyMessage() {
+            this.$axios({
+                method: "POST",
+                data: {},
+                url: this.$server.serverUrl + "/Account/ReadMyMessage",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    this.reload()
+                }
+            });
         }
     }
 };
@@ -105,6 +118,7 @@ export default {
         white-space: nowrap;
         text-overflow: ellipsis;
         width: 5rem;
+        margin-left: 0.2rem;
     }
     .IsGary {
         background: #ccc;

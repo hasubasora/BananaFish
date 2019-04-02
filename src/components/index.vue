@@ -27,7 +27,7 @@
             </router-link>
             <router-link to="/productList" class="tabbar-item" exact>
                 <div class="icon1 all-icon"></div>
-                <div>分类</div>
+                <div>搜索</div>
             </router-link>
             <router-link to="/FreeOfCharge" class="tabbar-item" exact>
                 <div class="icon2 all-icon"></div>
@@ -100,6 +100,7 @@ export default {
         height: 1rem;
         padding: 0.1rem 0;
         background: #fff;
+        z-index: 999;
         .all-icon {
             width: 0.4rem;
             height: 0.4rem;

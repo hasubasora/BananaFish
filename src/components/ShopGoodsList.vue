@@ -10,17 +10,17 @@
                 <yd-tab-panel v-for="item in items" :label="item.label" :key="item.id">
 
                     <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
-                        <yd-preview-header @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
-                            <div slot="left">订单编号:{{itemt.OrderId}}</div>
+                        <yd-preview-header  @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
+                            <div slot="left"><span class="identification" v-if="itemt.OrderType === 3">双拼</span>订单编号:{{itemt.OrderId}}</div>
                             <div slot="right" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
                         </yd-preview-header>
 
-                        <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id">
+                        <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id"  @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
                             <div slot="left">
                                 <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
                             <div slot="right">
                                 <yd-flexbox>
-                                    <yd-flexbox-item @click.native="GoToGoodsDes(GoodsInfo.ProductId, itemt.OrderType)">
+                                    <yd-flexbox-item>
                                         <span class="IntegralProductTitle">{{GoodsInfo.ProductTitle}}</span>
                                         <p class="Integral">{{GoodsInfo.AttValueName}}&nbsp;</p>
                                         <p class="Integral">
@@ -36,8 +36,24 @@
                         </yd-preview-item>
 
                         <yd-preview-item>
-                            <div slot="left"></div>
-                            <div slot="right">共{{itemt.LstProduct.length}}件商品 合计¥{{itemt.OrderAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
+                            <div slot="left" v-if="itemt.TowGroup && itemt.TowGroup.list.length">
+                                <div  class="preview-left" v-if="itemt.TowGroup.list.length == 1">
+                                    <div class="preview-img">
+                                        <img v-for="(TowGroupItem, index) in itemt.TowGroup.list" :key="index" :src="TowGroupItem.UserIcon" alt="">
+                                        <img src="../assets/Img/question-icon.png" alt="">
+                                    </div>
+                                    <span>拼团中</span>
+                                </div>
+                                <div class="preview-left" v-else>
+                                    <div class="preview-img" v-for="(TowGroupItem, index) in itemt.TowGroup.list" :key="index">
+                                        <img :src="TowGroupItem.UserIcon">
+                                        <img class="hg" v-if="TowGroupItem.WinStatus === 1" src="../assets/Img/hg.png" alt="">
+                                    </div>
+                                    <span>拼团成功</span>
+                                </div>
+                            </div>
+                            <div slot="left" v-else></div>
+                            <div slot="right" class="preview-right"><span v-if="itemt.OrderType !== 3">共{{itemt.LstProduct.length}}件商品</span> 合计¥{{itemt.OrderAmount}}(含运费￥{{itemt.ExpressAmount}})</div>
                         </yd-preview-item>
                         <yd-preview-item>
                             <div slot="left"></div>
@@ -181,9 +197,6 @@ export default {
         
     },
     methods: {
-        // goBack() {
-        //     window.history.length <= 1 ? this.$router.push({path: "/MyInfo"}) : this.$router.go(-1);
-        // },
         GetType(e) {
             this.GetTypePay = e;
         },
@@ -471,6 +484,38 @@ export default {
         }
         .red {
             color: red;
+        }
+        .identification {
+            display: inline-block;
+            background: #FB2D56;
+            color: #fff;
+            border-radius: 0.2rem;
+            padding: 0 0.1rem;
+            margin-right: 0.1rem;
+        }
+        .preview-left {
+            display: flex;
+            align-items: center;
+            color: #F02B22;
+            .preview-img {
+                position: relative;
+                img {
+                    width: 0.46rem;
+                    margin-right: 0.1rem;
+                    border-radius: 50%;
+                }
+                .hg {
+                    position: absolute;
+                    width: 0.3rem;
+                    height: 0.3rem;
+                    top: -0.1rem;
+                    left: -0.1rem;
+                }
+            }
+        }
+        .preview-right {
+            height: 0.46rem;
+            line-height: 0.46rem;
         }
     }
     .orderBtn {

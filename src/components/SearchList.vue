@@ -1,7 +1,7 @@
 <template>
     <div class="search">
         <yd-navbar fixed style="z-index:10" bgcolor='#f2f2f2'>
-            <router-link to="/" slot="left">
+            <router-link to="/productList" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
             <router-link to="" @click.native="SwitchAttr()" slot="right">

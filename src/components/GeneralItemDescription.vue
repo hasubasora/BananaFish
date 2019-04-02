@@ -156,10 +156,6 @@
                     </div>
                     <p v-if="Gotup">已选：{{GoodAttrs}}</p>
                 </yd-flexbox-item>
-                <!-- <yd-flexbox-item>
-                    <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
-                </yd-flexbox-item> -->
-
             </yd-flexbox>
             <div class="GoodSuk">
                 <div class="gotup border" v-if="Gotup">
@@ -422,6 +418,48 @@
         }
     }
     .Popup {
+        .GoodSuk {
+            position: relative;
+            z-index: 1501;
+            padding: 0.2rem 0.2rem 1rem 0.2rem;
+            max-height: 6rem;
+            overflow-y: auto;
+            .gotup {
+                border-bottom: 1px solid #eee;
+                padding: 0.2rem 0;
+                font-size: 0.36rem;
+                .gotupTab {
+                    font-size: 0.25rem;
+                    display: flex;
+                    flex-wrap: wrap;
+                    .isOrange {
+                        background: #ff5f17;
+                        border: 1px solid #ff5f17;
+                        color: #f2f2f2;
+                    }
+                    > span {
+                        border: 1px solid #dedcdc;
+                        padding: 0.05rem 0.2rem;
+                        border-radius: 5px;
+                        background: #dedcdc;
+                        margin: 0.2rem;
+                        cursor: pointer;
+                    }
+                    .pointerEvents {
+                        pointer-events: none;
+                        border: 1px dotted rgb(190, 190, 190);
+                        background: #dedcdc;
+                        color: rgb(190, 190, 190);
+                    }
+                }
+            }
+            .spinner {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.2rem;
+            }
+        }
         .SetButton {
             position: absolute;
             bottom: 0;
@@ -505,47 +543,6 @@
                 height: 0.8rem;
                 flex: 1;
             }
-        }
-    }
-
-    .GoodSuk {
-        padding: 0.2rem 0.2rem 1rem 0.2rem;
-        max-height: 6rem;
-        overflow-y: auto;
-        .gotup {
-            border-bottom: 1px solid #eee;
-            padding: 0.2rem 0;
-            font-size: 0.36rem;
-            .gotupTab {
-                font-size: 0.25rem;
-                display: flex;
-                flex-wrap: wrap;
-                .isOrange {
-                    background: #ff5f17;
-                    border: 1px solid #ff5f17;
-                    color: #f2f2f2;
-                }
-                > span {
-                    border: 1px solid #dedcdc;
-                    padding: 0.05rem 0.2rem;
-                    border-radius: 5px;
-                    background: #dedcdc;
-                    margin: 0.2rem;
-                    cursor: pointer;
-                }
-                .pointerEvents {
-                    pointer-events: none;
-                    border: 1px dotted rgb(190, 190, 190);
-                    background: #dedcdc;
-                    color: rgb(190, 190, 190);
-                }
-            }
-        }
-        .spinner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.2rem;
         }
     }
     .ImgUrl {

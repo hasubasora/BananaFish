@@ -72,8 +72,7 @@
             </yd-cell-item>
         </yd-cell-group>
         <div class="s_address">
-            <button type="button" @click="verify(AddressId)">
-                保存地址</button>
+            <button type="button" @click="verify(AddressId)">保存地址</button>
         </div>
     </div>
 </template>
@@ -173,7 +172,9 @@ export default {
                 ret.itemName1 + "-" + ret.itemName2 + "-" + ret.itemName3;
         },
         returnGo() {
-            this.$router.go(-1);
+            this.$router.replace({
+                name: "selectAddress"
+            })
         },
         verify() {
             if (!this.model2) {
@@ -236,7 +237,9 @@ export default {
                 LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
-                    this.$router.go(-1);
+                    this.$router.replace({
+                        name: "selectAddress"
+                    });
                 }
             });
         },
@@ -256,7 +259,9 @@ export default {
                 LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
-                    this.$router.go(-1);
+                    this.$router.replace({
+                        name: "selectAddress"
+                    });
                 }
             });
         }
