@@ -1,8 +1,12 @@
 <template>
     <div id="app">
         <router-view v-if="isRouterAlive"/>
-        <yd-popup v-model="winModal" position="center" width="90%">
+        <!-- <yd-popup v-model="winModal" position="center" width="90%"> -->
+        <div class="AppPopup" v-if="winModal">
             <div class="winModal">
+                <div class="closeImg" v-if="TwoPersonChipObj.WinStatus === 0" @click="closeAppModal">
+                    <img src="./assets/Img/close1.png" alt="">
+                </div>
                 <div class="winTop">
                     <img src="./assets/Img/LOGO.png" alt="">
                     <span>拼团成功</span>
@@ -18,9 +22,6 @@
                             <img :src="TwoPersonChipList[1].UserIcon">
                         </div>
                     </transition>
-                    <!-- <transition name="xing1">
-                        <img class="xing1" v-if="winModal" src="./assets/Img/question.png">
-                    </transition> -->
                     <transition enter-active-class="animated fadeIn">
                         <div v-if="winModal" class="leftName">{{TwoPersonChipList[0].UserName}}</div>
                     </transition>
@@ -46,11 +47,17 @@
                 <div class="subHint" v-if="TwoPersonChipObj.WinStatus === 0">(幸运免单用户 <span v-for="(item, index) in TwoPersonChipList" :key="index" v-if="item.WinStatus === 1">{{item.UserName}}</span>)</div>
                 <div class="winBtn" @click="GoRemainingSum" v-if="TwoPersonChipObj.WinStatus === 1">立即领取</div>
                 <div class="winBtn" @click="GoFreeOfCharge" v-else>领取新的免单机会</div>
-                <div class="NoviceGuideModal" v-if="NoviceGuideGlobalModal && TwoPersonChipObj.WinStatus === 1"  @click="CancelGlobalModal">
-                    <img src="./assets/Img/Novice-guide-map3.png">
+                <div class="NoviceGuideModal" v-if="NoviceGuideGlobalModal"  @click="CancelGlobalModal">
+                    <div class="GuideModalTop">
+                        <img src="./assets/Img/Novice-guide-map3.png">
+                    </div>
+                    <div class="GuideModalBottom">
+
+                    </div>
                 </div>
             </div>
-        </yd-popup>
+        </div>
+        <!-- </yd-popup> -->
 
 
         <!-- 新用户绑定手机号码 -->
@@ -97,7 +104,8 @@ export default {
             appPhoneNumber: false,
             isAppSendable: true,
             AppPhone: "",
-            password: ""
+            password: "",
+            code: ""
         };
     },
     created() {
@@ -130,6 +138,7 @@ export default {
         },
         GoRemainingSum() {
             this.winModal = false
+            BanTouch.move()
             this.$router.push({
                 path: "/RemainingSum"
             })
@@ -145,13 +154,18 @@ export default {
                     this.TwoPersonChipObj = response.data.data
                     this.TwoPersonChipList = response.data.data.list
                     this.winModal = true
-                    if(!localStorage.getItem('GlobalModal1')) {
+                    // BanTouch.stop()
+                    this.NoviceGuideGlobalModal = false
+                    if((!localStorage.getItem('GlobalModal1')) && this.TwoPersonChipObj.WinStatus == 1) {
                         this.NoviceGuideGlobalModal = true
-                        BanTouch.stop()
                         localStorage.setItem("GlobalModal1", true)
                     }
                 }
             })
+        },
+        closeAppModal() {
+            this.winModal = false
+            BanTouch.move()
         },
         CancelGlobalModal() {
             this.NoviceGuideGlobalModal = false
@@ -159,6 +173,7 @@ export default {
         },
         GoFreeOfCharge() {
             this.winModal = false
+            BanTouch.move()
             this.$router.push({
                 name: 'FreeOfCharge'
             })
@@ -229,7 +244,7 @@ html,body,#app{
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 101;
+    z-index: 1600;
     background-color: rgba(0,0,0,0.5);
     .phoneContent {
         position: absolute;
@@ -316,207 +331,206 @@ body {
 }
 
 //幸运双拼长轮询弹窗
-.winModal {
-    position: relative;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 0.2rem;
-    padding: 0.4rem 0.4rem 0.3rem;
-    overflow: hidden;
-    .winTop {
+.AppPopup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1550;
+    background: rgba($color: #000000, $alpha: 0.3);
+    .winModal {
+        position: absolute;
+        top: 50%;
+        left: 5%;
+        background: #fff;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        margin-bottom: 0.4rem;
-        img {
-            width: 1.1rem;
-            margin-right: 0.2rem;
-        }
-        span {
-            font-size: 0.48rem;
-            font-weight: bold;
-        }
-    }
-    .pic {
-        position: relative;
-        width: 100%;
-        height: 1.6rem;
-        .leftPic {
+        border-radius: 0.2rem;
+        padding: 0.4rem 0.4rem 0.3rem;
+        width: 90%;
+        transform: translateY(-55%);
+        overflow: hidden;
+        .closeImg {
             position: absolute;
-            top: 0;
-            left: 50%;
-            margin-left: -1.4rem;
-            img {
-                border-radius: 50%;
-                overflow: hidden;
-                width: 1rem;
-                height: 1rem;
-            }
-        }
-        .leftName {
-            position: absolute;
-            top: 1.2rem;
-            left: 50%;
-            margin-left: -1.6rem;
-            padding: 0 0.1rem;
-            width: 1.4rem;
-            height: 0.32rem;
-            text-align: center;
-            background: #F3F3F3;
-            border-radius: 0.04rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .rightPic {
-            position: absolute;
-            top: 0;
-            right: 50%;
-            margin-right: -1.4rem;
-            img {
-                border-radius: 50%;
-                overflow: hidden;
-                width: 1rem;
-                height: 1rem;
-            }
-        }
-        .rightName {
-            position: absolute;
-            top: 1.2rem;
-            right: 50%;
-            margin-right: -1.6rem;
-            padding: 0 0.1rem;
-            width: 1.4rem;
-            height: 0.32rem;
-            text-align: center;
-            background: #F3F3F3;
-            border-radius: 0.04rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .xing1 {
-            position: absolute;
+            top: 0.3rem;
+            right: 0.4rem;
             width: 0.4rem;
-            height: 0.4rem;
-            top: -1rem;
-            left: 0;
-            opacity: 0;
-        }
-        .xing1-enter {
-            opacity: 1;
-        }
-        .xing1-enter-active {
-            animation: xing1 .4s ease;
-            transition: opacity .4s ease;
-        }
-        .xing1-enter-to {
-            opacity: 0;
-        }
-    }
-    .winGoods {
-        display: flex;
-        justify-content: space-between;
-        .goods-img {
-            width: 1.1rem;
-            height: 1.1rem;
-            margin-right: 0.2rem;
             img {
                 width: 100%;
             }
         }
-        .goods-right {
+        .winTop {
             display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            font-size: 0.25rem;
+            align-items: center;
+            margin-bottom: 0.3rem;
+            img {
+                width: 1.1rem;
+                margin-right: 0.2rem;
+            }
+            span {
+                font-size: 0.48rem;
+                font-weight: bold;
+            }
+        }
+        .pic {
+            position: relative;
+            width: 100%;
+            height: 1.6rem;
+            .leftPic {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                margin-left: -1.4rem;
+                img {
+                    border-radius: 50%;
+                    overflow: hidden;
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+            .leftName {
+                position: absolute;
+                top: 1.2rem;
+                left: 50%;
+                margin-left: -1.6rem;
+                padding: 0 0.1rem;
+                width: 1.4rem;
+                height: 0.32rem;
+                text-align: center;
+                background: #F3F3F3;
+                border-radius: 0.04rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .rightPic {
+                position: absolute;
+                top: 0;
+                right: 50%;
+                margin-right: -1.4rem;
+                img {
+                    border-radius: 50%;
+                    overflow: hidden;
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+            .rightName {
+                position: absolute;
+                top: 1.2rem;
+                right: 50%;
+                margin-right: -1.6rem;
+                padding: 0 0.1rem;
+                width: 1.4rem;
+                height: 0.32rem;
+                text-align: center;
+                background: #F3F3F3;
+                border-radius: 0.04rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .xing1 {
+                position: absolute;
+                width: 0.4rem;
+                height: 0.4rem;
+                top: -1rem;
+                left: 0;
+                opacity: 0;
+            }
+            .xing1-enter {
+                opacity: 1;
+            }
+            .xing1-enter-active {
+                animation: xing1 .4s ease;
+                transition: opacity .4s ease;
+            }
+            .xing1-enter-to {
+                opacity: 0;
+            }
+        }
+        .winGoods {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.1rem;
+            .goods-img {
+                width: 1.1rem;
+                height: 1.1rem;
+                margin-right: 0.2rem;
+                img {
+                    width: 100%;
+                }
+            }
+            .goods-right {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                font-size: 0.25rem;
+                margin-bottom: 0.4rem;
+                span {
+                    color: #F02B22;
+                }
+            }
+        }
+        .lotteryResults {
+            width: 2.45rem;
+            background: #454545;
+            color: #fff;
+            text-align: center;
+            height: 0.46rem;
+            line-height: 0.46rem;
+            border-radius: 0.1rem;
+            margin-top: 0.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .hint{
+            font-size: 0.4rem;
+            color: #FF3450;
+        }
+        .subHint {
+            color: #878787;
             margin-bottom: 0.4rem;
             span {
                 color: #F02B22;
+                font-weight: bold;
+            }
+        }
+        .winBtn {
+            width: 90%;
+            height: 0.73rem;
+            line-height: 0.73rem;
+            color: #fff;
+            background: linear-gradient(to right, #F02B22, #FC2D59);
+            text-align: center;
+            border-radius: 0.6rem;
+        }
+        .NoviceGuideModal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            .GuideModalTop {
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 0;
+                bottom: 1.2rem;
+                background: rgba($color: #000000, $alpha: 0.7);
+                img {
+                    width: 100%;
+                }
+            }
+            .GuideModalBottom {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 1.2rem;
             }
         }
     }
-    .lotteryResults {
-        width: 2.45rem;
-        background: #454545;
-        color: #fff;
-        text-align: center;
-        height: 0.46rem;
-        line-height: 0.46rem;
-        border-radius: 0.1rem;
-        margin-bottom: 0.4rem;
-    }
-    .hint{
-        font-size: 0.4rem;
-        color: #FF3450;
-        margin-bottom: 0.2rem;
-    }
-    .subHint {
-        color: #878787;
-        margin-bottom: 0.4rem;
-        span {
-            color: #F02B22;
-            font-weight: bold;
-        }
-    }
-    .winBtn {
-        width: 90%;
-        height: 0.73rem;
-        line-height: 0.73rem;
-        color: #fff;
-        background: linear-gradient(to right, #F02B22, #FC2D59);
-        text-align: center;
-        border-radius: 0.6rem;
-    }
-    .NoviceGuideModal {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 1.2rem;
-        background: rgba($color: #000000, $alpha: 0.7);
-        img {
-            position: absolute;
-            bottom: 0.4rem;
-            left: 10%;
-            width: 80%
-        }
-    }
 }
-@keyframes xing1 {
-    0% {
-        transform: translate(2rem, 2rem);
-    }
-    10% {
-        transform: translate(1.96rem, 1.65rem)
-    }
-    20% {
-        transform: translate(1.88rem, 1.31rem)
-    }
-    30% {
-        transform: translate(1.73rem, 1rem)
-    }
-    40% {
-        transform: translate(1.53rem, 0.71rem)
-    }
-    50% {
-        transform: translate(1.29rem, 0.46rem)
-    }
-    60% {
-        transform: translate(1rem, 0.27rem)
-    }
-    70% {
-        transform: translate(0.68rem, 0.12rem)
-    }
-    80% {
-        transform: translate(0.34rem, 0.03rem)
-    }
-    90% {
-        transform: translate(0rem, 0rem)
-    }
-    100% {
-        transform: translateX(0, 0);
-    }
-}   
 </style>

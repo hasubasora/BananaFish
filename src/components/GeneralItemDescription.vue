@@ -966,7 +966,7 @@ export default {
                         if(response.data.success == 200) {
                             this.$router.push({
                                 name: "cartOrder",
-                                params: { sid: this.ProductType }
+                                query: { sid: this.ProductType }
                             });
                         }else {
                             this.$dialog.toast({

@@ -6,7 +6,9 @@
         </yd-tab>
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
             <div class="index-content" slot="list" v-if="tab1 == 0">
-                <home-banner :broadcastAd = "broadcastAd"></home-banner>
+                <div class="home-banner">
+                    <home-banner :broadcastAd = "broadcastAd"></home-banner>
+                </div>
                 <div class="winners-swiper">
                     <swiper :options="swiperOption"  v-if="expressNews.length">
                         <swiper-slide class="barItem" v-for="(item, index) in expressNews" :key="index">
@@ -22,7 +24,7 @@
                     <div class="LDcontent">
                         <div class="LDItem" v-for="(product, index) in products" :key="index" @click="GoItemDes(product.Id)">
                             <div class="ItemImg">
-                                <img :src="product.ProductImg">
+                                <img :src="product.ProductImg" alt="">
                             </div>
                             <div class="ItemText">
                                 <div class="num">
@@ -31,7 +33,7 @@
                                 </div>
                                 <div class="loot">
                                     <!-- <span>抢</span><span class="arrows"></span> -->
-                                    <img src="../assets/Img/home-Q.png" alt="">
+                                    <img src="../assets/Img/home-Q.png">
                                 </div>
                             </div>
                         </div>
@@ -260,10 +262,10 @@
                             const detailList = response.data.rows
                             this.goodsTabDetail = [...this.goodsTabDetail, ...detailList]
                             if(detailList.length < this.pagesize) {
-                                this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.loadedDone');
+                                this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.loadedDone')
                                 return;
                             }
-                            this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.finishLoad');
+                            this.$refs.infinitescrollDemo.$emit('ydui.infinitescroll.finishLoad')
                         }
                     });
                 }
@@ -296,6 +298,11 @@
         }
         .index-content {
             position: relative;
+            .home-banner {
+                width: 100%;
+                height: 0;
+                padding-bottom: 40%;
+            }
             .winners-swiper {
                 position: absolute;
                 top: 0.2rem;
@@ -340,14 +347,15 @@
                         padding: 0.2rem 0;
                         margin-right: 0.2rem;
                         border-radius: 0.2rem;
-                        // box-shadow:1px 2px 5px rgb(156, 24, 40);
                         text-align: center;
                         .ItemImg {
                             margin-left: 15%;
                             margin-bottom: 0.1rem;
                             width: 70%;
-                            border-radius: 50%;
+                            height: 0;
+                            padding-bottom: 70%;
                             overflow: hidden;
+                            background: #eee;
                             img {
                                 width: 100%;
                             }
@@ -388,7 +396,7 @@
                     width: 100%;
                 }
                 .goodsDescribe {
-                    padding: 0.4rem;
+                    padding: 0.2rem 0.4rem 0.4rem;
                     .goodsTitle {
                         font-size: 0.28rem;
                         font-weight: bold;

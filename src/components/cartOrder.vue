@@ -160,13 +160,15 @@ export default {
     created() {
         console.log(this.$route.query.IsDefault)
         this.codeImg = this.$server.serverUrl + "/index/GetImgCode/" + Math.random()
-        if(this.$route.params.sid !== undefined) {
-            sessionStorage.setItem('sid', this.$route.params.sid)
+        if(this.$route.query.sid !== undefined) {
+            sessionStorage.setItem('sid', this.$route.query.sid)
+            sessionStorage.setItem('LuckyProductType', this.$route.query.LuckyProductType)
+            sessionStorage.setItem('GroupNo', this.$route.query.GroupNo)
         }
         this.$axios({
             method: "POST",
             data: { 
-                orderType: this.$route.params.sid || sessionStorage.getItem('sid')
+                orderType: this.$route.query.sid || sessionStorage.getItem('sid')
             },
             url: this.$server.serverUrl + "/order/getorderconfirm",
             responseType: "json"
@@ -358,16 +360,14 @@ export default {
                     this.picked,
                     this.GetTypePay
                 );
-            } else {
-                console.log(this.$route.params.GroupNo)
-                
+            } else { 
                 this.$axios({
                     method: "POST",
                     data: {
                         addressid: this.address.AddressId,
-                        orderType: this.$route.params.sid,
+                        orderType: this.$route.query.sid,
                         useBalance: this.useBalance,
-                        TwoPersonChipNo: this.$route.params.GroupNo
+                        TwoPersonChipNo: sessionStorage.getItem("GroupNo")
                     },
                     url: this.$server.serverUrl + "/order/addorder",
                     responseType: "json"
@@ -390,7 +390,7 @@ export default {
                             })
                         }
                         if(this.EnoughBalance) {
-                            if(this.$route.params.LuckyProductType === 3 && !this.$route.params.GroupNo) {
+                            if(this.$route.query.LuckyProductType == 3 || sessionStorage.getItem('LuckyProductType') == 3 && !sessionStorage.getItem('GroupNo')) {
                                 this.$router.push({
                                     name: "LuckyShareConfirm",
                                     query: {OrderIdList: this.OrderIdList}

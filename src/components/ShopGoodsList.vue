@@ -15,7 +15,7 @@
                             <div slot="right" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
                         </yd-preview-header>
 
-                        <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id"  @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
+                        <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id" @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
                             <div slot="left">
                                 <img class="ProductImgs" :src=" GoodsInfo.ProductImg" alt=""></div>
                             <div slot="right">
@@ -63,7 +63,7 @@
                                 <!-- <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="SalesReturnApplyFor(itemt.OrderId)" type="button">申请退货</button> -->
                                 <button class="orderBtn grayBtn" v-if="itemt.OrderStatus==2" @click="OrderLogistics(itemt.OrderId)" type="button">物流信息</button>
                                 <button class="orderBtn grayBtn" @click="closeOrder(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">取消订单</button>
-                                <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
+                                <button class="orderBtn orangeBtn" @click="ShowWindow(itemt.OrderId, itemt.OrderType)" v-if="itemt.OrderStatus==0" type="button">立即付款</button>
                                 <button class="orderBtn orangeBtn" @click="GoComment(itemt.OrderId,new Date())" v-if="itemt.OrderStatus==3" type="button">评价</button>
                                 <button class="orderBtn orangeBtn" @click="receivedmyorder(itemt.OrderId)" v-if="itemt.OrderStatus==2" type="button">确认收货</button>
                                 <!-- <router-link to='"/SalesReturnApplyFor"+itemt.OrderId'>退货退款</router-link> -->
@@ -145,6 +145,7 @@ export default {
             picked: "",
             PayList: [],
             OrderID: "",
+            OrderType: 0,
             GoodsHtml: [],
             items: [
                 { label: "全部", content: [] },
@@ -193,8 +194,7 @@ export default {
             if (response.data.success == 200) {
                 this.PayList = response.data.list;
             }
-        });
-        
+        });  
     },
     methods: {
         GetType(e) {
@@ -232,7 +232,7 @@ export default {
                 this.$router.push({
                     name: "GeneralItemDescription",
                     query: { Good_id: id }
-                });
+                })
             }else if(OrderType == 3) {
                 this.$router.push({
                     name: "FreeDetail",
@@ -241,9 +241,10 @@ export default {
             }
         },
         //显示选择框
-        ShowWindow(oid) {
+        ShowWindow(oid, OrderType) {
             this.show1 = true;
             this.OrderID = oid;
+            this.OrderType = OrderType
         },
         GoComment(a, b) {
             this.$router.push({ name: "Comment", query: { plan: a, t: b } });
@@ -256,8 +257,7 @@ export default {
                 this.$router.push({
                     name: "LuckyOrderDetail",
                     query: { 
-                        OrderId: id,
-                        OrderType: OrderType
+                        OrderId: id
                     }
                 });
             }else {
@@ -307,8 +307,12 @@ export default {
                 });
                 return;
             }
-            GoBuySometing("", this.OrderID, this.picked, this.GetTypePay);
-            this.reload()
+            if (this.OrderType == 3) {
+                GoBuySometing("", this.OrderID, this.picked, this.GetTypePay, "LuckyDouble", this.OrderID);
+            }else {
+                GoBuySometing("", this.OrderID, this.picked, this.GetTypePay);
+                this.reload()
+            }
             // window.location.href =
             //     this.$server.serverUrl +
             //     "/Paying/GoPay?Client=0&GroupOrderIdList=&OrderIdList=" +
