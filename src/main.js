@@ -41,20 +41,9 @@ Vue.use(Vuex);
 import serverUrl from "../static/temper.js"
 Vue.prototype.$server = serverUrl;
 
-/**
- * VCharts
- */
-import VCharts from 'v-charts'
-Vue.use(VCharts)
 
 Vue.config.productionTip = false
 
-/**
- * 引入 Element
- */
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
 
 import animated from 'animate.css';
 Vue.use(animated)
@@ -176,7 +165,7 @@ GetConfig()
  * 
  * @param {*} res 调起微信支付
  */
-export const GetWeixinPay = (res, JumpPath, OrderIdList) => {
+export const GetWeixinPay = (res, pt, JumpPath, GroupNo) => {
   console.log(res);
   let _res = res.retData
   console.log(_res.appId);
@@ -192,16 +181,14 @@ export const GetWeixinPay = (res, JumpPath, OrderIdList) => {
         "paySign": _res.paySign //微信签名 
       },
       function (_res) {
-        console.log(_res);
-        console.log('_res==================');
         if (_res.err_msg == "get_brand_wcpay_request:ok") {
           if(JumpPath == 'reload') {
             return
           }else if(JumpPath === 'LuckyDouble') {
-            if(OrderIdList) {
+            if(GroupNo) {
               router.push({
                 name: "LuckyShareConfirm",
-                query: {OrderIdList: OrderIdList}
+                query: {OrderIdList: pt}
             })
             }else{
               router.push({
@@ -214,7 +201,7 @@ export const GetWeixinPay = (res, JumpPath, OrderIdList) => {
           }else if(JumpPath) {
             router.push({
               name: "Confirmation",
-              params: {getCoins: JumpPath}
+              query: {getCoins: JumpPath}
             })
           }else {
             router.push({
@@ -250,18 +237,19 @@ export const GetWeixinPay = (res, JumpPath, OrderIdList) => {
 }
 /**
  * 
- * @param {*} tc 头筹id
- * @param {*} pt 普通id
+ * @param {*} tc 头筹订单id
+ * @param {*} pt 普通订单id
  * @param {*} picked 支付类型
  * @param {*} GetTypePay 支付跳转类型
  * @param {*} JumpPath 跳转我的订单路径
+ * @param {*} GroupNo 开团号（判断是新开团还是拼团）
  */
-export const GoBuySometing = (tc, pt, picked, GetTypePay, JumpPath, OrderIdList) => {
+export const GoBuySometing = (tc, pt, picked, GetTypePay, JumpPath, GroupNo) => {
   if (GetTypePay) {
     console.log("跳网页支付");
     this.h5axiox(tc, pt, picked);
   } else {
-    this.weixinAip(tc, pt, picked, JumpPath, OrderIdList);
+    this.weixinAip(tc, pt, picked, JumpPath, GroupNo);
   }
 }
 
@@ -278,7 +266,7 @@ export const h5axiox = (tc, pt, picked) => {
 
 
 
-export const weixinAip = (tc, pt, picked, JumpPath, OrderIdList) => {
+export const weixinAip = (tc, pt, picked, JumpPath, GroupNo) => {
   if (picked == 30000) {
     axios({
       method: "POST",
@@ -293,7 +281,7 @@ export const weixinAip = (tc, pt, picked, JumpPath, OrderIdList) => {
       if(response.data.success == 100) {
         window.location.href = serverUrl.serverUrl  + "/weixin/payOAuth?retUrl=" + escape(window.location.href)
       }else if (response.data.success == 200) {
-        GetWeixinPay(response.data, JumpPath, OrderIdList)
+        GetWeixinPay(response.data, pt, JumpPath, GroupNo)
       }
     })
   }else if(picked == 8000) {

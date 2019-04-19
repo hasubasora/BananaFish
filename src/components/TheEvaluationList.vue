@@ -34,10 +34,10 @@
 .GetCommentList {
     background: #fff;
     .comment {
-        padding: 0.5rem;
+        padding: 0.3rem;
         .yd-flexbox-vertical {
             border-bottom: #ccc 1px solid;
-            margin: 0.5rem 0;
+            margin: 0.3rem 0;
         }
         .UserInfo {
             .UserIcon {
@@ -63,7 +63,7 @@
         .ImgShow {
             width: 1rem;
             display: flex;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
             > img {
                 margin: 0.05rem;
                 width: 100%;

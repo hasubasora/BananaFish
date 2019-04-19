@@ -1,8 +1,11 @@
 <template>
     <div id="app">
-        <router-view v-if="isRouterAlive"/>
-        <!-- <yd-popup v-model="winModal" position="center" width="90%"> -->
-        <div class="AppPopup" v-if="winModal">
+        <keep-alive>
+            <router-view v-if="isRouterAlive && $route.meta.keepAlive"/>
+        </keep-alive>
+        <router-view v-if="isRouterAlive && !$route.meta.keepAlive"/>
+        
+        <div class="AppPopup" v-if="winModal" @touchmove.prevent>
             <div class="winModal">
                 <div class="closeImg" v-if="TwoPersonChipObj.WinStatus === 0" @click="closeAppModal">
                     <img src="./assets/Img/close1.png" alt="">
@@ -13,20 +16,20 @@
                 </div>
                 <div class="pic">
                     <transition name="left" enter-active-class="animated bounceInLeft">    
-                        <div v-if="winModal" class="leftPic">
+                        <div v-if="winModalItem" class="leftPic">
                             <img :src="TwoPersonChipList[0].UserIcon">
                         </div>
                     </transition>
                     <transition name="right" enter-active-class="animated bounceInRight">
-                        <div v-if="winModal" class="rightPic">
+                        <div v-if="winModalItem" class="rightPic">
                             <img :src="TwoPersonChipList[1].UserIcon">
                         </div>
                     </transition>
                     <transition enter-active-class="animated fadeIn">
-                        <div v-if="winModal" class="leftName">{{TwoPersonChipList[0].UserName}}</div>
+                        <div v-if="winModalItem" class="leftName">{{TwoPersonChipList[0].UserName}}</div>
                     </transition>
                     <transition enter-active-class="animated fadeIn">
-                        <div v-if="winModal" class="rightName">{{TwoPersonChipList[1].UserName}}</div>
+                        <div v-if="winModalItem" class="rightName">{{TwoPersonChipList[1].UserName}}</div>
                     </transition>
                 </div>
                 <div class="winGoods">
@@ -46,7 +49,7 @@
                 <div class="subHint" v-if="TwoPersonChipObj.WinStatus === 1">(请领取您的免单款<span>￥{{TwoPersonChipObj.BuyPrice}}</span>)</div>
                 <div class="subHint" v-if="TwoPersonChipObj.WinStatus === 0">(幸运免单用户 <span v-for="(item, index) in TwoPersonChipList" :key="index" v-if="item.WinStatus === 1">{{item.UserName}}</span>)</div>
                 <div class="winBtn" @click="GoRemainingSum" v-if="TwoPersonChipObj.WinStatus === 1">立即领取</div>
-                <div class="winBtn" @click="GoFreeOfCharge" v-else>领取新的免单机会</div>
+                <div class="winBtn" @click="GoLuckyDouble" v-else>领取新的免单机会</div>
                 <div class="NoviceGuideModal" v-if="NoviceGuideGlobalModal"  @click="CancelGlobalModal">
                     <div class="GuideModalTop">
                         <img src="./assets/Img/Novice-guide-map3.png">
@@ -57,11 +60,9 @@
                 </div>
             </div>
         </div>
-        <!-- </yd-popup> -->
-
 
         <!-- 新用户绑定手机号码 -->
-        <div class="appPhoneNumber" v-if="appPhoneNumber">
+        <div class="appPhoneNumber" v-if="appPhoneNumber" @touchmove.prevent>
             <div class="phoneContent">
                 <div class="appTitle">验证手机号码</div>
                 <yd-cell-group>
@@ -85,7 +86,6 @@
 </template>
 
 <script>
-import BanTouch from './module/BanTouch.js'
 export default {
     name: "App",
     provide() {
@@ -97,6 +97,7 @@ export default {
         return {
             isRouterAlive:true,
             winModal: false,
+            winModalItem: true,
             TwoPersonChipObj: {},
             TwoPersonChipList: [],
             NoviceGuideGlobalModal: false,
@@ -109,10 +110,10 @@ export default {
         };
     },
     created() {
+        this.winModalItem = false
         this.timer = setInterval(()=>{
             setTimeout(this.GetOrderPush, 0)//避免页面卡死
         }, 5000)
-
 
         //新人绑定号码
         this.$axios({
@@ -138,7 +139,6 @@ export default {
         },
         GoRemainingSum() {
             this.winModal = false
-            BanTouch.move()
             this.$router.push({
                 path: "/RemainingSum"
             })
@@ -154,37 +154,33 @@ export default {
                     this.TwoPersonChipObj = response.data.data
                     this.TwoPersonChipList = response.data.data.list
                     this.winModal = true
-                    // BanTouch.stop()
                     this.NoviceGuideGlobalModal = false
                     if((!localStorage.getItem('GlobalModal1')) && this.TwoPersonChipObj.WinStatus == 1) {
                         this.NoviceGuideGlobalModal = true
                         localStorage.setItem("GlobalModal1", true)
+                    }
+                    if(this.winModal) {
+                        setTimeout(()=> {
+                            this.winModalItem = true
+                        }, 300)
                     }
                 }
             })
         },
         closeAppModal() {
             this.winModal = false
-            BanTouch.move()
         },
         CancelGlobalModal() {
             this.NoviceGuideGlobalModal = false
-            BanTouch.move()
         },
-        GoFreeOfCharge() {
+        GoLuckyDouble() {
             this.winModal = false
-            BanTouch.move()
             this.$router.push({
-                name: 'FreeOfCharge'
+                name: 'LuckyDouble'
             })
         },
 
         sendCode1() {
-            if (!(/^1[345789]\d{9}$/.test(this.AppPhone))) {
-                this.$dialog.toast({ mes: "手机号有误！" });
-                return;
-            }
-
             this.$axios({
                 method: "POST",
                 data: {
@@ -233,7 +229,7 @@ html,body,#app{
 //   height: 100%;
 }
 #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "微软雅黑", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -293,6 +289,7 @@ html,body,#app{
 }
 body {
     margin: 0;
+    // background: #fff;
 }
 .c-white {
     color: #fff !important;
@@ -314,7 +311,7 @@ body {
     background-color: #ff5f17;
 }
 .titleColor {
-    background: linear-gradient(to left, #ea3f32, #ed7947);
+    background: linear-gradient(to left, #FD4068, #F23E35);
 }
 .orderBtn {
     height: 0.5rem;

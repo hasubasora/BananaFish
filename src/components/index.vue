@@ -1,25 +1,6 @@
 <template>
     <div class="homePage">
-        <keep-alive>
-            <router-view @changeCartNum="changeCartNum"></router-view>
-        </keep-alive>
-
-        <!-- <yd-tabbar fixed active-color="#aaa">
-            <yd-tabbar-item title="首页" link="/" active>
-                <yd-icon name="home" slot="icon" size="0.54rem"></yd-icon>
-            </yd-tabbar-item>
-            
-            <yd-tabbar-item title="头筹" link="ProductGroupList" active>
-                <span slot="icon" class="iconfont IconList icon-touchou-copy"></span>
-            </yd-tabbar-item>
-            <yd-tabbar-item title="购物车" link="cart" active>
-                <yd-icon name="shopcart" slot="icon" size="0.54rem"></yd-icon>
-                <yd-badge slot="badge" type="danger" v-if="productNum">{{productNum}}</yd-badge>
-            </yd-tabbar-item>
-            <yd-tabbar-item title="我的" link="MyInfo" active>
-                <yd-icon name="ucenter" slot="icon" size="0.54rem"></yd-icon>
-            </yd-tabbar-item>
-        </yd-tabbar> -->
+        <router-view></router-view>
         <div class="tabbar">
             <router-link to="/" class="tabbar-item" exact>
                 <div class="icon all-icon"></div>
@@ -36,7 +17,7 @@
             <router-link to="cart" class="tabbar-item cart" exact>
                 <div class="icon3 all-icon"></div>
                 <div>购物车</div>
-                <yd-badge type="danger" class="badge" v-if="productNum">{{productNum}}</yd-badge>
+                <yd-badge type="danger" class="badge" v-if="productNum">{{productNum > 99 ? '99+' : productNum}}</yd-badge>
             </router-link>
             <router-link to="MyInfo" class="tabbar-item" exact>
                 <div class="icon4 all-icon"></div>
@@ -82,7 +63,6 @@ export default {
                 
                 if (response.data.success == 200) {
                     this.productNum = response.data.object.productNum;
-                    console.log(response.data);
                 }
             });
         }
@@ -138,8 +118,8 @@ export default {
             }
             .badge {
                 position: absolute;
-                top: 0;
-                right: 50%;
+                top: -0.04rem;
+                right: 48%;
                 margin-right: -0.5rem;
             }
         }

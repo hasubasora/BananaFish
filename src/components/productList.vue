@@ -12,7 +12,7 @@
             </yd-flexbox-item>
             <router-link to="/MessageQueue" class="header-icon">
                 <img class="message-icon" :src="message">
-                <yd-badge class="badge" type="danger">{{MessageNum}}</yd-badge>
+                <yd-badge class="badge" type="danger" v-if="MessageNum">{{MessageNum}}</yd-badge>
             </router-link>
         </yd-flexbox>
         <div class="scrolltab">
@@ -21,19 +21,19 @@
                     v-for="(NavItem, index) in NavList"
                     :key="index" @click="ChangeNav(NavItem.CategoryId, index)"
                     :class="{active: checkedItem === index}"
-                >
-                    <span>{{NavItem.CateName}}</span>
+                >   
+                    <div class="cate-name">{{NavItem.CateName}}</div>
                 </li>
             </ul>
             <div class="scrolltab-content">
                 <div class="top-img">
                     <img :src="category.AdPicture">
                 </div>
-                <div class="title">
+                <div class="title" v-if="subCategory.length">
                     <span>{{category.CateName}}</span>
-                    <span @click="GoMore(category.RecommendType, category.CategoryId)">更多</span>
+                    <span @click="GoMore(category.RecommendType, category.CategoryId)" class="more">更多 <img src="../assets/Img/right-arrows.png" alt=""></span>
                 </div>
-                <div class="grids-group">
+                <div class="grids-group" v-if="subCategory.length">
                     <div class="grids-item" v-for="(subCategoryItem,index) in subCategory" :key="index" @click="GoThreeList(subCategoryItem.CategoryId)">
                         <div class="item-img">
                             <img :src="subCategoryItem.CateIcon">
@@ -42,6 +42,10 @@
                     </div>
                 </div>
                 <div class="waterfall">
+                    <div class="title">
+                        <span>畅销新品</span>
+                        <span @click="GoMore(category.RecommendType, category.CategoryId)" class="more">更多 <img src="../assets/Img/right-arrows.png" alt=""></span>
+                    </div>
                     <div class="waterfall-item" v-for="(recommandProductsItem, index) in recommandProducts" :key="index" @click="GoItemDes(recommandProductsItem.Id)">
                         <div class="waterfall-left">
                             <img :src="recommandProductsItem.ProductImg">
@@ -49,7 +53,7 @@
                         <div class="waterfall-right">
                             <div class="describe-title">{{recommandProductsItem.ProductTitle}}</div>
                             <div class="describe-text">
-                                <span class="price">￥ {{recommandProductsItem.SalePrice}}</span>
+                                <span class="price">￥ {{recommandProductsItem.SalePrice.toFixed(2)}}</span>
                                 <span class="num">已销{{recommandProductsItem.SaleCount}}件</span>
                             </div>
                         </div>
@@ -77,6 +81,18 @@ export default {
             subCategory: [],
             recommandProducts: []
         };
+    },
+    //保存页面有position定位的滚动位置
+    beforeRouteLeave (to, from, next) {
+        this.scrollTop1 = document.querySelector('.scrolltab-nav').scrollTop
+        this.scrollTop2 = document.querySelector('.scrolltab-content').scrollTop
+        next()
+    },
+    beforeRouteEnter (to, from, next) {
+        next(vm => {
+            document.querySelector('.scrolltab-nav').scrollTop = vm.scrollTop1
+            document.querySelector('.scrolltab-content').scrollTop = vm.scrollTop2
+        })
     },
     created() {
         this.$axios({
@@ -129,6 +145,7 @@ export default {
     methods: {
         ChangeNav(CategoryId, index) {
             this.checkedItem = index
+            document.querySelector('.scrolltab-content').scrollTop = 0
             this.$axios({
                 method: "POST",
                 data: {
@@ -170,7 +187,6 @@ export default {
 </script>
 
 <style lang="scss">
-    // @import '../stylesheet/main.scss';
     .productList {
         background: #fff;
         .productList-header {
@@ -229,42 +245,35 @@ export default {
             background: #fff;
             .scrolltab-nav {
                 height: 100%;
-                background-color: #f5f5f5;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
+                border-right: 1px solid #f5f5f5;
                 position: relative;
                 z-index: 1;
                 li {
-                    padding: 0px 0.1rem 0 0;
                     height: 0.8rem;
-                    line-height: 0.8rem;
+                    // line-height: 0.8rem;
                     text-align: center;
-                    width: 2rem;
-                    font-size: .3rem;
-                    color: #666;
+                    width: 1.8rem;
+                    font-size: 0.26rem;
+                    color: #222;
                     overflow-x: hidden;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                    span {
-                        padding-left: 0.2rem;
+                    .cate-name {
+                        width: 1.48rem;
+                        margin: 0.16rem auto;
+                        height: 0.46rem;
+                        line-height: 0.52rem;
                     }
                 }
                 .active {
                     color: #E84325;
                     background: #fff;
-                    span {
-                        position: relative;
-                        &:before {
-                            content: "";
-                            width: 0.1rem;
-                            height: 0.1rem;
-                            background: #E84325;
-                            border-radius: 50%; 
-                            position: absolute;
-                            top: 50%;
-                            left: -0.04rem;
-                            margin-top: -0.05rem;
-                        }
+                    .cate-name {
+                        background: linear-gradient(to right, #F02B22, #FC2F5B);
+                        color: #fff;
+                        border-radius: 0.4rem;
                     }
                 }
             }
@@ -274,58 +283,75 @@ export default {
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
                 flex: 1;
-                padding: 0 .24rem;
                 position: relative;
                 .top-img {
-                    width: 5.02rem;
-                    height: 1.72rem;
-                    background: #eee;
+                    margin: 0 0.26rem 0.4rem;
+                    width: 5.2rem;
+                    height: 1.78rem;
                     img {
-                        width: 5.02rem;
-                        height: 1.72rem;
+                        width: 100%;
+                        height: 1.78rem;
                     }
                 }
-                .title {
+                >.title {
                     display: flex;
                     justify-content: space-between;
-                    padding: 0 0.1rem;
-                    margin-top: 0.4rem;
-                    font-size: 0.3rem;
+                    padding: 0 0.26rem;
+                    font-size: #333;
                     font-weight: bold;
+                    .more {
+                        color: #FF1D26;
+                        img {
+                            width: 0.12rem;
+                        }
+                    }
                 }
                 .grids-group {
                     display: flex;
                     flex-wrap: wrap;
-                    margin-bottom: 0.6rem;
+                    margin-bottom: 0.26rem;
                     .grids-item {
                         display: flex;
                         flex-direction: column;
                         width: 33.3%;
-                        margin-top: 0.3rem;
-                        // margin: 0.3rem auto 0;
+                        height: 2.24rem;
                         .item-img {
-                            width: 1.4rem;
-                            height: 1.4rem;
-                            border: 1px solid #eee;
-                            border-radius: 50%;
+                            width: 1rem;
+                            height: 1rem;
                             overflow: hidden;
-                            margin: 0 auto;
+                            margin: 0.5rem auto 0;
                             img {
-                                width: 1.4rem;
+                                width: 1rem;
                             }
                         }
                         span {
                             text-align: center;
                             font-size: 0.28rem;
-                            margin-top: 0.1rem;
+                            margin-top: 0.3rem;
+                            color: #888888;
                         }
                     }
                 }
                 .waterfall {
+                    padding: 0 0.26rem 0.26rem;
+                    .title {
+                        padding-bottom: 0.24rem;
+                        border-bottom: 1px solid #EEEEEE;
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: #333;
+                        font-weight: bold;
+                        .more {
+                            color: #FF1D26;
+                            img {
+                                width: 0.12rem;
+                            }
+                        }
+                    }
                     .waterfall-item {
                         display: flex;
                         width: 100%;
-                        margin-bottom: 0.3rem;
+                        padding: 0.3rem 0;
                         .waterfall-left {
                             width: 1.3rem;
                             margin-right: 0.2rem;
@@ -339,11 +365,12 @@ export default {
                             flex-direction: column;
                             justify-content: space-between;
                             .describe-title {
-                                // font-weight: bold;
                                 display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
                                 text-overflow: ellipsis;
                                 overflow: hidden;
+                                color: #888888;
                                 height: auto;
+                                line-height: 0.4rem;
                                 white-space: normal;
                                 word-wrap: normal;
                                 /*! autoprefixer: off */
@@ -354,14 +381,14 @@ export default {
                             .describe-text {
                                 display: flex;
                                 justify-content: space-between;
+                                align-items: center;
                                 .price {
                                     color: #FE0B1C;
-                                    font-size: 0.26rem;
+                                    font-size: 0.3rem;
                                     font-weight: bold;
                                 }
                                 .num {
                                     color: #888888;
-                                    font-size: 0.26rem;
                                 }
                             }
                         }

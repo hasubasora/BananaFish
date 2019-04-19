@@ -1,16 +1,5 @@
 <template>
     <div>
-        <!-- <div class="news">
-            <div class="newsBox">
-                <div class="mdkx">免单快讯</div>
-                <span style="color:red;margin-top:0.1rem">最新</span>
-                <yd-slider autoplay="3000">
-                    <yd-slider-item v-for="(item, index) in expressNews" :key="index">
-                        <span style="margin-top:0.04rem;">恭喜<i class="c-red">{{item.NickName}}</i> 获得免单<i class="c-red">{{item.OrderTitle}}</i></span>
-                    </yd-slider-item>
-                </yd-slider>
-            </div>
-        </div> -->
         <div class="navbar">
             <div class="center" v-for="(item, index) in navigationIcoAd" :key="index" @click="GoPath(item)">
                 <div class="center border">

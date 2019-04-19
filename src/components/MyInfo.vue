@@ -33,7 +33,7 @@
         <yd-flexbox class="balance" direction="vertical">
             <yd-flexbox-item>
                 <yd-flexbox class="balance-top">
-                    <div>账户余额  <span @click="RemainingSum">￥{{balance.balance}}</span></div>
+                    <div>账户余额  <span @click="RemainingSum" class="balance-num">￥{{balance.balance}}</span></div>
                     <div>我的积分 <span>{{balance.integral}}</span></div>
                     <div class="withdrawBtn" @click="drawMoney(balance.isAngel)">提现</div>
                 </yd-flexbox>       
@@ -471,20 +471,24 @@ export default {
     .balance {
         background: #fff;
         margin: 0 0.2rem;
-        font-size: 0.3rem;
+        font-size: 0.28rem;
         border-bottom-left-radius: 0.2rem;
         border-bottom-right-radius: 0.2rem;
         .balance-top {
             justify-content: space-between;
             padding: 0.3rem;
             border-bottom: 1px solid #f5f5f5;
+            .balance-num {
+                color: #F02B22;
+                margin: 0 0.1rem;
+            }
             span {
                 font-weight: bold;
             }
             .withdrawBtn {
                 background: red;
                 color: #fff;
-                padding: 0.14rem 0.4rem;
+                padding: 0.09rem 0.41rem;
                 border-radius: 0.4rem;
                 font-size: 0.28rem;
             }
@@ -560,12 +564,11 @@ export default {
                     top: 0.04rem;
                 }
                 img {
-                    width: 0.5rem;
+                    width: 0.4rem;
                 }
                 p {
                     margin-top: 0.1rem;
-                    font-size: 0.26rem;
-                }  
+                }
             }
             .last-order {
                 padding-top: 0;
@@ -702,7 +705,7 @@ export default {
                     margin-bottom: 0.3rem;
                 }
                 img {
-                    width: 0.6rem;
+                    width: 0.42rem;
                 }
             }
         }

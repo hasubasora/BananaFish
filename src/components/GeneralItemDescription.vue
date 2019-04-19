@@ -1,145 +1,146 @@
 <template>
-    <div class="www">
+    <div class="GeneralItemDescription">
         <yd-navbar slot="navbar" height='.8rem' fixed>
             <div @click="GoHistory" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </div>
 
             <yd-flexbox slot="center" style="border:1px solid #A0A0A0;border-radius:5px">
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]">商品</yd-flexbox-item>
-                <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]">详情</yd-flexbox-item>
+                <yd-flexbox-item :class="['flexboxNav',{'flexbox':flexNav}]" @click.native="scrollDetail('top')">商品</yd-flexbox-item>
+                <yd-flexbox-item :class="['flexboxNav',{'flexbox':!flexNav}]" @click.native="scrollDetail('detail')">详情</yd-flexbox-item>
             </yd-flexbox>
         </yd-navbar>
 
-        <div class="swipe" ref="GroupGood">
-            <yd-scrollnav :callback='NavCallback'>
-                <yd-scrollnav-panel v-for="(item, key) in list" :key="key">
-                    <!-- 内容 -->
-                    <div class="GroupSwipe" v-if="key==0">
-                        <mt-swipe :auto="4000">
-                            <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id">
-                                <yd-lightbox>
-                                    <yd-lightbox-img :src="item.ImgUrl" style="width:100%"></yd-lightbox-img>
-                                </yd-lightbox>
-                            </mt-swipe-item>
-                        </mt-swipe>
-                        <div class="lucky_price">
-                            <div class="price">
-                                <span>￥{{GoodsList.SalePrice}}</span>
-                                <div class="market_price"><del>市场价 ￥ {{GoodsList.MarketPrice}}</del></div>
-                            </div>
-                            <div class="sales">
-                                <div class="sale_num">月销 {{GoodsList.SaleCount}}</div>
-                                <div class="integral">可获得积分：{{GoodsList.Integral}}</div>
-                            </div>
+        <div class="swipe">
+            <!-- 内容 -->
+            <div class="content" ref="content">
+                <div class="GroupSwipe" ref="GroupSwipe">
+                    <mt-swipe :auto="4000">
+                        <mt-swipe-item v-for="item in GoodsList.ProductImg" :key="item.id">
+                            <yd-lightbox>
+                                <yd-lightbox-img :src="item.ImgUrl" style="width:100%"></yd-lightbox-img>
+                            </yd-lightbox>
+                        </mt-swipe-item>
+                    </mt-swipe>
+                    <div class="lucky_price">
+                        <div class="price">
+                            <span>￥{{GoodsList.SalePrice}}</span>
+                            <div class="market_price"><del>市场价 ￥{{GoodsList.MarketPrice}}</del></div>
                         </div>
-                        <p class="goodtitle">
-                            {{GoodsList.ProductTitle}}
-                        </p>
-                        <div class="AngelMembers">
-                            <div class="AngelLeft">
-                                <img src="../assets/Img/angelIcon.png" alt="">
-                                <div class="save">
-                                    天使会员预计可省 <span> ￥ {{savePrice}}元</span>
-                                </div>
-                            </div>
-                            <router-link to="/AngelActivity" class="AngelRight" v-if="!IsAngel">
-                                <div>成为</div>
-                                <div>天使会员</div>
-                            </router-link>
-                        </div>
-                        <div @click="showSelect(2)">
-                            <yd-cell-group>
-                                <yd-cell-item arrow>
-                                    <span slot="left">
-                                        <i class="gray">规格&nbsp;</i>
-                                    </span>
-                                    <span slot="left">选择 颜色分类</span>
-                                </yd-cell-item>
-                            </yd-cell-group>
+                        <div class="sales">
+                            <div class="sale_num">月销 {{GoodsList.SaleCount}}</div>
+                            <div class="integral">可获得积分：{{GoodsList.Integral}}</div>
                         </div>
                     </div>
-
-                    <!-- 评价 -->
-                    <yd-cell-group v-if="key==1">
-                        <yd-cell-item arrow @click.native="GetCommentList(GoodsList.Id)">
-                            <span slot="left">
-                                <i>宝贝评价</i>
-                            </span>
-                            <span slot="right">
-                                查看全部
-                            </span>
-                        </yd-cell-item>
-                        <div class="CommentWrap" v-for="items in LstComment" :key="items.id" v-if="LstComment.length">
-                            <div class="CommentList">
-                                <div class="Comment-left">
-                                    <div class="UserInfo">
-                                        <img class="UserIcon" :src="items.UserIcon" alt="">
-                                        <span class="NickName">{{ items.NickName }}</span>
-                                    </div>
-                                    <div class="Comment">
-                                        {{items.Comment}}
-                                    </div>
-                                </div>
-                                <div class="Comment-right" v-if="items.ImgShow == [] && items.ImgShow !== null">
-                                    <img :src="items.ImgShow[0].AttachPath" alt="">
-                                </div>
+                    <p class="goodtitle">
+                        {{GoodsList.ProductTitle}}
+                    </p>
+                    <div class="AngelMembers">
+                        <div class="AngelLeft">
+                            <img src="../assets/Img/angelIcon.png" alt="">
+                            <div class="save">
+                                天使会员预计可省 <span> ￥ {{savePrice}}元</span>
                             </div>
                         </div>
-                        <div class="blank" v-if="!LstComment.length">
-                            该商品暂未评价
-                        </div>
-                    </yd-cell-group>
-                    <!-- 评价 -->
-
-                    <!-- 详细 -->
-
-                    <div v-if="key==2">
-                        <div class="details">
-                            <div class="GoodsDirectly">
-                                <div class="DirectlyLeft">
-                                    <img :src="Supplier.SupplierIcoImg" alt="">
-                                    <div class="ShopInfo">
-                                        <div class="Shopname">{{Supplier.SupplierName}}</div>
-                                        <div class="ProductNum">商品数量 {{Supplier.ProductCount}}</div>
-                                    </div>
-                                </div>
-                                <div class="Directlyright" @click="GoPath(Supplier.SupplierId)">
-                                    <span>进店逛逛</span>
-                                </div>
-                            </div>
-                            <div class="spxq">商品详情</div>
-                        </div>
-                        <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
+                        <router-link to="/AngelActivity" class="AngelRight" v-if="!IsAngel">
+                            <div>成为</div>
+                            <div>天使会员</div>
+                        </router-link>
                     </div>
-                    <yd-backtop></yd-backtop>
-                    <!-- 详细 -->
+                    <div @click="showSelect(2)">
+                        <yd-cell-group>
+                            <yd-cell-item arrow>
+                                <span slot="left">
+                                    <i class="gray">规格&nbsp;</i>
+                                </span>
+                                <span slot="left">选择 颜色分类</span>
+                            </yd-cell-item>
+                        </yd-cell-group>
+                    </div>
+                </div>
 
-                </yd-scrollnav-panel>
-            </yd-scrollnav>
+                <!-- 评价 -->
+                <yd-cell-group ref="commentPanel">
+                    <yd-cell-item arrow @click.native="GetCommentList(GoodsList.Id)">
+                        <span slot="left">
+                            <i>宝贝评价</i>
+                        </span>
+                        <span slot="right">
+                            查看全部
+                        </span>
+                    </yd-cell-item>
+                    <div class="CommentWrap" v-for="items in LstComment" :key="items.id" v-if="LstComment.length">
+                        <div class="CommentList">
+                            <div class="Comment-left">
+                                <div class="UserInfo">
+                                    <img class="UserIcon" :src="items.UserIcon" alt="">
+                                    <span class="NickName">{{ items.NickName }}</span>
+                                </div>
+                                <div class="Comment">
+                                    {{items.Comment}}
+                                </div>
+                            </div>
+                            <div class="Comment-right" v-if="items.ImgShow == [] && items.ImgShow !== null">
+                                <img :src="items.ImgShow[0].AttachPath" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="blank" v-if="!LstComment.length">
+                        该商品暂未评价
+                    </div>
+                </yd-cell-group>
+            <!-- 评价 -->
+                <div class="details">
+                    <div class="GoodsDirectly">
+                        <div class="DirectlyLeft">
+                            <img :src="Supplier.SupplierIcoImg" alt="">
+                            <div class="ShopInfo">
+                                <div class="Shopname">{{Supplier.SupplierName}}</div>
+                                <div class="ProductNum">商品数量 {{Supplier.ProductCount}}</div>
+                            </div>
+                        </div>
+                        <div class="Directlyright" @click="GoPath(Supplier.SupplierId)">
+                            <span>进店逛逛</span>
+                        </div>
+                    </div>
+                    <div class="spxq">商品详情</div>
+                </div>
+            </div>
+            
+            <!-- 详细 -->
+            <div class="GoodsHtml" v-html="GoodsHtml.ProductDesc"></div>
+            <yd-backtop></yd-backtop>
+            <!-- 详细 -->
         </div>
         <!-- 底部导航 -->
-            <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem">
-                <div class='iconfont_s'>
-                    <yd-tabbar-item title="首页" link="/" active>
-                        <yd-icon name="home" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
-                    </yd-tabbar-item>
-                    <yd-tabbar-item title="客服" link=" " @click.native="ToKefo" active>
-                        <span slot="icon" class="marginTop02 iconfont icon-54" style="font-size:.5rem; color:#ccc"></span>
-                    </yd-tabbar-item>
-                    <yd-tabbar-item title="购物车" link="/cart" active>
-                        <yd-icon name="shopcart" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
-                        <yd-badge slot="badge" type="danger">{{storeText?storeText:this.productNum}}</yd-badge>
-                    </yd-tabbar-item>
+        <yd-tabbar fixed active-color="#ccc" class="yd-nav-button" fontsize=".26rem" style="padding: 0">
+            <div class='iconfont_s'>
+                <!-- <yd-tabbar-item title="客服" link="" @click.native="ToKefo" active>
+                    <span slot="icon" class="marginTop02 iconfont icon-54" style="font-size:.5rem; color:#ccc"></span>
+                </yd-tabbar-item>
+                <yd-tabbar-item title="购物车" link="/cart" active>
+                    <yd-icon name="shopcart" slot="icon" size="0.4rem" class="marginTop02"></yd-icon>
+                    <img slot="icon" src="../assets/Img/detail-cart-icon.png" alt="">
+                    <yd-badge slot="badge" type="danger" >{{storeText?storeText:productNum}}</yd-badge>
+                </yd-tabbar-item> -->
+                <div @click="ToKefo" class="service">
+                    <img src="../assets/Img/detail-service-icon.png" alt="">
+                    <span>锦鲤客服</span>
                 </div>
+                <div class="service" @click="GoCart">
+                    <img src="../assets/Img/detail-cart-icon.png" alt="">
+                    <span>购物车</span>
+                    <div class="badge">{{productNum > 99 ? '99+' : productNum}}</div>
+                </div>
+            </div>
 
-                <div class="yd-nav-right-button">
-                    <button class="handleClick rightbtn" v-if="GoodsList.IsAllowAddCart" @click="showSelect(1)" type="button">加入购物车</button>
-                </div>
-                <div class="yd-nav-right-button">
-                    <button class="handleClick leftbtn leftColor" v-if="this.$route.query.text!='over' " @click="showSelect(2)" type="button">立即购买</button>
-                </div>
-            </yd-tabbar>
+            <div class="yd-nav-right-button">
+                <button class="handleClick" v-if="GoodsList.IsAllowAddCart" @click="showSelect(1)" type="button">加入购物车</button>
+            </div>
+            <div class="yd-nav-right-button">
+                <button class="handleClick leftColor" v-if="this.$route.query.text!='over' " @click="showSelect(2)" type="button">立即购买</button>
+            </div>
+        </yd-tabbar>
         <!-- 底部导航 -->
 
         <yd-popup v-model="show" position="bottom" class="Popup">
@@ -161,7 +162,7 @@
                 <div class="gotup border" v-if="Gotup">
                     <h3>{{Gotup.AttName}}</h3>
                     <div class="gotupTab">
-                        <span @click="TouchSku(itemt.AttValueId,Gotup.LstAttValue,110,itemt.AttValue,selectSKUTwo[index],index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementSkuAttr[index]}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
+                        <span @click="TouchSku(itemt.AttValueId,LstAtt,0,itemt.AttValue,index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementSkuAttr[index]}" v-for="(itemt, index) in Gotup.LstAttValue" :key="index">
                             {{itemt.AttValue}}
                         </span>
                     </div>
@@ -169,7 +170,7 @@
                 <div class="gotup border" v-if="GotupAttr">
                     <h3>{{GotupAttr.AttName}}</h3>
                     <div class="gotupTab">
-                        <span @click="TouchSku(itemt.AttValueId,GotupAttr.LstAttValue,100,itemt.AttValue,selectSKUOne[index],index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
+                        <span @click="TouchSku(itemt.AttValueId,LstAtt,1,itemt.AttValue,index)" :class="{isOrange:itemt.isTrue,pointerEvents:elementAttrSku[index]}" v-for="(itemt, index) in GotupAttr.LstAttValue" :key="index">
                             {{itemt.AttValue}}
                         </span>
                     </div>
@@ -179,8 +180,9 @@
                     <yd-spinner :longpress="false" v-model="spinner"></yd-spinner>
                 </div>
             </div>
-            <!-- <yd-button type="warning" class="SetButton" size="large" @click.native="addCart(GoodsList.Id, type)">确定</yd-button> -->
-            <div class="SetButton" @click="addCart(GoodsList.Id, type)">确定</div>
+            <div class="SetButtonBg" @click="addCart(GoodsList.Id, type)">
+                <div class="SetButton">确定</div>
+            </div>
         </yd-popup>
 
         <!-- 新人活动弹出框 -->
@@ -196,14 +198,10 @@
     </div>
 </template>
 <style lang="scss">
-.www {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.GeneralItemDescription {
     .flexboxNav {
         padding: 0.1rem 0.2rem;
+        color: #888;
     }
     .flexbox {
         padding: 0.1rem 0.2rem;
@@ -211,13 +209,8 @@
         color: #fff;
     }
     .swipe {
-        position: relative;
-        top: 0.75rem;
-        left: 0;
-        width: 100%;
-        height: 90%;
         -webkit-overflow-scrolling: touch; /*这句是为了滑动更顺畅*/
-        overflow-y: scroll;
+        // overflow-y: scroll;
         background: #f2f2f2;
         padding: 0.7rem 0 1rem;
         .yd-cell:after {
@@ -234,7 +227,6 @@
                 background: #ffffff;
                 text-align: center;
                 .mint-swipe-item {
-                    border: 1px solid;
                     img {
                         height: 100%;
                         width: auto;
@@ -321,7 +313,7 @@
                     .UserInfo {
                         display: flex;
                         align-items: center;
-                        margin-bottom: 0.1rem;
+                        margin-bottom: 0.2rem;
                         .UserIcon {
                             width: 0.6rem;
                             height: 0.6rem;
@@ -332,10 +324,16 @@
                     .Comment {
                         padding-right: 0.2rem;
                         line-height: 0.4rem;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 3;
+                        display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+                        text-overflow: ellipsis;
                         overflow: hidden;
+                        height: auto;
+                        white-space: normal;
+                        word-wrap: normal;
+                        /*! autoprefixer: off */
+                        -webkit-box-orient: vertical;
+                        /* autoprefixer: on */
+                        -webkit-line-clamp: 2;
                     }
                 }
                 .Comment-right {
@@ -421,7 +419,7 @@
         .GoodSuk {
             position: relative;
             z-index: 1501;
-            padding: 0.2rem 0.2rem 1rem 0.2rem;
+            padding: 0.2rem;
             max-height: 6rem;
             overflow-y: auto;
             .gotup {
@@ -460,19 +458,20 @@
                 padding: 0.2rem;
             }
         }
-        .SetButton {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1rem;
-            line-height: 1rem;
-            background: #ffb400;
-            color: #fff;
-            font-size: .36rem;
-            z-index: 1998;
-            text-align: center;
-            border-radius: 3px;
+        .SetButtonBg {
+            background: #fff;
+            border-top: 1px solid #f5f5f5;
+            padding-top: 0.1rem;
+            .SetButton {
+                height: 1rem;
+                line-height: 1rem;
+                background: linear-gradient(to right, #F02B22, #FC2D59);
+                color: #fff;
+                font-size: .36rem;
+                z-index: 1998;
+                text-align: center;
+                border-radius: 3px;
+            }
         }
     }
     .share {
@@ -505,7 +504,7 @@
     }
     .yd-nav-button {
         background: #ffffff;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid #f1f1f1;
         padding: 0;
         z-index: 99;
         position: fixed;
@@ -517,17 +516,17 @@
             width: 100%;
         }
         .handleClick {
-            background-color: #ff5f17;
+            background: #333333;
             font-size: 0.3rem;
             border: none;
             outline: none;
-            height: 0.8rem;
+            height: 1rem;
             width: 100%;
-            color: #ffffff;
+            color: #fff;
         }
 
         .leftColor {
-            background-color: #ffa617;
+            background: linear-gradient(to right, #FC2D59, #FC2D59);
         }
         .yd-tabbar {
             padding: 0;
@@ -537,11 +536,37 @@
         }
         .iconfont_s {
             display: flex;
-            > a {
+            margin-right: 0.2rem;
+            margin-left: 0.26rem;
+            .service {
+                position: relative;
+                display: flex;
+                justify-content: space-between;
+                flex-direction: column;
+                align-items: center;
                 width: 1rem;
-                text-align: center;
-                height: 0.8rem;
-                flex: 1;
+                color: #222;
+                font-size: 0.24rem;
+                img {
+                    width: 0.34rem;
+                    margin-bottom: 0.06rem;
+                }
+                span {
+                    text-align: center;
+                }
+                .badge {
+                    position: absolute;
+                    top: -0.1rem;
+                    right: 0.04rem;
+                    background: #F42C36;
+                    color: #fff;
+                    height: 0.36rem;
+                    line-height: 0.4rem;
+                    width: 0.36rem;
+                    text-align: center;
+                    border-radius: 0.4rem;
+                    font-size: 0.16rem;
+                }
             }
         }
     }
@@ -615,17 +640,6 @@ export default {
                 { label: "宝贝" },
                 { label: "详情" },
                 { label: "评价" }
-                // { label: "推荐" }
-            ],
-            Bom: [
-                {
-                    icon: require("../assets/Img/b1.png"),
-                    title: "微信朋友圈"
-                },
-                {
-                    icon: require("../assets/Img/b2.png"),
-                    title: "微信好友"
-                }
             ],
             GetConfig: "",
             GoodsList: {},
@@ -635,6 +649,7 @@ export default {
             type: 1,
             show1: false,
             flexNav: true,
+            LstAtt: [],
             Gotup: [],
             GotupAttr: [],
             GotupLen: 0,
@@ -644,36 +659,39 @@ export default {
             elementAttrSku: [],
             elementSkuAttr: [],
             GoodAttrs: [],
-            GotupLength: 0,
+            AnotherAttrArray: [],
             ImgUrl: "",
             buyName: "",
             buyID: "", //商品ID
             ProductType: 0,
-            spinner: 0, //购买数量
+            spinner: 1, //购买数量
             price: 0,
             Stock: 0, //存库
             isModal: false,
             modalText: "",
             Share: "",
             IsAngel: false,
-            Supplier: {}
+            Supplier: {},
+            scrollTop: 0,
+            GroupSwipeClientHeight: 0
         };
     },
     mounted() {
-        console.log(this.$refs.GroupGood);
-
-        this.scroll = this.$refs.GroupGood; //获取dom
-        this.$refs.GroupGood.addEventListener(
-            "scroll",
-            () => {
-                console.log(this.$refs.GroupGood.scrollTop);
-            },
-            false
-        );
+        if(this.$refs.content.clientHeight) {
+            this.GroupSwipeClientHeight = this.$refs.content.clientHeight
+            console.log(this.$refs.commentPanel.clientHeight)
+        }
+        var ua = navigator.userAgent.toLowerCase()
+        if(ua.indexOf('micromessenger') > -1) {//在微信浏览器时使用body事件
+            document.body.scrollTop = 0
+        }else {
+            document.documentElement.scrollTop = 0
+        }
+        window.addEventListener('scroll', this.handleScroll)
     },
     created() {
-        // sessionStorage.setItem("s", this.$route.query.Good_id);
-        // localStorage.setItem("s", this.$route.query.Good_id);
+        sessionStorage.setItem("s", this.$route.query.Good_id);
+        localStorage.setItem("s", this.$route.query.Good_id);
         console.log(this.$route.query.Good_id);
         // 商品信息
         this.GetProductDetail();
@@ -691,6 +709,34 @@ export default {
         }
     },
     methods: {
+        scrollDetail(location) {
+            var ua = navigator.userAgent.toLowerCase()
+            if(location === 'detail') {
+                if(ua.indexOf('micromessenger') > -1) {
+                    document.body.scrollTop = this.GroupSwipeClientHeight
+                    this.flexNav = false
+                }else {
+                    document.documentElement.scrollTop = this.GroupSwipeClientHeight
+                    this.flexNav = false
+                }
+            }else {
+                if(ua.indexOf('micromessenger') > -1) {
+                    document.body.scrollTop = 0
+                    this.flexNav = true
+                }else {
+                    document.documentElement.scrollTop = 0
+                    this.flexNav = true
+                }
+            }
+        },
+        handleScroll() {
+            this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+            if(this.scrollTop >= this.GroupSwipeClientHeight) {
+                this.flexNav = false
+            }else {
+                this.flexNav = true
+            }
+        },
         showSelect(index) {
             this.show = true;
             this.type = index;
@@ -704,12 +750,13 @@ export default {
         ToKefo() {
             window.location.href = this.GetConfig
         },
-        NavCallback(index) {
-            if(index) {
-                this.flexNav = false
-            }else {
-                this.flexNav = true
-            }
+        GoCart() {
+            this.$router.push({
+                name: 'cart',
+                query: {
+                    isShowBack: 'true'
+                }
+            })
         },
         GoPath(SupplierId) {
             this.$router.push({
@@ -741,14 +788,11 @@ export default {
             window.history.length <= 1 ? this.$router.push('/') : this.$router.go(-1)
         },
 
-        TouchSku(ValueId, element, vid, buyName, buySku, _index) {
+        TouchSku(ValueId, LstAtt, vid, buyName, _index) {
             // console.log(_index);
-
-            if (this.GotupLength > 1) {
-                // console.log("有多个属性");
-            }
+            this.AnotherAttrArray = []
             switch (vid) {
-                case 110:
+                case 0:
                     if (this.GoodAttrs.length < 1) {
                         // console.log("还没添加1");
                         this.GoodAttrs.push(buyName);
@@ -760,7 +804,7 @@ export default {
                         }
                     }
                     break;
-                case 100:
+                case 1:
                     // console.log("还没添加=" + this.GoodAttrs.length);
                     if (this.GoodAttrs.length < 1) {
                         this.GoodAttrs.push("");
@@ -785,27 +829,45 @@ export default {
             // console.log(buyName); //自己的名字
             // console.log(buySku);
             // console.log(_index); //下标
-
-            for (const [keys, elementSkus] of element.entries()) {
+            // console.log(this.LstAtt.length)
+            if(this.LstAtt.length == 2) {
+                let AnotherId = vid ? 0 : 1
+                const AnotherAttId = LstAtt[AnotherId].AttId
+                // console.log(AnotherAttId)
+                for(const AnotherAttr of this.LstAtt[AnotherId].LstAttValue) {
+                    const AnotherLstAtt = AnotherAttId + ":" + AnotherAttr.AttValueId
+                    // console.log(AnotherLstAtt)
+                    this.AnotherAttrArray.push(AnotherLstAtt)
+                    // console.log(this.AnotherAttrArray)
+                }
+            }
+            for (const [keys, elementSkus] of LstAtt[vid].LstAttValue.entries()) {
+                console.log(elementSkus)
                 if (ValueId == elementSkus.AttValueId) {
                     //点击的ID 和 JSON里面一样的 改变属性
                     this.$set(elementSkus, "isTrue", !elementSkus.isTrue);
-                    console.log(elementSkus, elementSkus.isTrue)
+                    // console.log(elementSkus, elementSkus.isTrue)
                     //*************************判断第一个属性 有没有 第二属性*******************
-                    if (vid == 110 && elementSkus.isTrue) {
+                    if (vid == 0 && elementSkus.isTrue) {
                         //存库存有没有的判断
                         this.elementAttrSku = [];
                         //保存属性下的SKU
                         this.selectSKUOne = elementSkus.SKU;
-                        // console.log(this.selectSKUOne);
+                        console.log(this.selectSKUOne);
 
                         //判断点击每一个的存库的
+                        this.selectSKUOne = []
                         for (const iteratorSku of elementSkus.SKU) {
-                            if (iteratorSku.Stock > 0) {
-                                // console.log(iteratorSku.Stock);
-                                this.elementAttrSku.push(false);
-                            } else {
-                                this.elementAttrSku.push(true);
+                            // console.log(iteratorSku)
+                            // console.log(this.AnotherAttrArray.filter(n=>iteratorSku.AttIds.indexOf(n) > -1).length > 0)
+                            if(this.AnotherAttrArray.filter(n=>iteratorSku.AttIds.indexOf(n) > -1).length > 0) {//过滤另一个属性没有，本属性SKU却有的属性
+                                console.log(iteratorSku)
+                                this.selectSKUOne.push(iteratorSku)
+                                if (iteratorSku.Stock > 0) {
+                                    this.elementAttrSku.push(false);
+                                } else {
+                                    this.elementAttrSku.push(true);
+                                }
                             }
                         }
 
@@ -820,18 +882,29 @@ export default {
                                 this.ImgUrl = elementSkus.SKU[this.GotupLen - 1].ImgUrl;
                                 this.price = elementSkus.SKU[this.GotupLen - 1].SalePrice;
                                 this.buyID = elementSkus.SKU[this.GotupLen - 1].AttIds;
-                                console.log(this.Stock, this.ImgUrl)
+                                // console.log(this.Stock, this.ImgUrl)
                                 break;
                             case 2:
-                                if (buySku) {
-                                    console.log(buySku);
-                                    this.Stock = buySku.Stock;
-                                    this.ImgUrl = buySku.ImgUrl
-                                    this.price = buySku.SalePrice;
-                                    this.buyID = buySku.AttIds;
-                                    // console.log("点上面的ID");
-                                    // console.log(buySku.AttIds);
-                                    // console.log(buySku.AttValueName);
+                                // if (buySku) {
+                                //     console.log(buySku);
+                                //     this.Stock = buySku.Stock;
+                                //     this.ImgUrl = buySku.ImgUrl
+                                //     this.price = buySku.SalePrice;
+                                //     this.buyID = buySku.AttIds;
+                                //     // console.log("点上面的ID");
+                                //     // console.log(buySku.AttIds);
+                                //     // console.log(buySku.AttValueName);
+                                // }
+                                if(this.GoodAttrs.length == 2) {
+                                    console.log(this.selectSKUTwo, _index)
+                                    if (this.selectSKUTwo[_index].Stock > 0) {
+                                        // console.log(this.Stock)
+                                        this.Stock = this.selectSKUTwo[_index].Stock;
+                                        this.ImgUrl = this.selectSKUTwo[_index].ImgUrl;
+                                        this.price = this.selectSKUTwo[_index].SalePrice;
+                                    }
+                                    this.buyID = this.selectSKUTwo[_index].AttIds;
+                                    console.log(this.buyID)
                                 }
 
                                 //121:641|122:490
@@ -848,35 +921,45 @@ export default {
                         //     "***************************************************"
                         // );
                         // }
-                    } else if (vid == 110) {
+                    } else if (vid == 0) {
                         this.elementAttrSku = []; //清空xy选择
                     }
 
                     //*************************判断第二个属性 有没有 第一个属性*******************
-                    if (vid == 100 && elementSkus.isTrue) {
+                    if (vid == 1 && elementSkus.isTrue) {
                         this.elementSkuAttr = [];
-                        this.selectSKUTwo = elementSkus.SKU;
+                        // this.selectSKUTwo = elementSkus.SKU;
+                        // console.log(elementSkus.SKU)
+                        this.selectSKUTwo = []
                         for (const iteratorSku of elementSkus.SKU) {
                             //没有库存的禁止
-                            if (iteratorSku.Stock > 0) {
-                                // console.log(iteratorSku.Stock);
-                                this.elementSkuAttr.push(false);
-                            } else {
-                                this.elementSkuAttr.push(true);
+                            // console.log(this.AnotherAttrArray, iteratorSku)
+                            if(this.AnotherAttrArray.filter(n=>iteratorSku.AttIds.indexOf(n) > -1).length > 0) {
+                                // console.log(iteratorSku)
+                                this.selectSKUTwo.push(iteratorSku)
+                                if (iteratorSku.Stock > 0) {
+                                    // console.log(iteratorSku.Stock);
+                                    this.elementSkuAttr.push(false);
+                                } else {
+                                    this.elementSkuAttr.push(true);
+                                }
                             }
+                            // console.log(this.selectSKUTwo)
                         }
-                        console.log(this.selectSKUOne[_index].Stock)
-                        if (this.selectSKUOne[_index].Stock > 0) {
-                            console.log(this.Stock)
-                            this.Stock = this.selectSKUOne[_index].Stock;
-                            this.ImgUrl = this.selectSKUOne[_index].ImgUrl;
-                            this.price = this.selectSKUOne[_index].SalePrice;
+                        if(this.GoodAttrs.length == 2 && this.GoodAttrs[0] != '') {
+                            console.log(this.selectSKUOne, _index)
+                            if (this.selectSKUOne[_index].Stock > 0) {
+                                // console.log(this.Stock)
+                                this.Stock = this.selectSKUOne[_index].Stock;
+                                this.ImgUrl = this.selectSKUOne[_index].ImgUrl;
+                                this.price = this.selectSKUOne[_index].SalePrice;
+                            }
+                            this.buyID = this.selectSKUOne[_index].AttIds;
+                            console.log("点下面的ID",this.buyID);
                         }
-                        this.buyID = this.selectSKUOne[_index].AttIds;
-                        console.log("点下面的ID",this.buyID);
 
                         // console.log(this.selectSKU[_index].AttIds);
-                    } else if (vid == 100) {
+                    } else if (vid == 1) {
                         this.elementSkuAttr = []; //清空xy选择
                     }
                 } else {
@@ -886,8 +969,6 @@ export default {
         },
         //用的是这个
         addCart(i, key) {
-            console.log(i, key)
-            // console.log(key);console.log(this.buyID); console.log(this.spinner);console.log(this.$route.query.Good_id);
             if (this.Gotup && !this.show) {
                 this.show = false;
                 this.key = key;
@@ -895,7 +976,7 @@ export default {
             }
             console.log(key);
             //判断是不是取消了选择
-            if (this.GoodAttrs.length == this.GotupLength) {
+            if (this.GoodAttrs.length == this.GotupLen) {
                 for (const iterator of this.GoodAttrs) {
                     if (iterator == "") {
                         this.$dialog.toast({
@@ -927,26 +1008,20 @@ export default {
                         url: this.$server.serverUrl + "/order/addshoppingcart",
                         responseType: "json"
                     }).then(response => {
-                        // this.GetMyId(response.data.success)
-                        switch (response.data.success) {
-                            case 200:
-                                this.show = false;
+                        if(response.data.success == 200) {
+                            this.show = false;
                                 this.$dialog.toast({
                                     mes: "加入购物车成功",
                                     timeout: 1500,
                                     icon: "success"
                                 });
-                                // getNum();
-                                this.reload()
-                                break;
-
-                            case 500:
-                                this.$dialog.toast({
-                                    mes: response.data.msg,
-                                    timeout: 1500
-                                });
-                            default:
-                                break;
+                            // getNum();
+                            this.reload()
+                        }else {
+                            this.$dialog.toast({
+                                mes: response.data.msg,
+                                timeout: 1500
+                            });
                         }
                     });
                     break;
@@ -996,10 +1071,10 @@ export default {
                     this.GoodsList = response.data.object; //整个
                     this.LstComment = response.data.object.LstComment
                     console.log(this.LstComment)
-                    this.GotupLength = this.GoodsList.LstAtt.length;
+                    this.GotupLen = this.GoodsList.LstAtt.length;
+                    this.LstAtt = this.GoodsList.LstAtt
                     this.Gotup = this.GoodsList.LstAtt[0]; //第一个属性
                     this.GotupAttr = this.GoodsList.LstAtt[1]; //第二个属性
-                    this.GotupLen = this.GoodsList.LstAtt.length;
                     this.Stock = this.GoodsList.ProductStock;
                     this.price = this.GoodsList.SalePrice;
                     this.ProductType = this.GoodsList.ProductType;
@@ -1016,7 +1091,7 @@ export default {
                         })
                     }
 
-                            // 微信分享
+                    // 微信分享
                     let shareurl = location.href; //获取锚点之前的链接
                     this.$axios({
                         method: "POST",

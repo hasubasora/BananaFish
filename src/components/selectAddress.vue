@@ -57,11 +57,10 @@ export default {
     },
     methods: {
         //新增地址
-
         CompileAddress(uid) {
             this.$router.replace({
                 name: "setAddress",
-                params: { address_id: uid }
+                query: { address_id: uid, compile: 'compile' }
             });
         },
         SelectToDef(num) {
@@ -107,7 +106,7 @@ export default {
             if(this.$route.query.compile) {
                 this.$router.replace({
                     name: "setAddress",
-                    params: { address_id: AddressId }
+                    query: { address_id: AddressId, compile: "compile" }
                 });
             }else {
                 if(sessionStorage.getItem('AddressJumpPath') === 'FreeOfCharge') {

@@ -1,9 +1,9 @@
 <template>
     <div class="setAddress">
         <yd-navbar slot="navbar" title="地址编辑" height='.8rem' color="#f2f2f2" class="titleColor">
-            <router-link to="" slot="left" @click.native="returnGo">
+            <div slot="left" @click="returnGo">
                 <yd-navbar-back-icon color="#f2f2f2"></yd-navbar-back-icon>
-            </router-link>
+            </div>
             <router-link to="" color="#f2f2f2" slot="right" @click.native="verify(AddressId)">
                 <span style="color:#fff"> 保存</span>
             </router-link>
@@ -99,16 +99,16 @@ export default {
         };
     },
     created() {
-        if (this.$route.params.address_id) {
-            console.log(this.$route.params.address_id);
+        if (this.$route.query.address_id) {
+            console.log(this.$route.query.address_id);
 
-            this.AddressId = this.$route.params.address_id;
+            this.AddressId = this.$route.query.address_id;
             localStorage.removeItem("dd");
-            localStorage.setItem("dd", this.$route.params.address_id);
+            localStorage.setItem("dd", this.$route.query.address_id);
             this.getAddress();
         }
         if (localStorage.getItem("dd")) {
-            console.log(this.$route.params.address_id);
+            console.log(this.$route.query.address_id);
 
             console.log(localStorage.dd);
             this.AddressId = localStorage.dd;
@@ -132,7 +132,7 @@ export default {
                 if (response.data.success == 200) {
                     for (const iterator of response.data.rows) {
                         if (
-                            this.$route.params.address_id ==
+                            this.$route.query.address_id ==
                                 iterator.AddressId ||
                             localStorage.dd == iterator.AddressId
                         ) {
@@ -237,9 +237,16 @@ export default {
                 LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
-                    this.$router.replace({
-                        name: "selectAddress"
-                    });
+                   if(this.$route.query.compile) {
+                        this.$router.replace({
+                            name: "selectAddress",
+                            query: { compile: "compile" }
+                        });
+                    }else {
+                        this.$router.replace({
+                            name: "selectAddress"
+                        });
+                    }
                 }
             });
         },
@@ -259,9 +266,16 @@ export default {
                 LOGIN_SUCCESS(response.data)
                 if (response.data.success == 200) {
                     this.address = response.data.object;
-                    this.$router.replace({
-                        name: "selectAddress"
-                    });
+                    if(this.$route.query.compile) {
+                        this.$router.replace({
+                            name: "selectAddress",
+                            query: { compile: "compile" }
+                        });
+                    }else {
+                        this.$router.replace({
+                            name: "selectAddress"
+                        });
+                    }
                 }
             });
         }

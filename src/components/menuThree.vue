@@ -15,27 +15,39 @@
             </yd-tab>
 
             <!-- 商品列表 -->
+            <div class="classify-banner" @click="goToNewbie(categoryInfo)">
+                <img :src="categoryInfo.AdPicture" alt="">
+            </div>
+            <swiper-slides-per-view :icon="hotIconUrl" :list="hotProducts" :key="tab2"></swiper-slides-per-view>
             <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-                <div theme="3" slot="list" class="list">
-                    <div class="list-item" v-for="(item, key) in rows" :key="key" @click="GoItemDes(item.Id)">
-                        <div class="list-img">
-                            <img :src="item.ProductImg">
+                <div class="list-wrap" slot="list">
+                    <div class="waterfall-flow-title">
+                        <img :src="recommendIcon" alt="">
+                    </div>
+                    <div class="list">
+                        <div class="list-item" v-for="(item, key) in rows" :key="key" @click="GoItemDes(item.Id)">
+                            <div class="list-img">
+                                <img :src="item.ProductImg">
+                            </div>
+                            <p class="title">{{item.ProductTitle}}</p>
+                            <div class="Integral">
+                                <div class="price">￥{{item.SalePrice}}</div>
+                                <span>销量{{item.SaleCount}}件</span>
+                            </div>
+                            <div class="badge">
+                                <img v-if="item.ProductType == 2" src="../assets/Img/JLbadge.png" alt="">
+                                <img v-if="item.ProductType == 3" src="../assets/Img/SPbadge.png" alt="">
+                            </div>
                         </div>
-                        <p class="hideTwo title">{{item.ProductTitle}}</p>
-                        <div class="price">￥{{item.SalePrice}}</div>
-                        <div class="Integral">
-                            <span>{{item.Integral}}积分</span>
-                            <span>销量{{item.SaleCount}}件</span>
+                        
+                        <!-- <div class="waterfall-flow-title">
+                            <img :src="recommendIcon" alt="">
                         </div>
-                        <div class="badge">
-                            <img v-if="item.ProductType == 2" src="../assets/Img/JLbadge.png" alt="">
-                            <img v-if="item.ProductType == 3" src="../assets/Img/SPbadge.png" alt="">
-                        </div>
+                        <waterfall-flow :goodsInfo="rows"></waterfall-flow> -->
                     </div>
                 </div>
                 <span slot="doneTip">已经到底了(〃'▽'〃)~~</span>
                 <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg" />
-
             </yd-infinitescroll>
         </div>
     </div>
@@ -46,8 +58,9 @@ import { InfiniteScroll } from "vue-ydui/dist/lib.rem/infinitescroll";
 /* 使用px：import {InfiniteScroll} from 'vue-ydui/dist/lib.px/infinitescroll'; */
 
 Vue.component(InfiniteScroll.name, InfiniteScroll);
+import swiperSlidesPerView from '../comment/swiperSlidesPerView'
+import waterfallFlow from '../comment/waterfallFlow'
 export default {
-    inject: ['reload'],
     data() {
         return {
             tab2: 1,
@@ -62,8 +75,19 @@ export default {
             RecommendType: this.$route.query.gg,
             isModal: false,
             modalText: {},
-            totalcount: Number
+            totalcount: Number,
+            categoryInfo: '',
+            hotIconUrl: '',
+            hotProducts: [],
+            recommendIcon: '',
         };
+    },
+    created() {
+        this.Group_id = this.$route.params.Group_id;
+        localStorage.setItem("GoodsKey", this.$route.params.Group_id);
+        this.getCategory();
+        this.getCategoryProduct(this.$route.params.Group_id, this.$route.query.gg);
+        this.getcategoryTopData(this.$route.params.Group_id, this.$route.query.gg)
     },
     mounted() {
         let _w = parseInt(
@@ -74,13 +98,9 @@ export default {
             (document.getElementsByClassName("yd-tab-nav")[0].style.width = 110)
         );
     },
-    created() {
-        console.log(this.$route.params.Group_id, this.$route.query);
-        this.Group_id = this.$route.params.Group_id;
-        localStorage.setItem("GoodsKey", this.$route.params.Group_id);
-        this.getCategory();
-        this.getCategoryProduct(this.$route.params.Group_id, this.$route.query.gg);
-        console.log(this.$route.query, this.$route.params);
+    components: {
+        swiperSlidesPerView,
+        waterfallFlow
     },
     methods: {
         goBack() {
@@ -144,10 +164,8 @@ export default {
             // console.log(this.items[key].CategoryId);
             // console.log(this.items[key].RecommendType);
             this.page = 1
-            this.getCategoryProduct(
-                this.items[key].CategoryId,
-                this.items[key].RecommendType
-            );
+            this.getCategoryProduct(this.items[key].CategoryId,this.items[key].RecommendType);
+            this.getcategoryTopData(this.items[key].CategoryId,this.items[key].RecommendType)
             this.tab2 = key;
             this.items[key].content = this.rows;
         },
@@ -172,12 +190,38 @@ export default {
             }).then(response => {
                 if (response.data.success == 200) {
                     console.log(response.data)
+                    this.recommendIcon = response.data.hotIcon.hotIconUrl
                     this.rows = response.data.rows;
                     this.totalcount = response.data.totalcount
+                    this.recommendIcon = response.data.hotIcon.hotIconUrl
                 }
             });
         },
-
+        getcategoryTopData(Group_id, gType) {
+            let _RecommendType = 0;
+            if (gType != 0) {
+                _RecommendType = gType;
+            } else {
+                _RecommendType = this.$route.query.gg;
+            }
+            this.$axios({
+                method: "POST",
+                data: {
+                    categoryid: Group_id,
+                    RecommendType: _RecommendType,
+                    SupplierId: this.$route.params.SupplierId
+                },
+                url: this.$server.serverUrl + "/index/getcategoryTopData",
+                responseType: "json"
+            }).then(response => {
+                if (response.data.success == 200) {
+                    console.log(response.data)
+                    this.categoryInfo = response.data.categoryInfo
+                    this.hotIconUrl = response.data.hotIcon.hotIconUrl
+                    this.hotProducts = response.data.hotProducts
+                }
+            })
+        },
         getCategory() {
             console.log(this.$route.query.gg)
             this.$axios({
@@ -226,58 +270,87 @@ export default {
     .yd-tab-nav:after {
         border-bottom: none;
     }
-    .list {
+    .list-wrap {
+        .waterfall-flow-title {
+            border-top: 0.16rem solid #F3F3F3;
+            height: 1rem;
+            padding-left: 0.4rem;
+            background: #fff;
+            img {
+                width: 1.74rem;
+                margin-top: 0.4rem;
+                transform: translateY(-50%);
+            }
+        }
+        .list {
             overflow: hidden;
-        .list-item {
-            width: 50%;
-            float: left;
-            padding: .2rem;
-            position: relative;
-            z-index: 0;
-            background-color: #fff;
-            border-right: 1px solid #eee;
-            border-bottom: 1px solid #eee;
-            &:nth-child(even) {
-                border-right: none;
-            }
-            .list-img {
-                height: 0;
-                width: 100%;
-                padding: 50% 0;
-                overflow: hidden;
-                img {
+            background: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+            .list-item {
+                position: relative;
+                width: 50%;
+                padding: 0.2rem;
+                border-bottom: 1px solid #eee;
+                box-sizing: border-box;
+                .list-img {
                     width: 100%;
-                    margin-top: -50%;
-                    border: none;
-                    display: block;
+                    height: 0;
+                    padding-bottom: 100%;
+                    img {
+                        width: 100%;
+                    }
+                }
+                &:nth-child(odd) {
+                    border-right: 1px solid #eee;   
+                }
+                .title {
+                    font-size: 0.26rem;
+                    margin-bottom: 0.1rem;
+                    margin-top: 0.1rem;
+                    display: -webkit-box; //将对象作为弹性伸缩盒子模型显示。
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    height: auto;
+                    white-space: normal;
+                    word-wrap: normal;
+                    /*! autoprefixer: off */
+                    -webkit-box-orient: vertical;
+                    /* autoprefixer: on */
+                    -webkit-line-clamp: 2; //这个属性不是css的规范属性，需要组合上面两个属性，表示显示的行数。
+                }
+                .price {
+                    color: #F02B22;
+                    font-size: 0.26rem;
+                    font-weight: bold;
+                    margin-bottom: 0.1rem;
+                }
+                .Integral {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 0.3rem;
+                }
+                .badge {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 0.8rem;
+                    img {
+                        width: 100%;
+                    }
                 }
             }
-            .title {
-                font-size: 0.28rem;
-                font-weight: bold;
-                margin-bottom: 0.1rem;
-            }
-            .price {
-                color: #ee6120;
-                font-weight: 600;
-                font-size: 0.28rem;
-                // margin-bottom: 0.1rem;
-            }
-            .Integral {
-                display: flex;
-                justify-content: space-between;
-                color: #888;
-            }
-            .badge {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 0.8rem;
-                height: 0.8rem;
-                img {
-                    width: 100%;
-                }
-            }
+        }
+        
+    }
+    .classify-banner {
+        width: 100%;
+        height: 0;
+        padding-bottom: 34%;
+        img {
+            width: 100%;
         }
     }
 }

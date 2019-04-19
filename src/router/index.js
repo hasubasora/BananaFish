@@ -13,6 +13,9 @@ export default new Router({
           path: '/',
           name: 'Home',
           component: Home => require(["@/components/Home"], Home),
+          // meta: {
+          //   keepAlive: true
+          // }
         },
         // {
         //   path: '/ProductGroupList',
@@ -23,6 +26,9 @@ export default new Router({
           path: '/productList',
           name: 'productList',
           component: productList => require(["@/components/productList"], productList),
+          meta: {
+            keepAlive: true
+          }
         },
         { //一级目录
           path: '/productList1',
@@ -33,6 +39,9 @@ export default new Router({
           path: '/cart',
           name: 'cart',
           component: cart => require(["@/components/cart"], cart),
+          // meta: {
+          //   keepAlive: true
+          // }
         }, { //个人信息
           path: '/MyInfo',
           name: 'MyInfo',
@@ -187,10 +196,6 @@ export default new Router({
       name: 'Though',
       component: Though => require(["@/components/Though"], Though),
     }, { //消息
-      path: '/www/:Good_id',
-      name: 'www',
-      component: www => require(["@/components/www"], www),
-    }, { //消息
       path: '/MessageText/:Text_id',
       name: 'MessageText',
       component: MessageText => require(["@/components/MessageText"], MessageText),
@@ -272,10 +277,16 @@ export default new Router({
       path: '/FreeOfCharge',
       name: 'FreeOfCharge',
       component: FreeOfCharge => require(["@/components/FreeOfCharge/FreeOfCharge"], FreeOfCharge),
+      meta: {
+        keepAlive: true
+      }
     }, {//我的免单
       path: '/MyFreeList',
       name: 'MyFreeList',
       component: MyFreeList => require(["@/components/FreeOfCharge/MyFreeList"], MyFreeList),
+      meta: {
+        keepAlive: true
+      }
     }, {//我的免单
       path: '/FreeDetail',
       name: 'FreeDetail',
@@ -296,6 +307,9 @@ export default new Router({
       path: '/LuckyDouble',
       name: 'LuckyDouble',
       component: LuckyDouble => require(["@/components/LuckyDouble/LuckyDouble"], LuckyDouble),
+      meta: {
+        keepAlive: true
+      }
     }, {//推广中心
       path: '/PromotionCenter',
       name: 'PromotionCenter',
@@ -326,5 +340,5 @@ export default new Router({
       component: MaterialCircleArticle => require(["@/components/MaterialCircleArticle/MaterialCircleArticle"], MaterialCircleArticle),
     }
   ],
-  saveScrollPosition: true
+  // saveScrollPosition: true
 })

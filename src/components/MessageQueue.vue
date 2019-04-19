@@ -4,7 +4,7 @@
             <router-link to="/productList" slot="left">
                 <yd-navbar-back-icon></yd-navbar-back-icon>
             </router-link>
-            <div slot="right" @click="ReadMyMessage">全部已读</div>
+            <div slot="right" @click="ReadMyMessage" style="color:#888;">全部已读</div>
         </yd-navbar>
 
         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">

@@ -12,11 +12,14 @@
                 <i class="moren" v-if="this.$route.query.IsDefault == undefined || this.$route.query.IsDefault === 1">默认</i>
             </div>
             <yd-flexbox-item>
-                <div class="address_right">
+                <div class="address_center">
                     <h3 class="font25">{{address.ShipPhone}}</h3>
                     <p>{{address.Province}}{{address.CityName}}{{address.AreaName}}{{address.Address}}</p>
                 </div>
             </yd-flexbox-item>
+            <div class="address_right">
+                <img src="../assets/Img/jiantou.png" alt="">
+            </div>
         </yd-flexbox>
         <yd-flexbox class="address" :class="{empty: empty}" style="font-size:.3rem" @click.native="GetAddress" v-if="address==''">
             请添加地址
@@ -202,6 +205,7 @@ export default {
             responseType: "json"
         }).then(response => {
             if (response.data.success == 200) {
+                console.log(response.data)
                 this.PayList = response.data.list
                 this.picked = response.data.list[0].payType
                 this.GetTypePay = response.data.list[0].isBrowser
@@ -229,9 +233,7 @@ export default {
                             }
                         }
                         iterator.IsDefault == 1 ? (this.address = iterator) : "";
-                        iterator.IsDefault == 1
-                            ? (this.AddressId = iterator.AddressId)
-                            : "";
+                        iterator.IsDefault == 1 ? (this.AddressId = iterator.AddressId) : "";
                     }
 
                 }
@@ -390,7 +392,7 @@ export default {
                             })
                         }
                         if(this.EnoughBalance) {
-                            if(this.$route.query.LuckyProductType == 3 || sessionStorage.getItem('LuckyProductType') == 3 && !sessionStorage.getItem('GroupNo')) {
+                            if((this.$route.query.LuckyProductType == 3 || sessionStorage.getItem('LuckyProductType') == 3) && !sessionStorage.getItem('GroupNo')) {
                                 this.$router.push({
                                     name: "LuckyShareConfirm",
                                     query: {OrderIdList: this.OrderIdList}
@@ -403,14 +405,14 @@ export default {
                                     }
                                 })
                             } 
-                        }else {    
+                        }else {
                             GoBuySometing(
                                 this.GroupOrderIdList,
                                 this.OrderIdList,
                                 this.picked,
                                 this.GetTypePay,
                                 'LuckyDouble',
-                                this.OrderIdList
+                                sessionStorage.getItem('GroupNo')
                             );
                         }
                         return
@@ -443,7 +445,7 @@ export default {
     color: #888;
 }
 .orderList {
-    margin: 1rem 0;
+    margin: 0.8rem 0;
     width: 100%;
     position: absolute;
     top: 0;
@@ -498,22 +500,31 @@ export default {
 }
 
 .address {
-    background: #fffced;
+    background: #fff;
     padding: 0.3rem;
     margin-bottom: 0.2rem;
     .address_left {
-        width: 1rem;
+        width: 1.6rem;
         text-align: center;
         font-size: 0.26rem;
+        .moren {
+            border: 1px solid;
+            color: #ff5f17;
+            padding: 0.02rem 0.04rem;
+        }
+    }
+    .address_center {
+        padding: 0 0.3rem;
+        font-size: 0.26rem;
+        p {
+            color: #888;
+        }
     }
     .address_right {
-        padding: 0 0.5rem;
-        font-size: 0.26rem;
-    }
-    .moren {
-        border: 1px solid;
-        color: #ff5f17;
-        padding: 0.02rem 0.04rem;
+        width: 0.4rem; 
+        img{
+            width: 100%;
+        }
     }
 }
 .empty {

@@ -12,7 +12,7 @@
                     <yd-preview :buttons="btns" v-for="itemt in item.content" :key="itemt.id" style="border-radius:5px;margin:.2rem">
                         <yd-preview-header  @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
                             <div slot="left"><span class="identification" v-if="itemt.OrderType === 3">双拼</span>订单编号:{{itemt.OrderId}}</div>
-                            <div slot="right" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
+                            <div slot="right" class="OrderStatusStr" :class="{red:itemt.OrderType === 3}">{{itemt.OrderStatusStr}}</div>
                         </yd-preview-header>
 
                         <yd-preview-item v-for="GoodsInfo in itemt.LstProduct" :key="GoodsInfo.id" @click.native="ToGeneralOrderDetails(itemt.OrderId, itemt.OrderType)">
@@ -151,7 +151,7 @@ export default {
                 { label: "全部", content: [] },
                 { label: "待付款", content: [] },
                 { label: "待发货", content: [] },
-                { label: "已发货", content: [] },
+                { label: "待收货", content: [] },
                 { label: "待评价", content: [] },
                 { label: "售后", content: [] }
             ],
@@ -347,11 +347,13 @@ export default {
             });
         },
         GetGoodsList(sta) {
+            console.log(sta)
             sta != null ? sta : (sta = 0);
             //判断售后数据
             if (sta == 5) {
                 sta = 8;
             }
+            console.log(sta)
             this.$axios({
                 method: "POST",
                 data: {
@@ -475,8 +477,16 @@ export default {
         }
     }
     .back {
+        // background: #f5f5f5;
         .yd-tab-panel {
             background: none;
+        }
+        .yd-preview-header{
+            padding-right: 0;
+            margin-right: 0.24rem;
+            &:after {
+            border-bottom: 1px solid #eee;
+            }
         }
         .yd-preview {
             &:before {
@@ -496,6 +506,9 @@ export default {
             border-radius: 0.2rem;
             padding: 0 0.1rem;
             margin-right: 0.1rem;
+        }
+        .OrderStatusStr {
+            font-size: 0.26rem;
         }
         .preview-left {
             display: flex;
@@ -523,24 +536,21 @@ export default {
         }
     }
     .orderBtn {
-        height: 0.5rem;
-        width: 1.4rem;
+        height: 0.56rem;
+        width: 1.74rem;
         border: none;
-        border-radius: 5px;
+        border-radius: 0.4rem;
         outline: none;
+        font-size: 0.24rem;
     }
     .orangeBtn {
         color: #fff;
-        background: linear-gradient(
-            -90deg,
-            rgba(234, 63, 50, 1),
-            rgba(237, 121, 71, 1)
-        );
+        background: linear-gradient(to right, #F02B22, #FC2D59);
     }
     .grayBtn {
         background: #fff;
-        border: 1px solid;
-        color: #555;
+        border: 1px solid #888;
+        color: #888;
     }
     .orderSwipe {
         position: fixed;
